@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:gravity="center_vertical"
-    android:padding="@dimen/mdu_padding_normal">
+    android:paddingLeft="@dimen/mdu_keyline_1"
+    android:paddingRight="@dimen/mdu_keyline_1">
 
     <TextView
         android:id="@+id/name"
