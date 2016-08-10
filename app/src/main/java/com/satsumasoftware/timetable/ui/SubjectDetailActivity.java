@@ -17,10 +17,13 @@ import com.satsumasoftware.timetable.framework.Subject;
 public class SubjectDetailActivity extends AppCompatActivity {
 
     protected static final String EXTRA_SUBJECT = "extra_subject";
+    protected static final String EXTRA_LIST_POS = "extra_list_position";
 
     private boolean mIsNewSubject;
 
     private Subject mSubject;
+    private int mListPosition = SubjectsActivity.LIST_POS_INVALID;
+
     private EditText mEditText;
 
     @Override
@@ -35,6 +38,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mSubject = extras.getParcelable(EXTRA_SUBJECT);
+            mListPosition = extras.getInt(EXTRA_LIST_POS);
         }
         mIsNewSubject = mSubject == null;
 
@@ -99,6 +103,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_SUBJECT, mSubject);
+        intent.putExtra(EXTRA_LIST_POS, mListPosition);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

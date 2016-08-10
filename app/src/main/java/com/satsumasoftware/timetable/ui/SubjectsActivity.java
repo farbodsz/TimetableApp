@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class SubjectsActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 1;
+    protected static final int LIST_POS_INVALID = -1;
 
     private ArrayList<Subject> mSubjects;
     private SubjectsAdapter mAdapter;
@@ -36,6 +37,15 @@ public class SubjectsActivity extends BaseActivity {
         mSubjects = new ArrayList<>();
 
         mAdapter = new SubjectsAdapter(mSubjects);
+        mAdapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
+            @Override
+            public void onEntryClick(View view, int position) {
+                Intent intent = new Intent(SubjectsActivity.this, SubjectDetailActivity.class);
+                intent.putExtra(SubjectDetailActivity.EXTRA_SUBJECT, mSubjects.get(position));
+                intent.putExtra(SubjectDetailActivity.EXTRA_LIST_POS, position);
+                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
+            }
+        });
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -59,7 +69,14 @@ public class SubjectsActivity extends BaseActivity {
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 Subject modifiedSubject = data.getParcelableExtra(SubjectDetailActivity.EXTRA_SUBJECT);
-                mSubjects.add(modifiedSubject);
+                int listPos = data.getIntExtra(SubjectDetailActivity.EXTRA_LIST_POS, LIST_POS_INVALID);
+
+                if (listPos == LIST_POS_INVALID) {
+                    mSubjects.add(modifiedSubject);
+                } else {
+                    mSubjects.set(listPos, modifiedSubject);
+                }
+
                 mAdapter.notifyDataSetChanged();
             }
         }
