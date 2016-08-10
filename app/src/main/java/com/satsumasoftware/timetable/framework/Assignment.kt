@@ -1,5 +1,5 @@
 package com.satsumasoftware.timetable.framework
 
-import java.util.*
+import org.threeten.bp.LocalDate
 
-class Assignment(val id: Int, val title: String, val detail: String, val dueDate: Date)
+class Assignment(val id: Int, val title: String, val detail: String, val dueDate: LocalDate)
