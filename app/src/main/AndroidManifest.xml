@@ -26,6 +26,11 @@
             android:label="@string/title_activity_assignments"
             android:theme="@style/Timetable.Home"/>
 
+        <activity
+            android:name=".ui.SubjectsActivity"
+            android:label="@string/title_activity_subjects"
+            android:theme="@style/Timetable.Home"/>
+
     </application>
 
 </manifest>

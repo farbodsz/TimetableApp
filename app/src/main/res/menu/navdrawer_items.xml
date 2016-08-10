@@ -15,4 +15,11 @@
             android:icon="@drawable/ic_assignment_black_24dp"/>
     </group>
 
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_subjects"
+            android:title="@string/title_activity_subjects"
+            android:icon="@drawable/ic_list_black_24dp"/>
+    </group>
+
 </menu>

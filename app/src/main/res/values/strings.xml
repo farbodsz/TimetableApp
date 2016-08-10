@@ -4,6 +4,7 @@
 
     <string name="title_activity_home">Home</string>
     <string name="title_activity_assignments">Assignments</string>
+    <string name="title_activity_subjects">Subjects</string>
 
     <string name="drawer_open" translatable="false">Open drawer</string>
     <string name="drawer_close" translatable="false">Close drawer</string>

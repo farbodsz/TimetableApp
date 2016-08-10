@@ -56,6 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected static final int NAVDRAWER_ITEM_HOME = R.id.navigation_item_home;
     protected static final int NAVDRAWER_ITEM_ASSIGNMENTS = R.id.navigation_item_assignments;
+    protected static final int NAVDRAWER_ITEM_SUBJECTS = R.id.navigation_item_subjects;
     protected static final int NAVDRAWER_ITEM_INVALID = -1;
 
     /*
@@ -174,6 +175,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
             case NAVDRAWER_ITEM_ASSIGNMENTS:
                 intent = new Intent(this, AssignmentsActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case NAVDRAWER_ITEM_SUBJECTS:
+                intent = new Intent(this, SubjectsActivity.class);
                 startActivity(intent);
                 finish();
                 break;
