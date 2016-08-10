@@ -37,14 +37,32 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.Subjec
         return mSubjects.size();
     }
 
-    public class SubjectViewHolder extends RecyclerView.ViewHolder {
+    public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mName;
 
         SubjectViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             mName = (TextView) itemView.findViewById(R.id.name);
         }
+
+        @Override
+        public void onClick(View view) {
+            if (mOnEntryClickListener != null) {
+                mOnEntryClickListener.onEntryClick(view, getLayoutPosition());
+            }
+        }
+    }
+
+    private OnEntryClickListener mOnEntryClickListener;
+
+    public interface OnEntryClickListener {
+        void onEntryClick(View view, int position);
+    }
+
+    public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
+        mOnEntryClickListener = onEntryClickListener;
     }
 
 }
