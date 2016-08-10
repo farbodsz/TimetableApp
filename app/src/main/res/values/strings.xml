@@ -5,6 +5,14 @@
     <string name="title_activity_home">Home</string>
     <string name="title_activity_assignments">Assignments</string>
     <string name="title_activity_subjects">Subjects</string>
+    <string name="title_activity_subject_new">New Subject</string>
+    <string name="title_activity_subject_edit">Edit Subject</string>
+
+    <string name="property_name">Name</string>
+
+    <string name="action_done">Done</string>
+
+    <string name="message_invalid_name">This name is invalid</string>
 
     <string name="drawer_open" translatable="false">Open drawer</string>
     <string name="drawer_close" translatable="false">Close drawer</string>

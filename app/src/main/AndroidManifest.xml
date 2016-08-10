@@ -31,6 +31,10 @@
             android:label="@string/title_activity_subjects"
             android:theme="@style/Timetable.Home"/>
 
+        <activity
+            android:name=".ui.SubjectDetailActivity"
+            android:theme="@style/Timetable.Home"/>
+
     </application>
 
 </manifest>
