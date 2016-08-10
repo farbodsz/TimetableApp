@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable
+package com.satsumasoftware.timetable.framework
 
 import java.util.*
 

@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable;
+package com.satsumasoftware.timetable.ui;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.satsumasoftware.timetable.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
