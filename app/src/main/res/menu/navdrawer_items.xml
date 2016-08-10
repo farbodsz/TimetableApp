@@ -11,7 +11,8 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_assignments"
-            android:title="@string/title_activity_assignments"/>
+            android:title="@string/title_activity_assignments"
+            android:icon="@drawable/ic_assignment_black_24dp"/>
     </group>
 
 </menu>
