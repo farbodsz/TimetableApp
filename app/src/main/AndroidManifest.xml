@@ -18,6 +18,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AssignmentsActivity"
+            android:label="@string/title_activity_assignments"
+            android:theme="@style/Timetable.Home"/>
+
     </application>
 
 </manifest>
