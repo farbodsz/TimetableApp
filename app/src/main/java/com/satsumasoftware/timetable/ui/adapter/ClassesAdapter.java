@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.db.ClassesUtils;
 import com.satsumasoftware.timetable.db.DatabaseUtils;
 import com.satsumasoftware.timetable.framework.Class;
-import com.satsumasoftware.timetable.framework.ClassGroup;
+import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.Subject;
 
 import java.util.ArrayList;
@@ -19,11 +20,11 @@ import java.util.ArrayList;
 public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesViewHolder> {
 
     private Context mContext;
-    private SparseArray<ClassGroup> mClassGroups;
+    private ArrayList<Class> mClasses;
 
-    public ClassesAdapter(Context context, SparseArray<ClassGroup> classGroups) {
+    public ClassesAdapter(Context context, ArrayList<Class> classes) {
         mContext = context;
-        mClassGroups = classGroups;
+        mClasses = classes;
     }
 
     @Override
@@ -34,21 +35,22 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
 
     @Override
     public void onBindViewHolder(ClassesViewHolder holder, int position) {
-        ClassGroup classGroup = mClassGroups.valueAt(position);
+        Class cls = mClasses.get(position);
 
-        Subject subject = DatabaseUtils.getSubjectFromId(mContext, classGroup.getSubjectId());
+        Subject subject = DatabaseUtils.getSubjectFromId(mContext, cls.getSubjectId());
         holder.mSubject.setText(subject.getName());
 
+        ArrayList<ClassDetail> classDetails =
+                ClassesUtils.getClassDetailsFromIds(mContext, cls.getClassDetailIds());
+
         StringBuilder builder = new StringBuilder();
-        ArrayList<Class> classes = classGroup.getClasses();
-        for (int i = 0; i < classes.size(); i++) {
-            Class cls = classes.get(i);
-            builder.append(cls.getStartTime().toString())
-                    .append(" - ")
-                    .append(cls.getEndTime().toString())
-                    .append(" ")
-                    .append(cls.getDay().toString());
-            if (i != classes.size() - 1) {
+
+        for (int i = 0; i < classDetails.size(); i++) {
+            ClassDetail classDetail = classDetails.get(i);
+            builder.append(classDetail.getTeacher())
+                    .append(", ")
+                    .append(classDetail.getRoom());
+            if (i != classDetails.size() - 1) {
                 builder.append("\n");
             }
         }
@@ -57,7 +59,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
 
     @Override
     public int getItemCount() {
-        return mClassGroups.size();
+        return mClasses.size();
     }
 
     public class ClassesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

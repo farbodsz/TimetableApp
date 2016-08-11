@@ -14,14 +14,16 @@ import android.view.View;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.ClassesSchema;
 import com.satsumasoftware.timetable.db.DatabaseUtils;
+import com.satsumasoftware.timetable.db.SubjectsSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.framework.Class;
-import com.satsumasoftware.timetable.framework.ClassGroup;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
+
+import java.util.ArrayList;
 
 public class ClassesActivity extends BaseActivity {
 
-    private SparseArray<ClassGroup> mClasses;
+    private ArrayList<Class> mClasses;
     private ClassesAdapter mAdapter;
 
     @Override
@@ -32,15 +34,12 @@ public class ClassesActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mClasses = new SparseArray<>(DatabaseUtils.getHighestSubjectId(this));
+        mClasses = new ArrayList<>();
         TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
         Cursor cursor = dbHelper.getReadableDatabase().query(
                 ClassesSchema.TABLE_NAME, null, null, null, null, null, null);
         while (!cursor.isAfterLast()) {
-            Class cls = new Class(cursor);
-            int subjectId = cls.getSubjectId();
-            ClassGroup classGroup = mClasses.get(subjectId, new ClassGroup(subjectId));
-            classGroup.addClass(cls);
+            mClasses.add(new Class(this, cursor));
             cursor.moveToNext();
         }
         cursor.close();
