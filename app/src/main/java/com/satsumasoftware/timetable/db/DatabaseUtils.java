@@ -27,7 +27,7 @@ public final class DatabaseUtils {
 
     public static void addSubject(Context context, Subject subject) {
         ContentValues values = new ContentValues();
-        values.put(SubjectsSchema.COL_ID, subject.getId());
+        values.put(SubjectsSchema._ID, subject.getId());
         values.put(SubjectsSchema.COL_NAME, subject.getName());
 
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
@@ -37,7 +37,7 @@ public final class DatabaseUtils {
     public static void deleteSubject(Context context, int subjectId) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.delete(SubjectsSchema.TABLE_NAME,
-                SubjectsSchema.COL_ID + "=?",
+                SubjectsSchema._ID + "=?",
                 new String[] {String.valueOf(subjectId)});
     }
 
@@ -49,20 +49,10 @@ public final class DatabaseUtils {
     public static int getHighestSubjectId(Context context) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(
-                SubjectsSchema.TABLE_NAME,
-                new String[] {SubjectsSchema.COL_ID},
-                null,
-                null,
-                null,
-                null,
-                SubjectsSchema.COL_ID + " DESC");
-        if (cursor.getCount() == 0) {
-            return 0;
-        }
-        cursor.moveToFirst();
-        int highestId = cursor.getInt(cursor.getColumnIndex(SubjectsSchema.COL_ID));
+                SubjectsSchema.TABLE_NAME, null, null, null, null, null, null);
+        int count = cursor.getCount();
         cursor.close();
-        return highestId;
+        return count;
     }
 
     public static Subject getSubjectFromId(Context context, int id) {
@@ -70,7 +60,7 @@ public final class DatabaseUtils {
         Cursor cursor = db.query(
                 SubjectsSchema.TABLE_NAME,
                 null,
-                SubjectsSchema.COL_ID + "=?",
+                SubjectsSchema._ID + "=?",
                 new String[] {String.valueOf(id)},
                 null, null, null);
         cursor.moveToFirst();
