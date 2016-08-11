@@ -40,17 +40,7 @@ public class SubjectsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mSubjects = new ArrayList<>();
-        TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
-        Cursor cursor = dbHelper.getReadableDatabase().query(
-                SubjectsSchema.TABLE_NAME,
-                null, null, null, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            mSubjects.add(new Subject(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
+        mSubjects = DatabaseUtils.getSubjects(this);
         sortList();
 
         mAdapter = new SubjectsAdapter(mSubjects);

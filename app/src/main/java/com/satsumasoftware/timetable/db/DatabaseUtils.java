@@ -7,7 +7,23 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.satsumasoftware.timetable.framework.Subject;
 
+import java.util.ArrayList;
+
 public final class DatabaseUtils {
+
+    public static ArrayList<Subject> getSubjects(Context context) {
+        ArrayList<Subject> subjects = new ArrayList<>();
+        TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(context);
+        Cursor cursor = dbHelper.getReadableDatabase().query(
+                SubjectsSchema.TABLE_NAME, null, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            subjects.add(new Subject(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return subjects;
+    }
 
     public static void addSubject(Context context, Subject subject) {
         ContentValues values = new ContentValues();
