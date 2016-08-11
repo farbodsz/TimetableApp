@@ -55,6 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * This is a list of all items in the nav drawer and their corresponding menu ids
      */
     protected static final int NAVDRAWER_ITEM_HOME = R.id.navigation_item_home;
+    protected static final int NAVDRAWER_ITEM_CLASSES = R.id.navigation_item_classes;
     protected static final int NAVDRAWER_ITEM_ASSIGNMENTS = R.id.navigation_item_assignments;
     protected static final int NAVDRAWER_ITEM_SUBJECTS = R.id.navigation_item_subjects;
     protected static final int NAVDRAWER_ITEM_INVALID = -1;
@@ -170,6 +171,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         switch (menuItem) {
             case NAVDRAWER_ITEM_HOME:
                 intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case NAVDRAWER_ITEM_CLASSES:
+                intent = new Intent(this, ClassesActivity.class);
                 startActivity(intent);
                 finish();
                 break;

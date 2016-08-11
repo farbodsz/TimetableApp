@@ -3,6 +3,7 @@
     <string name="app_name">Timetable</string>
 
     <string name="title_activity_home">Home</string>
+    <string name="title_activity_classes">Classes</string>
     <string name="title_activity_assignments">Assignments</string>
     <string name="title_activity_subjects">Subjects</string>
     <string name="title_activity_subject_new">New Subject</string>

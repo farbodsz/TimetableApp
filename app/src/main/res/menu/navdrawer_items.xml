@@ -10,9 +10,16 @@
 
     <group android:id="@+id/navigation_group_2" android:checkableBehavior="single">
         <item
+            android:id="@+id/navigation_item_classes"
+            android:title="@string/title_activity_classes"
+            android:icon="@drawable/ic_class_black_24dp"/>
+        <item
             android:id="@+id/navigation_item_assignments"
             android:title="@string/title_activity_assignments"
             android:icon="@drawable/ic_assignment_black_24dp"/>
+    </group>
+
+    <group android:id="@+id/navigation_group_3" android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_subjects"
             android:title="@string/title_activity_subjects"
