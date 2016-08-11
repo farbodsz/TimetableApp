@@ -24,6 +24,14 @@ public class ClassGroup implements Parcelable {
         mClasses.add(cls);
     }
 
+    public int getSubjectId() {
+        return mSubjectId;
+    }
+
+    public ArrayList<Class> getClasses() {
+        return mClasses;
+    }
+
 
     public static final Creator<ClassGroup> CREATOR = new Creator<ClassGroup>() {
         @Override
