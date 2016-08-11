@@ -11,6 +11,6 @@ public final class SubjectsSchema {
             COL_NAME + SchemaUtilsKt.TEXT_TYPE +
             " )";
 
-    protected final String SQL_DELETE =
+    protected static final String SQL_DELETE =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
 }
