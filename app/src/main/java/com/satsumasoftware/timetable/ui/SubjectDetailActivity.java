@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
-import android.support.annotation.IntegerRes;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +16,7 @@ import android.widget.EditText;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
+import com.satsumasoftware.timetable.db.DatabaseUtils;
 import com.satsumasoftware.timetable.framework.Subject;
 
 import java.lang.annotation.Retention;
@@ -126,7 +127,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
         @Action int actionType;
 
         if (mIsNewSubject) {
-            mSubject = new Subject(1, newName);  // TODO the id should be the latest id
+            mSubject = new Subject(DatabaseUtils.getHighestSubjectId(this) + 1, newName);
             actionType = ACTION_NEW;
         } else {
             mSubject.setName(newName);

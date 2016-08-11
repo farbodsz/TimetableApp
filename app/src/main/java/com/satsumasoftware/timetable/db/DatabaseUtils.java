@@ -25,4 +25,23 @@ public final class DatabaseUtils {
                 new String[] {String.valueOf(subject.getId())});
     }
 
+    public static int getHighestSubjectId(Context context) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.query(
+                SubjectsSchema.TABLE_NAME,
+                new String[] {SubjectsSchema.COL_ID},
+                null,
+                null,
+                null,
+                null,
+                SubjectsSchema.COL_ID + " DESC");
+        if (cursor.getCount() == 0) {
+            return 0;
+        }
+        cursor.moveToFirst();
+        int highestId = cursor.getInt(cursor.getColumnIndex(SubjectsSchema.COL_ID));
+        cursor.close();
+        return highestId;
+    }
+
 }
