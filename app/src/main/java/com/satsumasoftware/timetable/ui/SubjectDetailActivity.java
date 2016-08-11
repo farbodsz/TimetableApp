@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.framework.Subject;
 
 public class SubjectDetailActivity extends AppCompatActivity {
@@ -94,6 +95,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
                     Snackbar.LENGTH_SHORT).show();
             return;
         }
+        newName = TextUtilsKt.title(newName);
 
         if (mIsNewSubject) {
             mSubject = new Subject(1, newName);  // TODO the id should be the latest id
