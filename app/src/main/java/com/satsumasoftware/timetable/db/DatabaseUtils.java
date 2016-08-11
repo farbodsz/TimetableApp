@@ -18,11 +18,16 @@ public final class DatabaseUtils {
         db.insert(SubjectsSchema.TABLE_NAME, null, values);
     }
 
-    public static void deleteSubject(Context context, Subject subject) {
+    public static void deleteSubject(Context context, int subjectId) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.delete(SubjectsSchema.TABLE_NAME,
                 SubjectsSchema.COL_ID + "=?",
-                new String[] {String.valueOf(subject.getId())});
+                new String[] {String.valueOf(subjectId)});
+    }
+
+    public static void replaceSubject(Context context, int oldSubjectId, Subject newSubject) {
+        deleteSubject(context, oldSubjectId);
+        addSubject(context, newSubject);
     }
 
     public static int getHighestSubjectId(Context context) {

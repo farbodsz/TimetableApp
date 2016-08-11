@@ -107,10 +107,11 @@ public class SubjectsActivity extends BaseActivity {
                         break;
                     case SubjectDetailActivity.ACTION_EDIT:
                         mSubjects.set(listPos, returnedSubject);
+                        DatabaseUtils.replaceSubject(this, returnedSubject.getId(), returnedSubject);
                         break;
                     case SubjectDetailActivity.ACTION_DELETE:
                         mSubjects.remove(listPos);
-                        DatabaseUtils.deleteSubject(this, returnedSubject);
+                        DatabaseUtils.deleteSubject(this, returnedSubject.getId());
                         break;
                 }
                 sortList();
