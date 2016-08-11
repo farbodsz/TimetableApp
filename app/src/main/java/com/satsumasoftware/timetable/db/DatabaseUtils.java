@@ -49,4 +49,18 @@ public final class DatabaseUtils {
         return highestId;
     }
 
+    public static Subject getSubjectFromId(Context context, int id) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.query(
+                SubjectsSchema.TABLE_NAME,
+                null,
+                SubjectsSchema.COL_ID + "=?",
+                new String[] {String.valueOf(id)},
+                null, null, null);
+        cursor.moveToFirst();
+        Subject subject = new Subject(cursor);
+        cursor.close();
+        return subject;
+    }
+
 }
