@@ -1,7 +1,9 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,10 +14,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.db.DatabaseUtils;
+import com.satsumasoftware.timetable.db.SubjectsSchema;
+import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class SubjectsActivity extends BaseActivity {
 
@@ -33,8 +40,18 @@ public class SubjectsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // TODO get subjects from a database
         mSubjects = new ArrayList<>();
+        TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
+        Cursor cursor = dbHelper.getReadableDatabase().query(
+                SubjectsSchema.TABLE_NAME,
+                null, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            mSubjects.add(new Subject(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        sortList();
 
         mAdapter = new SubjectsAdapter(mSubjects);
         mAdapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
@@ -62,6 +79,15 @@ public class SubjectsActivity extends BaseActivity {
         });
     }
 
+    private void sortList() {
+        Collections.sort(mSubjects, new Comparator<Subject>() {
+            @Override
+            public int compare(Subject subject, Subject t1) {
+                return subject.getName().compareTo(t1.getName());
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -73,9 +99,11 @@ public class SubjectsActivity extends BaseActivity {
 
                 if (listPos == LIST_POS_INVALID) {
                     mSubjects.add(modifiedSubject);
+                    DatabaseUtils.addSubject(this, modifiedSubject);
                 } else {
                     mSubjects.set(listPos, modifiedSubject);
                 }
+                sortList();
 
                 mAdapter.notifyDataSetChanged();
             }
