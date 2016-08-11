@@ -94,7 +94,7 @@ public class SubjectsActivity extends BaseActivity {
 
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                Subject modifiedSubject = data.getParcelableExtra(SubjectDetailActivity.EXTRA_SUBJECT);
+                Subject returnedSubject = data.getParcelableExtra(SubjectDetailActivity.EXTRA_SUBJECT);
                 int listPos = data.getIntExtra(SubjectDetailActivity.EXTRA_LIST_POS, LIST_POS_INVALID);
 
                 @SubjectDetailActivity.Action int actionType =  data.getIntExtra(
@@ -102,14 +102,15 @@ public class SubjectsActivity extends BaseActivity {
 
                 switch (actionType) {
                     case SubjectDetailActivity.ACTION_NEW:
-                        mSubjects.add(modifiedSubject);
-                        DatabaseUtils.addSubject(this, modifiedSubject);
+                        mSubjects.add(returnedSubject);
+                        DatabaseUtils.addSubject(this, returnedSubject);
                         break;
                     case SubjectDetailActivity.ACTION_EDIT:
-                        mSubjects.set(listPos, modifiedSubject);
+                        mSubjects.set(listPos, returnedSubject);
                         break;
                     case SubjectDetailActivity.ACTION_DELETE:
-                        // TODO
+                        mSubjects.remove(listPos);
+                        DatabaseUtils.deleteSubject(this, returnedSubject);
                         break;
                 }
                 sortList();

@@ -10,6 +10,7 @@
 
     <string name="property_name">Name</string>
 
+    <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
 
     <string name="message_invalid_name">This name is invalid</string>

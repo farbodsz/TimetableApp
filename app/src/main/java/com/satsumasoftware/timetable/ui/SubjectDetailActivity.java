@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.satsumasoftware.timetable.R;
@@ -72,6 +73,18 @@ public class SubjectDetailActivity extends AppCompatActivity {
         if (!mIsNewSubject) {
             mEditText.setText(mSubject.getName());
         }
+
+        Button button = (Button) findViewById(R.id.button);
+        if (mIsNewSubject) {
+            button.setVisibility(View.GONE);
+        } else {
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleDeleteAction();
+                }
+            });
+        }
     }
 
     @Override
@@ -124,6 +137,15 @@ public class SubjectDetailActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_SUBJECT, mSubject);
         intent.putExtra(EXTRA_LIST_POS, mListPosition);
         intent.putExtra(EXTRA_RESULT_ACTION, actionType);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
+    private void handleDeleteAction() {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_SUBJECT, mSubject);
+        intent.putExtra(EXTRA_LIST_POS, mListPosition);
+        intent.putExtra(EXTRA_RESULT_ACTION, ACTION_DELETE);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
