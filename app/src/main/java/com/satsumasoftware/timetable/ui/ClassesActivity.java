@@ -33,7 +33,7 @@ public class ClassesActivity extends BaseActivity {
 
     @Override
     protected int getSelfNavDrawerItem() {
-        return NAVDRAWER_ITEM_ASSIGNMENTS;
+        return NAVDRAWER_ITEM_CLASSES;
     }
 
     @Override
