@@ -97,11 +97,20 @@ public class SubjectsActivity extends BaseActivity {
                 Subject modifiedSubject = data.getParcelableExtra(SubjectDetailActivity.EXTRA_SUBJECT);
                 int listPos = data.getIntExtra(SubjectDetailActivity.EXTRA_LIST_POS, LIST_POS_INVALID);
 
-                if (listPos == LIST_POS_INVALID) {
-                    mSubjects.add(modifiedSubject);
-                    DatabaseUtils.addSubject(this, modifiedSubject);
-                } else {
-                    mSubjects.set(listPos, modifiedSubject);
+                @SubjectDetailActivity.Action int actionType =  data.getIntExtra(
+                        SubjectDetailActivity.EXTRA_RESULT_ACTION, -1);
+
+                switch (actionType) {
+                    case SubjectDetailActivity.ACTION_NEW:
+                        mSubjects.add(modifiedSubject);
+                        DatabaseUtils.addSubject(this, modifiedSubject);
+                        break;
+                    case SubjectDetailActivity.ACTION_EDIT:
+                        mSubjects.set(listPos, modifiedSubject);
+                        break;
+                    case SubjectDetailActivity.ACTION_DELETE:
+                        // TODO
+                        break;
                 }
                 sortList();
 

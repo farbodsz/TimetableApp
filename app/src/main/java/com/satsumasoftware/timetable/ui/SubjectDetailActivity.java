@@ -3,6 +3,8 @@ package com.satsumasoftware.timetable.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
+import android.support.annotation.IntegerRes;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,10 +17,21 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.framework.Subject;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 public class SubjectDetailActivity extends AppCompatActivity {
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({ACTION_NEW, ACTION_EDIT, ACTION_DELETE})
+    public @interface Action {}
+    public static final int ACTION_NEW = 0;
+    public static final int ACTION_EDIT = 1;
+    public static final int ACTION_DELETE = 2;
 
     protected static final String EXTRA_SUBJECT = "extra_subject";
     protected static final String EXTRA_LIST_POS = "extra_list_position";
+    protected static final String EXTRA_RESULT_ACTION = "extra_result_action";
 
     private boolean mIsNewSubject;
 
@@ -97,15 +110,20 @@ public class SubjectDetailActivity extends AppCompatActivity {
         }
         newName = TextUtilsKt.title(newName);
 
+        @Action int actionType;
+
         if (mIsNewSubject) {
             mSubject = new Subject(1, newName);  // TODO the id should be the latest id
+            actionType = ACTION_NEW;
         } else {
             mSubject.setName(newName);
+            actionType = ACTION_EDIT;
         }
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_SUBJECT, mSubject);
         intent.putExtra(EXTRA_LIST_POS, mListPosition);
+        intent.putExtra(EXTRA_RESULT_ACTION, actionType);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
