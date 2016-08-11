@@ -9,7 +9,7 @@ import com.satsumasoftware.timetable.db.SubjectsSchema
 class Subject(val id: Int, var name: String) : Parcelable {
 
     constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(SubjectsSchema.COL_ID)),
+            cursor.getInt(cursor.getColumnIndex(SubjectsSchema._ID)),
             cursor.getString(cursor.getColumnIndex(SubjectsSchema.COL_NAME)))
 
     constructor(source: Parcel): this(source.readInt(), source.readString())
