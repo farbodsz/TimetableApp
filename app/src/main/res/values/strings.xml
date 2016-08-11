@@ -4,12 +4,18 @@
 
     <string name="title_activity_home">Home</string>
     <string name="title_activity_classes">Classes</string>
+    <string name="title_activity_class_new">New Class</string>
+    <string name="title_activity_class_edit">Edit Class</string>
     <string name="title_activity_assignments">Assignments</string>
     <string name="title_activity_subjects">Subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
 
     <string name="property_name">Name</string>
+
+    <string name="property_subject">Subject</string>
+    <string name="property_room">Room</string>
+    <string name="property_teacher">Teacher</string>
 
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>

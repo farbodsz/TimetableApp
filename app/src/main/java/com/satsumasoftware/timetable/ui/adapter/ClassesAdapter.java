@@ -2,7 +2,6 @@ package com.satsumasoftware.timetable.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.ClassesUtils;
-import com.satsumasoftware.timetable.db.DatabaseUtils;
+import com.satsumasoftware.timetable.db.SubjectsUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -37,7 +36,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
     public void onBindViewHolder(ClassesViewHolder holder, int position) {
         Class cls = mClasses.get(position);
 
-        Subject subject = DatabaseUtils.getSubjectFromId(mContext, cls.getSubjectId());
+        Subject subject = SubjectsUtils.getSubjectFromId(mContext, cls.getSubjectId());
         holder.mSubject.setText(subject.getName());
 
         ArrayList<ClassDetail> classDetails =

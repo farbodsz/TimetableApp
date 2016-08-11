@@ -8,13 +8,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.SparseArray;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.ClassesSchema;
-import com.satsumasoftware.timetable.db.DatabaseUtils;
-import com.satsumasoftware.timetable.db.SubjectsSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
