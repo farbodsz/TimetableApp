@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/navigation_group_1" android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_home"
             android:title="@string/title_activity_home"
             android:icon="@drawable/ic_home_black_24dp"/>
     </group>
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/navigation_group_2" android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_assignments"
             android:title="@string/title_activity_assignments"
             android:icon="@drawable/ic_assignment_black_24dp"/>
-    </group>
-
-    <group android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_subjects"
             android:title="@string/title_activity_subjects"
