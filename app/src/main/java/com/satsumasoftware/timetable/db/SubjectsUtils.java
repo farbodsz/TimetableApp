@@ -9,7 +9,7 @@ import com.satsumasoftware.timetable.framework.Subject;
 
 import java.util.ArrayList;
 
-public final class DatabaseUtils {
+public final class SubjectsUtils {
 
     public static ArrayList<Subject> getSubjects(Context context) {
         ArrayList<Subject> subjects = new ArrayList<>();

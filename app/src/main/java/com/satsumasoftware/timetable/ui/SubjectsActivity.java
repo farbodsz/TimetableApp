@@ -1,9 +1,7 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,9 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.DatabaseUtils;
-import com.satsumasoftware.timetable.db.SubjectsSchema;
-import com.satsumasoftware.timetable.db.TimetableDbHelper;
+import com.satsumasoftware.timetable.db.SubjectsUtils;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 
@@ -40,7 +36,7 @@ public class SubjectsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mSubjects = DatabaseUtils.getSubjects(this);
+        mSubjects = SubjectsUtils.getSubjects(this);
         sortList();
 
         mAdapter = new SubjectsAdapter(mSubjects);
@@ -93,15 +89,15 @@ public class SubjectsActivity extends BaseActivity {
                 switch (actionType) {
                     case SubjectDetailActivity.ACTION_NEW:
                         mSubjects.add(returnedSubject);
-                        DatabaseUtils.addSubject(this, returnedSubject);
+                        SubjectsUtils.addSubject(this, returnedSubject);
                         break;
                     case SubjectDetailActivity.ACTION_EDIT:
                         mSubjects.set(listPos, returnedSubject);
-                        DatabaseUtils.replaceSubject(this, returnedSubject.getId(), returnedSubject);
+                        SubjectsUtils.replaceSubject(this, returnedSubject.getId(), returnedSubject);
                         break;
                     case SubjectDetailActivity.ACTION_DELETE:
                         mSubjects.remove(listPos);
-                        DatabaseUtils.deleteSubject(this, returnedSubject.getId());
+                        SubjectsUtils.deleteSubject(this, returnedSubject.getId());
                         break;
                 }
                 sortList();
