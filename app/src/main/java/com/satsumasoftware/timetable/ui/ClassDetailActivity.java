@@ -34,7 +34,6 @@ import com.satsuware.usefulviews.LabelledSpinner;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,6 +57,8 @@ public class ClassDetailActivity extends AppCompatActivity {
     private boolean mIsNew;
 
     private Class mClass;
+    private ArrayList<Integer> mClassDetailIds;
+
     private int mListPosition = SubjectsActivity.LIST_POS_INVALID;
 
     private Subject mSubject;
@@ -129,6 +130,8 @@ public class ClassDetailActivity extends AppCompatActivity {
             public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
         });
 
+        mClassDetailIds = new ArrayList<>();
+
         mClassTimes = new ArrayList<>();
         mAdapters = new ArrayList<>();
 
@@ -159,6 +162,13 @@ public class ClassDetailActivity extends AppCompatActivity {
     private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {
         boolean isNewDetail = classDetail == null;
 
+        // MUST be final so that it doesn't change as adapter count updates
+        final int pagerCount = mPagerAdapter.getCount();
+
+        mClassDetailIds.add(isNewDetail ?
+                ClassesUtils.getHighestClassDetailId(this) + pagerCount + 1 :
+                classDetail.getId());
+
         View page = getLayoutInflater().inflate(R.layout.fragment_class_detail, null);
 
         EditText room = (EditText) page.findViewById(R.id.editText_room);
@@ -181,7 +191,7 @@ public class ClassDetailActivity extends AppCompatActivity {
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_TIME, classTimes.get(position));
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, mPagerAdapter.getCount() - 1);
+                intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_LIST_POS, position);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
             }
@@ -203,7 +213,7 @@ public class ClassDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, mPagerAdapter.getCount() - 1);
+                intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
             }
         });
@@ -224,7 +234,7 @@ public class ClassDetailActivity extends AppCompatActivity {
             });
         }
 
-        mPagerAdapter.addViewWithTitle(page, "Detail " + (mPagerAdapter.getCount() + 1));
+        mPagerAdapter.addViewWithTitle(page, "Detail " + (pagerCount + 1));
     }
 
     @Override
@@ -234,21 +244,26 @@ public class ClassDetailActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_CLASS_TIME_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 ClassTime classTime = data.getParcelableExtra(ClassTimeDetailActivity.EXTRA_CLASS_TIME);
-                int tabIndex = data.getIntExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, -1) - 1;
+                int tabIndex = data.getIntExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, -1);
+                int listPos = data.getIntExtra(ClassTimeDetailActivity.EXTRA_LIST_POS, -1);
                 @ClassTimeDetailActivity.Action int actionType =
                         data.getIntExtra(ClassTimeDetailActivity.EXTRA_RESULT_ACTION, -1);
+
+                Log.d("TAB INDEX", "is : " + tabIndex);
 
                 ArrayList<ClassTime> someTimes = mClassTimes.get(tabIndex);
                 switch (actionType) {
                     case ClassTimeDetailActivity.ACTION_NEW:
                         someTimes.add(classTime);
+                        ClassesUtils.addClassTime(this, classTime);
                         break;
                     case ClassTimeDetailActivity.ACTION_EDIT:
-                        int listPos = data.getIntExtra(ClassTimeDetailActivity.EXTRA_LIST_POS, -1);
                         someTimes.set(listPos, classTime);
+                        ClassesUtils.replaceClassTime(this, classTime.getId(), classTime);
                         break;
                     case ClassTimeDetailActivity.ACTION_DELETE:
-                        // TODO
+                        someTimes.remove(listPos);
+                        ClassesUtils.deleteClassTime(this, classTime.getId());
                         break;
                 }
                 mAdapters.get(tabIndex).notifyDataSetChanged();
@@ -288,14 +303,19 @@ public class ClassDetailActivity extends AppCompatActivity {
         // errors can be resolved without any data being written or saved
 
         ArrayList<View> pages = mPagerAdapter.getAllViews();
+
+        ArrayList<Integer> classDetailIds = new ArrayList<>();
         ArrayList<String> rooms = new ArrayList<>();
         ArrayList<String> teachers = new ArrayList<>();
-        ArrayList<Integer> classTimeIds = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> classTimeIdsList = new ArrayList<>();
 
-        for (int i = 0; i < pages.size(); i++) {
+        // note the - 1 from .size() to exclude the placeholder tab
+        for (int i = 0; i < pages.size() - 1; i++) {
             Log.d("CDA", "---");
 
             View page = pages.get(i);
+
+            int classDetailId = mClassDetailIds.get(i);
 
             EditText roomText = (EditText) page.findViewById(R.id.editText_room);
             String room = roomText.getText().toString();
@@ -310,8 +330,10 @@ public class ClassDetailActivity extends AppCompatActivity {
                 Log.d("CDA", "class times list is empty");
                 if (room.trim().equals("") && teacher.trim().equals("")) {
                     // this is an empty detail page: room, teacher and times are empty
-                    Log.d("CDA", "completely empty detail page - CONTINUING");
-                    continue;
+                    Snackbar.make(findViewById(R.id.rootView),
+                            R.string.message_empty_detail, Snackbar.LENGTH_SHORT).show();
+                    Log.d("CDA", "completely empty detail page");
+                    return;
                 } else {
                     // this has a room or teacher but not times (which it needs)
                     Snackbar.make(findViewById(R.id.rootView),
@@ -321,9 +343,13 @@ public class ClassDetailActivity extends AppCompatActivity {
                 }
             }
 
+            classDetailIds.add(classDetailId);
             rooms.add(room);
             teachers.add(teacher);
-            for (ClassTime classTime : classTimes) classTimeIds.add(classTime.getId());
+
+            ArrayList<Integer> arrayList = new ArrayList<>();
+            for (ClassTime classTime : classTimes) arrayList.add(classTime.getId());
+            classTimeIdsList.add(arrayList);
         }
 
         if (rooms.size() == 0) {
@@ -333,8 +359,38 @@ public class ClassDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // now write the data
-        // TODO
+        // now write the data (replace class detail values)
+
+        for (int i = 0; i < rooms.size(); i++) {
+            int classDetailId = classDetailIds.get(i);
+            String room = rooms.get(i);
+            String teacher = teachers.get(i);
+            ArrayList<Integer> classTimeIds = classTimeIdsList.get(i);
+
+            ClassDetail classDetail = new ClassDetail(classDetailId, room, teacher, classTimeIds);
+
+            ClassesUtils.replaceClassDetail(this, classDetailId, classDetail);
+            ClassesUtils.replaceClassDetailToTimesLinks(this, classDetailId, classTimeIds);
+        }
+
+        @Action int actionType;
+        int id;
+
+        if (mIsNew) {
+            id = ClassesUtils.getHighestClassId(this);
+            actionType = ACTION_NEW;
+        } else {
+            id = mClass.getId();
+            actionType = ACTION_NEW;
+        }
+        mClass = new Class(id, mSubject.getId(), classDetailIds);
+
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_CLASS, mClass);
+        intent.putExtra(EXTRA_LIST_POS, mListPosition);
+        intent.putExtra(EXTRA_RESULT_ACTION, actionType);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 
     /*
