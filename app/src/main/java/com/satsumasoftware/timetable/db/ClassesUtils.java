@@ -106,4 +106,29 @@ public final class ClassesUtils {
         cursor.close();
         return count;
     }
+
+    public static void addClassTime(Context context, ClassTime classTime) {
+        ContentValues values = new ContentValues();
+        values.put(ClassTimesSchema._ID, classTime.getId());
+        values.put(ClassTimesSchema.COL_DAY, classTime.getDay().getValue());
+        values.put(ClassTimesSchema.COL_START_TIME_HRS, classTime.getStartTime().getHour());
+        values.put(ClassTimesSchema.COL_START_TIME_MINS, classTime.getStartTime().getMinute());
+        values.put(ClassTimesSchema.COL_START_TIME_HRS, classTime.getEndTime().getHour());
+        values.put(ClassTimesSchema.COL_START_TIME_MINS, classTime.getEndTime().getMinute());
+
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.insert(ClassTimesSchema.TABLE_NAME, null, values);
+    }
+
+    public static void deleteClassTime(Context context, int classTimeId) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.delete(ClassTimesSchema.TABLE_NAME,
+                ClassTimesSchema._ID + "=?",
+                new String[] {String.valueOf(classTimeId)});
+    }
+
+    public static void replaceClassTime(Context context, int oldClassTimeId, ClassTime newClassTime) {
+        deleteClassTime(context, oldClassTimeId);
+        addClassTime(context, newClassTime);
+    }
 }
