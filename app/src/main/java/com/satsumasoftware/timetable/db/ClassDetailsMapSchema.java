@@ -4,7 +4,7 @@ import android.provider.BaseColumns;
 
 public final class ClassDetailsMapSchema implements BaseColumns {
 
-    public static final String TABLE_NAME = "classes";
+    public static final String TABLE_NAME = "class_details_map";
     public static final String COL_CLASS_DETAIL_ID = "class_detail_id";
 
     protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
