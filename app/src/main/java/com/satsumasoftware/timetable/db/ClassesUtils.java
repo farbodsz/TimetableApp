@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
 
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -130,5 +129,28 @@ public final class ClassesUtils {
     public static void replaceClassTime(Context context, int oldClassTimeId, ClassTime newClassTime) {
         deleteClassTime(context, oldClassTimeId);
         addClassTime(context, newClassTime);
+    }
+
+    public static void addClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
+        for (int classTimeId : classTimeIds) {
+            ContentValues values = new ContentValues();
+            values.put(ClassDetailTimesMapSchema.COL_CLASS_DETAIL_ID, classDetailId);
+            values.put(ClassDetailTimesMapSchema.COL_CLASS_TIME_ID, classTimeId);
+
+            SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+            db.insert(ClassDetailTimesMapSchema.TABLE_NAME, null, values);
+        }
+    }
+
+    public static void deleteClassDetailToTimesLinks(Context context, int classDetailId) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.delete(ClassDetailTimesMapSchema.TABLE_NAME,
+                ClassDetailTimesMapSchema.COL_CLASS_DETAIL_ID + "=?",
+                new String[] {String.valueOf(classDetailId)});
+    }
+
+    public static void replaceClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
+        deleteClassDetailToTimesLinks(context, classDetailId);
+        addClassDetailToTimesLinks(context, classDetailId, classTimeIds);
     }
 }
