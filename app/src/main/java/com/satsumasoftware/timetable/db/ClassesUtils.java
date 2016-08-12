@@ -113,7 +113,7 @@ public final class ClassesUtils {
         values.put(ClassesSchema.COL_SUBJECT_ID, cls.getSubjectId());
 
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
-        db.insert(ClassTimesSchema.TABLE_NAME, null, values);
+        db.insert(ClassesSchema.TABLE_NAME, null, values);
     }
 
     public static void deleteClass(Context context, int classId) {
