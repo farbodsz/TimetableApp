@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 
@@ -104,6 +105,27 @@ public final class ClassesUtils {
         int count = cursor.getCount();
         cursor.close();
         return count;
+    }
+
+    public static void addClass(Context context, Class cls) {
+        ContentValues values = new ContentValues();
+        values.put(ClassesSchema._ID, cls.getId());
+        values.put(ClassesSchema.COL_SUBJECT_ID, cls.getSubjectId());
+
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.insert(ClassTimesSchema.TABLE_NAME, null, values);
+    }
+
+    public static void deleteClass(Context context, int classId) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.delete(ClassesSchema.TABLE_NAME,
+                ClassesSchema._ID + "=?",
+                new String[] {String.valueOf(classId)});
+    }
+
+    public static void replaceClass(Context context, int oldClassId, Class newClass) {
+        deleteClass(context, oldClassId);
+        addClass(context, newClass);
     }
 
     public static int getHighestClassDetailId(Context context) {
