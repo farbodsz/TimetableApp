@@ -24,13 +24,21 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(ClassDetailsMapSchema.SQL_CREATE);
+        db.execSQL(ClassDetailsSchema.SQL_CREATE);
+        db.execSQL(ClassDetailTimesMapSchema.SQL_CREATE);
         db.execSQL(ClassesSchema.SQL_CREATE);
+        db.execSQL(ClassTimesSchema.SQL_CREATE);
         db.execSQL(SubjectsSchema.SQL_CREATE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(ClassDetailsMapSchema.SQL_DELETE);
+        db.execSQL(ClassDetailsSchema.SQL_DELETE);
+        db.execSQL(ClassDetailTimesMapSchema.SQL_DELETE);
         db.execSQL(ClassesSchema.SQL_DELETE);
+        db.execSQL(ClassTimesSchema.SQL_DELETE);
         db.execSQL(SubjectsSchema.SQL_DELETE);
         onCreate(db);
     }
