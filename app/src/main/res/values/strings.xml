@@ -17,6 +17,8 @@
     <string name="property_room">Room</string>
     <string name="property_teacher">Teacher</string>
 
+    <string name="action_add_detail">Add detail</string>
+    <string name="action_add_time">Add time</string>
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
 

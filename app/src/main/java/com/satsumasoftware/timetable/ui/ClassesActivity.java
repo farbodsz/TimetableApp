@@ -1,5 +1,7 @@
 package com.satsumasoftware.timetable.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,11 +16,15 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.ClassesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.framework.Class;
+import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 
 import java.util.ArrayList;
 
 public class ClassesActivity extends BaseActivity {
+
+    protected static final int REQUEST_CODE_CLASS_DETAIL = 1;
+    protected static final int LIST_POS_INVALID = -1;
 
     private ArrayList<Class> mClasses;
     private ClassesAdapter mAdapter;
@@ -45,7 +51,10 @@ public class ClassesActivity extends BaseActivity {
         mAdapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                // TODO
+                Intent intent = new Intent(ClassesActivity.this, ClassDetailActivity.class);
+                intent.putExtra(ClassDetailActivity.EXTRA_CLASS, mClasses.get(position));
+                intent.putExtra(ClassDetailActivity.EXTRA_LIST_POS, position);
+                startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
             }
         });
 
@@ -57,9 +66,21 @@ public class ClassesActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
+                Intent intent = new Intent(ClassesActivity.this, ClassDetailActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_CLASS_DETAIL) {
+            if (resultCode == Activity.RESULT_OK) {
+                // TODO
+            }
+        }
     }
 
     @Override
