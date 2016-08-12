@@ -2,6 +2,8 @@ package com.satsumasoftware.timetable.db;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -95,4 +97,12 @@ public final class ClassesUtils {
         return classTimes;
     }
 
+    public static int getHighestClassTimeId(Context context) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.query(
+                ClassTimesSchema.TABLE_NAME, null, null, null, null, null, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
 }

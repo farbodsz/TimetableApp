@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/Widget.Timetable.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/ic_today_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/mdu_keyline_1" />
+
+        <com.satsuware.usefulviews.LabelledSpinner
+            android:id="@+id/spinner_day"
+            app:labelText="@string/property_day"
+            app:spinnerEntries="@array/days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/mdu_keyline_2"
+            android:layout_marginRight="@dimen/mdu_keyline_1" />
+    </FrameLayout>
+
+    <include layout="@layout/divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/ic_access_time_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/mdu_keyline_1" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/mdu_keyline_2">
+            <TextView
+                android:id="@+id/textView_start_time"
+                android:text="@string/property_start_time"
+                android:textSize="16sp"
+                android:textColor="@color/mdu_text_black_secondary"
+                android:background="?selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical" />
+            <include layout="@layout/divider" />
+            <TextView
+                android:id="@+id/textView_end_time"
+                android:text="@string/property_end_time"
+                android:textSize="16sp"
+                android:textColor="@color/mdu_text_black_secondary"
+                android:background="?selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <include layout="@layout/divider" />
+
+</LinearLayout>

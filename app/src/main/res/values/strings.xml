@@ -6,23 +6,40 @@
     <string name="title_activity_classes">Classes</string>
     <string name="title_activity_class_new">New Class</string>
     <string name="title_activity_class_edit">Edit Class</string>
+    <string name="title_activity_class_time_new">New Time</string>
+    <string name="title_activity_class_time_edit">Edit Time</string>
     <string name="title_activity_assignments">Assignments</string>
     <string name="title_activity_subjects">Subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
 
     <string name="property_name">Name</string>
+    <string name="message_invalid_name">This name is invalid</string>
 
     <string name="property_subject">Subject</string>
     <string name="property_room">Room</string>
     <string name="property_teacher">Teacher</string>
 
+    <string name="property_day">Day</string>
+    <string name="property_start_time">Start Time</string>
+    <string name="property_end_time">End Time</string>
+    <string name="message_start_time_after_end">The start time of your class cannot be after the end time</string>
+    <string name="message_start_time_equal_end">The start time of your class cannot equal the end time</string>
+    <string name="message_times_required">You need to enter a start time and end time</string>
+    <string-array name="days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
     <string name="action_add_detail">Add detail</string>
     <string name="action_add_time">Add time</string>
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
-
-    <string name="message_invalid_name">This name is invalid</string>
 
     <string name="drawer_open" translatable="false">Open drawer</string>
     <string name="drawer_close" translatable="false">Close drawer</string>
