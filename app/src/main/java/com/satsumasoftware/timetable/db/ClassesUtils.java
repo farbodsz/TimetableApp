@@ -97,6 +97,46 @@ public final class ClassesUtils {
         return classTimes;
     }
 
+    public static int getHighestClassId(Context context) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.query(
+                ClassesSchema.TABLE_NAME, null, null, null, null, null, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    public static int getHighestClassDetailId(Context context) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.query(
+                ClassDetailsSchema.TABLE_NAME, null, null, null, null, null, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    public static void addClassDetail(Context context, ClassDetail classDetail) {
+        ContentValues values = new ContentValues();
+        values.put(ClassDetailsSchema._ID, classDetail.getId());
+        values.put(ClassDetailsSchema.COL_ROOM, classDetail.getRoom());
+        values.put(ClassDetailsSchema.COL_TEACHER, classDetail.getTeacher());
+
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.insert(ClassTimesSchema.TABLE_NAME, null, values);
+    }
+
+    public static void deleteClassDetail(Context context, int classDetailId) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.delete(ClassDetailsSchema.TABLE_NAME,
+                ClassDetailsSchema._ID + "=?",
+                new String[] {String.valueOf(classDetailId)});
+    }
+
+    public static void replaceClassDetail(Context context, int oldClassDetailId, ClassDetail newClassDetail) {
+        deleteClassDetail(context, oldClassDetailId);
+        addClassDetail(context, newClassDetail);
+    }
+
     public static int getHighestClassTimeId(Context context) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(
@@ -129,6 +169,29 @@ public final class ClassesUtils {
     public static void replaceClassTime(Context context, int oldClassTimeId, ClassTime newClassTime) {
         deleteClassTime(context, oldClassTimeId);
         addClassTime(context, newClassTime);
+    }
+
+    public static void addClassToDetailsLinks(Context context, int classId, ArrayList<Integer> classDetailIds) {
+        for (int classDetail : classDetailIds) {
+            ContentValues values = new ContentValues();
+            values.put(ClassDetailsMapSchema.COL_CLASS_ID, classId);
+            values.put(ClassDetailsMapSchema.COL_CLASS_DETAIL_ID, classDetail);
+
+            SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+            db.insert(ClassDetailsMapSchema.TABLE_NAME, null, values);
+        }
+    }
+
+    public static void deleteClassToDetailsLinks(Context context, int classId) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.delete(ClassDetailsMapSchema.TABLE_NAME,
+                ClassDetailsMapSchema.COL_CLASS_ID + "=?",
+                new String[] {String.valueOf(classId)});
+    }
+
+    public static void replaceClassToDetailsLinks(Context context, int classId, ArrayList<Integer> classDetailIds) {
+        deleteClassToDetailsLinks(context, classId);
+        addClassToDetailsLinks(context, classId, classDetailIds);
     }
 
     public static void addClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
