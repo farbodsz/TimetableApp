@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,7 +19,7 @@ public final class ClassesUtils {
         Cursor cursor = dbHelper.getReadableDatabase().query(
                 ClassDetailsMapSchema.TABLE_NAME,
                 null,
-                ClassDetailsMapSchema._ID + "=?",
+                ClassDetailsMapSchema.COL_CLASS_ID + "=?",
                 new String[] {String.valueOf(classId)},
                 null, null, null);
         cursor.moveToFirst();
@@ -62,7 +63,7 @@ public final class ClassesUtils {
         Cursor cursor = dbHelper.getReadableDatabase().query(
                 ClassDetailTimesMapSchema.TABLE_NAME,
                 null,
-                ClassDetailTimesMapSchema._ID + "=?",
+                ClassDetailTimesMapSchema.COL_CLASS_DETAIL_ID + "=?",
                 new String[] {String.valueOf(classDetailId)},
                 null, null, null);
         cursor.moveToFirst();
