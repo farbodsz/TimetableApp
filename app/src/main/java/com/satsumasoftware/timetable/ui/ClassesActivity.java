@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.ClassesSchema;
+import com.satsumasoftware.timetable.db.ClassesUtils;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -78,7 +79,26 @@ public class ClassesActivity extends BaseActivity {
 
         if (requestCode == REQUEST_CODE_CLASS_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                // TODO
+                Class cls = data.getParcelableExtra(ClassDetailActivity.EXTRA_CLASS);
+                int listPos = data.getIntExtra(ClassDetailActivity.EXTRA_LIST_POS, -1);
+                @ClassDetailActivity.Action int actionType =
+                        data.getIntExtra(ClassDetailActivity.EXTRA_RESULT_ACTION, -1);
+
+                switch (actionType) {
+                    case ClassDetailActivity.ACTION_NEW:
+                        mClasses.add(cls);
+                        ClassesUtils.addClass(this, cls);
+                        ClassesUtils.addClassToDetailsLinks(this, cls.getId(), cls.getClassDetailIds());
+                        break;
+                    case ClassDetailActivity.ACTION_EDIT:
+                        mClasses.set(listPos, cls);
+                        ClassesUtils.replaceClass(this, cls.getId(), cls);
+                        break;
+                    case ClassDetailActivity.ACTION_DELETE:
+                        // TODO
+                        break;
+                }
+                mAdapter.notifyDataSetChanged();
             }
         }
     }
