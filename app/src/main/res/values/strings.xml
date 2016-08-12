@@ -19,6 +19,7 @@
     <string name="property_subject">Subject</string>
     <string name="property_room">Room</string>
     <string name="property_teacher">Teacher</string>
+    <string name="message_missing_time_for_detail">Some detail tabs are missing time periods</string>
 
     <string name="property_day">Day</string>
     <string name="property_start_time">Start Time</string>
