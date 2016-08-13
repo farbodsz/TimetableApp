@@ -174,8 +174,8 @@ public final class ClassesUtils {
         values.put(ClassTimesSchema.COL_DAY, classTime.getDay().getValue());
         values.put(ClassTimesSchema.COL_START_TIME_HRS, classTime.getStartTime().getHour());
         values.put(ClassTimesSchema.COL_START_TIME_MINS, classTime.getStartTime().getMinute());
-        values.put(ClassTimesSchema.COL_START_TIME_HRS, classTime.getEndTime().getHour());
-        values.put(ClassTimesSchema.COL_START_TIME_MINS, classTime.getEndTime().getMinute());
+        values.put(ClassTimesSchema.COL_END_TIME_HRS, classTime.getEndTime().getHour());
+        values.put(ClassTimesSchema.COL_END_TIME_MINS, classTime.getEndTime().getMinute());
 
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.insert(ClassTimesSchema.TABLE_NAME, null, values);
