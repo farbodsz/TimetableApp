@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -12,6 +13,8 @@ import com.satsumasoftware.timetable.framework.ClassTime;
 import java.util.ArrayList;
 
 public final class ClassesUtils {
+
+    private static final String LOG_TAG = "ClassesUtils";
 
     public static ArrayList<Integer> getClassDetailIds(Context context, int classId) {
         TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(context);
@@ -114,6 +117,7 @@ public final class ClassesUtils {
 
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.insert(ClassesSchema.TABLE_NAME, null, values);
+        Log.i(LOG_TAG, "Added Class with id " + cls.getId());
     }
 
     public static void deleteClass(Context context, int classId) {
@@ -121,11 +125,13 @@ public final class ClassesUtils {
         db.delete(ClassesSchema.TABLE_NAME,
                 ClassesSchema._ID + "=?",
                 new String[] {String.valueOf(classId)});
+        Log.i(LOG_TAG, "Deleted Class with id " + classId);
     }
 
     public static void replaceClass(Context context, int oldClassId, Class newClass) {
         deleteClass(context, oldClassId);
         addClass(context, newClass);
+        Log.i(LOG_TAG, "Replacing Class...");
     }
 
     public static int getHighestClassDetailId(Context context) {
@@ -145,6 +151,7 @@ public final class ClassesUtils {
 
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.insert(ClassDetailsSchema.TABLE_NAME, null, values);
+        Log.i(LOG_TAG, "Added ClassDetail with id " + classDetail.getId());
     }
 
     public static void deleteClassDetail(Context context, int classDetailId) {
@@ -152,11 +159,13 @@ public final class ClassesUtils {
         db.delete(ClassDetailsSchema.TABLE_NAME,
                 ClassDetailsSchema._ID + "=?",
                 new String[] {String.valueOf(classDetailId)});
+        Log.i(LOG_TAG, "Deleted ClassDetail with id " + classDetailId);
     }
 
     public static void replaceClassDetail(Context context, int oldClassDetailId, ClassDetail newClassDetail) {
         deleteClassDetail(context, oldClassDetailId);
         addClassDetail(context, newClassDetail);
+        Log.i(LOG_TAG, "Replacing ClassDetail...");
     }
 
     public static int getHighestClassTimeId(Context context) {
@@ -179,6 +188,7 @@ public final class ClassesUtils {
 
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.insert(ClassTimesSchema.TABLE_NAME, null, values);
+        Log.i(LOG_TAG, "Added ClassTime with id " + classTime.getId());
     }
 
     public static void deleteClassTime(Context context, int classTimeId) {
@@ -186,11 +196,13 @@ public final class ClassesUtils {
         db.delete(ClassTimesSchema.TABLE_NAME,
                 ClassTimesSchema._ID + "=?",
                 new String[] {String.valueOf(classTimeId)});
+        Log.i(LOG_TAG, "Deleted ClassTime with id " + classTimeId);
     }
 
     public static void replaceClassTime(Context context, int oldClassTimeId, ClassTime newClassTime) {
         deleteClassTime(context, oldClassTimeId);
         addClassTime(context, newClassTime);
+        Log.i(LOG_TAG, "Replacing ClassTime...");
     }
 
     public static void addClassToDetailsLinks(Context context, int classId, ArrayList<Integer> classDetailIds) {
@@ -201,6 +213,7 @@ public final class ClassesUtils {
 
             SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
             db.insert(ClassDetailsMapSchema.TABLE_NAME, null, values);
+            Log.i(LOG_TAG, "Added Class to ClassDetail link (" + classId + "->" + classDetail + ")");
         }
     }
 
@@ -209,11 +222,13 @@ public final class ClassesUtils {
         db.delete(ClassDetailsMapSchema.TABLE_NAME,
                 ClassDetailsMapSchema.COL_CLASS_ID + "=?",
                 new String[] {String.valueOf(classId)});
+        Log.i(LOG_TAG, "Deleted Class to ClassDetail links with classId " + classId + ")");
     }
 
     public static void replaceClassToDetailsLinks(Context context, int classId, ArrayList<Integer> classDetailIds) {
         deleteClassToDetailsLinks(context, classId);
         addClassToDetailsLinks(context, classId, classDetailIds);
+        Log.i(LOG_TAG, "Replacing Class to ClassDetail links...");
     }
 
     public static void addClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
@@ -224,6 +239,8 @@ public final class ClassesUtils {
 
             SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
             db.insert(ClassDetailTimesMapSchema.TABLE_NAME, null, values);
+            Log.i(LOG_TAG, "Added ClassDetail to ClassTime link (" + classDetailId + "->" +
+                    classTimeId + ")");
         }
     }
 
@@ -232,10 +249,12 @@ public final class ClassesUtils {
         db.delete(ClassDetailTimesMapSchema.TABLE_NAME,
                 ClassDetailTimesMapSchema.COL_CLASS_DETAIL_ID + "=?",
                 new String[] {String.valueOf(classDetailId)});
+        Log.i(LOG_TAG, "Deleted ClassDetail to ClassTime links with classDetailId " + classDetailId + ")");
     }
 
     public static void replaceClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
         deleteClassDetailToTimesLinks(context, classDetailId);
         addClassDetailToTimesLinks(context, classDetailId, classTimeIds);
+        Log.i(LOG_TAG, "Replacing ClassDetail to ClassTime links...");
     }
 }
