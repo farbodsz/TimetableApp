@@ -208,7 +208,7 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
         int id;
         @Action int actionType;
         if (mIsNewTime) {
-            id = ClassesUtils.getHighestClassTimeId(this);
+            id = ClassesUtils.getHighestClassTimeId(this) + 1;
             actionType = ACTION_NEW;
         } else {
             id = mClassTime.getId();
