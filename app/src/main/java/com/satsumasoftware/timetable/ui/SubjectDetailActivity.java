@@ -22,21 +22,10 @@ import java.lang.annotation.RetentionPolicy;
 
 public class SubjectDetailActivity extends AppCompatActivity {
 
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({ACTION_NEW, ACTION_EDIT, ACTION_DELETE})
-    public @interface Action {}
-    public static final int ACTION_NEW = 0;
-    public static final int ACTION_EDIT = 1;
-    public static final int ACTION_DELETE = 2;
-
     protected static final String EXTRA_SUBJECT = "extra_subject";
-    protected static final String EXTRA_LIST_POS = "extra_list_position";
-    protected static final String EXTRA_RESULT_ACTION = "extra_result_action";
-
-    private boolean mIsNewSubject;
 
     private Subject mSubject;
-    private int mListPosition = SubjectsActivity.LIST_POS_INVALID;
+    private boolean mIsNewSubject;
 
     private EditText mEditText;
 
@@ -52,7 +41,6 @@ public class SubjectDetailActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mSubject = extras.getParcelable(EXTRA_SUBJECT);
-            mListPosition = extras.getInt(EXTRA_LIST_POS);
         }
         mIsNewSubject = mSubject == null;
 
@@ -122,30 +110,22 @@ public class SubjectDetailActivity extends AppCompatActivity {
         }
         newName = TextUtilsKt.title(newName);
 
-        @Action int actionType;
-
         if (mIsNewSubject) {
             mSubject = new Subject(SubjectsUtils.getHighestSubjectId(this) + 1, newName);
-            actionType = ACTION_NEW;
+            SubjectsUtils.addSubject(this, mSubject);
+
         } else {
             mSubject.setName(newName);
-            actionType = ACTION_EDIT;
+            SubjectsUtils.replaceSubject(this, mSubject.getId(), mSubject);
         }
 
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_SUBJECT, mSubject);
-        intent.putExtra(EXTRA_LIST_POS, mListPosition);
-        intent.putExtra(EXTRA_RESULT_ACTION, actionType);
-        setResult(Activity.RESULT_OK, intent);
+        setResult(Activity.RESULT_OK);
         finish();
     }
 
     private void handleDeleteAction() {
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_SUBJECT, mSubject);
-        intent.putExtra(EXTRA_LIST_POS, mListPosition);
-        intent.putExtra(EXTRA_RESULT_ACTION, ACTION_DELETE);
-        setResult(Activity.RESULT_OK, intent);
+        SubjectsUtils.deleteSubject(this, mSubject.getId());
+        setResult(Activity.RESULT_OK);
         finish();
     }
 

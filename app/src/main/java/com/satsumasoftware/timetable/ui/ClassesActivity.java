@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class ClassesActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_CLASS_DETAIL = 1;
-    protected static final int LIST_POS_INVALID = -1;
 
     private ArrayList<Class> mClasses;
     private ClassesAdapter mAdapter;
@@ -37,16 +36,7 @@ public class ClassesActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mClasses = new ArrayList<>();
-        TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
-        Cursor cursor = dbHelper.getReadableDatabase().query(
-                ClassesSchema.TABLE_NAME, null, null, null, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            mClasses.add(new Class(this, cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
+        mClasses = ClassesUtils.getAllClasses(this);
 
         mAdapter = new ClassesAdapter(this, mClasses);
         mAdapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
@@ -73,34 +63,19 @@ public class ClassesActivity extends BaseActivity {
         });
     }
 
+    private void refreshList() {
+        mClasses.clear();
+        mClasses.addAll(ClassesUtils.getAllClasses(this));
+        mAdapter.notifyDataSetChanged();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE_CLASS_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                Class cls = data.getParcelableExtra(ClassDetailActivity.EXTRA_CLASS);
-                int listPos = data.getIntExtra(ClassDetailActivity.EXTRA_LIST_POS, -1);
-                @ClassDetailActivity.Action int actionType =
-                        data.getIntExtra(ClassDetailActivity.EXTRA_RESULT_ACTION, -1);
-
-                switch (actionType) {
-                    case ClassDetailActivity.ACTION_NEW:
-                        mClasses.add(cls);
-                        ClassesUtils.addClass(this, cls);
-                        ClassesUtils.addClassToDetailsLinks(this, cls.getId(), cls.getClassDetailIds());
-                        break;
-                    case ClassDetailActivity.ACTION_EDIT:
-                        mClasses.set(listPos, cls);
-                        ClassesUtils.replaceClass(this, cls.getId(), cls);
-                        ClassesUtils.replaceClassToDetailsLinks(this, cls.getId(), cls.getClassDetailIds());
-                        break;
-                    case ClassDetailActivity.ACTION_DELETE:
-                        mClasses.remove(listPos);
-                        ClassesUtils.completelyDeleteClass(this, cls);
-                        break;
-                }
-                mAdapter.notifyDataSetChanged();
+                refreshList();
             }
         }
     }

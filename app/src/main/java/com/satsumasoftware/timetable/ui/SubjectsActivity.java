@@ -45,7 +45,6 @@ public class SubjectsActivity extends BaseActivity {
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(SubjectsActivity.this, SubjectDetailActivity.class);
                 intent.putExtra(SubjectDetailActivity.EXTRA_SUBJECT, mSubjects.get(position));
-                intent.putExtra(SubjectDetailActivity.EXTRA_LIST_POS, position);
                 startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
             }
         });
@@ -65,6 +64,14 @@ public class SubjectsActivity extends BaseActivity {
         });
     }
 
+    private void refreshList() {
+        // change the list itself instead of reassigning so we can do notifyDataSetChanged()
+        mSubjects.clear();
+        mSubjects.addAll(SubjectsUtils.getSubjects(this));
+        sortList();
+        mAdapter.notifyDataSetChanged();
+    }
+
     private void sortList() {
         Collections.sort(mSubjects, new Comparator<Subject>() {
             @Override
@@ -80,29 +87,7 @@ public class SubjectsActivity extends BaseActivity {
 
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                Subject returnedSubject = data.getParcelableExtra(SubjectDetailActivity.EXTRA_SUBJECT);
-                int listPos = data.getIntExtra(SubjectDetailActivity.EXTRA_LIST_POS, LIST_POS_INVALID);
-
-                @SubjectDetailActivity.Action int actionType =  data.getIntExtra(
-                        SubjectDetailActivity.EXTRA_RESULT_ACTION, -1);
-
-                switch (actionType) {
-                    case SubjectDetailActivity.ACTION_NEW:
-                        mSubjects.add(returnedSubject);
-                        SubjectsUtils.addSubject(this, returnedSubject);
-                        break;
-                    case SubjectDetailActivity.ACTION_EDIT:
-                        mSubjects.set(listPos, returnedSubject);
-                        SubjectsUtils.replaceSubject(this, returnedSubject.getId(), returnedSubject);
-                        break;
-                    case SubjectDetailActivity.ACTION_DELETE:
-                        mSubjects.remove(listPos);
-                        SubjectsUtils.deleteSubject(this, returnedSubject.getId());
-                        break;
-                }
-                sortList();
-
-                mAdapter.notifyDataSetChanged();
+                refreshList();
             }
         }
     }

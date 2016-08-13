@@ -399,32 +399,24 @@ public class ClassDetailActivity extends AppCompatActivity {
             ClassesUtils.replaceClassDetailToTimesLinks(this, classDetailId, classTimeIds);
         }
 
-        @Action int actionType;
-        int id;
-
-        if (mIsNew) {
-            id = ClassesUtils.getHighestClassId(this) + 1;
-            actionType = ACTION_NEW;
-        } else {
-            id = mClass.getId();
-            actionType = ACTION_EDIT;
-        }
+        int id = mIsNew ? ClassesUtils.getHighestClassId(this) + 1 : mClass.getId();
         mClass = new Class(id, mSubject.getId(), classDetailIds);
 
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_CLASS, mClass);
-        intent.putExtra(EXTRA_LIST_POS, mListPosition);
-        intent.putExtra(EXTRA_RESULT_ACTION, actionType);
-        setResult(Activity.RESULT_OK, intent);
+        if (mIsNew) {
+            ClassesUtils.addClass(this, mClass);
+            ClassesUtils.addClassToDetailsLinks(this, mClass.getId(), mClass.getClassDetailIds());
+        } else {
+            ClassesUtils.replaceClass(this, mClass.getId(), mClass);
+            ClassesUtils.replaceClassToDetailsLinks(this, mClass.getId(), mClass.getClassDetailIds());
+        }
+
+        setResult(Activity.RESULT_OK);
         finish();
     }
 
     private void handleDeleteAction() {
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_CLASS, mClass);
-        intent.putExtra(EXTRA_LIST_POS, mListPosition);
-        intent.putExtra(EXTRA_RESULT_ACTION, ACTION_DELETE);
-        setResult(Activity.RESULT_OK, intent);
+        ClassesUtils.completelyDeleteClass(this, mClass);
+        setResult(Activity.RESULT_OK);
         finish();
     }
 
