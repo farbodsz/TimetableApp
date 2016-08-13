@@ -389,7 +389,7 @@ public class ClassDetailActivity extends AppCompatActivity {
             actionType = ACTION_NEW;
         } else {
             id = mClass.getId();
-            actionType = ACTION_NEW;
+            actionType = ACTION_EDIT;
         }
         mClass = new Class(id, mSubject.getId(), classDetailIds);
 
