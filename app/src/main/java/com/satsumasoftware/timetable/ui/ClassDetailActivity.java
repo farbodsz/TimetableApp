@@ -329,7 +329,7 @@ public class ClassDetailActivity extends AppCompatActivity {
             String room = roomText.getText().toString();
             Log.d("CDA", "room: " + room);
 
-            EditText teacherText = (EditText) findViewById(R.id.editText_teacher);
+            EditText teacherText = (EditText) page.findViewById(R.id.editText_teacher);
             String teacher = teacherText.getText().toString();
             Log.d("CDA", "teacher: " + teacher);
 
