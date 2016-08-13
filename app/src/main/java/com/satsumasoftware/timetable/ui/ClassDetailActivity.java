@@ -284,10 +284,22 @@ public class ClassDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mIsNew) {
+            menu.findItem(R.id.action_delete).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
                 handleDoneAction();
+                break;
+            case R.id.action_delete:
+                handleDeleteAction();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -407,7 +419,6 @@ public class ClassDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    /*
     private void handleDeleteAction() {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_CLASS, mClass);
@@ -416,7 +427,6 @@ public class ClassDetailActivity extends AppCompatActivity {
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
-    */
 
 
     public class ClassDetailPagerAdapter extends PagerAdapter {

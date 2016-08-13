@@ -257,4 +257,20 @@ public final class ClassesUtils {
         deleteClassDetailToTimesLinks(context, classDetailId);
         addClassDetailToTimesLinks(context, classDetailId, classTimeIds);
     }
+
+    public static void deleteAllClassEntities(Context context, Class cls) {
+        Log.i(LOG_TAG, "Deleting everything related with class of id " + cls.getId());
+        deleteClass(context, cls.getId());
+        deleteClassToDetailsLinks(context, cls.getId());
+
+        for (int classDetailId : cls.getClassDetailIds()) {
+            for (int classTimeId : getClassTimeIds(context, classDetailId)) {
+                deleteClassTime(context, classTimeId);
+            }
+
+            deleteClassDetail(context, classDetailId);
+            deleteClassDetailToTimesLinks(context, classDetailId);
+        }
+    }
+
 }
