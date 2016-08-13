@@ -56,22 +56,16 @@
             <TextView
                 android:id="@+id/textView_start_time"
                 android:text="@string/property_start_time"
-                android:textSize="16sp"
-                android:textColor="@color/mdu_text_black_secondary"
-                android:background="?selectableItemBackground"
+                style="@style/Widget.Timetable.TextView.Selectable"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical" />
+                android:layout_height="wrap_content" />
             <include layout="@layout/divider" />
             <TextView
                 android:id="@+id/textView_end_time"
                 android:text="@string/property_end_time"
-                android:textSize="16sp"
-                android:textColor="@color/mdu_text_black_secondary"
-                android:background="?selectableItemBackground"
+                style="@style/Widget.Timetable.TextView.Selectable"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </FrameLayout>
 
