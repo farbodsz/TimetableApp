@@ -28,11 +28,11 @@
 
         <activity
             android:name=".ui.ClassDetailActivity"
-            android:theme="@style/Timetable.Home"/>
+            android:theme="@style/Timetable"/>
 
         <activity
             android:name=".ui.ClassTimeDetailActivity"
-            android:theme="@style/Timetable.Home"/>
+            android:theme="@style/Timetable"/>
 
         <activity
             android:name=".ui.AssignmentsActivity"
@@ -46,7 +46,7 @@
 
         <activity
             android:name=".ui.SubjectDetailActivity"
-            android:theme="@style/Timetable.Home"/>
+            android:theme="@style/Timetable"/>
 
     </application>
 
