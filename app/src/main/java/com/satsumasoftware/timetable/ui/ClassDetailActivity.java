@@ -299,6 +299,14 @@ public class ClassDetailActivity extends AppCompatActivity {
     }
 
     private void handleDoneAction() {
+        // validate subject
+
+        if (mSubject == null) {
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_subject_required,
+                    Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
         // go through each page and only collect data first - so any validation
         // errors can be resolved without any data being written or saved
 
