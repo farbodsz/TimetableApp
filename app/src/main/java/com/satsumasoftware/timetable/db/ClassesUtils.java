@@ -120,7 +120,7 @@ public final class ClassesUtils {
         Log.i(LOG_TAG, "Added Class with id " + cls.getId());
     }
 
-    public static void deleteClass(Context context, int classId) {
+    private static void deleteClass(Context context, int classId) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.delete(ClassesSchema.TABLE_NAME,
                 ClassesSchema._ID + "=?",
@@ -154,7 +154,7 @@ public final class ClassesUtils {
         Log.i(LOG_TAG, "Added ClassDetail with id " + classDetail.getId());
     }
 
-    public static void deleteClassDetail(Context context, int classDetailId) {
+    private static void deleteClassDetail(Context context, int classDetailId) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.delete(ClassDetailsSchema.TABLE_NAME,
                 ClassDetailsSchema._ID + "=?",
@@ -191,7 +191,7 @@ public final class ClassesUtils {
         Log.i(LOG_TAG, "Added ClassTime with id " + classTime.getId());
     }
 
-    public static void deleteClassTime(Context context, int classTimeId) {
+    private static void deleteClassTime(Context context, int classTimeId) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.delete(ClassTimesSchema.TABLE_NAME,
                 ClassTimesSchema._ID + "=?",
@@ -217,12 +217,20 @@ public final class ClassesUtils {
         }
     }
 
-    public static void deleteClassToDetailsLinks(Context context, int classId) {
+    private static void deleteClassToDetailsLinks(Context context, int classId) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.delete(ClassDetailsMapSchema.TABLE_NAME,
                 ClassDetailsMapSchema.COL_CLASS_ID + "=?",
                 new String[] {String.valueOf(classId)});
         Log.i(LOG_TAG, "Deleted Class to ClassDetail links with classId " + classId + ")");
+    }
+
+    private static void deleteClassDetailInClassLink(Context context, int classDetailId) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.delete(ClassDetailsMapSchema.TABLE_NAME,
+                ClassDetailsMapSchema.COL_CLASS_DETAIL_ID + "=?",
+                new String[] {String.valueOf(classDetailId)});
+        Log.i(LOG_TAG, "Deleted Class to ClassDetail links with classDetailId " + classDetailId + ")");
     }
 
     public static void replaceClassToDetailsLinks(Context context, int classId, ArrayList<Integer> classDetailIds) {
@@ -244,7 +252,7 @@ public final class ClassesUtils {
         }
     }
 
-    public static void deleteClassDetailToTimesLinks(Context context, int classDetailId) {
+    private static void deleteClassDetailToTimesLinks(Context context, int classDetailId) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.delete(ClassDetailTimesMapSchema.TABLE_NAME,
                 ClassDetailTimesMapSchema.COL_CLASS_DETAIL_ID + "=?",
@@ -252,7 +260,7 @@ public final class ClassesUtils {
         Log.i(LOG_TAG, "Deleted ClassDetail to ClassTime links with classDetailId " + classDetailId + ")");
     }
 
-    public static void deleteClassTimeInDetailLink(Context context, int classTimeId) {
+    private static void deleteClassTimeInDetailLink(Context context, int classTimeId) {
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.delete(ClassDetailTimesMapSchema.TABLE_NAME,
                 ClassDetailTimesMapSchema.COL_CLASS_TIME_ID + "=?",
@@ -266,19 +274,32 @@ public final class ClassesUtils {
         addClassDetailToTimesLinks(context, classDetailId, classTimeIds);
     }
 
-    public static void deleteAllClassEntities(Context context, Class cls) {
-        Log.i(LOG_TAG, "Deleting everything related with class of id " + cls.getId());
+    public static void completelyDeleteClass(Context context, Class cls) {
+        Log.i(LOG_TAG, "Deleting everything related to Class of id " + cls.getId());
+
         deleteClass(context, cls.getId());
-        deleteClassToDetailsLinks(context, cls.getId());
 
         for (int classDetailId : cls.getClassDetailIds()) {
-            for (int classTimeId : getClassTimeIds(context, classDetailId)) {
-                deleteClassTime(context, classTimeId);
-            }
-
-            deleteClassDetail(context, classDetailId);
-            deleteClassDetailToTimesLinks(context, classDetailId);
+            completelyDeleteClassDetail(context, classDetailId);
         }
+    }
+
+    public static void completelyDeleteClassDetail(Context context, int classDetailId) {
+        Log.i(LOG_TAG, "Deleting everything related to ClassDetail of id " + classDetailId);
+
+        deleteClassDetail(context, classDetailId);
+        deleteClassDetailInClassLink(context, classDetailId);
+
+        for (int classTimeId : getClassTimeIds(context, classDetailId)) {
+            completelyDeleteClassTime(context, classTimeId);
+        }
+    }
+
+    public static void completelyDeleteClassTime(Context context, int classTimeId) {
+        Log.i(LOG_TAG, "Deleting everything related to ClassTime of id " + classTimeId);
+
+        deleteClassTime(context, classTimeId);
+        deleteClassTimeInDetailLink(context, classTimeId);
     }
 
 }

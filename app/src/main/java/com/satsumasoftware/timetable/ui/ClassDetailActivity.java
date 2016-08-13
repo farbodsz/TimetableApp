@@ -269,8 +269,7 @@ public class ClassDetailActivity extends AppCompatActivity {
                         break;
                     case ClassTimeDetailActivity.ACTION_DELETE:
                         someTimes.remove(listPos);
-                        ClassesUtils.deleteClassTime(this, classTime.getId());
-                        ClassesUtils.deleteClassTimeInDetailLink(this, classTime.getId());
+                        ClassesUtils.completelyDeleteClassTime(this, classTime.getId());
                         break;
                 }
                 mAdapters.get(tabIndex).notifyDataSetChanged();

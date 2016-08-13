@@ -3,7 +3,6 @@ package com.satsumasoftware.timetable.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,7 +17,6 @@ import com.satsumasoftware.timetable.db.ClassesSchema;
 import com.satsumasoftware.timetable.db.ClassesUtils;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.framework.Class;
-import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 
 import java.util.ArrayList;
@@ -99,7 +97,7 @@ public class ClassesActivity extends BaseActivity {
                         break;
                     case ClassDetailActivity.ACTION_DELETE:
                         mClasses.remove(listPos);
-                        ClassesUtils.deleteAllClassEntities(this, cls);
+                        ClassesUtils.completelyDeleteClass(this, cls);
                         break;
                 }
                 mAdapter.notifyDataSetChanged();
