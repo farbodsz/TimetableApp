@@ -94,6 +94,7 @@ public class ClassesActivity extends BaseActivity {
                     case ClassDetailActivity.ACTION_EDIT:
                         mClasses.set(listPos, cls);
                         ClassesUtils.replaceClass(this, cls.getId(), cls);
+                        ClassesUtils.replaceClassToDetailsLinks(this, cls.getId(), cls.getClassDetailIds());
                         break;
                     case ClassDetailActivity.ACTION_DELETE:
                         // TODO
