@@ -42,6 +42,7 @@ public class ClassesActivity extends BaseActivity {
         TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
         Cursor cursor = dbHelper.getReadableDatabase().query(
                 ClassesSchema.TABLE_NAME, null, null, null, null, null, null);
+        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             mClasses.add(new Class(this, cursor));
             cursor.moveToNext();
