@@ -385,7 +385,7 @@ public class ClassDetailActivity extends AppCompatActivity {
         int id;
 
         if (mIsNew) {
-            id = ClassesUtils.getHighestClassId(this);
+            id = ClassesUtils.getHighestClassId(this) + 1;
             actionType = ACTION_NEW;
         } else {
             id = mClass.getId();
