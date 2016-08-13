@@ -73,18 +73,6 @@ public class SubjectDetailActivity extends AppCompatActivity {
         if (!mIsNewSubject) {
             mEditText.setText(mSubject.getName());
         }
-
-        Button button = (Button) findViewById(R.id.button);
-        if (mIsNewSubject) {
-            button.setVisibility(View.GONE);
-        } else {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    handleDeleteAction();
-                }
-            });
-        }
     }
 
     @Override
@@ -94,10 +82,22 @@ public class SubjectDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mIsNewSubject) {
+            menu.findItem(R.id.action_delete).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
                 handleDoneAction();
+                break;
+            case R.id.action_delete:
+                handleDeleteAction();
                 break;
         }
         return super.onOptionsItemSelected(item);
