@@ -16,6 +16,23 @@ public final class ClassesUtils {
 
     private static final String LOG_TAG = "ClassesUtils";
 
+    public static ArrayList<Class> getAllClasses(Context context) {
+        ArrayList<Class> classes = new ArrayList<>();
+
+        TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(context);
+        Cursor cursor = dbHelper.getReadableDatabase().query(
+                ClassesSchema.TABLE_NAME, null, null, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            classes.add(new Class(context, cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return classes;
+    }
+
     public static ArrayList<Integer> getClassDetailIds(Context context, int classId) {
         TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(context);
 
