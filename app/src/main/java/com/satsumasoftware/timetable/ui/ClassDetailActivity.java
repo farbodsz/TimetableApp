@@ -56,6 +56,8 @@ public class ClassDetailActivity extends AppCompatActivity {
 
     private boolean mIsNew;
 
+    private int mNewDetailIdCount = 1;
+
     private Class mClass;
     private ArrayList<Integer> mClassDetailIds;
 
@@ -166,7 +168,7 @@ public class ClassDetailActivity extends AppCompatActivity {
         final int pagerCount = mPagerAdapter.getCount();
 
         mClassDetailIds.add(isNewDetail ?
-                ClassesUtils.getHighestClassDetailId(this) + pagerCount + 1 :
+                ClassesUtils.getHighestClassDetailId(this) + mNewDetailIdCount :
                 classDetail.getId());
 
         View page = getLayoutInflater().inflate(R.layout.fragment_class_detail, null);
@@ -235,6 +237,10 @@ public class ClassDetailActivity extends AppCompatActivity {
         }
 
         mPagerAdapter.addViewWithTitle(page, "Detail " + (pagerCount + 1));
+
+        if (isNewDetail) {
+            mNewDetailIdCount++;
+        }
     }
 
     @Override
