@@ -129,9 +129,9 @@ public final class ClassesUtils {
     }
 
     public static void replaceClass(Context context, int oldClassId, Class newClass) {
+        Log.i(LOG_TAG, "Replacing Class...");
         deleteClass(context, oldClassId);
         addClass(context, newClass);
-        Log.i(LOG_TAG, "Replacing Class...");
     }
 
     public static int getHighestClassDetailId(Context context) {
@@ -163,9 +163,9 @@ public final class ClassesUtils {
     }
 
     public static void replaceClassDetail(Context context, int oldClassDetailId, ClassDetail newClassDetail) {
+        Log.i(LOG_TAG, "Replacing ClassDetail...");
         deleteClassDetail(context, oldClassDetailId);
         addClassDetail(context, newClassDetail);
-        Log.i(LOG_TAG, "Replacing ClassDetail...");
     }
 
     public static int getHighestClassTimeId(Context context) {
@@ -200,9 +200,9 @@ public final class ClassesUtils {
     }
 
     public static void replaceClassTime(Context context, int oldClassTimeId, ClassTime newClassTime) {
+        Log.i(LOG_TAG, "Replacing ClassTime...");
         deleteClassTime(context, oldClassTimeId);
         addClassTime(context, newClassTime);
-        Log.i(LOG_TAG, "Replacing ClassTime...");
     }
 
     public static void addClassToDetailsLinks(Context context, int classId, ArrayList<Integer> classDetailIds) {
@@ -226,9 +226,9 @@ public final class ClassesUtils {
     }
 
     public static void replaceClassToDetailsLinks(Context context, int classId, ArrayList<Integer> classDetailIds) {
+        Log.i(LOG_TAG, "Replacing Class to ClassDetail links...");
         deleteClassToDetailsLinks(context, classId);
         addClassToDetailsLinks(context, classId, classDetailIds);
-        Log.i(LOG_TAG, "Replacing Class to ClassDetail links...");
     }
 
     public static void addClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
@@ -253,8 +253,8 @@ public final class ClassesUtils {
     }
 
     public static void replaceClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
+        Log.i(LOG_TAG, "Replacing ClassDetail to ClassTime links...");
         deleteClassDetailToTimesLinks(context, classDetailId);
         addClassDetailToTimesLinks(context, classDetailId, classTimeIds);
-        Log.i(LOG_TAG, "Replacing ClassDetail to ClassTime links...");
     }
 }
