@@ -87,7 +87,7 @@ public final class ClassesUtils {
             Cursor cursor = dbHelper.getReadableDatabase().query(
                     ClassTimesSchema.TABLE_NAME,
                     null,
-                    ClassTimesSchema._ID,
+                    ClassTimesSchema._ID + "=?",
                     new String[] {String.valueOf(classTimeId)},
                     null, null, null);
             cursor.moveToFirst();
