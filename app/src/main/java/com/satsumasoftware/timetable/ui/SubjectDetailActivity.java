@@ -119,6 +119,8 @@ public class SubjectDetailActivity extends AppCompatActivity {
             SubjectsUtils.replaceSubject(this, mSubject.getId(), mSubject);
         }
 
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_SUBJECT, mSubject);
         setResult(Activity.RESULT_OK);
         finish();
     }
