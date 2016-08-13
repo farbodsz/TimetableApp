@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,22 +13,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.db.ClassesUtils;
-import com.satsumasoftware.timetable.db.SubjectsUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
-import com.satsumasoftware.timetable.framework.Subject;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalTime;
-import org.w3c.dom.Text;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -163,7 +156,16 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_subject_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_item_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mIsNewTime) {
+            menu.findItem(R.id.action_delete).setVisible(false);
+        }
         return true;
     }
 
@@ -172,6 +174,9 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_done:
                 handleDoneAction();
+                break;
+            case R.id.action_delete:
+                handleDeleteAction();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -222,6 +227,16 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
         intent.putExtra(EXTRA_LIST_POS, mListPosition);
         intent.putExtra(EXTRA_RESULT_ACTION, actionType);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
+    private void handleDeleteAction() {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_CLASS_TIME, mClassTime);
+        intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
+        intent.putExtra(EXTRA_LIST_POS, mListPosition);
+        intent.putExtra(EXTRA_RESULT_ACTION, ACTION_DELETE);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

@@ -270,6 +270,7 @@ public class ClassDetailActivity extends AppCompatActivity {
                     case ClassTimeDetailActivity.ACTION_DELETE:
                         someTimes.remove(listPos);
                         ClassesUtils.deleteClassTime(this, classTime.getId());
+                        ClassesUtils.deleteClassTimeInDetailLink(this, classTime.getId());
                         break;
                 }
                 mAdapters.get(tabIndex).notifyDataSetChanged();
@@ -279,7 +280,7 @@ public class ClassDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_subject_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_item_detail, menu);
         return true;
     }
 

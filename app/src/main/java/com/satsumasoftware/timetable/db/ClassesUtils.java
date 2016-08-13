@@ -252,6 +252,14 @@ public final class ClassesUtils {
         Log.i(LOG_TAG, "Deleted ClassDetail to ClassTime links with classDetailId " + classDetailId + ")");
     }
 
+    public static void deleteClassTimeInDetailLink(Context context, int classTimeId) {
+        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
+        db.delete(ClassDetailTimesMapSchema.TABLE_NAME,
+                ClassDetailTimesMapSchema.COL_CLASS_TIME_ID + "=?",
+                new String[] {String.valueOf(classTimeId)});
+        Log.i(LOG_TAG, "Deleted ClassDetail to ClassTime links with classTimeId " + classTimeId + ")");
+    }
+
     public static void replaceClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
         Log.i(LOG_TAG, "Replacing ClassDetail to ClassTime links...");
         deleteClassDetailToTimesLinks(context, classDetailId);

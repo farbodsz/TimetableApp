@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.satsumasoftware.timetable.R;
@@ -77,7 +76,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_subject_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_item_detail, menu);
         return true;
     }
 
