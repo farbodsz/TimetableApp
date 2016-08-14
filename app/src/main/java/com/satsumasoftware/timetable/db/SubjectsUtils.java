@@ -4,12 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.satsumasoftware.timetable.framework.Subject;
 
 import java.util.ArrayList;
 
 public final class SubjectsUtils {
+
+    private static final String LOG_TAG = "SubjectUtils";
 
     public static ArrayList<Subject> getSubjects(Context context) {
         ArrayList<Subject> subjects = new ArrayList<>();
@@ -32,6 +35,7 @@ public final class SubjectsUtils {
 
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.insert(SubjectsSchema.TABLE_NAME, null, values);
+        Log.i(LOG_TAG, "Added Subject with id " + subject.getId());
     }
 
     public static void deleteSubject(Context context, int subjectId) {
@@ -39,9 +43,11 @@ public final class SubjectsUtils {
         db.delete(SubjectsSchema.TABLE_NAME,
                 SubjectsSchema._ID + "=?",
                 new String[] {String.valueOf(subjectId)});
+        Log.i(LOG_TAG, "Deleted Subject with id " + subjectId);
     }
 
     public static void replaceSubject(Context context, int oldSubjectId, Subject newSubject) {
+        Log.i(LOG_TAG, "Replacing Subject...");
         deleteSubject(context, oldSubjectId);
         addSubject(context, newSubject);
     }
