@@ -121,7 +121,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_SUBJECT, mSubject);
-        setResult(Activity.RESULT_OK);
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
 
