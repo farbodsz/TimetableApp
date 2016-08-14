@@ -43,6 +43,9 @@
     <string name="action_add_time">Add time</string>
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
+    <string name="action_new">New</string>
+
+    <string name="choose_subject">Select a subject</string>
 
     <string name="drawer_open" translatable="false">Open drawer</string>
     <string name="drawer_close" translatable="false">Close drawer</string>

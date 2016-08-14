@@ -9,11 +9,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.ClassesUtils;
@@ -30,6 +33,7 @@ import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassTimesAdapter;
+import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import java.lang.annotation.Retention;
@@ -52,7 +56,8 @@ public class ClassDetailActivity extends AppCompatActivity {
     protected static final String EXTRA_LIST_POS = "extra_list_position";
     protected static final String EXTRA_RESULT_ACTION = "extra_result_action";
 
-    protected static final int REQUEST_CODE_CLASS_TIME_DETAIL = 2;
+    protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
+    protected static final int REQUEST_CODE_CLASS_TIME_DETAIL = 3;
 
     private boolean mIsNew;
 
@@ -64,7 +69,10 @@ public class ClassDetailActivity extends AppCompatActivity {
     private int mListPosition = SubjectsActivity.LIST_POS_INVALID;
 
     private Subject mSubject;
-    private LabelledSpinner mSpinner;
+
+    private TextView mSubjectText;
+    private AlertDialog mSubjectDialog;
+
     private ClassDetailPagerAdapter mPagerAdapter;
 
     private ArrayList<ArrayList<ClassTime>> mClassTimes;
@@ -118,18 +126,44 @@ public class ClassDetailActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<String> subjectNames = getSubjectNames(subjects);
-
-        mSpinner = (LabelledSpinner) findViewById(R.id.spinner_subject);
-        mSpinner.setItemsArray(subjectNames);
-        mSpinner.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+        mSubjectText = (TextView) findViewById(R.id.textView_subject);
+        mSubjectText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
-                mSubject = subjects.get(position);
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ClassDetailActivity.this);
+
+                LayoutInflater inflater = getLayoutInflater();
+                View customView = inflater.inflate(R.layout.dialog_subjects, null);
+
+                SubjectsAdapter adapter = new SubjectsAdapter(subjects);
+                adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
+                    @Override
+                    public void onEntryClick(View view, int position) {
+                        mSubject = subjects.get(position);
+                        mSubjectDialog.dismiss();
+                        updateSubjectText();
+                    }
+                });
+
+                RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(ClassDetailActivity.this));
+                recyclerView.setAdapter(adapter);
+
+                Button button = (Button) customView.findViewById(R.id.button_new);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(ClassDetailActivity.this, SubjectDetailActivity.class);
+                        startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
+                    }
+                });
+
+                builder.setView(customView);
+
+                mSubjectDialog = builder.create();
+                mSubjectDialog.show();
             }
-
-            @Override
-            public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
         });
 
         mClassDetailIds = new ArrayList<>();
@@ -138,9 +172,8 @@ public class ClassDetailActivity extends AppCompatActivity {
         mAdapters = new ArrayList<>();
 
         if (!mIsNew) {
-            Subject subject = SubjectsUtils.getSubjectFromId(this, mClass.getSubjectId());
-            int pos = subjectNames.indexOf(subject.getName());
-            mSpinner.setSelection(pos);
+            mSubject = SubjectsUtils.getSubjectFromId(this, mClass.getSubjectId());
+            updateSubjectText();
 
             ArrayList<ClassDetail> classDetails =
                     ClassesUtils.getClassDetailsFromIds(this, mClass.getClassDetailIds());
@@ -153,12 +186,10 @@ public class ClassDetailActivity extends AppCompatActivity {
         addDetailTab(null, true);
     }
 
-    private ArrayList<String> getSubjectNames(ArrayList<Subject> subjects) {
-        ArrayList<String> names = new ArrayList<>();
-        for (Subject subject : subjects) {
-            names.add(subject.getName());
-        }
-        return names;
+    private void updateSubjectText() {
+        mSubjectText.setText(mSubject.getName());
+        mSubjectText.setTextColor(ContextCompat.getColor(
+                ClassDetailActivity.this, R.color.mdu_text_white));
     }
 
     private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {
@@ -247,7 +278,14 @@ public class ClassDetailActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_CLASS_TIME_DETAIL) {
+        if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
+            if (resultCode == Activity.RESULT_OK) {
+                mSubject = data.getParcelableExtra(SubjectDetailActivity.EXTRA_SUBJECT);
+                mSubjectDialog.dismiss();
+                updateSubjectText();
+            }
+
+        } else if (requestCode == REQUEST_CODE_CLASS_TIME_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 ClassTime classTime = data.getParcelableExtra(ClassTimeDetailActivity.EXTRA_CLASS_TIME);
                 int tabIndex = data.getIntExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, -1);

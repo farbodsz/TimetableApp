@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
     android:orientation="vertical"
@@ -16,10 +15,11 @@
             style="@style/Widget.Timetable.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <com.satsuware.usefulviews.LabelledSpinner
-            android:id="@+id/spinner_subject"
-            app:labelText="@string/property_subject"
-            app:widgetColor="@color/mdu_text_white_secondary"
+        <TextView
+            android:id="@+id/textView_subject"
+            android:text="@string/property_subject"
+            style="@style/Widget.Timetable.TextView.Selectable"
+            android:textColor="@color/mdu_text_white_secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/mdu_keyline_2"
