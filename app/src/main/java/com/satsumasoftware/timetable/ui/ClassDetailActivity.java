@@ -119,7 +119,7 @@ public class ClassDetailActivity extends AppCompatActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 View customView = inflater.inflate(R.layout.dialog_subjects, null);
 
-                SubjectsAdapter adapter = new SubjectsAdapter(subjects);
+                SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
                 adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
                     @Override
                     public void onEntryClick(View view, int position) {

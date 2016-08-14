@@ -33,6 +33,7 @@ public final class SubjectsUtils {
         ContentValues values = new ContentValues();
         values.put(SubjectsSchema._ID, subject.getId());
         values.put(SubjectsSchema.COL_NAME, subject.getName());
+        values.put(SubjectsSchema.COL_COLOR_ID, subject.getColorId());
 
         SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
         db.insert(SubjectsSchema.TABLE_NAME, null, values);

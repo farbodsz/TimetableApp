@@ -1,5 +1,7 @@
 package com.satsumasoftware.timetable.ui.adapter;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,15 +9,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 
 import java.util.ArrayList;
 
 public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.SubjectViewHolder> {
 
+    private Context mContext;
     private ArrayList<Subject> mSubjects;
 
-    public SubjectsAdapter(ArrayList<Subject> subjects) {
+    public SubjectsAdapter(Context context, ArrayList<Subject> subjects) {
+        mContext = context;
         mSubjects = subjects;
     }
 
@@ -28,7 +33,10 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.Subjec
     @Override
     public void onBindViewHolder(SubjectViewHolder holder, int position) {
         Subject subject = mSubjects.get(position);
+        Color color = new Color(subject.getColorId());
 
+        holder.mColor.setBackgroundColor(ContextCompat.getColor(
+                mContext, color.getPrimaryColorResId(mContext)));
         holder.mName.setText(subject.getName());
     }
 
@@ -39,11 +47,13 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.Subjec
 
     public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        View mColor;
         TextView mName;
 
         SubjectViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            mColor = itemView.findViewById(R.id.color);
             mName = (TextView) itemView.findViewById(R.id.name);
         }
 

@@ -4,17 +4,27 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.db.SubjectsUtils;
+import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
+import com.satsumasoftware.timetable.ui.adapter.ColorsAdapter;
+
+import java.util.ArrayList;
 
 public class SubjectDetailActivity extends AppCompatActivity {
 
@@ -24,6 +34,9 @@ public class SubjectDetailActivity extends AppCompatActivity {
     private boolean mIsNewSubject;
 
     private EditText mEditText;
+
+    private AlertDialog mColorDialog;
+    private Color mColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +69,43 @@ public class SubjectDetailActivity extends AppCompatActivity {
         if (!mIsNewSubject) {
             mEditText.setText(mSubject.getName());
         }
+
+        final ImageView imageView = (ImageView) findViewById(R.id.imageView);
+
+        mColor = new Color(mIsNewSubject ? 6 : mSubject.getColorId());
+        imageView.setImageResource(mColor.getPrimaryColorResId(this));
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(SubjectDetailActivity.this);
+
+                LayoutInflater inflater = getLayoutInflater();
+                View customView = inflater.inflate(R.layout.dialog_colors, null);
+
+                final ArrayList<Color> colors = ColorsAdapter.getAllColors();
+
+                ColorsAdapter adapter = new ColorsAdapter(getBaseContext(), colors);
+                adapter.setOnEntryClickListener(new ColorsAdapter.OnEntryClickListener() {
+                    @Override
+                    public void onEntryClick(View view, int position) {
+                        mColor = colors.get(position);
+                        imageView.setImageResource(mColor.getPrimaryColorResId(getBaseContext()));
+                        mColorDialog.dismiss();
+                    }
+                });
+
+                RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new GridLayoutManager(SubjectDetailActivity.this, 4));
+                recyclerView.setAdapter(adapter);
+
+                builder.setView(customView);
+
+                mColorDialog = builder.create();
+                mColorDialog.show();
+            }
+        });
     }
 
     @Override
@@ -107,7 +157,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
         newName = TextUtilsKt.title(newName);
 
         if (mIsNewSubject) {
-            mSubject = new Subject(SubjectsUtils.getHighestSubjectId(this) + 1, newName);
+            mSubject = new Subject(SubjectsUtils.getHighestSubjectId(this) + 1, newName, mColor.getId());
             SubjectsUtils.addSubject(this, mSubject);
 
         } else {

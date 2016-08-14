@@ -39,7 +39,7 @@ public class SubjectsActivity extends BaseActivity {
         mSubjects = SubjectsUtils.getSubjects(this);
         sortList();
 
-        mAdapter = new SubjectsAdapter(mSubjects);
+        mAdapter = new SubjectsAdapter(getBaseContext(), mSubjects);
         mAdapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
