@@ -49,13 +49,21 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ColorViewH
         return mColors.size();
     }
 
-    public class ColorViewHolder extends RecyclerView.ViewHolder {
+    public class ColorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         CircleImageView mImageView;
 
         ColorViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             mImageView = (CircleImageView) itemView.findViewById(R.id.imageView);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mOnEntryClickListener != null) {
+                mOnEntryClickListener.onEntryClick(view, getLayoutPosition());
+            }
         }
     }
 
