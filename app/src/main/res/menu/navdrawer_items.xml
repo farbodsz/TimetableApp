@@ -10,6 +10,10 @@
 
     <group android:id="@+id/navigation_group_2" android:checkableBehavior="single">
         <item
+            android:id="@+id/navigation_item_schedule"
+            android:title="@string/title_activity_schedule"
+            android:icon="@drawable/ic_today_black_24dp"/>
+        <item
             android:id="@+id/navigation_item_classes"
             android:title="@string/title_activity_classes"
             android:icon="@drawable/ic_class_black_24dp"/>

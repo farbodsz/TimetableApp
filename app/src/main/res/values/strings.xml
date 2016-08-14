@@ -3,6 +3,7 @@
     <string name="app_name">Timetable</string>
 
     <string name="title_activity_home">Home</string>
+    <string name="title_activity_schedule">Schedule</string>
     <string name="title_activity_classes">Classes</string>
     <string name="title_activity_class_new">New Class</string>
     <string name="title_activity_class_edit">Edit Class</string>
@@ -44,6 +45,7 @@
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
     <string name="action_new">New</string>
+    <string name="action_today">Today</string>
 
     <string name="choose_subject">Select a subject</string>
 

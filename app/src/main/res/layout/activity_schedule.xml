@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.ScheduleActivity">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Widget.Timetable.Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </android.support.design.widget.AppBarLayout>
+
+        <com.alamkanak.weekview.WeekView
+            android:id="@+id/weekView"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:columnGap="@dimen/mdu_spacing_micro"
+            app:eventMarginVertical="1dp"
+            app:eventTextColor="@color/mdu_text_white"
+            app:eventTextSize="14sp"
+            app:headerColumnPadding="@dimen/mdu_keyline_1"
+            app:headerColumnTextColor="@color/mdu_text_black_secondary"
+            app:headerRowBackgroundColor="@color/mdu_grey_200"
+            app:headerRowPadding="12dp"
+            app:hourHeight="56dp"
+            app:noOfVisibleDays="3"
+            app:dayBackgroundColor="#05000000"
+            app:todayHeaderTextColor="?colorAccent"
+            app:showDistinctPastFutureColor="true"
+            app:showNowLine="true"
+            app:nowLineColor="?colorAccent"
+            app:nowLineThickness="2dp" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <include layout="@layout/navigation_drawer"/>
+
+</android.support.v4.widget.DrawerLayout>

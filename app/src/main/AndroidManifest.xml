@@ -22,6 +22,11 @@
         </activity>
 
         <activity
+            android:name=".ui.ScheduleActivity"
+            android:label="@string/title_activity_schedule"
+            android:theme="@style/Timetable.Home"/>
+
+        <activity
             android:name=".ui.ClassesActivity"
             android:label="@string/title_activity_classes"
             android:theme="@style/Timetable.Home"/>
