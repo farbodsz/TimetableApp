@@ -9,7 +9,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -28,8 +27,6 @@ import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 
 import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -130,10 +127,6 @@ public class ScheduleActivity extends BaseActivity {
                                 this, color.getPrimaryDarkColorResId(this)));
 
                         weekViewEvents.add(event);
-
-                        Log.d("SDA", "Added " + name + " in " + location + " with times");
-                        Log.d("SDA", " - start time: " + startTime.getTime());
-                        Log.d("SDA", " - end time: " + endTime.getTime());
                     }
                 }
             }
