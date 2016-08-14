@@ -1,7 +1,6 @@
 package com.satsumasoftware.timetable.framework
 
 import android.database.Cursor
-import java.util.*
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.SubjectsSchema

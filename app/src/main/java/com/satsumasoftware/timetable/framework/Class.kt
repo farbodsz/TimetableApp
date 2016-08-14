@@ -2,11 +2,11 @@ package com.satsumasoftware.timetable.framework
 
 import android.content.Context
 import android.database.Cursor
-import java.util.*
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.ClassesSchema
 import com.satsumasoftware.timetable.db.ClassesUtils
+import java.util.*
 
 class Class(val id: Int, val subjectId: Int, val classDetailIds: ArrayList<Int>) : Parcelable {
 

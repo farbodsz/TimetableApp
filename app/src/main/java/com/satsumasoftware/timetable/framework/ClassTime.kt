@@ -1,10 +1,8 @@
 package com.satsumasoftware.timetable.framework
 
-import java.util.*
+import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-
-import android.database.Cursor
 import com.satsumasoftware.timetable.db.ClassTimesSchema
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime
