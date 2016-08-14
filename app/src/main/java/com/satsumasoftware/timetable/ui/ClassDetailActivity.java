@@ -3,7 +3,6 @@ package com.satsumasoftware.timetable.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -34,8 +33,6 @@ import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassTimesAdapter;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,16 +40,10 @@ import java.util.Locale;
 
 public class ClassDetailActivity extends AppCompatActivity {
 
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({ACTION_NEW, ACTION_EDIT, ACTION_DELETE})
-    public @interface Action {}
-    public static final int ACTION_NEW = 0;
-    public static final int ACTION_EDIT = 1;
-    public static final int ACTION_DELETE = 2;
+    private static final String LOG_TAG = "ClassDetailActivity";
 
     protected static final String EXTRA_CLASS = "extra_class";
     protected static final String EXTRA_LIST_POS = "extra_list_position";
-    protected static final String EXTRA_RESULT_ACTION = "extra_result_action";
 
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
     protected static final int REQUEST_CODE_CLASS_TIME_DETAIL = 3;
@@ -63,8 +54,6 @@ public class ClassDetailActivity extends AppCompatActivity {
 
     private Class mClass;
     private ArrayList<Integer> mClassDetailIds;
-
-    private int mListPosition = SubjectsActivity.LIST_POS_INVALID;
 
     private Subject mSubject;
 
@@ -88,7 +77,6 @@ public class ClassDetailActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mClass = extras.getParcelable(EXTRA_CLASS);
-            mListPosition = extras.getInt(EXTRA_LIST_POS);
         }
         mIsNew = mClass == null;
 
@@ -291,7 +279,7 @@ public class ClassDetailActivity extends AppCompatActivity {
                 @ClassTimeDetailActivity.Action int actionType =
                         data.getIntExtra(ClassTimeDetailActivity.EXTRA_RESULT_ACTION, -1);
 
-                Log.d("TAB INDEX", "is : " + tabIndex);
+                Log.d(LOG_TAG, "Refreshing adapter at tab index " + tabIndex);
 
                 ArrayList<ClassTime> someTimes = mClassTimes.get(tabIndex);
                 switch (actionType) {
@@ -373,7 +361,7 @@ public class ClassDetailActivity extends AppCompatActivity {
 
         // note the - 1 from .size() to exclude the placeholder tab
         for (int i = 0; i < pages.size() - 1; i++) {
-            Log.d("CDA", "---");
+            Log.d(LOG_TAG, "Collecting values at tab index " + i);
 
             View page = pages.get(i);
 
@@ -381,26 +369,26 @@ public class ClassDetailActivity extends AppCompatActivity {
 
             EditText roomText = (EditText) page.findViewById(R.id.editText_room);
             String room = roomText.getText().toString();
-            Log.d("CDA", "room: " + room);
+            Log.d(LOG_TAG, "room: " + room);
 
             EditText teacherText = (EditText) page.findViewById(R.id.editText_teacher);
             String teacher = teacherText.getText().toString();
-            Log.d("CDA", "teacher: " + teacher);
+            Log.d(LOG_TAG, "teacher: " + teacher);
 
             ArrayList<ClassTime> classTimes = mClassTimes.get(i);
             if (classTimes.isEmpty()) {
-                Log.d("CDA", "class times list is empty");
+                Log.d(LOG_TAG, "class times list is empty!");
                 if (room.trim().equals("") && teacher.trim().equals("")) {
                     // this is an empty detail page: room, teacher and times are empty
                     Snackbar.make(findViewById(R.id.rootView),
                             R.string.message_empty_detail, Snackbar.LENGTH_SHORT).show();
-                    Log.d("CDA", "completely empty detail page");
+                    Log.d(LOG_TAG, "completely empty detail page");
                     return;
                 } else {
                     // this has a room or teacher but not times (which it needs)
                     Snackbar.make(findViewById(R.id.rootView),
                             R.string.message_missing_time_for_detail, Snackbar.LENGTH_SHORT).show();
-                    Log.d("CDA", "room and teacher, but no times");
+                    Log.d(LOG_TAG, "room and/or teacher, but no times");
                     return;
                 }
             }
@@ -416,7 +404,7 @@ public class ClassDetailActivity extends AppCompatActivity {
 
         if (rooms.size() == 0) {
             // if nothing has been added
-            Log.d("CDA", "nothing entered");
+            Log.d(LOG_TAG, "nothing entered");
             handleCloseAction();
             return;
         }
