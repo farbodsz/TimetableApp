@@ -122,7 +122,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        SubjectsUtils.deleteSubject(this, mSubject.getId());
+        SubjectsUtils.completelyDeleteSubject(this, mSubject.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }
