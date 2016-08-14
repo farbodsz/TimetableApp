@@ -3,6 +3,8 @@
 
     <dimen name="drawer_width">@dimen/match_parent</dimen>
 
+    <dimen name="subject_color_strip_width">4dp</dimen>
+
     <!-- per https://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#MATCH_PARENT -->
     <item name="match_parent" format="integer" type="dimen">-1</item>
 
