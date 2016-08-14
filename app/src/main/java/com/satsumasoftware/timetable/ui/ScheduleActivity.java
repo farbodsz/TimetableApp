@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 
 import org.threeten.bp.DayOfWeek;
@@ -120,8 +122,14 @@ public class ScheduleActivity extends BaseActivity {
                                 classTime.getEndTime().getHour(),
                                 classTime.getEndTime().getMinute());
 
-                        weekViewEvents.add(
-                                new WeekViewEvent(id, name, location, startTime, endTime));
+                        WeekViewEvent event =
+                                new WeekViewEvent(id, name, location, startTime, endTime);
+
+                        Color color = new Color(subject.getColorId());
+                        event.setColor(ContextCompat.getColor(
+                                this, color.getPrimaryDarkColorResId(this)));
+
+                        weekViewEvents.add(event);
 
                         Log.d("SDA", "Added " + name + " in " + location + " with times");
                         Log.d("SDA", " - start time: " + startTime.getTime());
