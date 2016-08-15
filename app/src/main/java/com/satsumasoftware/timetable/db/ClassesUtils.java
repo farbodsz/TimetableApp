@@ -164,6 +164,7 @@ public final class ClassesUtils {
     public static void addClassDetail(Context context, ClassDetail classDetail) {
         ContentValues values = new ContentValues();
         values.put(ClassDetailsSchema._ID, classDetail.getId());
+        values.put(ClassDetailsSchema.COL_CLASS_ID, classDetail.getClassId());
         values.put(ClassDetailsSchema.COL_ROOM, classDetail.getRoom());
         values.put(ClassDetailsSchema.COL_TEACHER, classDetail.getTeacher());
 
@@ -198,6 +199,7 @@ public final class ClassesUtils {
     public static void addClassTime(Context context, ClassTime classTime) {
         ContentValues values = new ContentValues();
         values.put(ClassTimesSchema._ID, classTime.getId());
+        values.put(ClassTimesSchema.COL_CLASS_DETAIL_ID, classTime.getClassDetailId());
         values.put(ClassTimesSchema.COL_DAY, classTime.getDay().getValue());
         values.put(ClassTimesSchema.COL_START_TIME_HRS, classTime.getStartTime().getHour());
         values.put(ClassTimesSchema.COL_START_TIME_MINS, classTime.getStartTime().getMinute());
