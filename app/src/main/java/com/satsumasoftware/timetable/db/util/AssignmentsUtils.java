@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db;
+package com.satsumasoftware.timetable.db.util;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.satsumasoftware.timetable.db.AssignmentsSchema;
+import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.framework.Assignment;
 
 import java.util.ArrayList;

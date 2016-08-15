@@ -18,7 +18,7 @@ import android.widget.ImageView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.db.SubjectsUtils;
+import com.satsumasoftware.timetable.db.util.SubjectsUtils;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ColorsAdapter;

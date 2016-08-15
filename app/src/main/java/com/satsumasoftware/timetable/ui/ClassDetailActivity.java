@@ -23,8 +23,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.ClassesUtils;
-import com.satsumasoftware.timetable.db.SubjectsUtils;
+import com.satsumasoftware.timetable.db.util.ClassesUtils;
+import com.satsumasoftware.timetable.db.util.SubjectsUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;

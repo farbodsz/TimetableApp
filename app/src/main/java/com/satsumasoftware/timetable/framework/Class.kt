@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.ClassesSchema
-import com.satsumasoftware.timetable.db.ClassesUtils
+import com.satsumasoftware.timetable.db.util.ClassesUtils
 import java.util.*
 
 class Class(val id: Int, val subjectId: Int, val classDetailIds: ArrayList<Int>) : Parcelable {

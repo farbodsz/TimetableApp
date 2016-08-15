@@ -2,6 +2,8 @@ package com.satsumasoftware.timetable.db;
 
 import android.provider.BaseColumns;
 
+import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
+
 public final class AssignmentsSchema implements BaseColumns {
 
     public static final String TABLE_NAME = "assignments";

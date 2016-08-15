@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.ClassesUtils;
+import com.satsumasoftware.timetable.db.util.ClassesUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 
