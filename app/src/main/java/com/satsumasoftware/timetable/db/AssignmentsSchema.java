@@ -8,8 +8,9 @@ public final class AssignmentsSchema implements BaseColumns {
     public static final String COL_CLASS_ID = "class_id";
     public static final String COL_TITLE = "title";
     public static final String COL_DETAIL = "detail";
-    public static final String COL_DUE_DATE_HRS = "due_date_hrs";
-    public static final String COL_DUE_DATE_MINS = "due_date_mins";
+    public static final String COL_DUE_DATE_DAY_OF_MONTH = "due_date_day_of_month";
+    public static final String COL_DUE_DATE_MONTH = "due_date_month";
+    public static final String COL_DUE_DATE_YEAR = "due_date_year";
     public static final String COL_COMPLETION_PROGRESS = "completion_progress";
 
     protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
@@ -17,8 +18,9 @@ public final class AssignmentsSchema implements BaseColumns {
             COL_CLASS_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_TITLE + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_DETAIL + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +
-            COL_DUE_DATE_HRS + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
-            COL_DUE_DATE_MINS + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
+            COL_DUE_DATE_DAY_OF_MONTH + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
+            COL_DUE_DATE_MONTH + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
+            COL_DUE_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_COMPLETION_PROGRESS + SchemaUtilsKt.INTEGER_TYPE +
             " )";
 
