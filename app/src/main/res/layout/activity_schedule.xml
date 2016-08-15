@@ -44,7 +44,8 @@
             app:showDistinctPastFutureColor="true"
             app:showNowLine="true"
             app:nowLineColor="?colorAccent"
-            app:nowLineThickness="2dp" />
+            app:nowLineThickness="2dp"
+            app:xScrollingSpeed="0" />
 
     </android.support.design.widget.CoordinatorLayout>
 
