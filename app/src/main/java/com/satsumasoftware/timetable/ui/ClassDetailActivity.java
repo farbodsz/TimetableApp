@@ -415,7 +415,8 @@ public class ClassDetailActivity extends AppCompatActivity {
             String teacher = teachers.get(i);
             ArrayList<Integer> classTimeIds = classTimeIdsList.get(i);
 
-            ClassDetail classDetail = new ClassDetail(classDetailId, room, teacher, classTimeIds);
+            ClassDetail classDetail =
+                    new ClassDetail(classDetailId, mClass.getId(), room, teacher, classTimeIds);
 
             ClassesUtils.replaceClassDetail(this, classDetailId, classDetail);
             ClassesUtils.replaceClassDetailToTimesLinks(this, classDetailId, classTimeIds);

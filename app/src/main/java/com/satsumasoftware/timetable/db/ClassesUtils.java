@@ -67,10 +67,11 @@ public final class ClassesUtils {
                     new String[]{String.valueOf(classDetailId)},
                     null, null, null);
             cursor.moveToFirst();
+            int classId = cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema.COL_CLASS_ID));
             String room = cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_ROOM));
             String teacher = cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_TEACHER));
             ArrayList<Integer> classTimeIds = getClassTimeIds(context, classDetailId);
-            classDetails.add(new ClassDetail(classDetailId, room, teacher, classTimeIds));
+            classDetails.add(new ClassDetail(classDetailId, classId, room, teacher, classTimeIds));
             cursor.close();
         }
 
