@@ -176,7 +176,7 @@ public class ClassDetailActivity extends AppCompatActivity {
                 ClassDetailActivity.this, R.color.mdu_text_white));
     }
 
-    private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {
+    private void addDetailTab(final ClassDetail classDetail, boolean placeHolder) {
         boolean isNewDetail = classDetail == null;
 
         // MUST be final so that it doesn't change as adapter count updates
@@ -206,8 +206,10 @@ public class ClassDetailActivity extends AppCompatActivity {
         adapter.setOnEntryClickListener(new ClassTimesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
+                assert classDetail != null;
                 Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_TIME, classTimes.get(position));
+                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetail.getId());
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_LIST_POS, position);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
@@ -229,7 +231,9 @@ public class ClassDetailActivity extends AppCompatActivity {
         btnAddTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                assert classDetail != null;
                 Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
+                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetail.getId());
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
             }
