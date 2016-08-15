@@ -176,15 +176,16 @@ public class ClassDetailActivity extends AppCompatActivity {
                 ClassDetailActivity.this, R.color.mdu_text_white));
     }
 
-    private void addDetailTab(final ClassDetail classDetail, boolean placeHolder) {
+    private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {
         boolean isNewDetail = classDetail == null;
 
         // MUST be final so that it doesn't change as adapter count updates
         final int pagerCount = mPagerAdapter.getCount();
 
-        mClassDetailIds.add(isNewDetail ?
+        final int classDetailId = isNewDetail ?
                 ClassesUtils.getHighestClassDetailId(this) + mNewDetailIdCount :
-                classDetail.getId());
+                classDetail.getId();
+        mClassDetailIds.add(classDetailId);
 
         View page = getLayoutInflater().inflate(R.layout.fragment_class_detail, null);
 
@@ -206,10 +207,9 @@ public class ClassDetailActivity extends AppCompatActivity {
         adapter.setOnEntryClickListener(new ClassTimesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                assert classDetail != null;
                 Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_TIME, classTimes.get(position));
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetail.getId());
+                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_LIST_POS, position);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
@@ -231,9 +231,8 @@ public class ClassDetailActivity extends AppCompatActivity {
         btnAddTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                assert classDetail != null;
                 Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetail.getId());
+                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
             }
@@ -413,6 +412,8 @@ public class ClassDetailActivity extends AppCompatActivity {
 
         // now write the data (replace class detail values)
 
+        int classId = mIsNew ? ClassesUtils.getHighestClassId(this) + 1 : mClass.getId();
+
         for (int i = 0; i < rooms.size(); i++) {
             int classDetailId = classDetailIds.get(i);
             String room = rooms.get(i);
@@ -420,13 +421,12 @@ public class ClassDetailActivity extends AppCompatActivity {
             ArrayList<Integer> classTimeIds = classTimeIdsList.get(i);
 
             ClassDetail classDetail =
-                    new ClassDetail(classDetailId, mClass.getId(), room, teacher, classTimeIds);
+                    new ClassDetail(classDetailId, classId, room, teacher, classTimeIds);
 
             ClassesUtils.replaceClassDetail(this, classDetailId, classDetail);
         }
 
-        int id = mIsNew ? ClassesUtils.getHighestClassId(this) + 1 : mClass.getId();
-        mClass = new Class(id, mSubject.getId(), classDetailIds);
+        mClass = new Class(classId, mSubject.getId(), classDetailIds);
 
         if (mIsNew) {
             ClassesUtils.addClass(this, mClass);
