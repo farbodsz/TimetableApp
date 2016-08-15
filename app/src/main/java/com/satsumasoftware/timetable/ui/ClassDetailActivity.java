@@ -182,9 +182,10 @@ public class ClassDetailActivity extends AppCompatActivity {
         // MUST be final so that it doesn't change as adapter count updates
         final int pagerCount = mPagerAdapter.getCount();
 
-        mClassDetailIds.add(isNewDetail ?
+        final int classDetailId = isNewDetail ?
                 ClassesUtils.getHighestClassDetailId(this) + mNewDetailIdCount :
-                classDetail.getId());
+                classDetail.getId();
+        mClassDetailIds.add(classDetailId);
 
         View page = getLayoutInflater().inflate(R.layout.fragment_class_detail, null);
 
@@ -208,6 +209,7 @@ public class ClassDetailActivity extends AppCompatActivity {
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_TIME, classTimes.get(position));
+                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_LIST_POS, position);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
@@ -230,6 +232,7 @@ public class ClassDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
+                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
             }
@@ -409,27 +412,26 @@ public class ClassDetailActivity extends AppCompatActivity {
 
         // now write the data (replace class detail values)
 
+        int classId = mIsNew ? ClassesUtils.getHighestClassId(this) + 1 : mClass.getId();
+
         for (int i = 0; i < rooms.size(); i++) {
             int classDetailId = classDetailIds.get(i);
             String room = rooms.get(i);
             String teacher = teachers.get(i);
             ArrayList<Integer> classTimeIds = classTimeIdsList.get(i);
 
-            ClassDetail classDetail = new ClassDetail(classDetailId, room, teacher, classTimeIds);
+            ClassDetail classDetail =
+                    new ClassDetail(classDetailId, classId, room, teacher, classTimeIds);
 
             ClassesUtils.replaceClassDetail(this, classDetailId, classDetail);
-            ClassesUtils.replaceClassDetailToTimesLinks(this, classDetailId, classTimeIds);
         }
 
-        int id = mIsNew ? ClassesUtils.getHighestClassId(this) + 1 : mClass.getId();
-        mClass = new Class(id, mSubject.getId(), classDetailIds);
+        mClass = new Class(classId, mSubject.getId(), classDetailIds);
 
         if (mIsNew) {
             ClassesUtils.addClass(this, mClass);
-            ClassesUtils.addClassToDetailsLinks(this, mClass.getId(), mClass.getClassDetailIds());
         } else {
             ClassesUtils.replaceClass(this, mClass.getId(), mClass);
-            ClassesUtils.replaceClassToDetailsLinks(this, mClass.getId(), mClass.getClassDetailIds());
         }
 
         setResult(Activity.RESULT_OK);

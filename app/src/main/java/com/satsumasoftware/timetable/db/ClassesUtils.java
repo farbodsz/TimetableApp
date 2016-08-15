@@ -37,9 +37,9 @@ public final class ClassesUtils {
         TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(context);
 
         Cursor cursor = dbHelper.getReadableDatabase().query(
-                ClassDetailsMapSchema.TABLE_NAME,
+                ClassDetailsSchema.TABLE_NAME,
                 null,
-                ClassDetailsMapSchema.COL_CLASS_ID + "=?",
+                ClassDetailsSchema.COL_CLASS_ID + "=?",
                 new String[] {String.valueOf(classId)},
                 null, null, null);
         cursor.moveToFirst();
@@ -47,7 +47,7 @@ public final class ClassesUtils {
         ArrayList<Integer> classDetailIds = new ArrayList<>();
         while (!cursor.isAfterLast()) {
             classDetailIds.add(cursor.getInt(
-                    cursor.getColumnIndex(ClassDetailsMapSchema.COL_CLASS_DETAIL_ID)));
+                    cursor.getColumnIndex(ClassDetailsSchema._ID)));
             cursor.moveToNext();
         }
         cursor.close();
@@ -67,10 +67,11 @@ public final class ClassesUtils {
                     new String[]{String.valueOf(classDetailId)},
                     null, null, null);
             cursor.moveToFirst();
+            int classId = cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema.COL_CLASS_ID));
             String room = cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_ROOM));
             String teacher = cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_TEACHER));
             ArrayList<Integer> classTimeIds = getClassTimeIds(context, classDetailId);
-            classDetails.add(new ClassDetail(classDetailId, room, teacher, classTimeIds));
+            classDetails.add(new ClassDetail(classDetailId, classId, room, teacher, classTimeIds));
             cursor.close();
         }
 
@@ -81,9 +82,9 @@ public final class ClassesUtils {
         TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(context);
 
         Cursor cursor = dbHelper.getReadableDatabase().query(
-                ClassDetailTimesMapSchema.TABLE_NAME,
+                ClassTimesSchema.TABLE_NAME,
                 null,
-                ClassDetailTimesMapSchema.COL_CLASS_DETAIL_ID + "=?",
+                ClassTimesSchema.COL_CLASS_DETAIL_ID + "=?",
                 new String[] {String.valueOf(classDetailId)},
                 null, null, null);
         cursor.moveToFirst();
@@ -91,7 +92,7 @@ public final class ClassesUtils {
         ArrayList<Integer> classTimeIds = new ArrayList<>();
         while (!cursor.isAfterLast()) {
             classTimeIds.add(cursor.getInt(
-                    cursor.getColumnIndex(ClassDetailTimesMapSchema.COL_CLASS_TIME_ID)));
+                    cursor.getColumnIndex(ClassTimesSchema._ID)));
             cursor.moveToNext();
         }
         cursor.close();
@@ -163,6 +164,7 @@ public final class ClassesUtils {
     public static void addClassDetail(Context context, ClassDetail classDetail) {
         ContentValues values = new ContentValues();
         values.put(ClassDetailsSchema._ID, classDetail.getId());
+        values.put(ClassDetailsSchema.COL_CLASS_ID, classDetail.getClassId());
         values.put(ClassDetailsSchema.COL_ROOM, classDetail.getRoom());
         values.put(ClassDetailsSchema.COL_TEACHER, classDetail.getTeacher());
 
@@ -197,6 +199,7 @@ public final class ClassesUtils {
     public static void addClassTime(Context context, ClassTime classTime) {
         ContentValues values = new ContentValues();
         values.put(ClassTimesSchema._ID, classTime.getId());
+        values.put(ClassTimesSchema.COL_CLASS_DETAIL_ID, classTime.getClassDetailId());
         values.put(ClassTimesSchema.COL_DAY, classTime.getDay().getValue());
         values.put(ClassTimesSchema.COL_START_TIME_HRS, classTime.getStartTime().getHour());
         values.put(ClassTimesSchema.COL_START_TIME_MINS, classTime.getStartTime().getMinute());
@@ -222,75 +225,6 @@ public final class ClassesUtils {
         addClassTime(context, newClassTime);
     }
 
-    public static void addClassToDetailsLinks(Context context, int classId, ArrayList<Integer> classDetailIds) {
-        for (int classDetail : classDetailIds) {
-            ContentValues values = new ContentValues();
-            values.put(ClassDetailsMapSchema.COL_CLASS_ID, classId);
-            values.put(ClassDetailsMapSchema.COL_CLASS_DETAIL_ID, classDetail);
-
-            SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
-            db.insert(ClassDetailsMapSchema.TABLE_NAME, null, values);
-            Log.i(LOG_TAG, "Added Class to ClassDetail link (" + classId + "->" + classDetail + ")");
-        }
-    }
-
-    private static void deleteClassToDetailsLinks(Context context, int classId) {
-        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
-        db.delete(ClassDetailsMapSchema.TABLE_NAME,
-                ClassDetailsMapSchema.COL_CLASS_ID + "=?",
-                new String[] {String.valueOf(classId)});
-        Log.i(LOG_TAG, "Deleted Class to ClassDetail links with classId " + classId + ")");
-    }
-
-    private static void deleteClassDetailInClassLink(Context context, int classDetailId) {
-        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
-        db.delete(ClassDetailsMapSchema.TABLE_NAME,
-                ClassDetailsMapSchema.COL_CLASS_DETAIL_ID + "=?",
-                new String[] {String.valueOf(classDetailId)});
-        Log.i(LOG_TAG, "Deleted Class to ClassDetail links with classDetailId " + classDetailId + ")");
-    }
-
-    public static void replaceClassToDetailsLinks(Context context, int classId, ArrayList<Integer> classDetailIds) {
-        Log.i(LOG_TAG, "Replacing Class to ClassDetail links...");
-        deleteClassToDetailsLinks(context, classId);
-        addClassToDetailsLinks(context, classId, classDetailIds);
-    }
-
-    public static void addClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
-        for (int classTimeId : classTimeIds) {
-            ContentValues values = new ContentValues();
-            values.put(ClassDetailTimesMapSchema.COL_CLASS_DETAIL_ID, classDetailId);
-            values.put(ClassDetailTimesMapSchema.COL_CLASS_TIME_ID, classTimeId);
-
-            SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
-            db.insert(ClassDetailTimesMapSchema.TABLE_NAME, null, values);
-            Log.i(LOG_TAG, "Added ClassDetail to ClassTime link (" + classDetailId + "->" +
-                    classTimeId + ")");
-        }
-    }
-
-    private static void deleteClassDetailToTimesLinks(Context context, int classDetailId) {
-        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
-        db.delete(ClassDetailTimesMapSchema.TABLE_NAME,
-                ClassDetailTimesMapSchema.COL_CLASS_DETAIL_ID + "=?",
-                new String[] {String.valueOf(classDetailId)});
-        Log.i(LOG_TAG, "Deleted ClassDetail to ClassTime links with classDetailId " + classDetailId + ")");
-    }
-
-    private static void deleteClassTimeInDetailLink(Context context, int classTimeId) {
-        SQLiteDatabase db = TimetableDbHelper.getInstance(context).getWritableDatabase();
-        db.delete(ClassDetailTimesMapSchema.TABLE_NAME,
-                ClassDetailTimesMapSchema.COL_CLASS_TIME_ID + "=?",
-                new String[] {String.valueOf(classTimeId)});
-        Log.i(LOG_TAG, "Deleted ClassDetail to ClassTime links with classTimeId " + classTimeId + ")");
-    }
-
-    public static void replaceClassDetailToTimesLinks(Context context, int classDetailId, ArrayList<Integer> classTimeIds) {
-        Log.i(LOG_TAG, "Replacing ClassDetail to ClassTime links...");
-        deleteClassDetailToTimesLinks(context, classDetailId);
-        addClassDetailToTimesLinks(context, classDetailId, classTimeIds);
-    }
-
     public static void completelyDeleteClass(Context context, Class cls) {
         Log.i(LOG_TAG, "Deleting everything related to Class of id " + cls.getId());
 
@@ -305,7 +239,6 @@ public final class ClassesUtils {
         Log.i(LOG_TAG, "Deleting everything related to ClassDetail of id " + classDetailId);
 
         deleteClassDetail(context, classDetailId);
-        deleteClassDetailInClassLink(context, classDetailId);
 
         for (int classTimeId : getClassTimeIds(context, classDetailId)) {
             completelyDeleteClassTime(context, classTimeId);
@@ -316,7 +249,6 @@ public final class ClassesUtils {
         Log.i(LOG_TAG, "Deleting everything related to ClassTime of id " + classTimeId);
 
         deleteClassTime(context, classTimeId);
-        deleteClassTimeInDetailLink(context, classTimeId);
     }
 
 }

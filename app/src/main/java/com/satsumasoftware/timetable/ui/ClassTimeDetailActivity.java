@@ -37,6 +37,7 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
     public static final int ACTION_DELETE = 2;
 
     protected static final String EXTRA_CLASS_TIME = "extra_class_time";
+    protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
     protected static final String EXTRA_TAB_POSITION = "extra_tab_position";
     protected static final String EXTRA_LIST_POS = "extra_list_position";
     protected static final String EXTRA_RESULT_ACTION = "extra_result_action";
@@ -45,6 +46,8 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
     private boolean mIsNewTime;
 
     private ClassTime mClassTime;
+    private int mClassDetailId;
+
     private int mListPosition = SubjectsActivity.LIST_POS_INVALID;
 
     private TextView mStartTimeText, mEndTimeText;
@@ -62,6 +65,7 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
 
         Bundle extras = getIntent().getExtras();
+        mClassDetailId = extras.getInt(EXTRA_CLASS_DETAIL_ID);
         mTabPos = extras.getInt(EXTRA_TAB_POSITION);
 
         if (extras.getParcelable(EXTRA_CLASS_TIME) != null) {
@@ -220,7 +224,7 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
             actionType = ACTION_EDIT;
         }
 
-        mClassTime = new ClassTime(id, mDayOfWeek, mStartTime, mEndTime);
+        mClassTime = new ClassTime(id, mClassDetailId, mDayOfWeek, mStartTime, mEndTime);
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_CLASS_TIME, mClassTime);
