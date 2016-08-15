@@ -38,15 +38,33 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
         return mAssignments.size();
     }
 
-    public class AssignmentViewHolder extends RecyclerView.ViewHolder {
+    public class AssignmentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mTitle, mDetail;
 
         AssignmentViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             mTitle = (TextView) itemView.findViewById(R.id.title);
             mDetail = (TextView) itemView.findViewById(R.id.detail);
         }
+
+        @Override
+        public void onClick(View view) {
+            if (mOnEntryClickListener != null) {
+                mOnEntryClickListener.onEntryClick(view, getLayoutPosition());
+            }
+        }
+    }
+
+    private OnEntryClickListener mOnEntryClickListener;
+
+    public interface OnEntryClickListener {
+        void onEntryClick(View view, int position);
+    }
+
+    public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
+        mOnEntryClickListener = onEntryClickListener;
     }
 
 }
