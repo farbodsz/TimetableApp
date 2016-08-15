@@ -82,9 +82,9 @@ public final class ClassesUtils {
         TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(context);
 
         Cursor cursor = dbHelper.getReadableDatabase().query(
-                ClassDetailTimesMapSchema.TABLE_NAME,
+                ClassTimesSchema.TABLE_NAME,
                 null,
-                ClassDetailTimesMapSchema.COL_CLASS_DETAIL_ID + "=?",
+                ClassTimesSchema.COL_CLASS_DETAIL_ID + "=?",
                 new String[] {String.valueOf(classDetailId)},
                 null, null, null);
         cursor.moveToFirst();
@@ -92,7 +92,7 @@ public final class ClassesUtils {
         ArrayList<Integer> classTimeIds = new ArrayList<>();
         while (!cursor.isAfterLast()) {
             classTimeIds.add(cursor.getInt(
-                    cursor.getColumnIndex(ClassDetailTimesMapSchema.COL_CLASS_TIME_ID)));
+                    cursor.getColumnIndex(ClassTimesSchema._ID)));
             cursor.moveToNext();
         }
         cursor.close();
