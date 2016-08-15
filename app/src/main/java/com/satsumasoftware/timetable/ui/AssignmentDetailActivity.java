@@ -3,6 +3,7 @@ package com.satsumasoftware.timetable.ui;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -22,6 +23,8 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
+import com.satsumasoftware.timetable.db.ClassesSchema;
+import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.util.AssignmentsUtils;
 import com.satsumasoftware.timetable.db.util.ClassesUtils;
 import com.satsumasoftware.timetable.db.util.SubjectsUtils;
@@ -47,8 +50,10 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     private EditText mEditTextDetail;
 
     private Class mClass;
+    private TextView mClassText;
     private AlertDialog mClassDialog;
 
+    private TextView mDateText;
     private LocalDate mDueDate;
 
     private int mCompletionProgess = 0;
@@ -90,8 +95,22 @@ public class AssignmentDetailActivity extends AppCompatActivity {
             mEditTextDetail.setText(mAssignment.getDetail());
         }
 
-        final TextView classText = (TextView) findViewById(R.id.textView_class);
-        classText.setOnClickListener(new View.OnClickListener() {
+        mClassText = (TextView) findViewById(R.id.textView_class);
+        if (!mIsNew) {
+            TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
+            Cursor cursor = dbHelper.getReadableDatabase().query(
+                    ClassesSchema.TABLE_NAME,
+                    null,
+                    ClassesSchema._ID + "=?",
+                    new String[] {String.valueOf(mAssignment.getClassId())},
+                    null, null, null);
+            cursor.moveToFirst();
+            mClass = new Class(this, cursor);
+            cursor.close();
+
+            updateClassText();
+        }
+        mClassText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentDetailActivity.this);
@@ -106,11 +125,8 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                     @Override
                     public void onEntryClick(View view, int position) {
                         mClass = classes.get(position);
+                        updateClassText();
                         mClassDialog.dismiss();
-                        classText.setText(SubjectsUtils.getSubjectFromId(
-                                getBaseContext(), mClass.getSubjectId()).getName());
-                        classText.setTextColor(ContextCompat.getColor(
-                                getBaseContext(), R.color.mdu_text_black));
                     }
                 });
 
@@ -126,20 +142,19 @@ public class AssignmentDetailActivity extends AppCompatActivity {
             }
         });
 
-        final TextView dateText = (TextView) findViewById(R.id.textView_date);
-        dateText.setOnClickListener(new View.OnClickListener() {
+        mDateText = (TextView) findViewById(R.id.textView_date);
+        if (!mIsNew) {
+            mDueDate = mAssignment.getDueDate();
+            updateDateText();
+        }
+        mDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
                         mDueDate = LocalDate.of(year, month, dayOfMonth);
-
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
-
-                        dateText.setText(mDueDate.format(formatter));
-                        dateText.setTextColor(ContextCompat.getColor(
-                                getBaseContext(), R.color.mdu_text_black));
+                        updateDateText();
                     }
                 };
 
@@ -148,6 +163,22 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                         LocalDate.now().getDayOfMonth()).show();
             }
         });
+    }
+
+    private void updateClassText() {
+        mClassText.setText(SubjectsUtils.getSubjectFromId(
+                getBaseContext(), mClass.getSubjectId()).getName());
+        mClassText.setTextColor(ContextCompat.getColor(
+                getBaseContext(), R.color.mdu_text_black));
+    }
+
+
+    private void updateDateText() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
+
+        mDateText.setText(mDueDate.format(formatter));
+        mDateText.setTextColor(ContextCompat.getColor(
+                getBaseContext(), R.color.mdu_text_black));
     }
 
     @Override
