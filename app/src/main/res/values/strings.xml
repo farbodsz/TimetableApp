@@ -48,6 +48,7 @@
     <string name="property_due_date">Due date</string>
     <string name="message_title_required">You must enter a title</string>
     <string name="message_class_required">You must choose a class</string>
+    <string name="message_due_date_required">You must select a due date</string>
 
     <string name="action_add_detail">Add detail</string>
     <string name="action_add_time">Add time</string>

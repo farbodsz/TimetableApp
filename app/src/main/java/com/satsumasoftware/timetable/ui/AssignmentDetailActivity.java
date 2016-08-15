@@ -186,12 +186,6 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     }
 
     private void handleDoneAction() {
-        if (mClass == null) {
-            Snackbar.make(findViewById(R.id.rootView), R.string.message_class_required,
-                    Snackbar.LENGTH_SHORT).show();
-            return;
-        }
-
         String newTitle = mEditTextTitle.getText().toString();
         if (newTitle.length() == 0) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_title_required,
@@ -199,6 +193,18 @@ public class AssignmentDetailActivity extends AppCompatActivity {
             return;
         }
         newTitle = TextUtilsKt.title(newTitle);
+
+        if (mClass == null) {
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_class_required,
+                    Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (mDueDate == null) {
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_due_date_required,
+                    Snackbar.LENGTH_SHORT).show();
+            return;
+        }
 
         int id = mIsNew ? AssignmentsUtils.getHighestAssignmentId(this) + 1 : mAssignment.getId();
 
