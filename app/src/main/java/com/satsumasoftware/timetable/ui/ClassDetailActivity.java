@@ -423,7 +423,6 @@ public class ClassDetailActivity extends AppCompatActivity {
                     new ClassDetail(classDetailId, mClass.getId(), room, teacher, classTimeIds);
 
             ClassesUtils.replaceClassDetail(this, classDetailId, classDetail);
-            ClassesUtils.replaceClassDetailToTimesLinks(this, classDetailId, classTimeIds);
         }
 
         int id = mIsNew ? ClassesUtils.getHighestClassId(this) + 1 : mClass.getId();
@@ -431,10 +430,8 @@ public class ClassDetailActivity extends AppCompatActivity {
 
         if (mIsNew) {
             ClassesUtils.addClass(this, mClass);
-            ClassesUtils.addClassToDetailsLinks(this, mClass.getId(), mClass.getClassDetailIds());
         } else {
             ClassesUtils.replaceClass(this, mClass.getId(), mClass);
-            ClassesUtils.replaceClassToDetailsLinks(this, mClass.getId(), mClass.getClassDetailIds());
         }
 
         setResult(Activity.RESULT_OK);
