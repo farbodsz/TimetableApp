@@ -16,9 +16,9 @@ class Assignment(val id: Int, val classId: Int, val title: String, val detail: S
             cursor.getString(cursor.getColumnIndex(AssignmentsSchema.COL_TITLE)),
             cursor.getString(cursor.getColumnIndex(AssignmentsSchema.COL_DETAIL)),
             LocalDate.of(
-                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH)),
+                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_DUE_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_DUE_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_DUE_DATE_YEAR))),
+                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH))),
             cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_COMPLETION_PROGRESS)))
 
     constructor(source: Parcel): this(
