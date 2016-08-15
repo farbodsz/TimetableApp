@@ -5,7 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.SubjectsSchema
 
-class Subject(val id: Int, var name: String, val colorId: Int) : Parcelable {
+class Subject(val id: Int, var name: String, var colorId: Int) : Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(SubjectsSchema._ID)),

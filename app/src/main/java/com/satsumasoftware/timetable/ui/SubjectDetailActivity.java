@@ -161,6 +161,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
 
         } else {
             mSubject.setName(newName);
+            mSubject.setColorId(mColor.getId());
             SubjectsUtils.replaceSubject(this, mSubject.getId(), mSubject);
         }
 
