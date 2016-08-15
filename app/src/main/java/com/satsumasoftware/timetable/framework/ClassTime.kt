@@ -7,10 +7,12 @@ import com.satsumasoftware.timetable.db.ClassTimesSchema
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime
 
-class ClassTime(val id: Int, val day: DayOfWeek, val startTime: LocalTime, val endTime: LocalTime) : Parcelable {
+class ClassTime(val id: Int, val classDetailId: Int, val day: DayOfWeek, val startTime: LocalTime,
+                val endTime: LocalTime) : Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(ClassTimesSchema._ID)),
+            cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_CLASS_DETAIL_ID)),
             DayOfWeek.of(cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_DAY))),
             LocalTime.of(
                     cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_START_TIME_HRS)),
@@ -21,6 +23,7 @@ class ClassTime(val id: Int, val day: DayOfWeek, val startTime: LocalTime, val e
 
     constructor(source: Parcel) : this(
             source.readInt(),
+            source.readInt(),
             source.readSerializable() as DayOfWeek,
             source.readSerializable() as LocalTime,
             source.readSerializable() as LocalTime)
@@ -29,6 +32,7 @@ class ClassTime(val id: Int, val day: DayOfWeek, val startTime: LocalTime, val e
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeInt(id)
+        dest?.writeInt(classDetailId)
         dest?.writeSerializable(day)
         dest?.writeSerializable(startTime)
         dest?.writeSerializable(endTime)
