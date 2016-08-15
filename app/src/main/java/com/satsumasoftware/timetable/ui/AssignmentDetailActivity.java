@@ -32,6 +32,7 @@ import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 import com.satsumasoftware.timetable.ui.adapter.ColorsAdapter;
 
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
@@ -133,14 +134,17 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
                         mDueDate = LocalDate.of(year, month, dayOfMonth);
-                        dateText.setText(mDueDate.toString());
+
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
+
+                        dateText.setText(mDueDate.format(formatter));
                         dateText.setTextColor(ContextCompat.getColor(
                                 getBaseContext(), R.color.mdu_text_black));
                     }
                 };
 
                 new DatePickerDialog(AssignmentDetailActivity.this, listener,
-                        LocalDate.now().getYear(), LocalDate.now().getMonthValue(),
+                        LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1,
                         LocalDate.now().getDayOfMonth()).show();
             }
         });
