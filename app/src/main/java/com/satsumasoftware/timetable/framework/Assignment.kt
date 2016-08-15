@@ -1,9 +1,8 @@
 package com.satsumasoftware.timetable.framework
 
+import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-
-import android.database.Cursor
 import com.satsumasoftware.timetable.db.AssignmentsSchema
 import org.threeten.bp.LocalDate
 
