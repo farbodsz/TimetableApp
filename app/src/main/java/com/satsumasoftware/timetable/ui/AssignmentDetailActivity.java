@@ -150,17 +150,24 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         mDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // note: -1 and +1s in code because Android month values are from 0-11 (to
+                // correspond with java.util.Calendar) but LocalDate month values are from 1-12
+
                 DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                        mDueDate = LocalDate.of(year, month, dayOfMonth);
+                        mDueDate = LocalDate.of(year, month + 1, dayOfMonth);
                         updateDateText();
                     }
                 };
 
-                new DatePickerDialog(AssignmentDetailActivity.this, listener,
-                        LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 1,
-                        LocalDate.now().getDayOfMonth()).show();
+                new DatePickerDialog(
+                        AssignmentDetailActivity.this,
+                        listener,
+                        mIsNew ? LocalDate.now().getYear() : mDueDate.getYear(),
+                        mIsNew ? LocalDate.now().getMonthValue() - 1 : mDueDate.getMonthValue() - 1,
+                        mIsNew ? LocalDate.now().getDayOfMonth() : mDueDate.getDayOfMonth()
+                ).show();
             }
         });
     }
