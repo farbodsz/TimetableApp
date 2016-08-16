@@ -54,6 +54,7 @@
     <string name="action_add_time">Add time</string>
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
+    <string name="action_edit">Edit</string>
     <string name="action_new">New</string>
     <string name="action_today">Today</string>
 
