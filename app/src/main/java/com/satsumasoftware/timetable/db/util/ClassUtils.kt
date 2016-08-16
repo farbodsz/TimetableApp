@@ -59,11 +59,7 @@ fun getClassDetailsFromIds(context: Context, classDetailIds: ArrayList<Int>): Ar
                 arrayOf(classDetailId.toString()),
                 null, null, null)
         cursor.moveToFirst()
-        val classId = cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema.COL_CLASS_ID))
-        val room = cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_ROOM))
-        val teacher = cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_TEACHER))
-        val classTimeIds = getClassTimeIds(context, classDetailId)
-        classDetails.add(ClassDetail(classDetailId, classId, room, teacher, classTimeIds))
+        classDetails.add(ClassDetail(context, cursor))
         cursor.close()
     }
     return classDetails
