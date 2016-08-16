@@ -66,7 +66,7 @@ public class ClassEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_detail);
+        setContentView(R.layout.activity_class_edit);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -187,7 +187,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 classDetail.getId();
         mClassDetailIds.add(classDetailId);
 
-        View page = getLayoutInflater().inflate(R.layout.fragment_class_detail, null);
+        View page = getLayoutInflater().inflate(R.layout.fragment_class_edit, null);
 
         EditText room = (EditText) page.findViewById(R.id.editText_room);
         if (!isNewDetail) {
