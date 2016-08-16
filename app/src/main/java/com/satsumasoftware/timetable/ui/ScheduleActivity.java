@@ -19,7 +19,6 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.ClassesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
-import com.satsumasoftware.timetable.db.util.ClassesUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;

@@ -13,7 +13,6 @@ import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
-import com.satsumasoftware.timetable.db.util.ClassesUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 

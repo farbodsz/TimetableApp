@@ -5,7 +5,6 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.ClassesSchema
-import com.satsumasoftware.timetable.db.util.ClassesUtils
 import com.satsumasoftware.timetable.db.util.getClassDetailIds
 import java.util.*
 
