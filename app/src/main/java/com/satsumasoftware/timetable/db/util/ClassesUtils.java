@@ -10,6 +10,7 @@ import com.satsumasoftware.timetable.db.ClassDetailsSchema;
 import com.satsumasoftware.timetable.db.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.ClassesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
+import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -233,6 +234,10 @@ public final class ClassesUtils {
         Log.i(LOG_TAG, "Deleting everything related to Class of id " + cls.getId());
 
         deleteClass(context, cls.getId());
+
+        for (Assignment assignment : AssignmentsUtils.getAssignmentsForClass(context, cls.getId())) {
+            AssignmentsUtils.deleteAssignment(context, assignment.getId());
+        }
 
         for (int classDetailId : cls.getClassDetailIds()) {
             completelyDeleteClassDetail(context, classDetailId);

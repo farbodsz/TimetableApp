@@ -30,6 +30,24 @@ public final class AssignmentsUtils {
         return assignments;
     }
 
+    public static ArrayList<Assignment> getAssignmentsForClass(Context context, int classId) {
+        ArrayList<Assignment> assignments = new ArrayList<>();
+        TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(context);
+        Cursor cursor = dbHelper.getReadableDatabase().query(
+                AssignmentsSchema.TABLE_NAME,
+                null,
+                AssignmentsSchema.COL_CLASS_ID + "=?",
+                new String[] {String.valueOf(classId)},
+                null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            assignments.add(new Assignment(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return assignments;
+    }
+
     public static void addAssignment(Context context, Assignment assignment) {
         ContentValues values = new ContentValues();
         values.put(AssignmentsSchema._ID, assignment.getId());
