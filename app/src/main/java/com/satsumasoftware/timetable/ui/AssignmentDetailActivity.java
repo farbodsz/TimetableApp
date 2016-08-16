@@ -24,9 +24,9 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.db.ClassesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
-import com.satsumasoftware.timetable.db.util.AssignmentsUtils;
-import com.satsumasoftware.timetable.db.util.ClassesUtils;
-import com.satsumasoftware.timetable.db.util.SubjectsUtils;
+import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
+import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
@@ -115,7 +115,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 View customView = inflater.inflate(R.layout.dialog_classes, null);
 
-                final ArrayList<Class> classes = ClassesUtils.getAllClasses(getBaseContext());
+                final ArrayList<Class> classes = ClassUtilsKt.getClasses(getBaseContext());
 
                 ClassesAdapter adapter = new ClassesAdapter(getBaseContext(), classes);
                 adapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
@@ -170,7 +170,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     }
 
     private void updateClassText() {
-        mClassText.setText(SubjectsUtils.getSubjectFromId(
+        mClassText.setText(SubjectUtilsKt.getSubjectFromId(
                 getBaseContext(), mClass.getSubjectId()).getName());
         mClassText.setTextColor(ContextCompat.getColor(
                 getBaseContext(), R.color.mdu_text_black));
@@ -245,7 +245,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? AssignmentsUtils.getHighestAssignmentId(this) + 1 : mAssignment.getId();
+        int id = mIsNew ? AssignmentUtilsKt.getHighestAssignmentId(this) + 1 : mAssignment.getId();
 
         mAssignment = new Assignment(
                 id,
@@ -256,9 +256,9 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                 mCompletionProgess);
 
         if (mIsNew) {
-            AssignmentsUtils.addAssignment(this, mAssignment);
+            AssignmentUtilsKt.addAssignment(this, mAssignment);
         } else {
-            AssignmentsUtils.replaceAssignment(this, mAssignment.getId(), mAssignment);
+            AssignmentUtilsKt.replaceAssignment(this, mAssignment.getId(), mAssignment);
         }
 
         Intent intent = new Intent();
@@ -267,7 +267,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        AssignmentsUtils.deleteAssignment(this, mAssignment.getId());
+        AssignmentUtilsKt.deleteAssignment(this, mAssignment.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }

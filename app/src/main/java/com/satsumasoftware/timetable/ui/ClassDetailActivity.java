@@ -23,8 +23,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassesUtils;
-import com.satsumasoftware.timetable.db.util.SubjectsUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -102,7 +103,7 @@ public class ClassDetailActivity extends AppCompatActivity {
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white));
 
-        final ArrayList<Subject> subjects = SubjectsUtils.getSubjects(this);
+        final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(this);
         Collections.sort(subjects, new Comparator<Subject>() {
             @Override
             public int compare(Subject subject, Subject t1) {
@@ -156,11 +157,11 @@ public class ClassDetailActivity extends AppCompatActivity {
         mAdapters = new ArrayList<>();
 
         if (!mIsNew) {
-            mSubject = SubjectsUtils.getSubjectFromId(this, mClass.getSubjectId());
+            mSubject = SubjectUtilsKt.getSubjectFromId(this, mClass.getSubjectId());
             updateSubjectText();
 
             ArrayList<ClassDetail> classDetails =
-                    ClassesUtils.getClassDetailsFromIds(this, mClass.getClassDetailIds());
+                    ClassUtilsKt.getClassDetailsFromIds(this, mClass.getClassDetailIds());
             for (ClassDetail classDetail : classDetails) {
                 addDetailTab(classDetail, false);
             }
@@ -183,7 +184,7 @@ public class ClassDetailActivity extends AppCompatActivity {
         final int pagerCount = mPagerAdapter.getCount();
 
         final int classDetailId = isNewDetail ?
-                ClassesUtils.getHighestClassDetailId(this) + mNewDetailIdCount :
+                ClassUtilsKt.getHighestClassDetailId(this) + mNewDetailIdCount :
                 classDetail.getId();
         mClassDetailIds.add(classDetailId);
 
@@ -200,7 +201,7 @@ public class ClassDetailActivity extends AppCompatActivity {
         }
 
         final ArrayList<ClassTime> classTimes = isNewDetail ? new ArrayList<ClassTime>() :
-                ClassesUtils.getClassTimesFromIds(this, classDetail.getClassTimeIds());
+                ClassUtilsKt.getClassTimesFromIds(this, classDetail.getClassTimeIds());
         mClassTimes.add(classTimes);
 
         ClassTimesAdapter adapter = new ClassTimesAdapter(classTimes);
@@ -286,15 +287,15 @@ public class ClassDetailActivity extends AppCompatActivity {
                 switch (actionType) {
                     case ClassTimeDetailActivity.ACTION_NEW:
                         someTimes.add(classTime);
-                        ClassesUtils.addClassTime(this, classTime);
+                        ClassUtilsKt.addClassTime(this, classTime);
                         break;
                     case ClassTimeDetailActivity.ACTION_EDIT:
                         someTimes.set(listPos, classTime);
-                        ClassesUtils.replaceClassTime(this, classTime.getId(), classTime);
+                        ClassUtilsKt.replaceClassTime(this, classTime.getId(), classTime);
                         break;
                     case ClassTimeDetailActivity.ACTION_DELETE:
                         someTimes.remove(listPos);
-                        ClassesUtils.completelyDeleteClassTime(this, classTime.getId());
+                        ClassUtilsKt.completelyDeleteClassTime(this, classTime.getId());
                         break;
                 }
                 mAdapters.get(tabIndex).notifyDataSetChanged();
@@ -412,7 +413,7 @@ public class ClassDetailActivity extends AppCompatActivity {
 
         // now write the data (replace class detail values)
 
-        int classId = mIsNew ? ClassesUtils.getHighestClassId(this) + 1 : mClass.getId();
+        int classId = mIsNew ? ClassUtilsKt.getHighestClassId(this) + 1 : mClass.getId();
 
         for (int i = 0; i < rooms.size(); i++) {
             int classDetailId = classDetailIds.get(i);
@@ -423,15 +424,15 @@ public class ClassDetailActivity extends AppCompatActivity {
             ClassDetail classDetail =
                     new ClassDetail(classDetailId, classId, room, teacher, classTimeIds);
 
-            ClassesUtils.replaceClassDetail(this, classDetailId, classDetail);
+            ClassUtilsKt.replaceClassDetail(this, classDetailId, classDetail);
         }
 
         mClass = new Class(classId, mSubject.getId(), classDetailIds);
 
         if (mIsNew) {
-            ClassesUtils.addClass(this, mClass);
+            ClassUtilsKt.addClass(this, mClass);
         } else {
-            ClassesUtils.replaceClass(this, mClass.getId(), mClass);
+            ClassUtilsKt.replaceClass(this, mClass.getId(), mClass);
         }
 
         setResult(Activity.RESULT_OK);
@@ -439,7 +440,7 @@ public class ClassDetailActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        ClassesUtils.completelyDeleteClass(this, mClass);
+        ClassUtilsKt.completelyDeleteClass(this, mClass);
         setResult(Activity.RESULT_OK);
         finish();
     }

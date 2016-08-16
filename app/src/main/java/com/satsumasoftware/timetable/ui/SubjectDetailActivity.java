@@ -18,7 +18,7 @@ import android.widget.ImageView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.db.util.SubjectsUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ColorsAdapter;
@@ -156,13 +156,13 @@ public class SubjectDetailActivity extends AppCompatActivity {
         newName = TextUtilsKt.title(newName);
 
         if (mIsNewSubject) {
-            mSubject = new Subject(SubjectsUtils.getHighestSubjectId(this) + 1, newName, mColor.getId());
-            SubjectsUtils.addSubject(this, mSubject);
+            mSubject = new Subject(SubjectUtilsKt.getHighestSubjectId(this) + 1, newName, mColor.getId());
+            SubjectUtilsKt.addSubject(this, mSubject);
 
         } else {
             mSubject.setName(newName);
             mSubject.setColorId(mColor.getId());
-            SubjectsUtils.replaceSubject(this, mSubject.getId(), mSubject);
+            SubjectUtilsKt.replaceSubject(this, mSubject.getId(), mSubject);
         }
 
         Intent intent = new Intent();
@@ -172,7 +172,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        SubjectsUtils.completelyDeleteSubject(this, mSubject.getId());
+        SubjectUtilsKt.completelyDeleteSubject(this, mSubject.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }

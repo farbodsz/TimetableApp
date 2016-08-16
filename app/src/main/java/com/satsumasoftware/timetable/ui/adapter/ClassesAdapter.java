@@ -9,8 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassesUtils;
-import com.satsumasoftware.timetable.db.util.SubjectsUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.Color;
@@ -38,7 +39,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
     public void onBindViewHolder(ClassesViewHolder holder, int position) {
         Class cls = mClasses.get(position);
 
-        Subject subject = SubjectsUtils.getSubjectFromId(mContext, cls.getSubjectId());
+        Subject subject = SubjectUtilsKt.getSubjectFromId(mContext, cls.getSubjectId());
         holder.mSubject.setText(subject.getName());
 
         Color color = new Color(subject.getColorId());
@@ -46,7 +47,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
                 mContext, color.getPrimaryColorResId(mContext)));
 
         ArrayList<ClassDetail> classDetails =
-                ClassesUtils.getClassDetailsFromIds(mContext, cls.getClassDetailIds());
+                ClassUtilsKt.getClassDetailsFromIds(mContext, cls.getClassDetailIds());
 
         StringBuilder builder = new StringBuilder();
 

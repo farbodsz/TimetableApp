@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.AssignmentsUtils;
+import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 
@@ -33,7 +33,7 @@ public class AssignmentsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mAssignments = AssignmentsUtils.getAssignments(this);
+        mAssignments = AssignmentUtilsKt.getAssignments(this);
 
         mAdapter = new AssignmentsAdapter(mAssignments);
         mAdapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
@@ -63,7 +63,7 @@ public class AssignmentsActivity extends BaseActivity {
 
     private void refreshList() {
         mAssignments.clear();
-        mAssignments.addAll(AssignmentsUtils.getAssignments(this));
+        mAssignments.addAll(AssignmentUtilsKt.getAssignments(this));
         mAdapter.notifyDataSetChanged();
     }
 

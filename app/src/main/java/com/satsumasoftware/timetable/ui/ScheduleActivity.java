@@ -18,8 +18,9 @@ import com.alamkanak.weekview.WeekViewEvent;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.ClassesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
+import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassesUtils;
-import com.satsumasoftware.timetable.db.util.SubjectsUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -85,17 +86,17 @@ public class ScheduleActivity extends BaseActivity {
     private List<WeekViewEvent> getEvents(int year, int month) {
         ArrayList<WeekViewEvent> weekViewEvents = new ArrayList<>();
 
-        ArrayList<Class> classes = ClassesUtils.getAllClasses(this);
+        ArrayList<Class> classes = ClassUtilsKt.getClasses(this);
 
         for (Class cls : classes) {
-            Subject subject = SubjectsUtils.getSubjectFromId(this, cls.getSubjectId());
+            Subject subject = SubjectUtilsKt.getSubjectFromId(this, cls.getSubjectId());
 
             ArrayList<ClassDetail> classDetails =
-                    ClassesUtils.getClassDetailsFromIds(this, cls.getClassDetailIds());
+                    ClassUtilsKt.getClassDetailsFromIds(this, cls.getClassDetailIds());
 
             for (ClassDetail classDetail : classDetails) {
                 ArrayList<ClassTime> classTimes =
-                        ClassesUtils.getClassTimesFromIds(this, classDetail.getClassTimeIds());
+                        ClassUtilsKt.getClassTimesFromIds(this, classDetail.getClassTimeIds());
 
                 for (ClassTime classTime : classTimes) {
                     ArrayList<Integer> daysInMonth = getDaysInMonth(year, month, classTime.getDay());
