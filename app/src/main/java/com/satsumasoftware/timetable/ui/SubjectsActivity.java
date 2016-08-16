@@ -43,8 +43,8 @@ public class SubjectsActivity extends BaseActivity {
         mAdapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(SubjectsActivity.this, SubjectDetailActivity.class);
-                intent.putExtra(SubjectDetailActivity.EXTRA_SUBJECT, mSubjects.get(position));
+                Intent intent = new Intent(SubjectsActivity.this, SubjectEditActivity.class);
+                intent.putExtra(SubjectEditActivity.EXTRA_SUBJECT, mSubjects.get(position));
                 startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
             }
         });
@@ -58,7 +58,7 @@ public class SubjectsActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SubjectsActivity.this, SubjectDetailActivity.class);
+                Intent intent = new Intent(SubjectsActivity.this, SubjectEditActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
             }
         });

@@ -25,7 +25,7 @@ import com.satsumasoftware.timetable.ui.adapter.ColorsAdapter;
 
 import java.util.ArrayList;
 
-public class SubjectDetailActivity extends AppCompatActivity {
+public class SubjectEditActivity extends AppCompatActivity {
 
     protected static final String EXTRA_SUBJECT = "extra_subject";
 
@@ -77,7 +77,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(SubjectDetailActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(SubjectEditActivity.this);
 
                 LayoutInflater inflater = getLayoutInflater();
                 View customView = inflater.inflate(R.layout.dialog_colors, null);
@@ -96,7 +96,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
 
                 RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new GridLayoutManager(SubjectDetailActivity.this, 4));
+                recyclerView.setLayoutManager(new GridLayoutManager(SubjectEditActivity.this, 4));
                 recyclerView.setAdapter(adapter);
 
                 builder.setView(customView);

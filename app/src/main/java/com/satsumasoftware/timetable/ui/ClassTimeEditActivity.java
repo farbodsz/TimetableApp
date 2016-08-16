@@ -27,7 +27,7 @@ import org.threeten.bp.LocalTime;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class ClassTimeDetailActivity extends AppCompatActivity {
+public class ClassTimeEditActivity extends AppCompatActivity {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({ACTION_NEW, ACTION_EDIT, ACTION_DELETE})
@@ -118,7 +118,7 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
                     initialMinute = mStartTime.getMinute();
                 }
 
-                new TimePickerDialog(ClassTimeDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                new TimePickerDialog(ClassTimeEditActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                         mStartTime = LocalTime.of(hour, minute);
@@ -136,7 +136,7 @@ public class ClassTimeDetailActivity extends AppCompatActivity {
                     initialHour = mEndTime.getHour();
                     initialMinute = mEndTime.getMinute();
                 }
-                new TimePickerDialog(ClassTimeDetailActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                new TimePickerDialog(ClassTimeEditActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                         mEndTime = LocalTime.of(hour, minute);

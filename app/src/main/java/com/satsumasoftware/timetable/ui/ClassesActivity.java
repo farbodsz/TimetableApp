@@ -39,9 +39,9 @@ public class ClassesActivity extends BaseActivity {
         mAdapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(ClassesActivity.this, ClassDetailActivity.class);
-                intent.putExtra(ClassDetailActivity.EXTRA_CLASS, mClasses.get(position));
-                intent.putExtra(ClassDetailActivity.EXTRA_LIST_POS, position);
+                Intent intent = new Intent(ClassesActivity.this, ClassEditActivity.class);
+                intent.putExtra(ClassEditActivity.EXTRA_CLASS, mClasses.get(position));
+                intent.putExtra(ClassEditActivity.EXTRA_LIST_POS, position);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
             }
         });
@@ -54,7 +54,7 @@ public class ClassesActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ClassesActivity.this, ClassDetailActivity.class);
+                Intent intent = new Intent(ClassesActivity.this, ClassEditActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
             }
         });

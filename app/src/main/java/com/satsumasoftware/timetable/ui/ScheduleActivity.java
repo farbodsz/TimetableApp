@@ -62,8 +62,8 @@ public class ScheduleActivity extends BaseActivity {
                 cursor.moveToFirst();
                 Class cls = new Class(getBaseContext(), cursor);
                 cursor.close();
-                Intent intent = new Intent(ScheduleActivity.this, ClassDetailActivity.class);
-                intent.putExtra(ClassDetailActivity.EXTRA_CLASS, cls);
+                Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
+                intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
             }
         });

@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class ClassDetailActivity extends AppCompatActivity {
+public class ClassEditActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "ClassDetailActivity";
 
@@ -114,7 +114,7 @@ public class ClassDetailActivity extends AppCompatActivity {
         mSubjectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ClassDetailActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
 
                 LayoutInflater inflater = getLayoutInflater();
                 View customView = inflater.inflate(R.layout.dialog_subjects, null);
@@ -131,14 +131,14 @@ public class ClassDetailActivity extends AppCompatActivity {
 
                 RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(ClassDetailActivity.this));
+                recyclerView.setLayoutManager(new LinearLayoutManager(ClassEditActivity.this));
                 recyclerView.setAdapter(adapter);
 
                 Button button = (Button) customView.findViewById(R.id.button_new);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(ClassDetailActivity.this, SubjectDetailActivity.class);
+                        Intent intent = new Intent(ClassEditActivity.this, SubjectEditActivity.class);
                         startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
                     }
                 });
@@ -173,7 +173,7 @@ public class ClassDetailActivity extends AppCompatActivity {
     private void updateSubjectText() {
         mSubjectText.setText(mSubject.getName());
         mSubjectText.setTextColor(ContextCompat.getColor(
-                ClassDetailActivity.this, R.color.mdu_text_white));
+                ClassEditActivity.this, R.color.mdu_text_white));
     }
 
     private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {
@@ -207,11 +207,11 @@ public class ClassDetailActivity extends AppCompatActivity {
         adapter.setOnEntryClickListener(new ClassTimesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_TIME, classTimes.get(position));
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_LIST_POS, position);
+                Intent intent = new Intent(ClassEditActivity.this, ClassTimeEditActivity.class);
+                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME, classTimes.get(position));
+                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
+                intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
+                intent.putExtra(ClassTimeEditActivity.EXTRA_LIST_POS, position);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
             }
         });
@@ -231,9 +231,9 @@ public class ClassDetailActivity extends AppCompatActivity {
         btnAddTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ClassDetailActivity.this, ClassTimeDetailActivity.class);
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
-                intent.putExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, pagerCount);
+                Intent intent = new Intent(ClassEditActivity.this, ClassTimeEditActivity.class);
+                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
+                intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
             }
         });
@@ -267,32 +267,32 @@ public class ClassDetailActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                mSubject = data.getParcelableExtra(SubjectDetailActivity.EXTRA_SUBJECT);
+                mSubject = data.getParcelableExtra(SubjectEditActivity.EXTRA_SUBJECT);
                 mSubjectDialog.dismiss();
                 updateSubjectText();
             }
 
         } else if (requestCode == REQUEST_CODE_CLASS_TIME_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                ClassTime classTime = data.getParcelableExtra(ClassTimeDetailActivity.EXTRA_CLASS_TIME);
-                int tabIndex = data.getIntExtra(ClassTimeDetailActivity.EXTRA_TAB_POSITION, -1);
-                int listPos = data.getIntExtra(ClassTimeDetailActivity.EXTRA_LIST_POS, -1);
-                @ClassTimeDetailActivity.Action int actionType =
-                        data.getIntExtra(ClassTimeDetailActivity.EXTRA_RESULT_ACTION, -1);
+                ClassTime classTime = data.getParcelableExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME);
+                int tabIndex = data.getIntExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, -1);
+                int listPos = data.getIntExtra(ClassTimeEditActivity.EXTRA_LIST_POS, -1);
+                @ClassTimeEditActivity.Action int actionType =
+                        data.getIntExtra(ClassTimeEditActivity.EXTRA_RESULT_ACTION, -1);
 
                 Log.d(LOG_TAG, "Refreshing adapter at tab index " + tabIndex);
 
                 ArrayList<ClassTime> someTimes = mClassTimes.get(tabIndex);
                 switch (actionType) {
-                    case ClassTimeDetailActivity.ACTION_NEW:
+                    case ClassTimeEditActivity.ACTION_NEW:
                         someTimes.add(classTime);
                         ClassUtilsKt.addClassTime(this, classTime);
                         break;
-                    case ClassTimeDetailActivity.ACTION_EDIT:
+                    case ClassTimeEditActivity.ACTION_EDIT:
                         someTimes.set(listPos, classTime);
                         ClassUtilsKt.replaceClassTime(this, classTime.getId(), classTime);
                         break;
-                    case ClassTimeDetailActivity.ACTION_DELETE:
+                    case ClassTimeEditActivity.ACTION_DELETE:
                         someTimes.remove(listPos);
                         ClassUtilsKt.completelyDeleteClassTime(this, classTime.getId());
                         break;

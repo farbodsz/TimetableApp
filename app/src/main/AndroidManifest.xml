@@ -33,11 +33,11 @@
             android:theme="@style/Timetable.Home"/>
 
         <activity
-            android:name=".ui.ClassDetailActivity"
+            android:name=".ui.ClassEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.ClassTimeDetailActivity"
+            android:name=".ui.ClassTimeEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
@@ -46,7 +46,7 @@
             android:theme="@style/Timetable.Home"/>
 
         <activity
-            android:name=".ui.AssignmentDetailActivity"
+            android:name=".ui.AssignmentEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
@@ -55,7 +55,7 @@
             android:theme="@style/Timetable.Home"/>
 
         <activity
-            android:name=".ui.SubjectDetailActivity"
+            android:name=".ui.SubjectEditActivity"
             android:theme="@style/Timetable"/>
 
     </application>

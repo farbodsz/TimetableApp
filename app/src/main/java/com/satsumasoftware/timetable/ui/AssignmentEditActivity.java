@@ -36,7 +36,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
-public class AssignmentDetailActivity extends AppCompatActivity {
+public class AssignmentEditActivity extends AppCompatActivity {
 
     protected static final String EXTRA_ASSIGNMENT = "extra_assignment";
 
@@ -110,7 +110,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         mClassText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentDetailActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentEditActivity.this);
 
                 LayoutInflater inflater = getLayoutInflater();
                 View customView = inflater.inflate(R.layout.dialog_classes, null);
@@ -129,7 +129,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
                 RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(AssignmentDetailActivity.this));
+                recyclerView.setLayoutManager(new LinearLayoutManager(AssignmentEditActivity.this));
                 recyclerView.setAdapter(adapter);
 
                 builder.setView(customView);
@@ -159,7 +159,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                 };
 
                 new DatePickerDialog(
-                        AssignmentDetailActivity.this,
+                        AssignmentEditActivity.this,
                         listener,
                         mIsNew ? LocalDate.now().getYear() : mDueDate.getYear(),
                         mIsNew ? LocalDate.now().getMonthValue() - 1 : mDueDate.getMonthValue() - 1,
