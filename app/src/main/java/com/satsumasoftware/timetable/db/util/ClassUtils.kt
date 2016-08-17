@@ -65,20 +65,24 @@ fun getClassDetailIds(context: Context, classId: Int): ArrayList<Int> {
     return classDetailIds
 }
 
+fun getClassDetailWithId(context: Context, classDetailId: Int): ClassDetail {
+    val db = TimetableDbHelper.getInstance(context).readableDatabase
+    val cursor = db.query(
+            ClassDetailsSchema.TABLE_NAME,
+            null,
+            "${ClassDetailsSchema._ID}=?",
+            arrayOf(classDetailId.toString()),
+            null, null, null)
+    cursor.moveToFirst()
+    val classDetail = ClassDetail(context, cursor)
+    cursor.close()
+    return classDetail
+}
+
 fun getClassDetailsFromIds(context: Context, classDetailIds: ArrayList<Int>): ArrayList<ClassDetail> {
     val classDetails = ArrayList<ClassDetail>()
-    val db = TimetableDbHelper.getInstance(context).readableDatabase
-
     for (classDetailId in classDetailIds) {
-        val cursor = db.query(
-                ClassDetailsSchema.TABLE_NAME,
-                null,
-                "${ClassDetailsSchema._ID}=?",
-                arrayOf(classDetailId.toString()),
-                null, null, null)
-        cursor.moveToFirst()
-        classDetails.add(ClassDetail(context, cursor))
-        cursor.close()
+        classDetails.add(getClassDetailWithId(context, classDetailId))
     }
     return classDetails
 }
