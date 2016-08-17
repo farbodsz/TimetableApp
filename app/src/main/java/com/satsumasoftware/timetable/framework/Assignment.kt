@@ -28,6 +28,8 @@ class Assignment(val id: Int, val classId: Int, val title: String, val detail: S
             source.readSerializable() as LocalDate,
             source.readInt())
 
+    fun hasDetail() = detail.trim().length != 0
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
