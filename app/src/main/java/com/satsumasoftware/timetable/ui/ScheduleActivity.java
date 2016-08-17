@@ -88,7 +88,7 @@ public class ScheduleActivity extends BaseActivity {
         ArrayList<Class> classes = ClassUtilsKt.getClasses(this);
 
         for (Class cls : classes) {
-            Subject subject = SubjectUtilsKt.getSubjectFromId(this, cls.getSubjectId());
+            Subject subject = SubjectUtilsKt.getSubjectWithId(this, cls.getSubjectId());
 
             ArrayList<ClassDetail> classDetails =
                     ClassUtilsKt.getClassDetailsFromIds(this, cls.getClassDetailIds());

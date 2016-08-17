@@ -38,7 +38,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
     public void onBindViewHolder(ClassesViewHolder holder, int position) {
         Class cls = mClasses.get(position);
 
-        Subject subject = SubjectUtilsKt.getSubjectFromId(mContext, cls.getSubjectId());
+        Subject subject = SubjectUtilsKt.getSubjectWithId(mContext, cls.getSubjectId());
         holder.mSubject.setText(subject.getName());
 
         Color color = new Color(subject.getColorId());

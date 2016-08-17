@@ -26,6 +26,20 @@ fun getSubjects(context: Context): ArrayList<Subject> {
     return subjects
 }
 
+fun getSubjectWithId(context: Context, id: Int): Subject {
+    val db = TimetableDbHelper.getInstance(context).readableDatabase
+    val cursor = db.query(
+            SubjectsSchema.TABLE_NAME,
+            null,
+            "${SubjectsSchema._ID}=?",
+            arrayOf(id.toString()),
+            null, null, null)
+    cursor.moveToFirst()
+    val subject = Subject(cursor)
+    cursor.close()
+    return subject
+}
+
 fun addSubject(context: Context, subject: Subject) {
     val values = ContentValues()
     with(values) {
@@ -84,18 +98,4 @@ fun getHighestSubjectId(context: Context): Int {
     val count = cursor.count
     cursor.close()
     return count
-}
-
-fun getSubjectFromId(context: Context, id: Int): Subject {
-    val db = TimetableDbHelper.getInstance(context).readableDatabase
-    val cursor = db.query(
-            SubjectsSchema.TABLE_NAME,
-            null,
-            "${SubjectsSchema._ID}=?",
-            arrayOf(id.toString()),
-            null, null, null)
-    cursor.moveToFirst()
-    val subject = Subject(cursor)
-    cursor.close()
-    return subject
 }

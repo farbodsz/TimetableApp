@@ -157,7 +157,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     }
 
     private void updateClassText() {
-        mClassText.setText(SubjectUtilsKt.getSubjectFromId(
+        mClassText.setText(SubjectUtilsKt.getSubjectWithId(
                 getBaseContext(), mClass.getSubjectId()).getName());
         mClassText.setTextColor(ContextCompat.getColor(
                 getBaseContext(), R.color.mdu_text_black));
