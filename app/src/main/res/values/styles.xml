@@ -23,15 +23,17 @@
 
     <style name="Widget.Timetable.TextView" />
 
-    <style name="Widget.Timetable.TextView.Item" />
+    <style name="Widget.Timetable.TextView.Item">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/mdu_text_black</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
 
     <style name="Widget.Timetable.TextView.Item.Selectable">
-        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/mdu_text_black_secondary</item>
         <!-- 'secondary' textColor by default (for when nothing is selected) -->
         <item name="android:background">?selectableItemBackground</item>
-        <item name="android:minHeight">48dp</item>
-        <item name="android:gravity">center_vertical</item>
     </style>
 
 </resources>
