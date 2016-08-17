@@ -7,7 +7,7 @@ import com.satsumasoftware.timetable.db.AssignmentsSchema
 import org.threeten.bp.LocalDate
 
 class Assignment(val id: Int, val classId: Int, val title: String, val detail: String,
-                 val dueDate: LocalDate, val completionProgress: Int) : Parcelable {
+                 val dueDate: LocalDate, var completionProgress: Int) : Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(AssignmentsSchema._ID)),
