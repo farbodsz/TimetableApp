@@ -21,6 +21,10 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
+    <style name="Widget.Timetable.CardView" parent="CardView.Light">
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
     <style name="Widget.Timetable.TextView" />
 
     <style name="Widget.Timetable.TextView.Item">

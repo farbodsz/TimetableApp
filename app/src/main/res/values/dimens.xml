@@ -7,6 +7,18 @@
 
     <integer name="subject_color_dialog_columns">5</integer>
 
+    <!-- Card dimensions, per Material Design guidelines -->
+    <dimen name="card_text_primary_title">24sp</dimen>
+    <dimen name="card_text_primary_title_medium">19sp</dimen>
+    <dimen name="card_text_primary_title_small">14sp</dimen>
+    <dimen name="card_text_primary_subtitle">14sp</dimen>
+    <dimen name="card_text_supporting">14sp</dimen>
+    <dimen name="card_text_supporting_large">16sp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+    <dimen name="card_padding_vertical_large">24dp</dimen>
+    <dimen name="card_padding_actions">8dp</dimen>
+    <dimen name="card_padding_actions_vertical_layout">4dp</dimen>
+
     <!-- per https://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#MATCH_PARENT -->
     <item name="match_parent" format="integer" type="dimen">-1</item>
 
