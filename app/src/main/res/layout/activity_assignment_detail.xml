@@ -38,6 +38,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+            android:src="@drawable/ic_track_changes_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/mdu_keyline_1"
+            android:layout_gravity="center_vertical" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="72dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/mdu_keyline_2"
+            android:layout_marginRight="@dimen/mdu_keyline_1">
+            <TextView
+                android:id="@+id/textView_progress"
+                android:text="50% Complete"
+                android:textColor="@color/mdu_text_black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <include layout="@layout/divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
             android:src="@drawable/ic_event_note_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

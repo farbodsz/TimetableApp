@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
@@ -74,6 +75,28 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         TextView dateText = (TextView) findViewById(R.id.textView_date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
         dateText.setText(mAssignment.getDueDate().format(formatter));
+
+        final TextView progressText = (TextView) findViewById(R.id.textView_progress);
+        progressText.setText(getString(R.string.property_progress,
+                mAssignment.getCompletionProgress()));
+
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
+        seekBar.setMax(20); // so it goes up in fives
+        seekBar.setProgress(mAssignment.getCompletionProgress() / 5);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mAssignment.setCompletionProgress(progress * 5);
+                progressText.setText(getString(R.string.property_progress,
+                        mAssignment.getCompletionProgress()));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
 
         TextView detailText = (TextView) findViewById(R.id.textView_detail);
         if (mAssignment.hasDetail()) {
@@ -146,6 +169,9 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     }
 
     private void saveChangesAndClose() {
+        // overwrite db values as completionProgress may have changed
+        AssignmentUtilsKt.replaceAssignment(this, mAssignment.getId(), mAssignment);
+
         setResult(RESULT_OK); // to reload any changes in AssignmentsActivity
         finish();
     }
