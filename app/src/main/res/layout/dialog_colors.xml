@@ -17,6 +17,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/mdu_spacing_normal"
+        android:paddingRight="@dimen/mdu_spacing_normal"
+        android:paddingBottom="@dimen/mdu_padding_normal" />
 
 </LinearLayout>
