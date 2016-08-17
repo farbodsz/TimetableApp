@@ -49,7 +49,7 @@
         <TextView
             android:id="@+id/textView_class"
             android:text="@string/property_class"
-            style="@style/Widget.Timetable.TextView.Selectable"
+            style="@style/Widget.Timetable.TextView.Item.Selectable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/mdu_keyline_2"/>
@@ -69,7 +69,7 @@
         <TextView
             android:id="@+id/textView_date"
             android:text="@string/property_due_date"
-            style="@style/Widget.Timetable.TextView.Selectable"
+            style="@style/Widget.Timetable.TextView.Item.Selectable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/mdu_keyline_2"/>

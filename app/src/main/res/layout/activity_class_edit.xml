@@ -18,7 +18,7 @@
         <TextView
             android:id="@+id/textView_subject"
             android:text="@string/property_subject"
-            style="@style/Widget.Timetable.TextView.Selectable"
+            style="@style/Widget.Timetable.TextView.Item.Selectable"
             android:textColor="@color/mdu_text_white_secondary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
