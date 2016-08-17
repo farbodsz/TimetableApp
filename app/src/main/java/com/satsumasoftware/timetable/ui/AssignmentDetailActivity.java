@@ -64,6 +64,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(mAssignment.getTitle());
 
         Class cls = ClassUtilsKt.getClassWithId(this, mAssignment.getClassId());
+        assert cls != null;
         Subject subject = SubjectUtilsKt.getSubjectFromId(this, cls.getSubjectId());
         getSupportActionBar().setSubtitle(subject.getName());
 
