@@ -21,11 +21,13 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
+import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 
@@ -40,6 +42,8 @@ public class AssignmentEditActivity extends AppCompatActivity {
 
     private Assignment mAssignment;
     private boolean mIsNew;
+
+    private Toolbar mToolbar;
 
     private EditText mEditTextTitle;
     private EditText mEditTextDetail;
@@ -58,8 +62,8 @@ public class AssignmentEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assignment_edit);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         assert getSupportActionBar() != null;
 
         Bundle extras = getIntent().getExtras();
@@ -72,8 +76,8 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 R.string.title_activity_assignment_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handleCloseAction();
@@ -93,7 +97,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
         mClassText = (TextView) findViewById(R.id.textView_class);
         if (!mIsNew) {
             mClass = ClassUtilsKt.getClassWithId(this, mAssignment.getClassId());
-            updateClassText();
+            updateLinkedClass();
         }
         mClassText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +114,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                     @Override
                     public void onEntryClick(View view, int position) {
                         mClass = classes.get(position);
-                        updateClassText();
+                        updateLinkedClass();
                         mClassDialog.dismiss();
                     }
                 });
@@ -157,12 +161,16 @@ public class AssignmentEditActivity extends AppCompatActivity {
         });
     }
 
-    private void updateClassText() {
+    private void updateLinkedClass() {
         Subject subject = SubjectUtilsKt.getSubjectWithId(getBaseContext(), mClass.getSubjectId());
         assert subject != null;
+
         mClassText.setText(subject.getName());
         mClassText.setTextColor(ContextCompat.getColor(
                 getBaseContext(), R.color.mdu_text_black));
+
+        Color color = new Color(subject.getColorId());
+        ThemeUtilsKt.setBarColors(color, this, mToolbar);
     }
 
 

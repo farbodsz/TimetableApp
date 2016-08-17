@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -42,7 +43,7 @@ public class SubjectEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject_edit);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
 
@@ -73,6 +74,7 @@ public class SubjectEditActivity extends AppCompatActivity {
 
         mColor = new Color(mIsNewSubject ? 6 : mSubject.getColorId());
         imageView.setImageResource(mColor.getPrimaryColorResId(this));
+        ThemeUtilsKt.setBarColors(mColor, SubjectEditActivity.this, toolbar);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +92,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                     public void onEntryClick(View view, int position) {
                         mColor = colors.get(position);
                         imageView.setImageResource(mColor.getPrimaryColorResId(getBaseContext()));
+                        ThemeUtilsKt.setBarColors(mColor, SubjectEditActivity.this, toolbar);
                         mColorDialog.dismiss();
                     }
                 });

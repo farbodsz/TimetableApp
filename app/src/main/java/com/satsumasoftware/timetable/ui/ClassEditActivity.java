@@ -23,11 +23,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassTimesAdapter;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
@@ -55,6 +57,8 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private Subject mSubject;
 
+    private Toolbar mToolbar;
+
     private TextView mSubjectText;
     private AlertDialog mSubjectDialog;
 
@@ -68,8 +72,8 @@ public class ClassEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_edit);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         assert getSupportActionBar() != null;
 
         Bundle extras = getIntent().getExtras();
@@ -82,8 +86,8 @@ public class ClassEditActivity extends AppCompatActivity {
                 R.string.title_activity_class_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handleCloseAction();
@@ -125,7 +129,7 @@ public class ClassEditActivity extends AppCompatActivity {
                     public void onEntryClick(View view, int position) {
                         mSubject = subjects.get(position);
                         mSubjectDialog.dismiss();
-                        updateSubjectText();
+                        updateLinkedSubject();
                     }
                 });
 
@@ -157,7 +161,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
         if (!mIsNew) {
             mSubject = SubjectUtilsKt.getSubjectWithId(this, mClass.getSubjectId());
-            updateSubjectText();
+            updateLinkedSubject();
 
             ArrayList<ClassDetail> classDetails =
                     ClassUtilsKt.getClassDetailsFromIds(this, mClass.getClassDetailIds());
@@ -170,10 +174,13 @@ public class ClassEditActivity extends AppCompatActivity {
         addDetailTab(null, true);
     }
 
-    private void updateSubjectText() {
+    private void updateLinkedSubject() {
         mSubjectText.setText(mSubject.getName());
         mSubjectText.setTextColor(ContextCompat.getColor(
                 ClassEditActivity.this, R.color.mdu_text_white));
+
+        Color color = new Color(mSubject.getColorId());
+        ThemeUtilsKt.setBarColors(color, this, mToolbar);
     }
 
     private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {
@@ -269,7 +276,7 @@ public class ClassEditActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 mSubject = data.getParcelableExtra(SubjectEditActivity.EXTRA_SUBJECT);
                 mSubjectDialog.dismiss();
-                updateSubjectText();
+                updateLinkedSubject();
             }
 
         } else if (requestCode == REQUEST_CODE_CLASS_TIME_DETAIL) {

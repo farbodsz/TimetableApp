@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,11 +15,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
+import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 
 import org.threeten.bp.format.DateTimeFormatter;
@@ -71,6 +74,9 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         Subject subject = SubjectUtilsKt.getSubjectWithId(this, cls.getSubjectId());
         assert subject != null;
         getSupportActionBar().setSubtitle(subject.getName());
+
+        Color color = new Color(subject.getColorId());
+        ThemeUtilsKt.setBarColors(color, this, toolbar);
 
         TextView dateText = (TextView) findViewById(R.id.textView_date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
