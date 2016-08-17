@@ -3,6 +3,7 @@ package com.satsumasoftware.timetable.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -57,6 +58,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private Subject mSubject;
 
+    private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
 
     private TextView mSubjectText;
@@ -72,6 +74,7 @@ public class ClassEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_edit);
 
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         assert getSupportActionBar() != null;
@@ -180,7 +183,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 ClassEditActivity.this, R.color.mdu_text_white));
 
         Color color = new Color(mSubject.getColorId());
-        ThemeUtilsKt.setBarColors(color, this, mToolbar);
+        ThemeUtilsKt.setBarColors(color, this, mAppBarLayout, mToolbar);
     }
 
     private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {
