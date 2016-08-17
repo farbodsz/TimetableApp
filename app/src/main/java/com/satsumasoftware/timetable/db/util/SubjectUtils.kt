@@ -26,7 +26,7 @@ fun getSubjects(context: Context): ArrayList<Subject> {
     return subjects
 }
 
-fun getSubjectWithId(context: Context, id: Int): Subject {
+fun getSubjectWithId(context: Context, id: Int): Subject? {
     val db = TimetableDbHelper.getInstance(context).readableDatabase
     val cursor = db.query(
             SubjectsSchema.TABLE_NAME,
@@ -35,6 +35,10 @@ fun getSubjectWithId(context: Context, id: Int): Subject {
             arrayOf(id.toString()),
             null, null, null)
     cursor.moveToFirst()
+    if (cursor.count == 0) {
+        cursor.close()
+        return null
+    }
     val subject = Subject(cursor)
     cursor.close()
     return subject

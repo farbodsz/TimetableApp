@@ -66,6 +66,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         Class cls = ClassUtilsKt.getClassWithId(this, mAssignment.getClassId());
         assert cls != null;
         Subject subject = SubjectUtilsKt.getSubjectWithId(this, cls.getSubjectId());
+        assert subject != null;
         getSupportActionBar().setSubtitle(subject.getName());
 
         TextView dateText = (TextView) findViewById(R.id.textView_date);
