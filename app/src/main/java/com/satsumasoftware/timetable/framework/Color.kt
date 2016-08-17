@@ -25,8 +25,8 @@ class Color(val id: Int) {
             15 -> "orange"
             16 -> "deep_orange"
             17 -> "brown"
-            18 -> "blue_grey"
-            19 -> "brown"
+            18 -> "grey"
+            19 -> "blue_grey"
             else -> throw IllegalArgumentException("invalid color id '$id'")
         }
 
