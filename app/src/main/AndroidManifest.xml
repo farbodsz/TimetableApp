@@ -46,6 +46,10 @@
             android:theme="@style/Timetable.Home"/>
 
         <activity
+            android:name=".ui.AssignmentDetailActivity"
+            android:theme="@style/Timetable"/>
+
+        <activity
             android:name=".ui.AssignmentEditActivity"
             android:theme="@style/Timetable"/>
 
