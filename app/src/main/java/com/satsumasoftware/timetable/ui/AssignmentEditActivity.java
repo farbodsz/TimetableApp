@@ -3,7 +3,6 @@ package com.satsumasoftware.timetable.ui;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -22,8 +21,6 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.db.ClassesSchema;
-import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
@@ -94,17 +91,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
 
         mClassText = (TextView) findViewById(R.id.textView_class);
         if (!mIsNew) {
-            TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
-            Cursor cursor = dbHelper.getReadableDatabase().query(
-                    ClassesSchema.TABLE_NAME,
-                    null,
-                    ClassesSchema._ID + "=?",
-                    new String[] {String.valueOf(mAssignment.getClassId())},
-                    null, null, null);
-            cursor.moveToFirst();
-            mClass = new Class(this, cursor);
-            cursor.close();
-
+            mClass = ClassUtilsKt.getClassWithId(this, mAssignment.getClassId());
             updateClassText();
         }
         mClassText.setOnClickListener(new View.OnClickListener() {
