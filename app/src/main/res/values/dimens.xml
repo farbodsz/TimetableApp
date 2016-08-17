@@ -5,6 +5,8 @@
 
     <dimen name="subject_color_strip_width">4dp</dimen>
 
+    <integer name="subject_color_dialog_columns">5</integer>
+
     <!-- per https://developer.android.com/reference/android/view/ViewGroup.LayoutParams.html#MATCH_PARENT -->
     <item name="match_parent" format="integer" type="dimen">-1</item>
 

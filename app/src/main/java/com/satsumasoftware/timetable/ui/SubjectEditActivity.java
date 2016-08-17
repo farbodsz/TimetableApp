@@ -96,7 +96,8 @@ public class SubjectEditActivity extends AppCompatActivity {
 
                 RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
                 recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new GridLayoutManager(SubjectEditActivity.this, 4));
+                recyclerView.setLayoutManager(new GridLayoutManager(SubjectEditActivity.this,
+                        getResources().getInteger(R.integer.subject_color_dialog_columns)));
                 recyclerView.setAdapter(adapter);
 
                 builder.setView(customView);
