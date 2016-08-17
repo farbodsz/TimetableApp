@@ -39,8 +39,8 @@ public class AssignmentsActivity extends BaseActivity {
         mAdapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(AssignmentsActivity.this, AssignmentEditActivity.class);
-                intent.putExtra(AssignmentEditActivity.EXTRA_ASSIGNMENT, mAssignments.get(position));
+                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
+                intent.putExtra(AssignmentDetailActivity.EXTRA_ASSIGNMENT, mAssignments.get(position));
                 startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
             }
         });
@@ -54,7 +54,7 @@ public class AssignmentsActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AssignmentsActivity.this, AssignmentEditActivity.class);
+                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
             }
         });
