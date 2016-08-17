@@ -16,8 +16,10 @@ import java.util.*
 
 class ClassesCard(val context: Context, val classTimes: ArrayList<ClassTime>) : HomeCard {
 
-    override val title = "Agenda"
-    override val forwardActionText: String? = "Open schedule"
+    override val title =
+            context.resources.getString(R.string.home_card_classes_title)!!
+    override val forwardActionText: String? =
+            context.resources.getString(R.string.home_card_classes_action)!!
 
     override fun loadContent(container: ViewGroup) {
         val inflater = LayoutInflater.from(context)

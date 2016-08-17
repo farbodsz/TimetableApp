@@ -16,6 +16,9 @@
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
 
+    <string name="home_card_classes_title">Agenda</string>
+    <string name="home_card_classes_action">Open schedule</string>
+
     <string name="property_name">Name</string>
     <string name="message_invalid_name">This name is invalid</string>
 
