@@ -2,8 +2,10 @@ package com.satsumasoftware.timetable.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -74,7 +76,13 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         dateText.setText(mAssignment.getDueDate().format(formatter));
 
         TextView detailText = (TextView) findViewById(R.id.textView_detail);
-        detailText.setText(mAssignment.getDetail());
+        if (mAssignment.hasDetail()) {
+            detailText.setText(mAssignment.getDetail());
+            detailText.setTextColor(ContextCompat.getColor(this, R.color.mdu_text_black));
+        } else {
+            detailText.setText(Html.fromHtml(getString(R.string.placeholder_detail_empty)));
+            detailText.setTextColor(ContextCompat.getColor(this, R.color.mdu_text_black_secondary));
+        }
     }
 
     @Override
