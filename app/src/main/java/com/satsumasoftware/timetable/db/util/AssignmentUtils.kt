@@ -24,6 +24,24 @@ fun getAssignments(context: Context): ArrayList<Assignment> {
     return assignments
 }
 
+fun getAssignmentWithId(context: Context, assignmentId: Int): Assignment? {
+    val db = TimetableDbHelper.getInstance(context).readableDatabase
+    val cursor = db.query(
+            AssignmentsSchema.TABLE_NAME,
+            null,
+            "${AssignmentsSchema._ID}=?",
+            arrayOf(assignmentId.toString()),
+            null, null, null)
+    cursor.moveToFirst()
+    if (cursor.count == 0) {
+        cursor.close()
+        return null
+    }
+    val assignment = Assignment(cursor)
+    cursor.close()
+    return assignment
+}
+
 fun getAssignmentsForClass(context: Context, classId: Int): ArrayList<Assignment> {
     val assignments = ArrayList<Assignment>()
     val dbHelper = TimetableDbHelper.getInstance(context)
