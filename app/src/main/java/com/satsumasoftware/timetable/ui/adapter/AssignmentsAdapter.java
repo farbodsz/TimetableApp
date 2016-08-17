@@ -39,12 +39,13 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
         Assignment assignment = mAssignments.get(position);
 
         holder.mTitle.setText(assignment.getTitle());
-        holder.mDetail.setText(assignment.getDetail());
 
         Class cls = ClassUtilsKt.getClassWithId(mContext, assignment.getClassId());
         assert cls != null;
         Subject subject = SubjectUtilsKt.getSubjectWithId(mContext, cls.getSubjectId());
         assert subject != null;
+
+        holder.mSubject.setText(subject.getName());
 
         Color color = new Color(subject.getColorId());
         holder.mColorView.setBackgroundColor(
@@ -59,14 +60,14 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
     public class AssignmentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         View mColorView;
-        TextView mTitle, mDetail;
+        TextView mTitle, mSubject;
 
         AssignmentViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             mColorView = itemView.findViewById(R.id.color);
             mTitle = (TextView) itemView.findViewById(R.id.title);
-            mDetail = (TextView) itemView.findViewById(R.id.detail);
+            mSubject = (TextView) itemView.findViewById(R.id.subject);
         }
 
         @Override
