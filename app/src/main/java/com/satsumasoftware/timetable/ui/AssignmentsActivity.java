@@ -35,7 +35,7 @@ public class AssignmentsActivity extends BaseActivity {
 
         mAssignments = AssignmentUtilsKt.getAssignments(this);
 
-        mAdapter = new AssignmentsAdapter(mAssignments);
+        mAdapter = new AssignmentsAdapter(this, mAssignments);
         mAdapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
