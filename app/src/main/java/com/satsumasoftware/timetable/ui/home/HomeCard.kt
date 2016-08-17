@@ -1,0 +1,17 @@
+package com.satsumasoftware.timetable.ui.home
+
+import android.view.View
+import android.view.ViewGroup
+
+interface HomeCard {
+
+    val title: String
+    val forwardActionText: String?
+
+    fun loadContent(container: ViewGroup)
+
+    fun hasForwardAction() = forwardActionText != null
+
+    fun getBottomBarClickListener(): View.OnClickListener
+
+}
