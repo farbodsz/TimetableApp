@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/mdu_padding_normal"
+    android:paddingRight="@dimen/mdu_padding_normal"
+    android:paddingTop="@dimen/mdu_spacing_normal"
+    android:paddingBottom="@dimen/mdu_spacing_normal">
+
+    <include layout="@layout/item_color"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/mdu_padding_normal">
+
+        <TextView
+            android:id="@+id/subject"
+            android:text="Geography"
+            android:textColor="@color/mdu_text_black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/details"
+            android:text="11:35 - 12:35 &#8901; W5"
+            android:textColor="@color/mdu_text_black_secondary"
+            android:textSize="13sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dp" />
+    </LinearLayout>
+</LinearLayout>
