@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.ui.home.HomeCard;
+import com.satsumasoftware.timetable.ui.card.HomeCard;
 
 import java.util.ArrayList;
 

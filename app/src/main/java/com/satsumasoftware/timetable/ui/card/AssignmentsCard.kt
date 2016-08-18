@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.ui.home
+package com.satsumasoftware.timetable.ui.card
 
 import android.content.Context
 import android.content.Intent

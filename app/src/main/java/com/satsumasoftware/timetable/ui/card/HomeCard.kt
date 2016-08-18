@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.ui.home
+package com.satsumasoftware.timetable.ui.card
 
 import android.view.View
 import android.view.ViewGroup

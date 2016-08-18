@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.ui.home
+package com.satsumasoftware.timetable.ui.card
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager

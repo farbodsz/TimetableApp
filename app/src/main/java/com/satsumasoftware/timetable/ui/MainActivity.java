@@ -15,9 +15,9 @@ import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.ui.adapter.HomeCardsAdapter;
-import com.satsumasoftware.timetable.ui.home.AssignmentsCard;
-import com.satsumasoftware.timetable.ui.home.ClassesCard;
-import com.satsumasoftware.timetable.ui.home.HomeCard;
+import com.satsumasoftware.timetable.ui.card.AssignmentsCard;
+import com.satsumasoftware.timetable.ui.card.ClassesCard;
+import com.satsumasoftware.timetable.ui.card.HomeCard;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
