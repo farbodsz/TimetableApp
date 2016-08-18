@@ -1,6 +1,10 @@
 package com.satsumasoftware.timetable
 
 fun String.title(): String {
+    if (this.trim().length == 0) {
+        return this
+    }
+
     val words = this.split(" ")
     val builder = StringBuilder()
     for (word in words) {

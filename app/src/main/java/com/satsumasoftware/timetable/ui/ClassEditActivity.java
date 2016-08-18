@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
@@ -386,15 +387,15 @@ public class ClassEditActivity extends AppCompatActivity {
             int classDetailId = mClassDetailIds.get(i);
 
             EditText roomText = (EditText) page.findViewById(R.id.editText_room);
-            String room = roomText.getText().toString();
+            String room = TextUtilsKt.title(roomText.getText().toString());
             Log.d(LOG_TAG, "room: " + room);
 
             EditText buildingText = (EditText) page.findViewById(R.id.editText_building);
-            String building = buildingText.getText().toString();
+            String building = TextUtilsKt.title(buildingText.getText().toString());
             Log.d(LOG_TAG, "building: " + building);
 
             EditText teacherText = (EditText) page.findViewById(R.id.editText_teacher);
-            String teacher = teacherText.getText().toString();
+            String teacher = TextUtilsKt.title(teacherText.getText().toString());
             Log.d(LOG_TAG, "teacher: " + teacher);
 
             ArrayList<ClassTime> classTimes = mClassTimes.get(i);
