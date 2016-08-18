@@ -17,4 +17,10 @@ class ClassDetail(val id: Int, val classId: Int, val room: String, val building:
             cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_TEACHER)),
             getClassTimeIds(context, cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema._ID))))
 
+    fun hasRoom() = room.trim().length != 0
+
+    fun hasBuilding() = building.trim().length != 0
+
+    fun hasTeacher() = teacher.trim().length != 0
+
 }
