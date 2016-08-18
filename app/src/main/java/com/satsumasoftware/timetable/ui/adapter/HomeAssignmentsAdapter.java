@@ -2,6 +2,7 @@ package com.satsumasoftware.timetable.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
@@ -52,13 +54,26 @@ public class HomeAssignmentsAdapter extends RecyclerView.Adapter<HomeAssignments
         Color color = new Color(subject.getColorId());
         holder.mColorCircle.setImageResource(color.getPrimaryColorResId(mContext));
 
-        String details = subject.getName() +
-                " \u2022 " +
-                assignment.getDueDate().format(DateTimeFormatter.ofPattern("d MMM")) +
-                " \u2022 " +
-                mContext.getString(R.string.property_progress, assignment.getCompletionProgress());
+        boolean isOverdue = assignment.getDueDate().isBefore(LocalDate.now());
 
-        holder.mDetails.setText(details);
+        StringBuilder details = new StringBuilder();
+
+        if (isOverdue) {
+            details.append("<font color=\"#F44336\"><b>");
+            details.append(mContext.getString(R.string.overdue));
+            details.append("</b> \u2022 ");
+        }
+
+        details.append(subject.getName())
+                .append(" \u2022 ");
+        details.append(assignment.getDueDate().format(DateTimeFormatter.ofPattern("d MMM")));
+        details.append(" \u2022 ")
+                .append(mContext.getString(R.string.property_progress,
+                        assignment.getCompletionProgress()));
+
+        if (isOverdue) details.append("</font>");
+
+        holder.mDetails.setText(Html.fromHtml(details.toString()));
     }
 
     @Override
