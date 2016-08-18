@@ -204,6 +204,11 @@ public class ClassEditActivity extends AppCompatActivity {
             room.setText(classDetail.getRoom());
         }
 
+        EditText building = (EditText) page.findViewById(R.id.editText_building);
+        if (!isNewDetail) {
+            building.setText(classDetail.getBuilding());
+        }
+
         EditText teacher = (EditText) page.findViewById(R.id.editText_teacher);
         if (!isNewDetail) {
             teacher.setText(classDetail.getTeacher());
@@ -368,6 +373,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
         ArrayList<Integer> classDetailIds = new ArrayList<>();
         ArrayList<String> rooms = new ArrayList<>();
+        ArrayList<String> buildings = new ArrayList<>();
         ArrayList<String> teachers = new ArrayList<>();
         ArrayList<ArrayList<Integer>> classTimeIdsList = new ArrayList<>();
 
@@ -382,6 +388,10 @@ public class ClassEditActivity extends AppCompatActivity {
             EditText roomText = (EditText) page.findViewById(R.id.editText_room);
             String room = roomText.getText().toString();
             Log.d(LOG_TAG, "room: " + room);
+
+            EditText buildingText = (EditText) page.findViewById(R.id.editText_building);
+            String building = buildingText.getText().toString();
+            Log.d(LOG_TAG, "building: " + building);
 
             EditText teacherText = (EditText) page.findViewById(R.id.editText_teacher);
             String teacher = teacherText.getText().toString();
@@ -407,6 +417,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
             classDetailIds.add(classDetailId);
             rooms.add(room);
+            buildings.add(building);
             teachers.add(teacher);
 
             ArrayList<Integer> arrayList = new ArrayList<>();
@@ -428,11 +439,12 @@ public class ClassEditActivity extends AppCompatActivity {
         for (int i = 0; i < rooms.size(); i++) {
             int classDetailId = classDetailIds.get(i);
             String room = rooms.get(i);
+            String building = buildings.get(i);
             String teacher = teachers.get(i);
             ArrayList<Integer> classTimeIds = classTimeIdsList.get(i);
 
             ClassDetail classDetail =
-                    new ClassDetail(classDetailId, classId, room, teacher, classTimeIds);
+                    new ClassDetail(classDetailId, classId, room, building, teacher, classTimeIds);
 
             ClassUtilsKt.replaceClassDetail(this, classDetailId, classDetail);
         }

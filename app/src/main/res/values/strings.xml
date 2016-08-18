@@ -28,6 +28,7 @@
 
     <string name="property_subject">Subject</string>
     <string name="property_room">Room</string>
+    <string name="property_building">Building</string>
     <string name="property_teacher">Teacher</string>
     <string name="message_subject_required">You must enter a subject for this class</string>
     <string name="message_empty_detail">Please check your inputs! At least one detail tab is completely empty</string>
