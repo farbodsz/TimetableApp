@@ -1,7 +1,6 @@
 package com.satsumasoftware.timetable.ui.adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,7 @@ public class HomeClassesAdapter extends RecyclerView.Adapter<HomeClassesAdapter.
 
     @Override
     public ClassesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_info_class, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_card_detail, parent, false);
         return new ClassesViewHolder(view);
     }
 

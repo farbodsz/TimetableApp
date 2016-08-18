@@ -33,7 +33,7 @@ public class HomeAssignmentsAdapter extends RecyclerView.Adapter<HomeAssignments
 
     @Override
     public AssignmentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_info_class, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_card_detail, parent, false);
         return new AssignmentsViewHolder(view);
     }
 
