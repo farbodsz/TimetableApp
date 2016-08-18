@@ -53,9 +53,16 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
 
         for (int i = 0; i < classDetails.size(); i++) {
             ClassDetail classDetail = classDetails.get(i);
-            builder.append(classDetail.getTeacher())
-                    .append(", ")
-                    .append(classDetail.getRoom());
+
+            if (classDetail.hasRoom()) {
+                builder.append(classDetail.getRoom());
+                if (classDetail.hasTeacher()) builder.append(" \u2022 ");
+            }
+
+            if (classDetail.hasTeacher()) {
+                builder.append(classDetail.getTeacher());
+            }
+
             if (i != classDetails.size() - 1) {
                 builder.append("\n");
             }
