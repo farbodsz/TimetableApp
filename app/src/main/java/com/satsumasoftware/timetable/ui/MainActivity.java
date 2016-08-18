@@ -9,10 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.db.AssignmentsSchema;
 import com.satsumasoftware.timetable.db.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
+import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
+import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.ui.adapter.HomeCardsAdapter;
+import com.satsumasoftware.timetable.ui.home.AssignmentsCard;
 import com.satsumasoftware.timetable.ui.home.ClassesCard;
 import com.satsumasoftware.timetable.ui.home.HomeCard;
 
@@ -20,6 +24,8 @@ import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MainActivity extends BaseActivity {
 
@@ -37,6 +43,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<HomeCard> cards = new ArrayList<>();
 
         cards.add(new ClassesCard(this, getClassesToday()));
+        cards.add(new AssignmentsCard(this, getAssignments()));
 
         recyclerView.setAdapter(new HomeCardsAdapter(cards));
     }
@@ -61,6 +68,41 @@ public class MainActivity extends BaseActivity {
         }
         cursor.close();
         return classTimes;
+    }
+
+    private ArrayList<Assignment> getAssignments() {
+        ArrayList<Assignment> assignments = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+
+        for (Assignment assignment : AssignmentUtilsKt.getAssignments(this)) {
+            LocalDate dueDate = assignment.getDueDate();
+
+            if (dueDate.isBefore(now) && assignment.getCompletionProgress() != 100) {
+                assignments.add(assignment);  // overdue (incomplete) assignment
+                continue;
+            }
+
+            if (dueDate.isEqual(now)) {
+                assignments.add(assignment);  // due today
+                continue;
+            }
+
+            if (dueDate.isAfter(now) && dueDate.isBefore(now.plusDays(4))) {
+                assignments.add(assignment);  // due in the next three days
+            }
+        }
+
+        // sort
+        Collections.sort(assignments, new Comparator<Assignment>() {
+            @Override
+            public int compare(Assignment assignment, Assignment t1) {
+                LocalDate date1 = assignment.getDueDate();
+                LocalDate date2 = t1.getDueDate();
+                return date1.compareTo(date2);
+            }
+        });
+
+        return assignments;
     }
 
     @Override
