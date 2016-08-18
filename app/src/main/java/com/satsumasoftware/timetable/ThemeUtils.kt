@@ -7,12 +7,9 @@ import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
-import android.support.annotation.MenuRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v7.widget.Toolbar
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import com.satsumasoftware.timetable.framework.Color
 
