@@ -15,9 +15,9 @@ public final class ClassDetailsSchema implements BaseColumns {
     protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_CLASS_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
-            COL_ROOM + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
+            COL_ROOM + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_BUILDING + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +
-            COL_TEACHER + SchemaUtilsKt.INTEGER_TYPE +
+            COL_TEACHER + SchemaUtilsKt.TEXT_TYPE +
             " )";
 
     protected static final String SQL_DELETE =
