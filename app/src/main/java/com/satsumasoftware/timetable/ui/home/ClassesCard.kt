@@ -23,7 +23,7 @@ class ClassesCard(val context: Context, val classTimes: ArrayList<ClassTime>) : 
 
     override fun loadContent(container: ViewGroup) {
         val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.card_home_class_content, null)
+        val view = inflater.inflate(R.layout.card_home_list_content, null)
 
         val recyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
 
