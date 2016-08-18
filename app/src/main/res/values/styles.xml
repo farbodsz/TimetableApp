@@ -12,6 +12,14 @@
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 
+    <style name="Timetable.EditItem">
+        <item name="colorPrimary">@color/mdu_grey_100</item>
+        <item name="colorPrimaryDark">@color/mdu_grey_300</item>
+        <item name="colorAccent">@color/theme_accent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
     <style name="Widget.Timetable" parent="android:Widget" />
 
     <style name="Widget.Timetable.Toolbar">
@@ -19,6 +27,11 @@
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="Widget.Timetable.Toolbar.Light">
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
     </style>
 
     <style name="Widget.Timetable.CardView" parent="CardView.Light">
