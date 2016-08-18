@@ -315,6 +315,7 @@ public class ClassEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
+        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 

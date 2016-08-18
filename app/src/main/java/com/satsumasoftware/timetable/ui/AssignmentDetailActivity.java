@@ -147,6 +147,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_detail, menu);
+        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_edit);
         return true;
     }
 

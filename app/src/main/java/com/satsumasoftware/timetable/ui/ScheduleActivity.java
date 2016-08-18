@@ -16,6 +16,7 @@ import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.db.ClassesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
@@ -167,6 +168,7 @@ public class ScheduleActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule, menu);
+        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_today);
         return true;
     }
 
