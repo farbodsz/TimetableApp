@@ -9,4 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:padding="@dimen/mdu_padding_normal" />
+    android:paddingTop="36dp"
+    android:paddingBottom="36dp"
+    android:paddingLeft="@dimen/mdu_padding_normal"
+    android:paddingRight="@dimen/mdu_padding_normal" />
