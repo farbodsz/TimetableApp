@@ -38,7 +38,7 @@
 
         <activity
             android:name=".ui.ClassTimeEditActivity"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable.EditItem"/>
 
         <activity
             android:name=".ui.AssignmentsActivity"

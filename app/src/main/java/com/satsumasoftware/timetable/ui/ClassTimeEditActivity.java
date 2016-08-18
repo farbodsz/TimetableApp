@@ -79,7 +79,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 R.string.title_activity_class_time_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        toolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,7 +162,6 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 
