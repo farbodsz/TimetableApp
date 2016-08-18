@@ -173,6 +173,7 @@ fun addClassDetail(context: Context, classDetail: ClassDetail) {
         put(ClassDetailsSchema._ID, classDetail.id)
         put(ClassDetailsSchema.COL_CLASS_ID, classDetail.classId)
         put(ClassDetailsSchema.COL_ROOM, classDetail.room)
+        put(ClassDetailsSchema.COL_BUILDING, classDetail.building)
         put(ClassDetailsSchema.COL_TEACHER, classDetail.teacher)
     }
 
