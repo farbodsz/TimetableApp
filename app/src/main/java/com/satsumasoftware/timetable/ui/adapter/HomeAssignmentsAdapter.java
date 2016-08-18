@@ -54,7 +54,7 @@ public class HomeAssignmentsAdapter extends RecyclerView.Adapter<HomeAssignments
 
         String details = subject.getName() +
                 " \u2022 " +
-                assignment.getDueDate().format(DateTimeFormatter.ofPattern("d MMM uu")) +
+                assignment.getDueDate().format(DateTimeFormatter.ofPattern("d MMM")) +
                 " \u2022 " +
                 mContext.getString(R.string.property_progress, assignment.getCompletionProgress());
 
