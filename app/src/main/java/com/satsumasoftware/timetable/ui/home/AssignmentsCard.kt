@@ -17,34 +17,20 @@ import com.satsumasoftware.timetable.ui.adapter.HomeAssignmentsAdapter
 import com.satsumasoftware.timetable.ui.adapter.HomeClassesAdapter
 import java.util.*
 
-class AssignmentsCard(val context: Context, val assignments: ArrayList<Assignment>) : HomeCard {
+class AssignmentsCard(override val context: Context, assignments: ArrayList<Assignment>) : ListCard {
 
     override val title =
             context.resources.getString(R.string.home_card_assignments_title)!!
     override val forwardActionText: String? =
             context.resources.getString(R.string.home_card_assignments_action)!!
 
+    override val recyclerAdapter = HomeAssignmentsAdapter(context, assignments)
+    override val isListEmpty = assignments.isEmpty()
+
+    override val placeholderText: String =
+            context.getString(R.string.home_card_assignments_placeholder)
+
     override val colorRes = R.color.mdu_deep_orange_500
-
-    override fun loadContent(container: ViewGroup) {
-        val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.card_home_list_content, null)
-
-        val recyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
-
-        with(recyclerView) {
-            layoutManager = object : LinearLayoutManager(context) {
-                override fun canScrollVertically(): Boolean {
-                    return false
-                }
-            }
-
-            setHasFixedSize(true)
-            adapter = HomeAssignmentsAdapter(context, assignments)
-        }
-
-        container.addView(view)
-    }
 
     override fun getBottomBarClickListener() =  View.OnClickListener {
         context.startActivity(Intent(context, AssignmentsActivity::class.java))

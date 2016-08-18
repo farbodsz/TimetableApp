@@ -18,8 +18,10 @@
 
     <string name="home_card_classes_title">Agenda</string>
     <string name="home_card_classes_action">Open schedule</string>
+    <string name="home_card_classes_placeholder">No classes today!</string>
     <string name="home_card_assignments_title">Assignments</string>
     <string name="home_card_assignments_action">View all assignments</string>
+    <string name="home_card_assignments_placeholder">No assignments due for the next 3 days!</string>
 
     <string name="overdue">Overdue</string>
 
