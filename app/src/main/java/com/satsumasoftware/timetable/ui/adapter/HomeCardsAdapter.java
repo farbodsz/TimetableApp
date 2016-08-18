@@ -1,5 +1,7 @@
 package com.satsumasoftware.timetable.ui.adapter;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +17,11 @@ import java.util.ArrayList;
 
 public class HomeCardsAdapter extends RecyclerView.Adapter<HomeCardsAdapter.HomeCardViewHolder> {
 
+    private Context mContext;
     private ArrayList<HomeCard> mCards;
 
-    public HomeCardsAdapter(ArrayList<HomeCard> cards) {
+    public HomeCardsAdapter(Context context, ArrayList<HomeCard> cards) {
+        mContext = context;
         mCards = cards;
     }
 
@@ -32,6 +36,7 @@ public class HomeCardsAdapter extends RecyclerView.Adapter<HomeCardsAdapter.Home
         HomeCard card = mCards.get(position);
 
         holder.mTitle.setText(card.getTitle());
+        holder.mTitle.setBackgroundColor(ContextCompat.getColor(mContext, card.getColorRes()));
 
         card.loadContent(holder.mContainer);
 

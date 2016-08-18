@@ -24,6 +24,8 @@ class AssignmentsCard(val context: Context, val assignments: ArrayList<Assignmen
     override val forwardActionText: String? =
             context.resources.getString(R.string.home_card_assignments_action)!!
 
+    override val colorRes = R.color.mdu_deep_orange_500
+
     override fun loadContent(container: ViewGroup) {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.card_home_list_content, null)

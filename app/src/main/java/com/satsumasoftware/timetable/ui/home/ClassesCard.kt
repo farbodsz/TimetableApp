@@ -21,6 +21,8 @@ class ClassesCard(val context: Context, val classTimes: ArrayList<ClassTime>) : 
     override val forwardActionText: String? =
             context.resources.getString(R.string.home_card_classes_action)!!
 
+    override val colorRes = R.color.mdu_light_blue_500
+
     override fun loadContent(container: ViewGroup) {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.card_home_list_content, null)

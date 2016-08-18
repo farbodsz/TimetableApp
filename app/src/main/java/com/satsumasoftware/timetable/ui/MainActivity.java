@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
         cards.add(new ClassesCard(this, getClassesToday()));
         cards.add(new AssignmentsCard(this, getAssignments()));
 
-        recyclerView.setAdapter(new HomeCardsAdapter(cards));
+        recyclerView.setAdapter(new HomeCardsAdapter(this, cards));
     }
 
     private ArrayList<ClassTime> getClassesToday() {
