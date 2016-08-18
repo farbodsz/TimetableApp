@@ -89,7 +89,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 R.string.title_activity_class_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        mToolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        mToolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

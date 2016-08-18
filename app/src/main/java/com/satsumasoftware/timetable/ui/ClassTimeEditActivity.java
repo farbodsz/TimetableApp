@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsuware.usefulviews.LabelledSpinner;
@@ -78,7 +79,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 R.string.title_activity_class_time_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        toolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

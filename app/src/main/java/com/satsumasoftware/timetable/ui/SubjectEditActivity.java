@@ -57,7 +57,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                 R.string.title_activity_subject_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+        toolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
