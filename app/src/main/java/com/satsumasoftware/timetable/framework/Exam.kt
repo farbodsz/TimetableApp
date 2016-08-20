@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.ExamsSchema
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 
 class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: LocalDate,
@@ -41,6 +42,8 @@ class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: Lo
     fun hasSeat() = seat.trim().length != 0
 
     fun hasRoom() = room.trim().length != 0
+
+    fun makeDateTimeObject() = LocalDateTime.of(date, startTime)
 
     override fun describeContents() = 0
 
