@@ -98,7 +98,7 @@ public class AssignmentsActivity extends BaseActivity {
             int timePeriodId = DateUtilsKt.getDatePeriodId(dueDate);
 
             if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                headers.add(DateUtilsKt.makeHeaderName(timePeriodId));
+                headers.add(DateUtilsKt.makeHeaderName(this, timePeriodId));
                 assignments.add(null);
             }
 

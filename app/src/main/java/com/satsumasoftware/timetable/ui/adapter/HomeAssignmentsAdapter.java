@@ -60,7 +60,7 @@ public class HomeAssignmentsAdapter extends RecyclerView.Adapter<HomeAssignments
 
         if (isOverdue) {
             details.append("<font color=\"#F44336\"><b>");
-            details.append(mContext.getString(R.string.overdue));
+            details.append(mContext.getString(R.string.due_overdue));
             details.append("</b> \u2022 ");
         }
 

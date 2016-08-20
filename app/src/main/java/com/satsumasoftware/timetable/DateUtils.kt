@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable
 
+import android.content.Context
 import org.threeten.bp.LocalDate
 import org.threeten.bp.Period
 import org.threeten.bp.temporal.WeekFields
@@ -31,13 +32,16 @@ fun getDatePeriodId(dueDate: LocalDate): Int {
     }
 }
 
-fun makeHeaderName(timePeriodId: Int) = when (timePeriodId) {
-    ID_OVERDUE -> "Overdue"
-    ID_TODAY -> "Today"
-    ID_TOMORROW -> "Tomorrow"
-    ID_THIS_WEEK -> "This Week"
-    ID_NEXT_WEEK -> "Next Week"
-    ID_THIS_MONTH -> "This Month"
-    ID_LATER -> "Later"
-    else -> throw IllegalArgumentException("invalid time period id '$timePeriodId'")
+fun makeHeaderName(context: Context, timePeriodId: Int): String {
+    val stringRes = when (timePeriodId) {
+        ID_OVERDUE -> R.string.due_overdue
+        ID_TODAY -> R.string.due_today
+        ID_TOMORROW -> R.string.due_tomorrow
+        ID_THIS_WEEK -> R.string.due_this_week
+        ID_NEXT_WEEK -> R.string.due_next_week
+        ID_THIS_MONTH -> R.string.due_this_month
+        ID_LATER -> R.string.due_later
+        else -> throw IllegalArgumentException("invalid time period id '$timePeriodId'")
+    }
+    return context.getString(stringRes)
 }

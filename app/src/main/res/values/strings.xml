@@ -23,7 +23,13 @@
     <string name="home_card_assignments_action">View all assignments</string>
     <string name="home_card_assignments_placeholder">No assignments due for the next 3 days!</string>
 
-    <string name="overdue">Overdue</string>
+    <string name="due_overdue">Overdue</string>
+    <string name="due_today">Today</string>
+    <string name="due_tomorrow">Tomorrow</string>
+    <string name="due_this_week">This week</string>
+    <string name="due_next_week">Next week</string>
+    <string name="due_this_month">This month</string>
+    <string name="due_later">Later</string>
 
     <string name="property_name">Name</string>
     <string name="message_invalid_name">This name is invalid</string>
