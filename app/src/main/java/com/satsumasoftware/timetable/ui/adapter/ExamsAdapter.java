@@ -85,6 +85,7 @@ public class ExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.mDetail.setText(details.toString());
 
         holder.mDate.setText(exam.getDate().format(DateTimeFormatter.ofPattern("dd MMM uu")));
+        holder.mDuration.setText(exam.getDuration() + " mins");
 
         Color color = new Color(subject.getColorId());
         holder.mColorView.setBackgroundColor(
