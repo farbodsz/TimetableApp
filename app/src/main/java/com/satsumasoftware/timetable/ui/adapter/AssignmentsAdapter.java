@@ -16,6 +16,8 @@ import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 
+import org.threeten.bp.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 
 public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -71,6 +73,9 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         holder.mTitle.setText(assignment.getTitle());
 
+        holder.mDueDate.setText(assignment.getDueDate().format(DateTimeFormatter.ofPattern("dd MMM uu")));
+        holder.mCompletion.setText(assignment.getCompletionProgress() + " %");
+
         Class cls = ClassUtilsKt.getClassWithId(mContext, assignment.getClassId());
         assert cls != null;
         Subject subject = SubjectUtilsKt.getSubjectWithId(mContext, cls.getSubjectId());
@@ -106,7 +111,7 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public class AssignmentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         View mColorView;
-        TextView mTitle, mSubject;
+        TextView mTitle, mSubject, mDueDate, mCompletion;
 
         AssignmentViewHolder(View itemView) {
             super(itemView);
@@ -114,6 +119,8 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             mColorView = itemView.findViewById(R.id.color);
             mTitle = (TextView) itemView.findViewById(R.id.title);
             mSubject = (TextView) itemView.findViewById(R.id.subject);
+            mDueDate = (TextView) itemView.findViewById(R.id.due_date);
+            mCompletion = (TextView) itemView.findViewById(R.id.completion_progress);
         }
 
         @Override

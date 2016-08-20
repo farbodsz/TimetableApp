@@ -11,8 +11,7 @@
         android:layout_width="@dimen/subject_color_strip_width"
         android:layout_height="match_parent"/>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -23,7 +22,7 @@
             android:text="Title"
             android:textColor="@color/mdu_text_black"
             android:textSize="16sp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
@@ -31,8 +30,31 @@
             android:text="Some detail stuff"
             android:textColor="@color/mdu_text_black_secondary"
             android:textSize="14sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title" />
+
+        <TextView
+            android:id="@+id/due_date"
+            android:text="20 Aug"
+            android:textColor="@color/mdu_text_black_secondary"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/completion_progress"
+            android:text="55%"
+            android:textColor="@color/mdu_text_black_secondary"
+            android:textSize="12sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/due_date"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="2dp"/>
+    </RelativeLayout>
 
 </FrameLayout>
