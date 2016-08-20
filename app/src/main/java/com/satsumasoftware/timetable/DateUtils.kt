@@ -2,7 +2,6 @@ package com.satsumasoftware.timetable
 
 import android.content.Context
 import org.threeten.bp.LocalDate
-import org.threeten.bp.Period
 import org.threeten.bp.temporal.WeekFields
 import java.util.*
 
@@ -16,11 +15,7 @@ private const val ID_LATER = 6
 
 fun getDatePeriodId(dueDate: LocalDate): Int {
     val now = LocalDate.now()
-
     val woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()  // to get week of year
-
-    val period = Period.between(dueDate, now)
-
     return when {
         dueDate.isBefore(now) -> ID_OVERDUE
         dueDate.isEqual(now) -> ID_TODAY
