@@ -51,8 +51,8 @@ class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: Lo
         dest?.writeSerializable(date)
         dest?.writeSerializable(startTime)
         dest?.writeInt(duration)
-        dest?.writeSerializable(seat)
-        dest?.writeSerializable(room)
+        dest?.writeString(seat)
+        dest?.writeString(room)
         dest?.writeInt(if (resit) 1 else 0)
     }
 
