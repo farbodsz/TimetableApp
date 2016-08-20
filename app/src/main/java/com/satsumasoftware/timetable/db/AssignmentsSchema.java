@@ -16,7 +16,7 @@ public final class AssignmentsSchema implements BaseColumns {
     public static final String COL_COMPLETION_PROGRESS = "completion_progress";
 
     protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
-            _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
+            _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_CLASS_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_TITLE + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_DETAIL + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +
