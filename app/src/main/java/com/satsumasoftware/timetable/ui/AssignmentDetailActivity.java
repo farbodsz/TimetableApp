@@ -61,7 +61,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveChangesAndClose();
+                saveEditsAndClose();
             }
         });
 
@@ -126,12 +126,12 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                 if (mAssignment == null) {
                     Log.d("ADA!!", "Assignment is NULL");
                     // must have been deleted
-                    saveChangesAndClose();
+                    saveDeleteAndClose();
                     return;
                 }
 
                 if (mIsNew) {
-                    saveChangesAndClose();
+                    saveEditsAndClose();
                 } else {
                     setupLayouts();
                 }
@@ -165,7 +165,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        saveChangesAndClose();
+        saveEditsAndClose();
         super.onBackPressed();
     }
 
@@ -174,10 +174,15 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    private void saveChangesAndClose() {
+    private void saveEditsAndClose() {
         // overwrite db values as completionProgress may have changed
         AssignmentUtilsKt.replaceAssignment(this, mAssignment.getId(), mAssignment);
 
+        setResult(RESULT_OK); // to reload any changes in AssignmentsActivity
+        finish();
+    }
+
+    private void saveDeleteAndClose() {
         setResult(RESULT_OK); // to reload any changes in AssignmentsActivity
         finish();
     }
