@@ -9,6 +9,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.satsumasoftware.timetable.DateUtilsKt;
@@ -18,6 +20,7 @@ import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +33,8 @@ public class AssignmentsActivity extends BaseActivity {
     private ArrayList<String> mHeaders;
     private ArrayList<Assignment> mAssignments;
     private AssignmentsAdapter mAdapter;
+
+    private boolean mShowPast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,24 +100,41 @@ public class AssignmentsActivity extends BaseActivity {
         for (int i = 0; i < mAssignments.size(); i++) {
             Assignment assignment = mAssignments.get(i);
 
-            // do not display completed assignments
-            if (assignment.getDueDate().isBefore(LocalDate.now()) &&
-                    assignment.getCompletionProgress() == 100) {
-                continue;
-            }
-
             LocalDate dueDate = assignment.getDueDate();
-            int timePeriodId = DateUtilsKt.getDatePeriodId(dueDate);
+            int timePeriodId;
 
-            if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                headers.add(DateUtilsKt.makeHeaderName(this, timePeriodId));
-                assignments.add(null);
+            if (dueDate.isBefore(LocalDate.now()) && assignment.getCompletionProgress() == 100) {
+                if (mShowPast) {
+                    timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
+                            String.valueOf(dueDate.getMonthValue()));
+
+                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                        headers.add(dueDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")));
+                        assignments.add(null);
+                    }
+
+                    headers.add(null);
+                    assignments.add(assignment);
+
+                    currentTimePeriod = timePeriodId;
+                }
+
+            } else {
+
+                if (!mShowPast) {
+                    timePeriodId = DateUtilsKt.getDatePeriodId(dueDate);
+
+                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                        headers.add(DateUtilsKt.makeHeaderName(this, timePeriodId));
+                        assignments.add(null);
+                    }
+
+                    headers.add(null);
+                    assignments.add(assignment);
+
+                    currentTimePeriod = timePeriodId;
+                }
             }
-
-            headers.add(null);
-            assignments.add(assignment);
-
-            currentTimePeriod = timePeriodId;
         }
 
         mHeaders.clear();
@@ -131,6 +153,24 @@ public class AssignmentsActivity extends BaseActivity {
                 refreshList();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_assignments, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_show_past_assignments:
+                mShowPast = !mShowPast;
+                item.setChecked(mShowPast);
+                refreshList();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
