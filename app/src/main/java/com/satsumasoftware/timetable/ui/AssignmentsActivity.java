@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.satsumasoftware.timetable.DateUtilsKt;
 import com.satsumasoftware.timetable.R;
@@ -167,6 +168,14 @@ public class AssignmentsActivity extends BaseActivity {
             case R.id.action_show_past_assignments:
                 mShowPast = !mShowPast;
                 item.setChecked(mShowPast);
+
+                TextView textView = (TextView) findViewById(R.id.text_infoBar);
+                if (mShowPast) {
+                    textView.setVisibility(View.VISIBLE);
+                    textView.setText(getString(R.string.showing_past_assignments));
+                } else {
+                    textView.setVisibility(View.GONE);
+                }
                 refreshList();
                 break;
         }

@@ -77,6 +77,8 @@
     <string name="action_show_past_assignments">Show past assignments</string>
     <string name="action_today">Today</string>
 
+    <string name="showing_past_assignments">Showing past assignments</string>
+
     <string name="choose_class">Select a class</string>
     <string name="choose_color">Pick a color</string>
     <string name="choose_subject">Select a subject</string>

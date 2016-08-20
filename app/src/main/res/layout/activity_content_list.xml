@@ -22,6 +22,17 @@
                 style="@style/Widget.Timetable.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/text_infoBar"
+                android:textSize="14sp"
+                android:textColor="@color/mdu_text_white"
+                android:background="@color/mdu_grey_900"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/mdu_keyline_1"
+                android:paddingRight="@dimen/mdu_keyline_1" />
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
