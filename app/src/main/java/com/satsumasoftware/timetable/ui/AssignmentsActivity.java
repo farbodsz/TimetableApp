@@ -94,6 +94,13 @@ public class AssignmentsActivity extends BaseActivity {
 
         for (int i = 0; i < mAssignments.size(); i++) {
             Assignment assignment = mAssignments.get(i);
+
+            // do not display completed assignments
+            if (assignment.getDueDate().isBefore(LocalDate.now()) &&
+                    assignment.getCompletionProgress() == 100) {
+                continue;
+            }
+
             LocalDate dueDate = assignment.getDueDate();
             int timePeriodId = DateUtilsKt.getDatePeriodId(dueDate);
 
