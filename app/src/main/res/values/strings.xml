@@ -12,6 +12,7 @@
     <string name="title_activity_assignments">Assignments</string>
     <string name="title_activity_assignment_new">New Assignment</string>
     <string name="title_activity_assignment_edit">Edit Assignment</string>
+    <string name="title_activity_exams">Exams</string>
     <string name="title_activity_subjects">Subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
@@ -78,6 +79,7 @@
     <string name="action_today">Today</string>
 
     <string name="showing_past_assignments">Showing past assignments</string>
+    <string name="showing_past_exams">Showing past exams</string>
 
     <string name="choose_class">Select a class</string>
     <string name="choose_color">Pick a color</string>
