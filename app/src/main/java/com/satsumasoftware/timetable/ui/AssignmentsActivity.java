@@ -11,17 +11,23 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.satsumasoftware.timetable.DateUtilsKt;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class AssignmentsActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
 
+    private ArrayList<String> mHeaders;
     private ArrayList<Assignment> mAssignments;
     private AssignmentsAdapter mAdapter;
 
@@ -33,9 +39,11 @@ public class AssignmentsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mHeaders = new ArrayList<>();
         mAssignments = AssignmentUtilsKt.getAssignments(this);
+        sortList();
 
-        mAdapter = new AssignmentsAdapter(this, mAssignments);
+        mAdapter = new AssignmentsAdapter(this, mHeaders, mAssignments);
         mAdapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
@@ -65,7 +73,46 @@ public class AssignmentsActivity extends BaseActivity {
     private void refreshList() {
         mAssignments.clear();
         mAssignments.addAll(AssignmentUtilsKt.getAssignments(this));
+        sortList();
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void sortList() {
+        Collections.sort(mAssignments, new Comparator<Assignment>() {
+            @Override
+            public int compare(Assignment a1, Assignment a2) {
+                LocalDate dueDate1 = a1.getDueDate();
+                LocalDate dueDate2 = a2.getDueDate();
+                return dueDate1.compareTo(dueDate2);
+            }
+        });
+
+        ArrayList<String> headers = new ArrayList<>();
+        ArrayList<Assignment> assignments = new ArrayList<>();
+
+        int currentTimePeriod = -1;
+
+        for (int i = 0; i < mAssignments.size(); i++) {
+            Assignment assignment = mAssignments.get(i);
+            LocalDate dueDate = assignment.getDueDate();
+            int timePeriodId = DateUtilsKt.getDatePeriodId(dueDate);
+
+            if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                headers.add(DateUtilsKt.makeHeaderName(timePeriodId));
+                assignments.add(null);
+            }
+
+            headers.add(null);
+            assignments.add(assignment);
+
+            currentTimePeriod = timePeriodId;
+        }
+
+        mHeaders.clear();
+        mHeaders.addAll(headers);
+
+        mAssignments.clear();
+        mAssignments.addAll(assignments);
     }
 
     @Override

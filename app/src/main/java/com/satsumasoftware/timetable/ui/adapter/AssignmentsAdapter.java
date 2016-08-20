@@ -18,24 +18,55 @@ import com.satsumasoftware.timetable.framework.Subject;
 
 import java.util.ArrayList;
 
-public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.AssignmentViewHolder> {
+public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int VIEW_TYPE_HEADER = 1;
+    private static final int VIEW_TYPE_ITEM = 2;
 
     private Context mContext;
+    private ArrayList<String> mHeaders;
     private ArrayList<Assignment> mAssignments;
 
-    public AssignmentsAdapter(Context context, ArrayList<Assignment> assignments) {
+    public AssignmentsAdapter(Context context, ArrayList<String> headers, ArrayList<Assignment> assignments) {
         mContext = context;
+        mHeaders = headers;
         mAssignments = assignments;
     }
 
     @Override
-    public AssignmentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_assignment, parent, false);
-        return new AssignmentViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case VIEW_TYPE_HEADER:
+                View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.subheader, parent, false);
+                return new HeaderViewHolder(header);
+            case VIEW_TYPE_ITEM:
+                View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_assignment, parent, false);
+                return new AssignmentViewHolder(item);
+            default:
+                throw new IllegalArgumentException("invalid view type");
+        }
     }
 
     @Override
-    public void onBindViewHolder(AssignmentViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        switch (getItemViewType(position)) {
+            case VIEW_TYPE_HEADER:
+                HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+                setupHeaderLayout(headerViewHolder, position);
+                break;
+            case VIEW_TYPE_ITEM:
+                AssignmentViewHolder assignmentViewHolder = (AssignmentViewHolder) holder;
+                setupItemLayout(assignmentViewHolder, position);
+                break;
+        }
+    }
+
+    private void setupHeaderLayout(HeaderViewHolder holder, int position) {
+        String text = mHeaders.get(position);
+        holder.mText.setText(text);
+    }
+
+    private void setupItemLayout(AssignmentViewHolder holder, int position) {
         Assignment assignment = mAssignments.get(position);
 
         holder.mTitle.setText(assignment.getTitle());
@@ -55,6 +86,21 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<AssignmentsAdapter.
     @Override
     public int getItemCount() {
         return mAssignments.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mAssignments.get(position) == null ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM;
+    }
+
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        TextView mText;
+
+        HeaderViewHolder(View itemView) {
+            super(itemView);
+            mText = (TextView) itemView.findViewById(R.id.text);
+        }
     }
 
     public class AssignmentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text"
+    android:text="Here's a header"
+    android:textColor="@color/mdu_text_black_secondary"
+    android:textSize="14sp"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:gravity="center_vertical"
+    android:paddingLeft="@dimen/mdu_padding_normal"
+    android:paddingRight="@dimen/mdu_padding_normal"
+    android:paddingBottom="2dp" />
