@@ -5,9 +5,11 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.ExamsSchema
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
 
 class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: LocalDate,
-                 val seat: String, val room: String, val resit: Boolean) : Parcelable {
+           val startTime: LocalTime, val duration: Int, val seat: String, val room: String,
+           val resit: Boolean) : Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(ExamsSchema._ID)),
@@ -17,6 +19,10 @@ class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: Lo
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DATE_MONTH)),
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DATE_DAY_OF_MONTH))),
+            LocalTime.of(
+                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_START_TIME_HRS)),
+                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_START_TIME_MINS))),
+            cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DURATION)),
             cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_SEAT)),
             cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_ROOM)),
             cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_IS_RESIT)) == 1)
@@ -26,6 +32,8 @@ class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: Lo
             source.readInt(),
             source.readString(),
             source.readSerializable() as LocalDate,
+            source.readSerializable() as LocalTime,
+            source.readInt(),
             source.readString(),
             source.readString(),
             source.readInt() == 1)
@@ -41,6 +49,8 @@ class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: Lo
         dest?.writeInt(subjectId)
         dest?.writeString(moduleName)
         dest?.writeSerializable(date)
+        dest?.writeSerializable(startTime)
+        dest?.writeInt(duration)
         dest?.writeSerializable(seat)
         dest?.writeSerializable(room)
         dest?.writeInt(if (resit) 1 else 0)
