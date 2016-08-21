@@ -117,13 +117,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/mdu_keyline_1"
             android:layout_gravity="center_vertical" />
-        <TextView
-            android:id="@+id/textView_seat"
-            android:text="@string/property_seat"
-            style="@style/Widget.Timetable.TextView.Item.Selectable"
+        <android.support.design.widget.TextInputLayout
+            android:hint="@string/property_seat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_2"/>
+            android:layout_marginLeft="@dimen/mdu_keyline_2">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/editText_seat"
+                android:inputType="textShortMessage"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.design.widget.TextInputLayout>
     </FrameLayout>
 
     <FrameLayout
@@ -135,13 +140,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/mdu_keyline_1"
             android:layout_gravity="center_vertical" />
-        <TextView
-            android:id="@+id/textView_room"
-            android:text="@string/property_room"
-            style="@style/Widget.Timetable.TextView.Item.Selectable"
+        <android.support.design.widget.TextInputLayout
+            android:hint="@string/property_room"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_2"/>
+            android:layout_marginLeft="@dimen/mdu_keyline_2">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/editText_room"
+                android:inputType="textShortMessage"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.design.widget.TextInputLayout>
     </FrameLayout>
 
     <include layout="@layout/divider" />
