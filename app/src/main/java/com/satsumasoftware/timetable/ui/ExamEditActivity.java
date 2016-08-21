@@ -100,7 +100,7 @@ public class ExamEditActivity extends AppCompatActivity {
             }
         });
 
-        mEditTextModule = (EditText) findViewById(R.id.editText_title);
+        mEditTextModule = (EditText) findViewById(R.id.editText_module);
         if (!mIsNew) {
             mEditTextModule.setText(mExam.getModuleName());
         }
