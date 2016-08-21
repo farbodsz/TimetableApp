@@ -125,9 +125,6 @@ public class ExamEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
-                LayoutInflater inflater = getLayoutInflater();
-                View customView = inflater.inflate(R.layout.dialog_subjects, null);
-
                 final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(getBaseContext());
 
                 SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
@@ -140,21 +137,23 @@ public class ExamEditActivity extends AppCompatActivity {
                     }
                 });
 
-                RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
+                RecyclerView recyclerView = new RecyclerView(getBaseContext());
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(ExamEditActivity.this));
                 recyclerView.setAdapter(adapter);
 
-                Button button = (Button) customView.findViewById(R.id.button_new);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(ExamEditActivity.this, SubjectEditActivity.class);
-                        startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
-                    }
-                });
+                View titleView = getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
+                ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_subject);
 
-                builder.setView(customView);
+                builder.setView(recyclerView)
+                        .setCustomTitle(titleView)
+                        .setPositiveButton(R.string.action_new, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(ExamEditActivity.this, SubjectEditActivity.class);
+                                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
+                            }
+                        });
 
                 mSubjectDialog = builder.create();
                 mSubjectDialog.show();
