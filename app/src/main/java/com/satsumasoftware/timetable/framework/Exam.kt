@@ -39,6 +39,8 @@ class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: Lo
             source.readString(),
             source.readInt() == 1)
 
+    fun hasModuleName() = moduleName.trim().length != 0
+
     fun hasSeat() = seat.trim().length != 0
 
     fun hasRoom() = room.trim().length != 0
