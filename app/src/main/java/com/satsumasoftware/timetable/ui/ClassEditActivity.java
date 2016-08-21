@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -117,9 +116,6 @@ public class ClassEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
 
-                LayoutInflater inflater = getLayoutInflater();
-                View customView = inflater.inflate(R.layout.dialog_subjects, null);
-
                 final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(getBaseContext());
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
@@ -138,12 +134,16 @@ public class ClassEditActivity extends AppCompatActivity {
                     }
                 });
 
-                RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
+                RecyclerView recyclerView = new RecyclerView(getBaseContext());
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(ClassEditActivity.this));
                 recyclerView.setAdapter(adapter);
 
-                builder.setView(customView)
+                View titleView = getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
+                ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_subject);
+
+                builder.setView(recyclerView)
+                        .setCustomTitle(titleView)
                         .setPositiveButton(R.string.action_new, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
