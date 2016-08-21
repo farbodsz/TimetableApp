@@ -45,7 +45,7 @@ class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: Lo
 
     fun hasRoom() = room.trim().length != 0
 
-    fun makeDateTimeObject() = LocalDateTime.of(date, startTime)
+    fun makeDateTimeObject() = LocalDateTime.of(date, startTime)!!
 
     override fun describeContents() = 0
 
