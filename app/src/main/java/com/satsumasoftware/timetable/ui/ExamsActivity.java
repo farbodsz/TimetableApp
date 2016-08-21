@@ -195,7 +195,7 @@ public class ExamsActivity extends BaseActivity {
 
     @Override
     protected int getSelfNavDrawerItem() {
-        return NAVDRAWER_ITEM_ASSIGNMENTS;
+        return NAVDRAWER_ITEM_EXAMS;
     }
 
     @Override
