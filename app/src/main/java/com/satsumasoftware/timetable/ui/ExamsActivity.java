@@ -16,11 +16,8 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.DateUtilsKt;
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
 import com.satsumasoftware.timetable.db.util.ExamUtilsKt;
-import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Exam;
-import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 import com.satsumasoftware.timetable.ui.adapter.ExamsAdapter;
 
 import org.threeten.bp.LocalDate;
@@ -33,7 +30,7 @@ import java.util.Comparator;
 
 public class ExamsActivity extends BaseActivity {
 
-    protected static final int REQUEST_CODE_EXAM_DETAIL = 1;
+    protected static final int REQUEST_CODE_EXAM_EDIT = 1;
 
     private ArrayList<String> mHeaders;
     private ArrayList<Exam> mExams;
@@ -57,9 +54,9 @@ public class ExamsActivity extends BaseActivity {
         mAdapter.setOnEntryClickListener(new ExamsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                //Intent intent = new Intent(ExamsActivity.this, ExamDetailActivity.class);
-                //intent.putExtra(ExamDetailActivity.EXTRA_EXAM, mExams.get(position));
-                //startActivityForResult(intent, REQUEST_CODE_EXAM_DETAIL);
+                Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
+                intent.putExtra(ExamEditActivity.EXTRA_EXAM, mExams.get(position));
+                startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT);
             }
         });
 
@@ -73,8 +70,8 @@ public class ExamsActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(ExamsActivity.this, ExamDetailActivity.class);
-                //startActivityForResult(intent, REQUEST_CODE_EXAM_DETAIL);
+                Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT);
             }
         });
 
@@ -153,7 +150,7 @@ public class ExamsActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_EXAM_DETAIL) {
+        if (requestCode == REQUEST_CODE_EXAM_EDIT) {
             if (resultCode == Activity.RESULT_OK) {
                 refreshList();
             }
