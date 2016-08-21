@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -110,14 +111,6 @@ public class ClassEditActivity extends AppCompatActivity {
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white));
 
-        final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(this);
-        Collections.sort(subjects, new Comparator<Subject>() {
-            @Override
-            public int compare(Subject subject, Subject t1) {
-                return subject.getName().compareTo(t1.getName());
-            }
-        });
-
         mSubjectText = (TextView) findViewById(R.id.textView_subject);
         mSubjectText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +119,14 @@ public class ClassEditActivity extends AppCompatActivity {
 
                 LayoutInflater inflater = getLayoutInflater();
                 View customView = inflater.inflate(R.layout.dialog_subjects, null);
+
+                final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(getBaseContext());
+                Collections.sort(subjects, new Comparator<Subject>() {
+                    @Override
+                    public int compare(Subject subject, Subject t1) {
+                        return subject.getName().compareTo(t1.getName());
+                    }
+                });
 
                 SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
                 adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
@@ -142,16 +143,14 @@ public class ClassEditActivity extends AppCompatActivity {
                 recyclerView.setLayoutManager(new LinearLayoutManager(ClassEditActivity.this));
                 recyclerView.setAdapter(adapter);
 
-                Button button = (Button) customView.findViewById(R.id.button_new);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(ClassEditActivity.this, SubjectEditActivity.class);
-                        startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
-                    }
-                });
-
-                builder.setView(customView);
+                builder.setView(customView)
+                        .setPositiveButton(R.string.action_new, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(ClassEditActivity.this, SubjectEditActivity.class);
+                                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
+                            }
+                        });
 
                 mSubjectDialog = builder.create();
                 mSubjectDialog.show();
