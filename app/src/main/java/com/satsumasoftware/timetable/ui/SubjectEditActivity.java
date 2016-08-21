@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
@@ -81,9 +82,6 @@ public class SubjectEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(SubjectEditActivity.this);
 
-                LayoutInflater inflater = getLayoutInflater();
-                View customView = inflater.inflate(R.layout.dialog_colors, null);
-
                 final ArrayList<Color> colors = ColorsAdapter.getAllColors();
 
                 ColorsAdapter adapter = new ColorsAdapter(getBaseContext(), colors);
@@ -97,13 +95,17 @@ public class SubjectEditActivity extends AppCompatActivity {
                     }
                 });
 
-                RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
+                RecyclerView recyclerView = new RecyclerView(getBaseContext());
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new GridLayoutManager(SubjectEditActivity.this,
                         getResources().getInteger(R.integer.subject_color_dialog_columns)));
                 recyclerView.setAdapter(adapter);
 
-                builder.setView(customView);
+                View titleView = getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
+                ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_color);
+
+                builder.setView(recyclerView)
+                        .setCustomTitle(titleView);
 
                 mColorDialog = builder.create();
                 mColorDialog.show();

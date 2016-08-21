@@ -104,9 +104,6 @@ public class AssignmentEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentEditActivity.this);
 
-                LayoutInflater inflater = getLayoutInflater();
-                View customView = inflater.inflate(R.layout.dialog_classes, null);
-
                 final ArrayList<Class> classes = ClassUtilsKt.getClasses(getBaseContext());
 
                 ClassesAdapter adapter = new ClassesAdapter(getBaseContext(), classes);
@@ -119,12 +116,16 @@ public class AssignmentEditActivity extends AppCompatActivity {
                     }
                 });
 
-                RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerView);
+                RecyclerView recyclerView = new RecyclerView(getBaseContext());
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(AssignmentEditActivity.this));
                 recyclerView.setAdapter(adapter);
 
-                builder.setView(customView);
+                View titleView = getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
+                ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_class);
+
+                builder.setView(recyclerView)
+                        .setCustomTitle(titleView);
 
                 mClassDialog = builder.create();
                 mClassDialog.show();
