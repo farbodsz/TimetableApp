@@ -289,6 +289,19 @@ public class ExamEditActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
+            if (resultCode == Activity.RESULT_OK) {
+                mSubject = data.getParcelableExtra(SubjectEditActivity.EXTRA_SUBJECT);
+                mSubjectDialog.dismiss();
+                updateLinkedSubject();
+            }
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
         ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_done);
