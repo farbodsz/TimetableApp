@@ -72,7 +72,13 @@ public class ExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Subject subject = SubjectUtilsKt.getSubjectWithId(mContext, exam.getSubjectId());
         assert subject != null;
 
-        holder.mTitle.setText(subject.getName() + ": " + exam.getModuleName());
+        StringBuilder titleBuilder = new StringBuilder();
+        titleBuilder.append(subject.getName());
+        if (exam.hasModuleName()) {
+            titleBuilder.append(": ")
+                    .append(exam.getModuleName());
+        }
+        holder.mTitle.setText(titleBuilder.toString());
 
         StringBuilder details = new StringBuilder();
         if (exam.hasSeat()) {
