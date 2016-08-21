@@ -27,9 +27,9 @@
             android:id="@+id/textView_subject"
             android:text="@string/property_subject"
             style="@style/Widget.Timetable.TextView.Item.Selectable"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:minWidth="130dp"
             android:paddingLeft="@dimen/mdu_padding_normal"
             android:paddingRight="@dimen/mdu_padding_normal" />
         <android.support.design.widget.TextInputLayout
