@@ -42,6 +42,21 @@ fun getExamWithId(context: Context, examId: Int): Exam? {
     return exam
 }
 
+fun getExamsForSubject(context: Context, subjectId: Int): ArrayList<Exam> {
+    val exams = ArrayList<Exam>()
+    val dbHelper = TimetableDbHelper.getInstance(context)
+    val cursor = dbHelper.readableDatabase.query(
+            ExamsSchema.TABLE_NAME,
+            null,
+            "${ExamsSchema.COL_SUBJECT_ID}=?",
+            arrayOf(subjectId.toString()),
+            null, null, null)
+    cursor.moveToFirst()
+    exams.add(Exam(cursor))
+    cursor.close()
+    return exams
+}
+
 fun addExam(context: Context, exam: Exam) {
     val values = ContentValues()
     with(values) {

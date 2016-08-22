@@ -73,6 +73,10 @@ fun completelyDeleteSubject(context: Context, subject: Subject) {
     for (cls in getClassesForSubject(context, subject.id)) {
         completelyDeleteClass(context, cls)
     }
+
+    for (exam in getExamsForSubject(context, subject.id)) {
+        deleteExam(context, exam.id)
+    }
 }
 
 fun replaceSubject(context: Context, oldSubjectId: Int, newSubject: Subject) {
