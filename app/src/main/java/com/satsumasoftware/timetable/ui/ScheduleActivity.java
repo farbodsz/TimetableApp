@@ -27,12 +27,15 @@ import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.ui.adapter.ScheduleAdapter;
 
 import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 
 public class ScheduleActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_CLASS_DETAIL = 1;
+
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +50,8 @@ public class ScheduleActivity extends BaseActivity {
 
         DynamicPagerAdapter pagerAdapter = new DynamicPagerAdapter();
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.setAdapter(pagerAdapter);
+        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPager.setAdapter(pagerAdapter);
 
         for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
             final ArrayList<ClassTime> classTimes = getClassTimes(dayOfWeek);
@@ -69,7 +72,6 @@ public class ScheduleActivity extends BaseActivity {
                 }
             });
 
-
             RecyclerView recyclerView = new RecyclerView(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setHasFixedSize(true);
@@ -78,11 +80,11 @@ public class ScheduleActivity extends BaseActivity {
             pagerAdapter.addViewWithTitle(recyclerView, dayOfWeek.toString());
         }
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setTabTextColors(
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white));
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(mViewPager);
 
         goToNow();
     }
@@ -111,7 +113,9 @@ public class ScheduleActivity extends BaseActivity {
     }
 
     private void goToNow() {
-        // TODO
+        DayOfWeek today = LocalDate.now().getDayOfWeek();
+        int index = today.getValue() - 1;
+        mViewPager.setCurrentItem(index);
     }
 
     @Override
