@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <ImageView
+        android:src="@drawable/ic_class_black_24dp"
+        android:tint="@color/mdu_grey_700"
+        android:layout_width="72dp"
+        android:layout_height="72dp" />
+
+    <TextView
+        android:text="@string/home_card_classes_placeholder"
+        android:textSize="20sp"
+        android:textColor="@color/mdu_text_black_secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mdu_padding_normal"/>
+
+</LinearLayout>

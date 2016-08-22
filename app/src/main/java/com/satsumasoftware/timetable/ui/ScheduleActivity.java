@@ -3,42 +3,41 @@ package com.satsumasoftware.timetable.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.alamkanak.weekview.MonthLoader;
-import com.alamkanak.weekview.WeekView;
-import com.alamkanak.weekview.WeekViewEvent;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
-import com.satsumasoftware.timetable.db.ClassesSchema;
+import com.satsumasoftware.timetable.db.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
-import com.satsumasoftware.timetable.framework.Color;
-import com.satsumasoftware.timetable.framework.Subject;
+import com.satsumasoftware.timetable.ui.adapter.ScheduleAdapter;
 
 import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 public class ScheduleActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_CLASS_DETAIL = 1;
 
-    private WeekView mWeekView;
+    private DynamicPagerAdapter mPagerAdapter;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,110 +47,91 @@ public class ScheduleActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mWeekView = (WeekView) findViewById(R.id.weekView);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        mWeekView.setOnEventClickListener(new WeekView.EventClickListener() {
-            @Override
-            public void onEventClick(WeekViewEvent event, RectF eventRect) {
-                TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(ScheduleActivity.this);
-                Cursor cursor = dbHelper.getReadableDatabase().query(
-                        ClassesSchema.TABLE_NAME,
-                        null,
-                        ClassesSchema._ID + "=?",
-                        new String[] {String.valueOf(event.getId())},
-                        null, null, null);
-                cursor.moveToFirst();
-                Class cls = new Class(getBaseContext(), cursor);
-                cursor.close();
-                Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
-                intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);
-                startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
-            }
-        });
+        mPagerAdapter = new DynamicPagerAdapter();
 
-        populateLayout();
+        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPager.setAdapter(mPagerAdapter);
+
+        setupLayout();
+
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setTabTextColors(
+                ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
+                ContextCompat.getColor(this, R.color.mdu_text_white));
+        tabLayout.setupWithViewPager(mViewPager);
 
         goToNow();
     }
 
-    private void populateLayout() {
-        mWeekView.setMonthChangeListener(new MonthLoader.MonthChangeListener() {
-            @Override
-            public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-                return getEvents(newYear, newMonth);
+    private void setupLayout() {
+        mPagerAdapter.removeAllViews(mViewPager);
+
+        for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
+            final ArrayList<ClassTime> classTimes = getClassTimes(dayOfWeek);
+
+            if (classTimes.isEmpty()) {
+                View placeholder = LayoutInflater.from(this).inflate(R.layout.placeholder_schedule, null);
+                mPagerAdapter.addViewWithTitle(placeholder, dayOfWeek.toString());
+                continue;
             }
-        });
-    }
 
-    private List<WeekViewEvent> getEvents(int year, int month) {
-        ArrayList<WeekViewEvent> weekViewEvents = new ArrayList<>();
+            ScheduleAdapter adapter = new ScheduleAdapter(this, classTimes);
+            adapter.setOnEntryClickListener(new ScheduleAdapter.OnEntryClickListener() {
+                @Override
+                public void onEntryClick(View view, int position) {
+                    ClassTime classTime = classTimes.get(position);
+                    ClassDetail classDetail =
+                            ClassUtilsKt.getClassDetailWithId(getBaseContext(), classTime.getClassDetailId());
+                    Class cls =
+                            ClassUtilsKt.getClassWithId(getBaseContext(), classDetail.getClassId());
 
-        ArrayList<Class> classes = ClassUtilsKt.getClasses(this);
-
-        for (Class cls : classes) {
-            Subject subject = SubjectUtilsKt.getSubjectWithId(this, cls.getSubjectId());
-            assert subject != null;
-
-            ArrayList<ClassDetail> classDetails =
-                    ClassUtilsKt.getClassDetailsFromIds(this, cls.getClassDetailIds());
-
-            for (ClassDetail classDetail : classDetails) {
-                ArrayList<ClassTime> classTimes =
-                        ClassUtilsKt.getClassTimesFromIds(this, classDetail.getClassTimeIds());
-
-                for (ClassTime classTime : classTimes) {
-                    ArrayList<Integer> daysInMonth = getDaysInMonth(year, month, classTime.getDay());
-
-                    for (int day : daysInMonth) {
-                        int id = cls.getId();
-                        String name = subject.getName();
-                        String location = classDetail.getRoom();
-
-                        Calendar startTime = new GregorianCalendar(
-                                year,
-                                month,
-                                day,
-                                classTime.getStartTime().getHour(),
-                                classTime.getStartTime().getMinute());
-
-                        Calendar endTime = new GregorianCalendar(
-                                year,
-                                month,
-                                day,
-                                classTime.getEndTime().getHour(),
-                                classTime.getEndTime().getMinute());
-
-                        WeekViewEvent event =
-                                new WeekViewEvent(id, name, location, startTime, endTime);
-
-                        Color color = new Color(subject.getColorId());
-                        event.setColor(ContextCompat.getColor(
-                                this, color.getPrimaryDarkColorResId(this)));
-
-                        weekViewEvents.add(event);
-                    }
+                    Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
+                    intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);
+                    startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
                 }
-            }
-        }
+            });
 
-        return weekViewEvents;
+            RecyclerView recyclerView = new RecyclerView(this);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(
+                    this, DividerItemDecoration.VERTICAL_LIST));
+            recyclerView.setAdapter(adapter);
+
+            mPagerAdapter.addViewWithTitle(recyclerView, dayOfWeek.toString());
+        }
     }
 
-    private ArrayList<Integer> getDaysInMonth(int year, int month, DayOfWeek dayOfWeek) {
-        // http://stackoverflow.com/a/3272519/4230345
-        Calendar startOfMonth = new GregorianCalendar(year, month, 1);
+    private ArrayList<ClassTime> getClassTimes(DayOfWeek dayOfWeek) {
+        ArrayList<ClassTime> classTimes = new ArrayList<>();
+        TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
 
-        ArrayList<Integer> daysInMonth = new ArrayList<>();
-        do {
-            // get day of week for current day
-            int day = startOfMonth.get(Calendar.DAY_OF_WEEK);
-            if (day == dayOfWeek.getValue() + 1) {  // note +1 to make them correspond
-                daysInMonth.add(startOfMonth.get(Calendar.DAY_OF_MONTH));
-            }
-            startOfMonth.add(Calendar.DAY_OF_YEAR, 1);  // advance to next day
-        } while (startOfMonth.get(Calendar.MONTH) == month); // continue in this month
+        Cursor cursor = dbHelper.getReadableDatabase().query(
+                ClassTimesSchema.TABLE_NAME,
+                null,
+                ClassTimesSchema.COL_DAY + "=?",
+                new String[] {String.valueOf(dayOfWeek.getValue())},
+                null, null, null);
+        if (cursor.getCount() == 0) {
+            return classTimes; // the empty ArrayList
+        }
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            classTimes.add(new ClassTime(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
 
-        return daysInMonth;
+        return classTimes;
+    }
+
+    private void goToNow() {
+        DayOfWeek today = LocalDate.now().getDayOfWeek();
+        int index = today.getValue() - 1;
+        mViewPager.setCurrentItem(index);
     }
 
     @Override
@@ -160,7 +140,7 @@ public class ScheduleActivity extends BaseActivity {
 
         if (requestCode == REQUEST_CODE_CLASS_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                populateLayout();
+                setupLayout();
             }
         }
     }
@@ -181,11 +161,6 @@ public class ScheduleActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void goToNow() {
-        mWeekView.goToToday();
-        mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) - 2);
     }
 
     @Override

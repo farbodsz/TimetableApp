@@ -59,6 +59,12 @@ class DynamicPagerAdapter : PagerAdapter() {
         return position
     }
 
+    fun removeAllViews(pager: ViewPager) {
+        pager.adapter = null
+        views.clear()
+        pager.adapter = this
+    }
+
     fun getView(position: Int): View {
         return views[position]
     }
