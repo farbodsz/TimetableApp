@@ -165,7 +165,7 @@ public class AssignmentsActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_show_past_assignments:
+            case R.id.action_show_past:
                 mShowPast = !mShowPast;
                 item.setChecked(mShowPast);
 

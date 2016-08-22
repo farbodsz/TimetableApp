@@ -88,6 +88,7 @@
     <string name="action_edit">Edit</string>
     <string name="action_new">New</string>
     <string name="action_show_past_assignments">Show past assignments</string>
+    <string name="action_show_past_exams">Show past exams</string>
     <string name="action_today">Today</string>
 
     <string name="showing_past_assignments">Showing past assignments</string>

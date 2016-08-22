@@ -160,13 +160,14 @@ public class ExamsActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_assignments, menu);
+        menu.findItem(R.id.action_show_past).setTitle(getString(R.string.action_show_past_exams));
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_show_past_assignments:
+            case R.id.action_show_past:
                 mShowPast = !mShowPast;
                 item.setChecked(mShowPast);
 
