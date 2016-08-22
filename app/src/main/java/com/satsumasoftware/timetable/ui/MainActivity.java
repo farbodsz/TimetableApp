@@ -47,7 +47,11 @@ public class MainActivity extends BaseActivity {
 
         cards.add(new ClassesCard(this, getClassesToday()));
         cards.add(new AssignmentsCard(this, getAssignments()));
-        cards.add(new ExamsCard(this, getExams()));
+
+        ArrayList<Exam> exams = getExams();
+        if (!exams.isEmpty()) {
+            cards.add(new ExamsCard(this, getExams()));
+        }
 
         recyclerView.setAdapter(new HomeCardsAdapter(this, cards));
     }
