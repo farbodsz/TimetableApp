@@ -36,6 +36,7 @@ public class ScheduleActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_CLASS_DETAIL = 1;
 
+    private DynamicPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
 
     @Override
@@ -49,17 +50,31 @@ public class ScheduleActivity extends BaseActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        DynamicPagerAdapter pagerAdapter = new DynamicPagerAdapter();
+        mPagerAdapter = new DynamicPagerAdapter();
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
-        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setAdapter(mPagerAdapter);
+
+        setupLayout();
+
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setTabTextColors(
+                ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
+                ContextCompat.getColor(this, R.color.mdu_text_white));
+        tabLayout.setupWithViewPager(mViewPager);
+
+        goToNow();
+    }
+
+    private void setupLayout() {
+        mPagerAdapter.removeAllViews(mViewPager);
 
         for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
             final ArrayList<ClassTime> classTimes = getClassTimes(dayOfWeek);
 
             if (classTimes.isEmpty()) {
                 View placeholder = LayoutInflater.from(this).inflate(R.layout.placeholder_schedule, null);
-                pagerAdapter.addViewWithTitle(placeholder, dayOfWeek.toString());
+                mPagerAdapter.addViewWithTitle(placeholder, dayOfWeek.toString());
                 continue;
             }
 
@@ -86,16 +101,8 @@ public class ScheduleActivity extends BaseActivity {
                     this, DividerItemDecoration.VERTICAL_LIST));
             recyclerView.setAdapter(adapter);
 
-            pagerAdapter.addViewWithTitle(recyclerView, dayOfWeek.toString());
+            mPagerAdapter.addViewWithTitle(recyclerView, dayOfWeek.toString());
         }
-
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setTabTextColors(
-                ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
-                ContextCompat.getColor(this, R.color.mdu_text_white));
-        tabLayout.setupWithViewPager(mViewPager);
-
-        goToNow();
     }
 
     private ArrayList<ClassTime> getClassTimes(DayOfWeek dayOfWeek) {
@@ -133,7 +140,7 @@ public class ScheduleActivity extends BaseActivity {
 
         if (requestCode == REQUEST_CODE_CLASS_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                // populateLayout(); TODO
+                setupLayout();
             }
         }
     }
