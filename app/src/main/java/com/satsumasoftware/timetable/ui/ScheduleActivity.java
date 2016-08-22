@@ -14,11 +14,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.db.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
+import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
+import com.satsumasoftware.timetable.framework.Class;
+import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.ui.adapter.ScheduleAdapter;
 
@@ -47,7 +51,24 @@ public class ScheduleActivity extends BaseActivity {
         viewPager.setAdapter(pagerAdapter);
 
         for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
-            ScheduleAdapter adapter = new ScheduleAdapter(this, getClassTimes(dayOfWeek));
+            final ArrayList<ClassTime> classTimes = getClassTimes(dayOfWeek);
+
+            ScheduleAdapter adapter = new ScheduleAdapter(this, classTimes);
+            adapter.setOnEntryClickListener(new ScheduleAdapter.OnEntryClickListener() {
+                @Override
+                public void onEntryClick(View view, int position) {
+                    ClassTime classTime = classTimes.get(position);
+                    ClassDetail classDetail =
+                            ClassUtilsKt.getClassDetailWithId(getBaseContext(), classTime.getClassDetailId());
+                    Class cls =
+                            ClassUtilsKt.getClassWithId(getBaseContext(), classDetail.getClassId());
+
+                    Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
+                    intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);
+                    startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
+                }
+            });
+
 
             RecyclerView recyclerView = new RecyclerView(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
