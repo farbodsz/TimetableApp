@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +56,12 @@ public class ScheduleActivity extends BaseActivity {
 
         for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
             final ArrayList<ClassTime> classTimes = getClassTimes(dayOfWeek);
+
+            if (classTimes.isEmpty()) {
+                View placeholder = LayoutInflater.from(this).inflate(R.layout.placeholder_schedule, null);
+                pagerAdapter.addViewWithTitle(placeholder, dayOfWeek.toString());
+                continue;
+            }
 
             ScheduleAdapter adapter = new ScheduleAdapter(this, classTimes);
             adapter.setOnEntryClickListener(new ScheduleAdapter.OnEntryClickListener() {
