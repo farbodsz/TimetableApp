@@ -47,6 +47,21 @@ fun getClassWithId(context: Context, classId: Int): Class? {
     return cls
 }
 
+fun getClassesForSubject(context: Context, subjectId: Int): ArrayList<Class> {
+    val classes = ArrayList<Class>()
+    val dbHelper = TimetableDbHelper.getInstance(context)
+    val cursor = dbHelper.readableDatabase.query(
+            ClassesSchema.TABLE_NAME,
+            null,
+            "${ClassesSchema.COL_SUBJECT_ID}=?",
+            arrayOf(subjectId.toString()),
+            null, null, null)
+    cursor.moveToFirst()
+    classes.add(Class(context, cursor))
+    cursor.close()
+    return classes
+}
+
 fun getClassDetailIds(context: Context, classId: Int): ArrayList<Int> {
     val classDetailIds = ArrayList<Int>()
     val dbHelper = TimetableDbHelper.getInstance(context)

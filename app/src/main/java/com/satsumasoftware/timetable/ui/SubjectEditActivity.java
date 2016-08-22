@@ -179,7 +179,7 @@ public class SubjectEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        SubjectUtilsKt.completelyDeleteSubject(this, mSubject.getId());
+        SubjectUtilsKt.completelyDeleteSubject(this, mSubject);
         setResult(Activity.RESULT_OK);
         finish();
     }
