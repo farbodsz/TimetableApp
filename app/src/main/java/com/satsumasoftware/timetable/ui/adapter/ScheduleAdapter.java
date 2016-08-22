@@ -66,7 +66,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         }
         holder.mDetails.setText(builder.toString());
 
-        holder.mTimes.setText(classTime.getStartTime().toString() + " + " +
+        holder.mTimes.setText(classTime.getStartTime().toString() + " - " +
                 classTime.getEndTime().toString());
     }
 
