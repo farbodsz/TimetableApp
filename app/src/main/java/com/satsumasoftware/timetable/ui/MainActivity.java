@@ -76,27 +76,19 @@ public class MainActivity extends BaseActivity {
         for (Assignment assignment : AssignmentUtilsKt.getAssignments(this)) {
             LocalDate dueDate = assignment.getDueDate();
 
-            if (dueDate.isBefore(now) && assignment.getCompletionProgress() != 100) {
+            boolean isOverdue = dueDate.isBefore(now) && assignment.getCompletionProgress() != 100;
+            boolean dueInNextThreeDays = dueDate.isAfter(now) && dueDate.isBefore(now.plusDays(4));
+
+            if (isOverdue || dueDate.isEqual(now) || dueInNextThreeDays) {
                 assignments.add(assignment);  // overdue (incomplete) assignment
-                continue;
-            }
-
-            if (dueDate.isEqual(now)) {
-                assignments.add(assignment);  // due today
-                continue;
-            }
-
-            if (dueDate.isAfter(now) && dueDate.isBefore(now.plusDays(4))) {
-                assignments.add(assignment);  // due in the next three days
             }
         }
 
-        // sort
         Collections.sort(assignments, new Comparator<Assignment>() {
             @Override
-            public int compare(Assignment assignment, Assignment t1) {
-                LocalDate date1 = assignment.getDueDate();
-                LocalDate date2 = t1.getDueDate();
+            public int compare(Assignment a1, Assignment a2) {
+                LocalDate date1 = a1.getDueDate();
+                LocalDate date2 = a2.getDueDate();
                 return date1.compareTo(date2);
             }
         });
