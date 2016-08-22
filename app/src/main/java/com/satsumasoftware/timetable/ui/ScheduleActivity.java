@@ -82,6 +82,8 @@ public class ScheduleActivity extends BaseActivity {
             RecyclerView recyclerView = new RecyclerView(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(
+                    this, DividerItemDecoration.VERTICAL_LIST));
             recyclerView.setAdapter(adapter);
 
             pagerAdapter.addViewWithTitle(recyclerView, dayOfWeek.toString());
