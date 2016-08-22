@@ -12,15 +12,19 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
+import com.satsumasoftware.timetable.db.util.ExamUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.ui.adapter.HomeCardsAdapter;
 import com.satsumasoftware.timetable.ui.card.AssignmentsCard;
 import com.satsumasoftware.timetable.ui.card.ClassesCard;
+import com.satsumasoftware.timetable.ui.card.ExamsCard;
 import com.satsumasoftware.timetable.ui.card.HomeCard;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +47,7 @@ public class MainActivity extends BaseActivity {
 
         cards.add(new ClassesCard(this, getClassesToday()));
         cards.add(new AssignmentsCard(this, getAssignments()));
+        cards.add(new ExamsCard(this, getExams()));
 
         recyclerView.setAdapter(new HomeCardsAdapter(this, cards));
     }
@@ -102,6 +107,30 @@ public class MainActivity extends BaseActivity {
         });
 
         return assignments;
+    }
+
+    private ArrayList<Exam> getExams() {
+        ArrayList<Exam> exams = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Exam exam : ExamUtilsKt.getExams(this)) {
+            LocalDateTime examDateTime = exam.makeDateTimeObject();
+
+            if (!examDateTime.isBefore(now) && examDateTime.isBefore(now.plusWeeks(6))) {
+                exams.add(exam);
+            }
+        }
+
+        Collections.sort(exams, new Comparator<Exam>() {
+            @Override
+            public int compare(Exam exam1, Exam exam2) {
+                LocalDateTime dateTime1 = exam1.makeDateTimeObject();
+                LocalDateTime dateTime2 = exam2.makeDateTimeObject();
+                return dateTime1.compareTo(dateTime2);
+            }
+        });
+
+        return exams;
     }
 
     @Override
