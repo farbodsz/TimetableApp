@@ -16,24 +16,25 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.DateUtilsKt;
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
-import com.satsumasoftware.timetable.framework.Assignment;
-import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
+import com.satsumasoftware.timetable.db.util.ExamUtilsKt;
+import com.satsumasoftware.timetable.framework.Exam;
+import com.satsumasoftware.timetable.ui.adapter.ExamsAdapter;
 
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class AssignmentsActivity extends BaseActivity {
+public class ExamsActivity extends BaseActivity {
 
-    protected static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
+    protected static final int REQUEST_CODE_EXAM_EDIT = 1;
 
     private ArrayList<String> mHeaders;
-    private ArrayList<Assignment> mAssignments;
-    private AssignmentsAdapter mAdapter;
+    private ArrayList<Exam> mExams;
+    private ExamsAdapter mAdapter;
 
     private boolean mShowPast;
 
@@ -46,16 +47,16 @@ public class AssignmentsActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         mHeaders = new ArrayList<>();
-        mAssignments = AssignmentUtilsKt.getAssignments(this);
+        mExams = ExamUtilsKt.getExams(this);
         sortList();
 
-        mAdapter = new AssignmentsAdapter(this, mHeaders, mAssignments);
-        mAdapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
+        mAdapter = new ExamsAdapter(this, mHeaders, mExams);
+        mAdapter.setOnEntryClickListener(new ExamsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
-                intent.putExtra(AssignmentDetailActivity.EXTRA_ASSIGNMENT, mAssignments.get(position));
-                startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
+                Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
+                intent.putExtra(ExamEditActivity.EXTRA_EXAM, mExams.get(position));
+                startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT);
             }
         });
 
@@ -69,53 +70,53 @@ public class AssignmentsActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
+                Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT);
             }
         });
 
     }
 
     private void refreshList() {
-        mAssignments.clear();
-        mAssignments.addAll(AssignmentUtilsKt.getAssignments(this));
+        mExams.clear();
+        mExams.addAll(ExamUtilsKt.getExams(this));
         sortList();
         mAdapter.notifyDataSetChanged();
     }
 
     private void sortList() {
-        Collections.sort(mAssignments, new Comparator<Assignment>() {
+        Collections.sort(mExams, new Comparator<Exam>() {
             @Override
-            public int compare(Assignment a1, Assignment a2) {
-                LocalDate dueDate1 = a1.getDueDate();
-                LocalDate dueDate2 = a2.getDueDate();
-                return dueDate1.compareTo(dueDate2);
+            public int compare(Exam e1, Exam e2) {
+                LocalDateTime dateTime1 = e1.makeDateTimeObject();
+                LocalDateTime dateTime2 = e2.makeDateTimeObject();
+                return dateTime1.compareTo(dateTime2);
             }
         });
 
         ArrayList<String> headers = new ArrayList<>();
-        ArrayList<Assignment> assignments = new ArrayList<>();
+        ArrayList<Exam> exams = new ArrayList<>();
 
         int currentTimePeriod = -1;
 
-        for (int i = 0; i < mAssignments.size(); i++) {
-            Assignment assignment = mAssignments.get(i);
+        for (int i = 0; i < mExams.size(); i++) {
+            Exam exam = mExams.get(i);
 
-            LocalDate dueDate = assignment.getDueDate();
+            LocalDate examDate = exam.getDate();
             int timePeriodId;
 
-            if (dueDate.isBefore(LocalDate.now()) && assignment.getCompletionProgress() == 100) {
+            if (exam.makeDateTimeObject().isBefore(LocalDateTime.now())) {
                 if (mShowPast) {
-                    timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
-                            String.valueOf(dueDate.getMonthValue()));
+                    timePeriodId = Integer.parseInt(String.valueOf(examDate.getYear()) +
+                            String.valueOf(examDate.getMonthValue()));
 
                     if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(dueDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")));
-                        assignments.add(null);
+                        headers.add(examDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")));
+                        exams.add(null);
                     }
 
                     headers.add(null);
-                    assignments.add(assignment);
+                    exams.add(exam);
 
                     currentTimePeriod = timePeriodId;
                 }
@@ -123,15 +124,15 @@ public class AssignmentsActivity extends BaseActivity {
             } else {
 
                 if (!mShowPast) {
-                    timePeriodId = DateUtilsKt.getDatePeriodId(dueDate);
+                    timePeriodId = DateUtilsKt.getDatePeriodId(examDate);
 
                     if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
                         headers.add(DateUtilsKt.makeHeaderName(this, timePeriodId));
-                        assignments.add(null);
+                        exams.add(null);
                     }
 
                     headers.add(null);
-                    assignments.add(assignment);
+                    exams.add(exam);
 
                     currentTimePeriod = timePeriodId;
                 }
@@ -141,15 +142,15 @@ public class AssignmentsActivity extends BaseActivity {
         mHeaders.clear();
         mHeaders.addAll(headers);
 
-        mAssignments.clear();
-        mAssignments.addAll(assignments);
+        mExams.clear();
+        mExams.addAll(exams);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_ASSIGNMENT_DETAIL) {
+        if (requestCode == REQUEST_CODE_EXAM_EDIT) {
             if (resultCode == Activity.RESULT_OK) {
                 refreshList();
             }
@@ -159,6 +160,7 @@ public class AssignmentsActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_assignments, menu);
+        menu.findItem(R.id.action_show_past).setTitle(getString(R.string.action_show_past_exams));
         return true;
     }
 
@@ -172,7 +174,7 @@ public class AssignmentsActivity extends BaseActivity {
                 TextView textView = (TextView) findViewById(R.id.text_infoBar);
                 if (mShowPast) {
                     textView.setVisibility(View.VISIBLE);
-                    textView.setText(getString(R.string.showing_past_assignments));
+                    textView.setText(getString(R.string.showing_past_exams));
                 } else {
                     textView.setVisibility(View.GONE);
                 }
@@ -194,7 +196,7 @@ public class AssignmentsActivity extends BaseActivity {
 
     @Override
     protected int getSelfNavDrawerItem() {
-        return NAVDRAWER_ITEM_ASSIGNMENTS;
+        return NAVDRAWER_ITEM_EXAMS;
     }
 
     @Override

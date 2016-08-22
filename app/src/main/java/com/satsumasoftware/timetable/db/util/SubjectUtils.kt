@@ -65,28 +65,18 @@ private fun deleteSubject(context: Context, subjectId: Int) {
     Log.i(LOG_TAG_SUBJECT, "Deleted Subject with id $subjectId")
 }
 
-private fun deleteClassesWithSubject(context: Context, subjectId: Int) {
-    val db = TimetableDbHelper.getInstance(context).readableDatabase
-    val cursor = db.query(
-            ClassesSchema.TABLE_NAME,
-            null,
-            "${ClassesSchema.COL_SUBJECT_ID}=?",
-            arrayOf(subjectId.toString()),
-            null, null, null)
-    cursor.moveToFirst()
-    while (!cursor.isAfterLast) {
-        val cls = Class(context, cursor)
-        completelyDeleteClass(context, cls)
-        cursor.moveToNext()
-    }
-    cursor.close()
-    Log.i(LOG_TAG_SUBJECT, "Deleted all Class-related entries associated with Subject with id $subjectId")
-}
+fun completelyDeleteSubject(context: Context, subject: Subject) {
+    Log.i(LOG_TAG_SUBJECT, "Deleting everything related to Subject with id ${subject.id}")
 
-fun completelyDeleteSubject(context: Context, subjectId: Int) {
-    Log.i(LOG_TAG_SUBJECT, "Deleting everything related to Subject with id $subjectId")
-    deleteClassesWithSubject(context, subjectId)
-    deleteSubject(context, subjectId)
+    deleteSubject(context, subject.id)
+
+    for (cls in getClassesForSubject(context, subject.id)) {
+        completelyDeleteClass(context, cls)
+    }
+
+    for (exam in getExamsForSubject(context, subject.id)) {
+        deleteExam(context, exam.id)
+    }
 }
 
 fun replaceSubject(context: Context, oldSubjectId: Int, newSubject: Subject) {

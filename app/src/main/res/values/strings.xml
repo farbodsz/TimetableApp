@@ -12,6 +12,9 @@
     <string name="title_activity_assignments">Assignments</string>
     <string name="title_activity_assignment_new">New Assignment</string>
     <string name="title_activity_assignment_edit">Edit Assignment</string>
+    <string name="title_activity_exams">Exams</string>
+    <string name="title_activity_exam_new">New Exam</string>
+    <string name="title_activity_exam_edit">Edit Exam</string>
     <string name="title_activity_subjects">Subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
@@ -22,6 +25,8 @@
     <string name="home_card_assignments_title">Assignments</string>
     <string name="home_card_assignments_action">View all assignments</string>
     <string name="home_card_assignments_placeholder">No assignments due for the next 3 days!</string>
+    <string name="home_card_exams_title">Upcoming exams</string>
+    <string name="home_card_exams_action">View all exams</string>
 
     <string name="due_overdue">Overdue</string>
     <string name="due_today">Today</string>
@@ -68,16 +73,28 @@
     <string name="message_due_date_required">You must select a due date</string>
     <string name="placeholder_detail_empty"><![CDATA[<i>It looks like you haven\'t entered any details for this assignment.</i>]]></string>
 
+    <string name="property_module">Unit / module name</string>
+    <string name="property_exam_date">Exam date</string>
+    <string name="property_duration">Duration</string>
+    <string name="property_seat">Seat</string>
+    <string name="property_resit">Resit</string>
+    <string name="message_exam_date_required">You must choose an exam date</string>
+    <string name="message_exam_time_required">You must enter an exam time</string>
+    <string name="message_exam_duration_required">You must select an exam duration</string>
+
     <string name="action_add_detail">Add detail</string>
     <string name="action_add_time">Add time</string>
+    <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
     <string name="action_edit">Edit</string>
     <string name="action_new">New</string>
     <string name="action_show_past_assignments">Show past assignments</string>
+    <string name="action_show_past_exams">Show past exams</string>
     <string name="action_today">Today</string>
 
     <string name="showing_past_assignments">Showing past assignments</string>
+    <string name="showing_past_exams">Showing past exams</string>
 
     <string name="choose_class">Select a class</string>
     <string name="choose_color">Pick a color</string>
