@@ -151,6 +151,7 @@ fun addClass(context: Context, cls: Class) {
     val values = ContentValues()
     with(values) {
         put(ClassesSchema._ID, cls.id)
+        put(ClassesSchema.COL_TIMETABLE_ID, cls.timetableId)
         put(ClassesSchema.COL_SUBJECT_ID, cls.subjectId)
     }
 
