@@ -3,8 +3,10 @@ package com.satsumasoftware.timetable.db.util
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
+import com.satsumasoftware.timetable.db.SubjectsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.TimetablesSchema
+import com.satsumasoftware.timetable.framework.Subject
 import com.satsumasoftware.timetable.framework.Timetable
 import java.util.*
 
@@ -60,7 +62,7 @@ fun addTimetable(context: Context, timetable: Timetable) {
     Log.i(LOG_TAG_TIMETABLE, "Added Timetable with id ${timetable.id}")
 }
 
-fun deleteTimetable(context: Context, timetableId: Int) {
+private fun deleteTimetable(context: Context, timetableId: Int) {
     val db = TimetableDbHelper.getInstance(context).writableDatabase
     db.delete(TimetablesSchema.TABLE_NAME,
             "${TimetablesSchema._ID}=?",
@@ -81,4 +83,32 @@ fun getHighestTimetableId(context: Context): Int {
     val count = cursor.count
     cursor.close()
     return count
+}
+
+fun completelyDeleteTimetable(context: Context, timetableId: Int) {
+    Log.i(LOG_TAG_TIMETABLE, "Deleting everything related to Timetable of id $timetableId")
+
+    deleteTimetable(context, timetableId)
+
+    for (subject in getSubjectsForTimetable(context, timetableId)) {
+        completelyDeleteSubject(context, subject)
+    }
+}
+
+private fun getSubjectsForTimetable(context: Context, timetableId: Int): ArrayList<Subject> {
+    val subjects = ArrayList<Subject>()
+    val db = TimetableDbHelper.getInstance(context).readableDatabase
+    val cursor = db.query(
+            SubjectsSchema.TABLE_NAME,
+            null,
+            "${SubjectsSchema.COL_TIMETABLE_ID}=?",
+            arrayOf(timetableId.toString()),
+            null, null, null)
+    cursor.moveToFirst()
+    while (!cursor.isAfterLast) {
+        subjects.add(Subject(cursor))
+        cursor.moveToNext()
+    }
+    cursor.close()
+    return subjects
 }
