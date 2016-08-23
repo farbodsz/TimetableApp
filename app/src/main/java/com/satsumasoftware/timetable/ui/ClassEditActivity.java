@@ -116,7 +116,7 @@ public class ClassEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
 
-                final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(getBaseContext());
+                final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(ClassEditActivity.this);
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
                     public int compare(Subject subject, Subject t1) {
