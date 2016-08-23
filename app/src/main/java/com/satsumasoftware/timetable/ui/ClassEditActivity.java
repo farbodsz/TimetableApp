@@ -215,6 +215,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
         final ArrayList<ClassTime> classTimes = isNewDetail ? new ArrayList<ClassTime>() :
                 ClassUtilsKt.getClassTimesFromIds(this, classDetail.getClassTimeIds());
+        sortClassTimes(classTimes);
         mClassTimes.add(classTimes);
 
         ClassTimesAdapter adapter = new ClassTimesAdapter(classTimes);
@@ -275,6 +276,21 @@ public class ClassEditActivity extends AppCompatActivity {
         }
     }
 
+    private void sortClassTimes(ArrayList<ClassTime> classTimes) {
+        Collections.sort(classTimes, new Comparator<ClassTime>() {
+            @Override
+            public int compare(ClassTime ct1, ClassTime ct2) {
+                int dayComparison = ct1.getDay().compareTo(ct2.getDay());
+                if (dayComparison == 0) {
+                    // days are equal
+                    return ct1.getStartTime().compareTo(ct2.getStartTime());
+                } else {
+                    return dayComparison;
+                }
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -300,10 +316,12 @@ public class ClassEditActivity extends AppCompatActivity {
                 switch (actionType) {
                     case ClassTimeEditActivity.ACTION_NEW:
                         someTimes.add(classTime);
+                        sortClassTimes(someTimes);
                         ClassUtilsKt.addClassTime(this, classTime);
                         break;
                     case ClassTimeEditActivity.ACTION_EDIT:
                         someTimes.set(listPos, classTime);
+                        sortClassTimes(someTimes);
                         ClassUtilsKt.replaceClassTime(this, classTime.getId(), classTime);
                         break;
                     case ClassTimeEditActivity.ACTION_DELETE:
