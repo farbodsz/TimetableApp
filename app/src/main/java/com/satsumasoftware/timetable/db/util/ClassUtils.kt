@@ -12,6 +12,7 @@ import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime
+import org.threeten.bp.DayOfWeek
 import java.util.*
 
 const val LOG_TAG_CLASS = "ClassUtils"
@@ -219,6 +220,28 @@ fun replaceClassDetail(context: Context, oldClassDetailId: Int, newClassDetail: 
     Log.i(LOG_TAG_CLASS, "Replacing ClassDetail...")
     deleteClassDetail(context, oldClassDetailId)
     addClassDetail(context, newClassDetail)
+}
+
+fun getClassTimesForDay(activity: Activity, dayOfWeek: DayOfWeek): ArrayList<ClassTime> {
+    val classTimes = ArrayList<ClassTime>()
+
+    val timetable = (activity.application as TimetableApplication).currentTimetable!!
+
+    val dbHelper = TimetableDbHelper.getInstance(activity)
+    val cursor = dbHelper.readableDatabase.query(
+            ClassTimesSchema.TABLE_NAME,
+            null,
+            "${ClassTimesSchema.COL_TIMETABLE_ID}=? AND ${ClassTimesSchema.COL_DAY}=?",
+            arrayOf(timetable.id.toString(), dayOfWeek.value.toString()),
+            null, null, null)
+    cursor.moveToFirst()
+    while (!cursor.isAfterLast) {
+        classTimes.add(ClassTime(cursor))
+        cursor.moveToNext()
+    }
+    cursor.close()
+
+    return classTimes
 }
 
 fun getHighestClassTimeId(context: Context): Int {
