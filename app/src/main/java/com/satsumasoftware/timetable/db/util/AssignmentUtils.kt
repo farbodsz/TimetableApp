@@ -64,6 +64,7 @@ fun addAssignment(context: Context, assignment: Assignment) {
     val values = ContentValues()
     with(values) {
         put(AssignmentsSchema._ID, assignment.id)
+        put(AssignmentsSchema.COL_TIMETABLE_ID, assignment.timetableId)
         put(AssignmentsSchema.COL_CLASS_ID, assignment.classId)
         put(AssignmentsSchema.COL_TITLE, assignment.title)
         put(AssignmentsSchema.COL_DETAIL, assignment.detail)
