@@ -18,6 +18,8 @@
     <string name="title_activity_subjects">Subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
+    <string name="title_activity_timetable_new">New Timetable</string>
+    <string name="title_activity_timetable_edit">Edit Timetable</string>
 
     <string name="home_card_classes_title">Agenda</string>
     <string name="home_card_classes_action">Open schedule</string>
@@ -41,6 +43,7 @@
 
     <string name="property_start_date">Start date</string>
     <string name="property_end_date">End date</string>
+    <string name="message_first_timetable_required">You need to have created at least one timetable to use the functionality of this app.</string>
 
     <string name="property_subject">Subject</string>
     <string name="property_room">Room</string>
