@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +19,11 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
+import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ColorsAdapter;
 
 import java.util.ArrayList;
@@ -163,7 +164,11 @@ public class SubjectEditActivity extends AppCompatActivity {
         newName = TextUtilsKt.title(newName);
 
         if (mIsNewSubject) {
-            mSubject = new Subject(SubjectUtilsKt.getHighestSubjectId(this) + 1, newName, mColor.getId());
+            Timetable currentTimetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+            assert currentTimetable != null;
+
+            mSubject = new Subject(SubjectUtilsKt.getHighestSubjectId(this) + 1,
+                    currentTimetable.getId(), newName, mColor.getId());
             SubjectUtilsKt.addSubject(this, mSubject);
 
         } else {
