@@ -61,6 +61,7 @@ fun addExam(context: Context, exam: Exam) {
     val values = ContentValues()
     with(values) {
         put(ExamsSchema._ID, exam.id)
+        put(ExamsSchema.COL_TIMETABLE_ID, exam.timetableId)
         put(ExamsSchema.COL_SUBJECT_ID, exam.subjectId)
         put(ExamsSchema.COL_MODULE, exam.moduleName)
         put(ExamsSchema.COL_DATE_DAY_OF_MONTH, exam.date.dayOfMonth)

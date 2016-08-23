@@ -7,6 +7,7 @@ import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
 public final class ExamsSchema implements BaseColumns {
 
     public static final String TABLE_NAME = "exams";
+    public static final String COL_TIMETABLE_ID = "timetable_id";
     public static final String COL_SUBJECT_ID = "subject_id";
     public static final String COL_MODULE = "module";
     public static final String COL_DATE_DAY_OF_MONTH = "date_day_of_month";
@@ -21,6 +22,7 @@ public final class ExamsSchema implements BaseColumns {
 
     protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
+            COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_SUBJECT_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_MODULE + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_DATE_DAY_OF_MONTH + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
