@@ -45,7 +45,6 @@ public class ClassEditActivity extends AppCompatActivity {
     private static final String LOG_TAG = "ClassDetailActivity";
 
     protected static final String EXTRA_CLASS = "extra_class";
-    protected static final String EXTRA_LIST_POS = "extra_list_position";
 
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
     protected static final int REQUEST_CODE_CLASS_TIME_DETAIL = 3;
