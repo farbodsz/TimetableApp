@@ -19,12 +19,14 @@ import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ScheduleAdapter;
 
 import org.threeten.bp.DayOfWeek;
@@ -109,11 +111,14 @@ public class ScheduleActivity extends BaseActivity {
         ArrayList<ClassTime> classTimes = new ArrayList<>();
         TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
 
+        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert timetable != null;
+
         Cursor cursor = dbHelper.getReadableDatabase().query(
                 ClassTimesSchema.TABLE_NAME,
                 null,
-                ClassTimesSchema.COL_DAY + "=?",
-                new String[] {String.valueOf(dayOfWeek.getValue())},
+                ClassTimesSchema.COL_TIMETABLE_ID + "=? AND " + ClassTimesSchema.COL_DAY + "=?",
+                new String[] {String.valueOf(timetable.getId()), String.valueOf(dayOfWeek.getValue())},
                 null, null, null);
         if (cursor.getCount() == 0) {
             return classTimes; // the empty ArrayList
