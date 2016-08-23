@@ -1,8 +1,10 @@
 package com.satsumasoftware.timetable.db.util
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
+import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.ClassDetailsSchema
 import com.satsumasoftware.timetable.db.ClassTimesSchema
 import com.satsumasoftware.timetable.db.ClassesSchema
@@ -14,14 +16,21 @@ import java.util.*
 
 const val LOG_TAG_CLASS = "ClassUtils"
 
-fun getClasses(context: Context): ArrayList<Class> {
+fun getClasses(activity: Activity): ArrayList<Class> {
     val classes = ArrayList<Class>()
-    val dbHelper = TimetableDbHelper.getInstance(context)
+
+    val timetable = (activity.application as TimetableApplication).currentTimetable!!
+
+    val dbHelper = TimetableDbHelper.getInstance(activity)
     val cursor = dbHelper.readableDatabase.query(
-            ClassesSchema.TABLE_NAME, null, null, null, null, null, null)
+            ClassesSchema.TABLE_NAME,
+            null,
+            "${ClassesSchema.COL_TIMETABLE_ID}=?",
+            arrayOf(timetable.id.toString()),
+            null, null, null)
     cursor.moveToFirst()
     while (!cursor.isAfterLast) {
-        classes.add(Class(context, cursor))
+        classes.add(Class(activity, cursor))
         cursor.moveToNext()
     }
     cursor.close()

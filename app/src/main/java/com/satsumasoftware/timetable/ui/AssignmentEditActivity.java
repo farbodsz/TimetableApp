@@ -105,7 +105,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentEditActivity.this);
 
-                final ArrayList<Class> classes = ClassUtilsKt.getClasses(getBaseContext());
+                final ArrayList<Class> classes = ClassUtilsKt.getClasses(AssignmentEditActivity.this);
 
                 ClassesAdapter adapter = new ClassesAdapter(getBaseContext(), classes);
                 adapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
