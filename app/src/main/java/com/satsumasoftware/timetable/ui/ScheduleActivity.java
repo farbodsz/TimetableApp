@@ -31,6 +31,8 @@ import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ScheduleActivity extends BaseActivity {
 
@@ -124,6 +126,13 @@ public class ScheduleActivity extends BaseActivity {
             cursor.moveToNext();
         }
         cursor.close();
+
+        Collections.sort(classTimes, new Comparator<ClassTime>() {
+            @Override
+            public int compare(ClassTime ct1, ClassTime ct2) {
+                return ct1.getStartTime().compareTo(ct2.getStartTime());
+            }
+        });
 
         return classTimes;
     }
