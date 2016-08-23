@@ -17,8 +17,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.threeten.bp.DayOfWeek;
@@ -224,7 +226,11 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             actionType = ACTION_EDIT;
         }
 
-        mClassTime = new ClassTime(id, mClassDetailId, mDayOfWeek, mStartTime, mEndTime);
+        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert timetable != null;
+
+        mClassTime = new ClassTime(
+                id, timetable.getId(), mClassDetailId, mDayOfWeek, mStartTime, mEndTime);
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_CLASS_TIME, mClassTime);

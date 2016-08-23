@@ -225,6 +225,7 @@ fun addClassTime(context: Context, classTime: ClassTime) {
     val values = ContentValues()
     with(values) {
         put(ClassTimesSchema._ID, classTime.id)
+        put(ClassTimesSchema.COL_TIMETABLE_ID, classTime.timetableId)
         put(ClassTimesSchema.COL_CLASS_DETAIL_ID, classTime.classDetailId)
         put(ClassTimesSchema.COL_DAY, classTime.day.value)
         put(ClassTimesSchema.COL_START_TIME_HRS, classTime.startTime.hour)
