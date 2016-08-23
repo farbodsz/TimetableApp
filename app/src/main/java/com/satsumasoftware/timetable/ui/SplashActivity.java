@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.framework.Timetable;
 
 public class SplashActivity extends AppCompatActivity {
+
+    private static final int REQUEST_CODE_TIMETABLE_EDIT = 1;
 
     private static final int SLEEP_TIME = 1000;
 
@@ -30,10 +33,12 @@ public class SplashActivity extends AppCompatActivity {
                     Intent intent;
                     if (currentTimetable == null) {
                         intent = new Intent(getBaseContext(), TimetableEditActivity.class);
+                        startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT);
                     } else {
                         intent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-                    startActivity(intent);
                 }
             }
         };
@@ -41,8 +46,15 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_TIMETABLE_EDIT) {
+            if (resultCode == Activity.RESULT_OK) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
     }
 }
