@@ -3,10 +3,8 @@ package com.satsumasoftware.timetable.db.util
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
-import com.satsumasoftware.timetable.db.ClassesSchema
 import com.satsumasoftware.timetable.db.SubjectsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.Subject
 import java.util.*
 
@@ -48,6 +46,7 @@ fun addSubject(context: Context, subject: Subject) {
     val values = ContentValues()
     with(values) {
         put(SubjectsSchema._ID, subject.id)
+        put(SubjectsSchema.COL_TIMETABLE_ID, subject.timetableId)
         put(SubjectsSchema.COL_NAME, subject.name)
         put(SubjectsSchema.COL_COLOR_ID, subject.colorId)
     }
