@@ -150,6 +150,7 @@ public class ScheduleActivity extends BaseActivity {
         if (requestCode == REQUEST_CODE_CLASS_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 setupLayout();
+                goToNow();
             }
         }
     }
