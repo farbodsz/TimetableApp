@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.satsumasoftware.timetable.DateUtilsKt;
+import com.satsumasoftware.timetable.DateUtils;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.framework.Exam;
@@ -124,10 +124,10 @@ public class ExamsActivity extends BaseActivity {
             } else {
 
                 if (!mShowPast) {
-                    timePeriodId = DateUtilsKt.getDatePeriodId(examDate);
+                    timePeriodId = DateUtils.getDatePeriodId(examDate);
 
                     if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(DateUtilsKt.makeHeaderName(this, timePeriodId));
+                        headers.add(DateUtils.makeHeaderName(this, timePeriodId));
                         exams.add(null);
                     }
 
