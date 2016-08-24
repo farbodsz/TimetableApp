@@ -20,6 +20,7 @@ class Subject(val id: Int, val timetableId: Int, var name: String, var colorId: 
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeInt(id)
+        dest?.writeInt(timetableId)
         dest?.writeString(name)
         dest?.writeInt(colorId)
     }
