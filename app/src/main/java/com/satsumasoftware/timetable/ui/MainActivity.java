@@ -11,12 +11,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.ExamUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Exam;
+import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.HomeCardsAdapter;
 import com.satsumasoftware.timetable.ui.card.AssignmentsCard;
 import com.satsumasoftware.timetable.ui.card.ClassesCard;
@@ -40,6 +42,12 @@ public class MainActivity extends BaseActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Timetable currentTimetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert currentTimetable != null;
+
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setSubtitle(currentTimetable.getDisplayedName());
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
