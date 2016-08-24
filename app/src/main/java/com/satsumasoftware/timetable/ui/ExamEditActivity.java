@@ -27,7 +27,7 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
@@ -93,7 +93,7 @@ public class ExamEditActivity extends AppCompatActivity {
                 R.string.title_activity_exam_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        mToolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        mToolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -271,7 +271,7 @@ public class ExamEditActivity extends AppCompatActivity {
         mSubjectText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
 
         Color color = new Color(mSubject.getColorId());
-        ThemeUtilsKt.setBarColors(color, this, mToolbar);
+        ThemeUtils.setBarColors(color, this, mToolbar);
     }
 
     private void updateDateText() {
@@ -305,7 +305,7 @@ public class ExamEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_done);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 

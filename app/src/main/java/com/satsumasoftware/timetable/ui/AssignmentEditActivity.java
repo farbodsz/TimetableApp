@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
@@ -77,7 +77,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 R.string.title_activity_assignment_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        mToolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        mToolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,7 +172,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 getBaseContext(), R.color.mdu_text_black));
 
         Color color = new Color(subject.getColorId());
-        ThemeUtilsKt.setBarColors(color, this, mToolbar);
+        ThemeUtils.setBarColors(color, this, mToolbar);
     }
 
 
@@ -187,7 +187,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_done);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 

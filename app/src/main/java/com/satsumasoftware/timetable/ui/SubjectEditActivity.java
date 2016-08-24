@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Color;
@@ -59,7 +59,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                 R.string.title_activity_subject_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        toolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        toolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +76,7 @@ public class SubjectEditActivity extends AppCompatActivity {
 
         mColor = new Color(mIsNewSubject ? 6 : mSubject.getColorId());
         imageView.setImageResource(mColor.getPrimaryColorResId(this));
-        ThemeUtilsKt.setBarColors(mColor, SubjectEditActivity.this, toolbar);
+        ThemeUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +91,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                     public void onEntryClick(View view, int position) {
                         mColor = colors.get(position);
                         imageView.setImageResource(mColor.getPrimaryColorResId(getBaseContext()));
-                        ThemeUtilsKt.setBarColors(mColor, SubjectEditActivity.this, toolbar);
+                        ThemeUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
                         mColorDialog.dismiss();
                     }
                 });
@@ -117,7 +117,7 @@ public class SubjectEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_done);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 

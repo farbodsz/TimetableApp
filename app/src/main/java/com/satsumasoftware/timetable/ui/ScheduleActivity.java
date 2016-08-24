@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -123,7 +123,7 @@ public class ScheduleActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_today);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_today);
         return true;
     }
 

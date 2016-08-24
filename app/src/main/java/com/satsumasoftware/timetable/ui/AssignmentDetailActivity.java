@@ -14,7 +14,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
@@ -57,7 +57,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        toolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +75,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle(subject.getName());
 
         Color color = new Color(subject.getColorId());
-        ThemeUtilsKt.setBarColors(color, this, toolbar);
+        ThemeUtils.setBarColors(color, this, toolbar);
 
         TextView dateText = (TextView) findViewById(R.id.textView_date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
@@ -147,7 +147,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_detail, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_edit);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_edit);
         return true;
     }
 
