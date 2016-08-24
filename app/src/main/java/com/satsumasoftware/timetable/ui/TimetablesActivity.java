@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.TimetableUtilsKt;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -36,6 +37,14 @@ public class TimetablesActivity extends BaseActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        toolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         mTimetables = TimetableUtilsKt.getTimetables(this);
         sortList();
