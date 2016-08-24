@@ -3,7 +3,7 @@ package com.satsumasoftware.timetable.framework
 import android.content.Context
 import android.database.Cursor
 import com.satsumasoftware.timetable.db.ClassDetailsSchema
-import com.satsumasoftware.timetable.db.util.getClassTimeIds
+import com.satsumasoftware.timetable.db.util.ClassUtils
 import java.util.*
 
 class ClassDetail(val id: Int, val classId: Int, val room: String, val building: String,
@@ -15,7 +15,7 @@ class ClassDetail(val id: Int, val classId: Int, val room: String, val building:
             cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_ROOM)),
             cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_BUILDING)),
             cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_TEACHER)),
-            getClassTimeIds(context, cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema._ID))))
+            ClassUtils.getClassTimeIds(context, cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema._ID))))
 
     fun hasRoom() = room.trim().length != 0
 

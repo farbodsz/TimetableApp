@@ -11,8 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
-import com.satsumasoftware.timetable.db.util.TimetableUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
+import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
 
@@ -35,7 +35,7 @@ public class TimetablesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_done_black_24dp));
+        toolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_done_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,7 +45,7 @@ public class TimetablesActivity extends AppCompatActivity {
             }
         });
 
-        mTimetables = TimetableUtilsKt.getTimetables(this);
+        mTimetables = TimetableUtils.getTimetables(this);
         sortList();
 
         mAdapter = new TimetablesAdapter(getApplication(), mTimetables);
@@ -76,7 +76,7 @@ public class TimetablesActivity extends AppCompatActivity {
 
     private void refreshList() {
         mTimetables.clear();
-        mTimetables.addAll(TimetableUtilsKt.getTimetables(this));
+        mTimetables.addAll(TimetableUtils.getTimetables(this));
         sortList();
         mAdapter.notifyDataSetChanged();
     }

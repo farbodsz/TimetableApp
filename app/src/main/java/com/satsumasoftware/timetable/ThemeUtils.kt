@@ -13,31 +13,43 @@ import android.view.Menu
 import android.view.View
 import com.satsumasoftware.timetable.framework.Color
 
-fun setBarColors(color: Color, activity: Activity, vararg views: View) {
-    for (view in views) {
-        view.setBackgroundColor(ContextCompat.getColor(activity, color.getPrimaryColorResId(activity)))
-    }
-    if (Build.VERSION.SDK_INT >= 21) {
-        activity.window.statusBarColor =
-                ContextCompat.getColor(activity, color.getPrimaryDarkColorResId(activity))
-    }
-}
+class ThemeUtils {
 
-@JvmOverloads
-fun tintDrawable(context: Context, @DrawableRes drawableRes: Int, @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
-    return tintDrawable(context, ContextCompat.getDrawable(context, drawableRes), colorRes)
-}
+    companion object {
 
-@JvmOverloads
-fun tintDrawable(context: Context, d: Drawable, @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
-    val drawable = DrawableCompat.wrap(d)
-    DrawableCompat.setTint(drawable, ContextCompat.getColor(context, colorRes))
-    return drawable
-}
+        @JvmStatic
+        fun setBarColors(color: Color, activity: Activity, vararg views: View) {
+            for (view in views) {
+                view.setBackgroundColor(ContextCompat.getColor(activity, color.getPrimaryColorResId(activity)))
+            }
+            if (Build.VERSION.SDK_INT >= 21) {
+                activity.window.statusBarColor =
+                        ContextCompat.getColor(activity, color.getPrimaryDarkColorResId(activity))
+            }
+        }
 
-fun tintMenuIcons(context: Context, menu: Menu, vararg @IdRes menuItems: Int) {
-    for (@IdRes menuItem in menuItems) {
-        val icon = menu.findItem(menuItem).icon
-        icon?.let { tintDrawable(context, icon) }
+        @JvmOverloads
+        @JvmStatic
+        fun tintDrawable(context: Context, @DrawableRes drawableRes: Int,
+                         @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
+            return tintDrawable(context, ContextCompat.getDrawable(context, drawableRes), colorRes)
+        }
+
+        @JvmOverloads
+        @JvmStatic
+        fun tintDrawable(context: Context, d: Drawable, @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
+            val drawable = DrawableCompat.wrap(d)
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(context, colorRes))
+            return drawable
+        }
+
+        @JvmStatic
+        fun tintMenuIcons(context: Context, menu: Menu, vararg @IdRes menuItems: Int) {
+            for (@IdRes menuItem in menuItems) {
+                val icon = menu.findItem(menuItem).icon
+                icon?.let { tintDrawable(context, icon) }
+            }
+        }
+
     }
 }

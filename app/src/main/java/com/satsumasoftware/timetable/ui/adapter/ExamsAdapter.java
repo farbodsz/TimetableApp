@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -69,7 +69,7 @@ public class ExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private void setupItemLayout(ExamViewHolder holder, int position) {
         Exam exam = mExams.get(position);
 
-        Subject subject = SubjectUtilsKt.getSubjectWithId(mContext, exam.getSubjectId());
+        Subject subject = SubjectUtils.getSubjectWithId(mContext, exam.getSubjectId());
         assert subject != null;
 
         StringBuilder titleBuilder = new StringBuilder();

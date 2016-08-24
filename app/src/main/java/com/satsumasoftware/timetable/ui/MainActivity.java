@@ -12,9 +12,9 @@ import android.view.MenuItem;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
-import com.satsumasoftware.timetable.db.util.ExamUtilsKt;
+import com.satsumasoftware.timetable.db.util.AssignmentUtils;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Exam;
@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity {
     private ArrayList<ClassTime> getClassesToday() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
 
-        ArrayList<ClassTime> classTimes = ClassUtilsKt.getClassTimesForDay(this, today);
+        ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, today);
 
         Collections.sort(classTimes, new Comparator<ClassTime>() {
             @Override
@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Assignment> assignments = new ArrayList<>();
         LocalDate now = LocalDate.now();
 
-        for (Assignment assignment : AssignmentUtilsKt.getAssignments(this)) {
+        for (Assignment assignment : AssignmentUtils.getAssignments(this)) {
             LocalDate dueDate = assignment.getDueDate();
 
             boolean isOverdue = dueDate.isBefore(now) && assignment.getCompletionProgress() != 100;
@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Exam> exams = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
-        for (Exam exam : ExamUtilsKt.getExams(this)) {
+        for (Exam exam : ExamUtils.getExams(this)) {
             LocalDateTime examDateTime = exam.makeDateTimeObject();
 
             if (!examDateTime.isBefore(now) && examDateTime.isBefore(now.plusWeeks(6))) {

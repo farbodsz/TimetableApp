@@ -20,11 +20,11 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.AssignmentUtils;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -77,7 +77,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 R.string.title_activity_assignment_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        mToolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        mToolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +97,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
 
         mClassText = (TextView) findViewById(R.id.textView_class);
         if (!mIsNew) {
-            mClass = ClassUtilsKt.getClassWithId(this, mAssignment.getClassId());
+            mClass = ClassUtils.getClassWithId(this, mAssignment.getClassId());
             updateLinkedClass();
         }
         mClassText.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +105,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentEditActivity.this);
 
-                final ArrayList<Class> classes = ClassUtilsKt.getClasses(AssignmentEditActivity.this);
+                final ArrayList<Class> classes = ClassUtils.getClasses(AssignmentEditActivity.this);
 
                 ClassesAdapter adapter = new ClassesAdapter(getBaseContext(), classes);
                 adapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
@@ -164,7 +164,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     }
 
     private void updateLinkedClass() {
-        Subject subject = SubjectUtilsKt.getSubjectWithId(getBaseContext(), mClass.getSubjectId());
+        Subject subject = SubjectUtils.getSubjectWithId(getBaseContext(), mClass.getSubjectId());
         assert subject != null;
 
         mClassText.setText(subject.getName());
@@ -172,7 +172,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 getBaseContext(), R.color.mdu_text_black));
 
         Color color = new Color(subject.getColorId());
-        ThemeUtilsKt.setBarColors(color, this, mToolbar);
+        ThemeUtils.setBarColors(color, this, mToolbar);
     }
 
 
@@ -187,7 +187,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_done);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 
@@ -245,7 +245,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? AssignmentUtilsKt.getHighestAssignmentId(this) + 1 : mAssignment.getId();
+        int id = mIsNew ? AssignmentUtils.getHighestAssignmentId(this) + 1 : mAssignment.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
@@ -260,9 +260,9 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 mCompletionProgess);
 
         if (mIsNew) {
-            AssignmentUtilsKt.addAssignment(this, mAssignment);
+            AssignmentUtils.addAssignment(this, mAssignment);
         } else {
-            AssignmentUtilsKt.replaceAssignment(this, mAssignment.getId(), mAssignment);
+            AssignmentUtils.replaceAssignment(this, mAssignment.getId(), mAssignment);
         }
 
         Intent intent = new Intent();
@@ -271,7 +271,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        AssignmentUtilsKt.deleteAssignment(this, mAssignment.getId());
+        AssignmentUtils.deleteAssignment(this, mAssignment.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }

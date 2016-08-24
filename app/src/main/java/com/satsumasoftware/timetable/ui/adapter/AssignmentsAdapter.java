@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -76,9 +76,9 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.mDueDate.setText(assignment.getDueDate().format(DateTimeFormatter.ofPattern("dd MMM uu")));
         holder.mCompletion.setText(assignment.getCompletionProgress() + " %");
 
-        Class cls = ClassUtilsKt.getClassWithId(mContext, assignment.getClassId());
+        Class cls = ClassUtils.getClassWithId(mContext, assignment.getClassId());
         assert cls != null;
-        Subject subject = SubjectUtilsKt.getSubjectWithId(mContext, cls.getSubjectId());
+        Subject subject = SubjectUtils.getSubjectWithId(mContext, cls.getSubjectId());
         assert subject != null;
 
         holder.mSubject.setText(subject.getName());

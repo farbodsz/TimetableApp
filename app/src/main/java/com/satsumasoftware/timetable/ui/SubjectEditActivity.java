@@ -18,9 +18,9 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -59,7 +59,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                 R.string.title_activity_subject_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        toolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        toolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +76,7 @@ public class SubjectEditActivity extends AppCompatActivity {
 
         mColor = new Color(mIsNewSubject ? 6 : mSubject.getColorId());
         imageView.setImageResource(mColor.getPrimaryColorResId(this));
-        ThemeUtilsKt.setBarColors(mColor, SubjectEditActivity.this, toolbar);
+        ThemeUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +91,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                     public void onEntryClick(View view, int position) {
                         mColor = colors.get(position);
                         imageView.setImageResource(mColor.getPrimaryColorResId(getBaseContext()));
-                        ThemeUtilsKt.setBarColors(mColor, SubjectEditActivity.this, toolbar);
+                        ThemeUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
                         mColorDialog.dismiss();
                     }
                 });
@@ -117,7 +117,7 @@ public class SubjectEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_done);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 
@@ -167,14 +167,14 @@ public class SubjectEditActivity extends AppCompatActivity {
             Timetable currentTimetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
             assert currentTimetable != null;
 
-            mSubject = new Subject(SubjectUtilsKt.getHighestSubjectId(this) + 1,
+            mSubject = new Subject(SubjectUtils.getHighestSubjectId(this) + 1,
                     currentTimetable.getId(), newName, mColor.getId());
-            SubjectUtilsKt.addSubject(this, mSubject);
+            SubjectUtils.addSubject(this, mSubject);
 
         } else {
             mSubject.setName(newName);
             mSubject.setColorId(mColor.getId());
-            SubjectUtilsKt.replaceSubject(this, mSubject.getId(), mSubject);
+            SubjectUtils.replaceSubject(this, mSubject.getId(), mSubject);
         }
 
         Intent intent = new Intent();
@@ -184,7 +184,7 @@ public class SubjectEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        SubjectUtilsKt.completelyDeleteSubject(this, mSubject);
+        SubjectUtils.completelyDeleteSubject(this, mSubject);
         setResult(Activity.RESULT_OK);
         finish();
     }

@@ -27,10 +27,10 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.ExamUtilsKt;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.ExamUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -93,7 +93,7 @@ public class ExamEditActivity extends AppCompatActivity {
                 R.string.title_activity_exam_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        mToolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        mToolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +118,7 @@ public class ExamEditActivity extends AppCompatActivity {
 
         mSubjectText = (TextView) findViewById(R.id.textView_subject);
         if (!mIsNew) {
-            mSubject = SubjectUtilsKt.getSubjectWithId(this, mExam.getSubjectId());
+            mSubject = SubjectUtils.getSubjectWithId(this, mExam.getSubjectId());
             updateLinkedSubject();
         }
         mSubjectText.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +126,7 @@ public class ExamEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
-                final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(ExamEditActivity.this);
+                final ArrayList<Subject> subjects = SubjectUtils.getSubjects(ExamEditActivity.this);
 
                 SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
                 adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
@@ -271,7 +271,7 @@ public class ExamEditActivity extends AppCompatActivity {
         mSubjectText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
 
         Color color = new Color(mSubject.getColorId());
-        ThemeUtilsKt.setBarColors(color, this, mToolbar);
+        ThemeUtils.setBarColors(color, this, mToolbar);
     }
 
     private void updateDateText() {
@@ -305,7 +305,7 @@ public class ExamEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_done);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 
@@ -370,7 +370,7 @@ public class ExamEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? ExamUtilsKt.getHighestExamId(this) + 1 : mExam.getId();
+        int id = mIsNew ? ExamUtils.getHighestExamId(this) + 1 : mExam.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
@@ -388,9 +388,9 @@ public class ExamEditActivity extends AppCompatActivity {
                 mExamIsResit);
 
         if (mIsNew) {
-            ExamUtilsKt.addExam(this, mExam);
+            ExamUtils.addExam(this, mExam);
         } else {
-            ExamUtilsKt.replaceExam(this, mExam.getId(), mExam);
+            ExamUtils.replaceExam(this, mExam.getId(), mExam);
         }
 
         Intent intent = new Intent();
@@ -399,7 +399,7 @@ public class ExamEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        ExamUtilsKt.deleteExam(this, mExam.getId());
+        ExamUtils.deleteExam(this, mExam.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }

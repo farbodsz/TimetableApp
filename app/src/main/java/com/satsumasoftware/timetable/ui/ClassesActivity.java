@@ -12,8 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
@@ -37,7 +37,7 @@ public class ClassesActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mClasses = ClassUtilsKt.getClasses(this);
+        mClasses = ClassUtils.getClasses(this);
         sortList();
 
         mAdapter = new ClassesAdapter(this, mClasses);
@@ -67,7 +67,7 @@ public class ClassesActivity extends BaseActivity {
 
     private void refreshList() {
         mClasses.clear();
-        mClasses.addAll(ClassUtilsKt.getClasses(this));
+        mClasses.addAll(ClassUtils.getClasses(this));
         sortList();
         mAdapter.notifyDataSetChanged();
     }
@@ -76,8 +76,8 @@ public class ClassesActivity extends BaseActivity {
         Collections.sort(mClasses, new Comparator<Class>() {
             @Override
             public int compare(Class c1, Class c2) {
-                Subject s1 = SubjectUtilsKt.getSubjectWithId(getBaseContext(), c1.getSubjectId());
-                Subject s2 = SubjectUtilsKt.getSubjectWithId(getBaseContext(), c2.getSubjectId());
+                Subject s1 = SubjectUtils.getSubjectWithId(getBaseContext(), c1.getSubjectId());
+                Subject s2 = SubjectUtils.getSubjectWithId(getBaseContext(), c2.getSubjectId());
                 assert s1 != null;
                 assert s2 != null;
                 return s1.getName().compareTo(s2.getName());

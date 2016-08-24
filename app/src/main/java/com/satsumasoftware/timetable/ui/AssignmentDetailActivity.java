@@ -14,10 +14,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.ThemeUtilsKt;
-import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.ThemeUtils;
+import com.satsumasoftware.timetable.db.util.AssignmentUtils;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -57,7 +57,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationIcon(ThemeUtilsKt.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        toolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,14 +68,14 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(mAssignment.getTitle());
 
-        Class cls = ClassUtilsKt.getClassWithId(this, mAssignment.getClassId());
+        Class cls = ClassUtils.getClassWithId(this, mAssignment.getClassId());
         assert cls != null;
-        Subject subject = SubjectUtilsKt.getSubjectWithId(this, cls.getSubjectId());
+        Subject subject = SubjectUtils.getSubjectWithId(this, cls.getSubjectId());
         assert subject != null;
         getSupportActionBar().setSubtitle(subject.getName());
 
         Color color = new Color(subject.getColorId());
-        ThemeUtilsKt.setBarColors(color, this, toolbar);
+        ThemeUtils.setBarColors(color, this, toolbar);
 
         TextView dateText = (TextView) findViewById(R.id.textView_date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
@@ -120,8 +120,8 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_ASSIGNMENT_EDIT) {
             if (resultCode == RESULT_OK) {
                 // get the edited assignment (it would have the highest id if new, same id if not)
-                mAssignment = AssignmentUtilsKt.getAssignmentWithId(this, mIsNew ?
-                        AssignmentUtilsKt.getHighestAssignmentId(this) : mAssignment.getId());
+                mAssignment = AssignmentUtils.getAssignmentWithId(this, mIsNew ?
+                        AssignmentUtils.getHighestAssignmentId(this) : mAssignment.getId());
 
                 if (mAssignment == null) {
                     Log.d("ADA!!", "Assignment is NULL");
@@ -147,7 +147,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_detail, menu);
-        ThemeUtilsKt.tintMenuIcons(this, menu, R.id.action_edit);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_edit);
         return true;
     }
 
@@ -176,7 +176,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
     private void saveEditsAndClose() {
         // overwrite db values as completionProgress may have changed
-        AssignmentUtilsKt.replaceAssignment(this, mAssignment.getId(), mAssignment);
+        AssignmentUtils.replaceAssignment(this, mAssignment.getId(), mAssignment);
 
         setResult(RESULT_OK); // to reload any changes in AssignmentsActivity
         finish();
