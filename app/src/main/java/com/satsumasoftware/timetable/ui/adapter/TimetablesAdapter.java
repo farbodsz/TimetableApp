@@ -22,6 +22,8 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
     private Application mApplication;
     private ArrayList<Timetable> mTimetables;
 
+    private boolean mBindingVH;
+
     public TimetablesAdapter(Application application, ArrayList<Timetable> timetables) {
         mApplication = application;
         mTimetables = timetables;
@@ -35,6 +37,8 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
 
     @Override
     public void onBindViewHolder(TimetablesViewHolder holder, int position) {
+        mBindingVH = true;
+
         Timetable timetable = mTimetables.get(position);
 
         holder.mName.setText(timetable.hasName() ?
@@ -50,6 +54,8 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
         boolean isCurrent = currentTimetable.getId() == timetable.getId();
 
         holder.mRadioButton.setChecked(isCurrent);
+
+        mBindingVH = false;
     }
 
     @Override
@@ -78,8 +84,10 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
             mRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (mOnEntryCheckListener != null) {
-                        mOnEntryCheckListener.onEntryCheck(buttonView, isChecked, getLayoutPosition());
+                    if (!mBindingVH) {
+                        Timetable timetable = mTimetables.get(getLayoutPosition());
+                        ((TimetableApplication) mApplication).setCurrentTimetable(timetable);
+                        notifyDataSetChanged();
                     }
                 }
             });
@@ -97,16 +105,6 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
 
     public void setOnEntryClickListener(OnEntryClickListener onEntryClickListener) {
         mOnEntryClickListener = onEntryClickListener;
-    }
-
-    private OnEntryCheckListener mOnEntryCheckListener;
-
-    public interface OnEntryCheckListener {
-        void onEntryCheck(CompoundButton buttonView, boolean isChecked, int position);
-    }
-
-    public void setOnEntryCheckListener(OnEntryCheckListener onEntryCheckListener) {
-        mOnEntryCheckListener = onEntryCheckListener;
     }
 
 }

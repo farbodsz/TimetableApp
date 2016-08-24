@@ -9,11 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.CompoundButton;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
-import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.TimetableUtilsKt;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
@@ -55,15 +53,6 @@ public class TimetablesActivity extends AppCompatActivity {
                 Intent intent = new Intent(TimetablesActivity.this, TimetableEditActivity.class);
                 intent.putExtra(TimetableEditActivity.EXTRA_TIMETABLE, mTimetables.get(position));
                 startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT);
-            }
-        });
-        mAdapter.setOnEntryCheckListener(new TimetablesAdapter.OnEntryCheckListener() {
-            @Override
-            public void onEntryCheck(CompoundButton buttonView, boolean isChecked, int position) {
-                Timetable timetable = mTimetables.get(position);
-                ((TimetableApplication) getApplication()).setCurrentTimetable(timetable);
-
-                mAdapter.notifyDataSetChanged(); // to update the 'checked' status of radio buttons
             }
         });
 
