@@ -21,6 +21,8 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate,
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_MONTH)),
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_YEAR))))
 
+    fun hasName() = name.trim().length != 0
+
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readString(),
