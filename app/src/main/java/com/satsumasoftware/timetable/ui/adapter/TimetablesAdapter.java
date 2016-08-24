@@ -79,7 +79,7 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (mOnEntryCheckListener != null) {
-                        mOnEntryCheckListener.onEntryCheck(buttonView, isChecked);
+                        mOnEntryCheckListener.onEntryCheck(buttonView, isChecked, getLayoutPosition());
                     }
                 }
             });
@@ -102,7 +102,7 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
     private OnEntryCheckListener mOnEntryCheckListener;
 
     public interface OnEntryCheckListener {
-        void onEntryCheck(CompoundButton buttonView, boolean isChecked);
+        void onEntryCheck(CompoundButton buttonView, boolean isChecked, int position);
     }
 
     public void setOnEntryCheckListener(OnEntryCheckListener onEntryCheckListener) {
