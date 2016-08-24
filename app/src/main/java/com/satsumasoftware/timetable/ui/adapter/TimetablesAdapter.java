@@ -41,8 +41,7 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
 
         Timetable timetable = mTimetables.get(position);
 
-        holder.mName.setText(timetable.hasName() ?
-                timetable.getName() : timetable.makeDefaultName());
+        holder.mName.setText(timetable.getDisplayedName());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM uu");
         String detailText = timetable.getStartDate().format(formatter) + " - " +

@@ -10,6 +10,16 @@ import org.threeten.bp.format.DateTimeFormatter
 class Timetable(val id: Int, val name: String, val startDate: LocalDate,
                 val endDate: LocalDate) : Parcelable {
 
+    val displayedName: String
+        get() {
+            return if (hasName()) {
+                name
+            } else {
+                val formatter = DateTimeFormatter.ofPattern("MMM uuuu")
+                "${startDate.format(formatter)} - ${endDate.format(formatter)}"
+            }
+        }
+
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(TimetablesSchema._ID)),
             cursor.getString(cursor.getColumnIndex(TimetablesSchema.COL_NAME)),
@@ -23,11 +33,6 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate,
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH))))
 
     fun hasName() = name.trim().length != 0
-
-    fun makeDefaultName(): String {
-        val formatter = DateTimeFormatter.ofPattern("MMM uuuu")
-        return "${startDate.format(formatter)} - ${endDate.format(formatter)}"
-    }
 
     constructor(source: Parcel) : this(
             source.readInt(),
