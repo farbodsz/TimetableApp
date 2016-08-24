@@ -44,24 +44,29 @@
             android:src="@drawable/ic_event_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_gravity="center_vertical" />
-        <TextView
-            android:id="@+id/textView_start_date"
-            android:text="@string/property_start_date"
-            style="@style/Widget.Timetable.TextView.Item.Selectable"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/mdu_keyline_1" />
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_2"/>
+            android:layout_marginLeft="@dimen/mdu_keyline_2">
+            <TextView
+                android:id="@+id/textView_start_date"
+                android:text="@string/property_start_date"
+                style="@style/Widget.Timetable.TextView.Item.Selectable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <include layout="@layout/divider" />
+            <TextView
+                android:id="@+id/textView_end_date"
+                android:text="@string/property_end_date"
+                style="@style/Widget.Timetable.TextView.Item.Selectable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/textView_end_date"
-        android:text="@string/property_end_date"
-        style="@style/Widget.Timetable.TextView.Item.Selectable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/mdu_keyline_2"/>
 
     <include layout="@layout/divider" />
 
