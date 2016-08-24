@@ -78,6 +78,7 @@
 
         <activity
             android:name=".ui.TimetablesActivity"
+            android:label="@string/title_activity_timetables"
             android:theme="@style/Timetable"/>
 
         <activity

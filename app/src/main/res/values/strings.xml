@@ -18,6 +18,7 @@
     <string name="title_activity_subjects">Subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
+    <string name="title_activity_timetables">Timetables</string>
     <string name="title_activity_timetable_new">New Timetable</string>
     <string name="title_activity_timetable_edit">Edit Timetable</string>
 
