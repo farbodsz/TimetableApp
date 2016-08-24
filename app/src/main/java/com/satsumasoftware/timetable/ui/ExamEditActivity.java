@@ -29,7 +29,7 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.ExamUtilsKt;
+import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
@@ -370,7 +370,7 @@ public class ExamEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? ExamUtilsKt.getHighestExamId(this) + 1 : mExam.getId();
+        int id = mIsNew ? ExamUtils.getHighestExamId(this) + 1 : mExam.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
@@ -388,9 +388,9 @@ public class ExamEditActivity extends AppCompatActivity {
                 mExamIsResit);
 
         if (mIsNew) {
-            ExamUtilsKt.addExam(this, mExam);
+            ExamUtils.addExam(this, mExam);
         } else {
-            ExamUtilsKt.replaceExam(this, mExam.getId(), mExam);
+            ExamUtils.replaceExam(this, mExam.getId(), mExam);
         }
 
         Intent intent = new Intent();
@@ -399,7 +399,7 @@ public class ExamEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        ExamUtilsKt.deleteExam(this, mExam.getId());
+        ExamUtils.deleteExam(this, mExam.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }
