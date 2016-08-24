@@ -215,6 +215,12 @@ public class TimetableEditActivity extends AppCompatActivity {
 
     private void handleDeleteAction() {
         TimetableUtilsKt.completelyDeleteTimetable(this, mTimetable.getId());
+
+        int highestId = TimetableUtilsKt.getHighestTimetableId(this);
+        Timetable newCurrentTimetable = TimetableUtilsKt.getTimetableWithId(this, highestId);
+
+        ((TimetableApplication) getApplication()).setCurrentTimetable(newCurrentTimetable);
+
         setResult(Activity.RESULT_OK);
         finish();
     }
