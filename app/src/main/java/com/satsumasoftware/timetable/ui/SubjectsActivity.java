@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 
@@ -36,7 +36,7 @@ public class SubjectsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mSubjects = SubjectUtilsKt.getSubjects(this);
+        mSubjects = SubjectUtils.getSubjects(this);
         sortList();
 
         mAdapter = new SubjectsAdapter(this, mSubjects);
@@ -68,7 +68,7 @@ public class SubjectsActivity extends BaseActivity {
     private void refreshList() {
         // change the list itself instead of reassigning so we can do notifyDataSetChanged()
         mSubjects.clear();
-        mSubjects.addAll(SubjectUtilsKt.getSubjects(this));
+        mSubjects.addAll(SubjectUtils.getSubjects(this));
         sortList();
         mAdapter.notifyDataSetChanged();
     }

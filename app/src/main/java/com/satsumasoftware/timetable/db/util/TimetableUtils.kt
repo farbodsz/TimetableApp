@@ -91,7 +91,7 @@ fun completelyDeleteTimetable(context: Context, timetableId: Int) {
     deleteTimetable(context, timetableId)
 
     for (subject in getSubjectsForTimetable(context, timetableId)) {
-        completelyDeleteSubject(context, subject)
+        SubjectUtils.completelyDeleteSubject(context, subject)
     }
 }
 

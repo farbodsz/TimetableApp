@@ -17,7 +17,7 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -70,7 +70,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
         Class cls = ClassUtils.getClassWithId(this, mAssignment.getClassId());
         assert cls != null;
-        Subject subject = SubjectUtilsKt.getSubjectWithId(this, cls.getSubjectId());
+        Subject subject = SubjectUtils.getSubjectWithId(this, cls.getSubjectId());
         assert subject != null;
         getSupportActionBar().setSubtitle(subject.getName());
 

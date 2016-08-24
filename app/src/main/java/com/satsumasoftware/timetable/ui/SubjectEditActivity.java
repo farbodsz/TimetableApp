@@ -20,7 +20,7 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -167,14 +167,14 @@ public class SubjectEditActivity extends AppCompatActivity {
             Timetable currentTimetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
             assert currentTimetable != null;
 
-            mSubject = new Subject(SubjectUtilsKt.getHighestSubjectId(this) + 1,
+            mSubject = new Subject(SubjectUtils.getHighestSubjectId(this) + 1,
                     currentTimetable.getId(), newName, mColor.getId());
-            SubjectUtilsKt.addSubject(this, mSubject);
+            SubjectUtils.addSubject(this, mSubject);
 
         } else {
             mSubject.setName(newName);
             mSubject.setColorId(mColor.getId());
-            SubjectUtilsKt.replaceSubject(this, mSubject.getId(), mSubject);
+            SubjectUtils.replaceSubject(this, mSubject.getId(), mSubject);
         }
 
         Intent intent = new Intent();
@@ -184,7 +184,7 @@ public class SubjectEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        SubjectUtilsKt.completelyDeleteSubject(this, mSubject);
+        SubjectUtils.completelyDeleteSubject(this, mSubject);
         setResult(Activity.RESULT_OK);
         finish();
     }

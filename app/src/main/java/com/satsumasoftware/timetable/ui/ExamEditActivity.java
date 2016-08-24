@@ -30,7 +30,7 @@ import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ExamUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -118,7 +118,7 @@ public class ExamEditActivity extends AppCompatActivity {
 
         mSubjectText = (TextView) findViewById(R.id.textView_subject);
         if (!mIsNew) {
-            mSubject = SubjectUtilsKt.getSubjectWithId(this, mExam.getSubjectId());
+            mSubject = SubjectUtils.getSubjectWithId(this, mExam.getSubjectId());
             updateLinkedSubject();
         }
         mSubjectText.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +126,7 @@ public class ExamEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
-                final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(ExamEditActivity.this);
+                final ArrayList<Subject> subjects = SubjectUtils.getSubjects(ExamEditActivity.this);
 
                 SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
                 adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
