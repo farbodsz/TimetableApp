@@ -28,6 +28,8 @@ import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ScheduleActivity extends BaseActivity {
 
@@ -115,6 +117,7 @@ public class ScheduleActivity extends BaseActivity {
         if (requestCode == REQUEST_CODE_CLASS_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 setupLayout();
+                goToNow();
             }
         }
     }

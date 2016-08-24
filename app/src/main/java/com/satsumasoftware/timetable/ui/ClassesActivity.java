@@ -46,7 +46,6 @@ public class ClassesActivity extends BaseActivity {
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(ClassesActivity.this, ClassEditActivity.class);
                 intent.putExtra(ClassEditActivity.EXTRA_CLASS, mClasses.get(position));
-                intent.putExtra(ClassEditActivity.EXTRA_LIST_POS, position);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
             }
         });
