@@ -30,6 +30,8 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
         db.execSQL(ClassTimesSchema.SQL_CREATE);
         db.execSQL(ExamsSchema.SQL_CREATE);
         db.execSQL(SubjectsSchema.SQL_CREATE);
+        db.execSQL(TermsSchema.SQL_CREATE);
+        db.execSQL(TimetablesSchema.SQL_CREATE);
     }
 
     @Override
@@ -40,6 +42,8 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
         db.execSQL(ClassTimesSchema.SQL_DELETE);
         db.execSQL(ExamsSchema.SQL_DELETE);
         db.execSQL(SubjectsSchema.SQL_DELETE);
+        db.execSQL(TermsSchema.SQL_DELETE);
+        db.execSQL(TimetablesSchema.SQL_DELETE);
         onCreate(db);
     }
 
