@@ -43,7 +43,7 @@
 
     <string name="property_start_date">Start date</string>
     <string name="property_end_date">End date</string>
-    <string name="message_first_timetable_required">You need to have created at least one timetable to use the functionality of this app.</string>
+    <string name="message_first_timetable_required">You need to have at least one timetable to use the functionality of this app.</string>
 
     <string name="property_subject">Subject</string>
     <string name="property_room">Room</string>

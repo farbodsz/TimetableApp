@@ -214,6 +214,13 @@ public class TimetableEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
+        if (TimetableUtilsKt.getTimetables(this).size() == 1) {
+            // there needs to be at least one timetable for the app to work
+            Snackbar.make(findViewById(R.id.rootView),
+                    R.string.message_first_timetable_required, Snackbar.LENGTH_SHORT);
+            return;
+        }
+
         TimetableUtilsKt.completelyDeleteTimetable(this, mTimetable.getId());
 
         int highestId = TimetableUtilsKt.getHighestTimetableId(this);
