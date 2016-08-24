@@ -110,10 +110,20 @@ class ExamUtils {
         @JvmStatic fun getHighestExamId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
-                    ExamsSchema.TABLE_NAME, null, null, null, null, null, null)
-            val count = cursor.count
+                    ExamsSchema.TABLE_NAME,
+                    arrayOf(ExamsSchema._ID),
+                    null,
+                    null,
+                    null,
+                    null,
+                    "${ExamsSchema._ID} DESC")
+            if (cursor.count == 0) {
+                return 0
+            }
+            cursor.moveToFirst()
+            val highestId = cursor.getInt(cursor.getColumnIndex(ExamsSchema._ID))
             cursor.close()
-            return count
+            return highestId
         }
 
     }

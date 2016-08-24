@@ -83,10 +83,20 @@ class TimetableUtils {
         @JvmStatic fun getHighestTimetableId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
-                    TimetablesSchema.TABLE_NAME, null, null, null, null, null, null)
-            val count = cursor.count
+                    TimetablesSchema.TABLE_NAME,
+                    arrayOf(TimetablesSchema._ID),
+                    null,
+                    null,
+                    null,
+                    null,
+                    "${TimetablesSchema._ID} DESC")
+            if (cursor.count == 0) {
+                return 0
+            }
+            cursor.moveToFirst()
+            val highestId = cursor.getInt(cursor.getColumnIndex(TimetablesSchema._ID))
             cursor.close()
-            return count
+            return highestId
         }
 
         @JvmStatic fun completelyDeleteTimetable(context: Context, timetableId: Int) {

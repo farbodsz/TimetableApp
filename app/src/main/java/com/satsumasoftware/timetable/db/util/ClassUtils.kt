@@ -155,10 +155,20 @@ class ClassUtils {
         @JvmStatic fun getHighestClassId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
-                    ClassesSchema.TABLE_NAME, null, null, null, null, null, null)
-            val count = cursor.count
+                    ClassesSchema.TABLE_NAME,
+                    arrayOf(ClassesSchema._ID),
+                    null,
+                    null,
+                    null,
+                    null,
+                    "${ClassesSchema._ID} DESC")
+            if (cursor.count == 0) {
+                return 0
+            }
+            cursor.moveToFirst()
+            val highestId = cursor.getInt(cursor.getColumnIndex(ClassesSchema._ID))
             cursor.close()
-            return count
+            return highestId
         }
 
         @JvmStatic fun addClass(context: Context, cls: Class) {
@@ -191,10 +201,20 @@ class ClassUtils {
         @JvmStatic fun getHighestClassDetailId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
-                    ClassDetailsSchema.TABLE_NAME, null, null, null, null, null, null)
-            val count = cursor.count
+                    ClassDetailsSchema.TABLE_NAME,
+                    arrayOf(ClassDetailsSchema._ID),
+                    null,
+                    null,
+                    null,
+                    null,
+                    "${ClassDetailsSchema._ID} DESC")
+            if (cursor.count == 0) {
+                return 0
+            }
+            cursor.moveToFirst()
+            val highestId = cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema._ID))
             cursor.close()
-            return count
+            return highestId
         }
 
         @JvmStatic fun addClassDetail(context: Context, classDetail: ClassDetail) {
@@ -252,10 +272,20 @@ class ClassUtils {
         @JvmStatic fun getHighestClassTimeId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
-                    ClassTimesSchema.TABLE_NAME, null, null, null, null, null, null)
-            val count = cursor.count
+                    ClassTimesSchema.TABLE_NAME,
+                    arrayOf(ClassTimesSchema._ID),
+                    null,
+                    null,
+                    null,
+                    null,
+                    "${ClassTimesSchema._ID} DESC")
+            if (cursor.count == 0) {
+                return 0
+            }
+            cursor.moveToFirst()
+            val highestId = cursor.getInt(cursor.getColumnIndex(ClassTimesSchema._ID))
             cursor.close()
-            return count
+            return highestId
         }
 
         @JvmStatic fun addClassTime(context: Context, classTime: ClassTime) {

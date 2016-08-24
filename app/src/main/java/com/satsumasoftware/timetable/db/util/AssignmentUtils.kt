@@ -109,10 +109,20 @@ class AssignmentUtils {
         @JvmStatic fun getHighestAssignmentId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
-                    AssignmentsSchema.TABLE_NAME, null, null, null, null, null, null)
-            val count = cursor.count
+                    AssignmentsSchema.TABLE_NAME,
+                    arrayOf(AssignmentsSchema._ID),
+                    null,
+                    null,
+                    null,
+                    null,
+                    "${AssignmentsSchema._ID} DESC")
+            if (cursor.count == 0) {
+                return 0
+            }
+            cursor.moveToFirst()
+            val highestId = cursor.getInt(cursor.getColumnIndex(AssignmentsSchema._ID))
             cursor.close()
-            return count
+            return highestId
         }
 
     }

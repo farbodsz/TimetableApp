@@ -100,10 +100,20 @@ class SubjectUtils {
         @JvmStatic fun getHighestSubjectId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
-                    SubjectsSchema.TABLE_NAME, null, null, null, null, null, null)
-            val count = cursor.count
+                    SubjectsSchema.TABLE_NAME,
+                    arrayOf(SubjectsSchema._ID),
+                    null,
+                    null,
+                    null,
+                    null,
+                    "${SubjectsSchema._ID} DESC")
+            if (cursor.count == 0) {
+                return 0
+            }
+            cursor.moveToFirst()
+            val highestId = cursor.getInt(cursor.getColumnIndex(SubjectsSchema._ID))
             cursor.close()
-            return count
+            return highestId
         }
 
     }
