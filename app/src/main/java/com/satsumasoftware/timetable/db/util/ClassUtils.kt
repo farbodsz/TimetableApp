@@ -290,8 +290,8 @@ fun completelyDeleteClass(context: Context, cls: Class) {
 
     deleteClass(context, cls.id)
 
-    for (assignment in getAssignmentsForClass(context, cls.id)) {
-        deleteAssignment(context, assignment.id)
+    for (assignment in AssignmentUtils.getAssignmentsForClass(context, cls.id)) {
+        AssignmentUtils.deleteAssignment(context, assignment.id)
     }
 
     for (classDetailId in cls.classDetailIds) {

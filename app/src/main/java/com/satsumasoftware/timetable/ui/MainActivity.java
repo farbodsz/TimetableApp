@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
+import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.ExamUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Assignment> assignments = new ArrayList<>();
         LocalDate now = LocalDate.now();
 
-        for (Assignment assignment : AssignmentUtilsKt.getAssignments(this)) {
+        for (Assignment assignment : AssignmentUtils.getAssignments(this)) {
             LocalDate dueDate = assignment.getDueDate();
 
             boolean isOverdue = dueDate.isBefore(now) && assignment.getCompletionProgress() != 100;

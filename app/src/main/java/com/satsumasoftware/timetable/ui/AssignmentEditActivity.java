@@ -22,7 +22,7 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
+import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
@@ -245,7 +245,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? AssignmentUtilsKt.getHighestAssignmentId(this) + 1 : mAssignment.getId();
+        int id = mIsNew ? AssignmentUtils.getHighestAssignmentId(this) + 1 : mAssignment.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
@@ -260,9 +260,9 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 mCompletionProgess);
 
         if (mIsNew) {
-            AssignmentUtilsKt.addAssignment(this, mAssignment);
+            AssignmentUtils.addAssignment(this, mAssignment);
         } else {
-            AssignmentUtilsKt.replaceAssignment(this, mAssignment.getId(), mAssignment);
+            AssignmentUtils.replaceAssignment(this, mAssignment.getId(), mAssignment);
         }
 
         Intent intent = new Intent();
@@ -271,7 +271,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        AssignmentUtilsKt.deleteAssignment(this, mAssignment.getId());
+        AssignmentUtils.deleteAssignment(this, mAssignment.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }

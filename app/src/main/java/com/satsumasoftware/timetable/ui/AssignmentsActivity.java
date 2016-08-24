@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.DateUtilsKt;
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
+import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 
@@ -46,7 +46,7 @@ public class AssignmentsActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         mHeaders = new ArrayList<>();
-        mAssignments = AssignmentUtilsKt.getAssignments(this);
+        mAssignments = AssignmentUtils.getAssignments(this);
         sortList();
 
         mAdapter = new AssignmentsAdapter(this, mHeaders, mAssignments);
@@ -78,7 +78,7 @@ public class AssignmentsActivity extends BaseActivity {
 
     private void refreshList() {
         mAssignments.clear();
-        mAssignments.addAll(AssignmentUtilsKt.getAssignments(this));
+        mAssignments.addAll(AssignmentUtils.getAssignments(this));
         sortList();
         mAdapter.notifyDataSetChanged();
     }
