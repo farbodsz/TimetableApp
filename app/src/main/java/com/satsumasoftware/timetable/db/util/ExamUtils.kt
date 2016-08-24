@@ -1,8 +1,10 @@
 package com.satsumasoftware.timetable.db.util
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
+import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.ExamsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.framework.Exam
@@ -10,11 +12,18 @@ import java.util.*
 
 const val LOG_TAG_EXAM = "ExamUtils"
 
-fun getExams(context: Context): ArrayList<Exam> {
+fun getExams(activity: Activity): ArrayList<Exam> {
     val exams = ArrayList<Exam>()
-    val dbHelper = TimetableDbHelper.getInstance(context)
+
+    val timetable = (activity.application as TimetableApplication).currentTimetable!!
+
+    val dbHelper = TimetableDbHelper.getInstance(activity)
     val cursor = dbHelper.readableDatabase.query(
-            ExamsSchema.TABLE_NAME, null, null, null, null, null, null)
+            ExamsSchema.TABLE_NAME,
+            null,
+            "${ExamsSchema.COL_TIMETABLE_ID}=?",
+            arrayOf(timetable.id.toString()),
+            null, null, null)
     cursor.moveToFirst()
     while (!cursor.isAfterLast) {
         exams.add(Exam(cursor))
@@ -61,6 +70,7 @@ fun addExam(context: Context, exam: Exam) {
     val values = ContentValues()
     with(values) {
         put(ExamsSchema._ID, exam.id)
+        put(ExamsSchema.COL_TIMETABLE_ID, exam.timetableId)
         put(ExamsSchema.COL_SUBJECT_ID, exam.subjectId)
         put(ExamsSchema.COL_MODULE, exam.moduleName)
         put(ExamsSchema.COL_DATE_DAY_OF_MONTH, exam.date.dayOfMonth)

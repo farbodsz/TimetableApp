@@ -6,11 +6,12 @@ import android.os.Parcelable
 import com.satsumasoftware.timetable.db.AssignmentsSchema
 import org.threeten.bp.LocalDate
 
-class Assignment(val id: Int, val classId: Int, val title: String, val detail: String,
-                 val dueDate: LocalDate, var completionProgress: Int) : Parcelable {
+class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title: String,
+                 val detail: String, val dueDate: LocalDate, var completionProgress: Int) : Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(AssignmentsSchema._ID)),
+            cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_TIMETABLE_ID)),
             cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_CLASS_ID)),
             cursor.getString(cursor.getColumnIndex(AssignmentsSchema.COL_TITLE)),
             cursor.getString(cursor.getColumnIndex(AssignmentsSchema.COL_DETAIL)),
@@ -21,6 +22,7 @@ class Assignment(val id: Int, val classId: Int, val title: String, val detail: S
             cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_COMPLETION_PROGRESS)))
 
     constructor(source: Parcel): this(
+            source.readInt(),
             source.readInt(),
             source.readInt(),
             source.readString(),
@@ -34,6 +36,7 @@ class Assignment(val id: Int, val classId: Int, val title: String, val detail: S
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeInt(id)
+        dest?.writeInt(timetableId)
         dest?.writeInt(classId)
         dest?.writeString(title)
         dest?.writeString(detail)

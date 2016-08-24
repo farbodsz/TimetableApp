@@ -5,19 +5,22 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.SubjectsSchema
 
-class Subject(val id: Int, var name: String, var colorId: Int) : Parcelable {
+class Subject(val id: Int, val timetableId: Int, var name: String, var colorId: Int) : Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(SubjectsSchema._ID)),
+            cursor.getInt(cursor.getColumnIndex(SubjectsSchema.COL_TIMETABLE_ID)),
             cursor.getString(cursor.getColumnIndex(SubjectsSchema.COL_NAME)),
             cursor.getInt(cursor.getColumnIndex(SubjectsSchema.COL_COLOR_ID)))
 
-    constructor(source: Parcel): this(source.readInt(), source.readString(), source.readInt())
+    constructor(source: Parcel) : this(
+            source.readInt(), source.readInt(), source.readString(), source.readInt())
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeInt(id)
+        dest?.writeInt(timetableId)
         dest?.writeString(name)
         dest?.writeInt(colorId)
     }

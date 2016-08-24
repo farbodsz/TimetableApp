@@ -2,7 +2,6 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -19,8 +18,6 @@ import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
-import com.satsumasoftware.timetable.db.ClassTimesSchema;
-import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -72,7 +69,7 @@ public class ScheduleActivity extends BaseActivity {
         mPagerAdapter.removeAllViews(mViewPager);
 
         for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
-            final ArrayList<ClassTime> classTimes = getClassTimes(dayOfWeek);
+            final ArrayList<ClassTime> classTimes = ClassUtilsKt.getClassTimesForDay(this, dayOfWeek);
 
             if (classTimes.isEmpty()) {
                 View placeholder = LayoutInflater.from(this).inflate(R.layout.placeholder_schedule, null);
@@ -105,36 +102,6 @@ public class ScheduleActivity extends BaseActivity {
 
             mPagerAdapter.addViewWithTitle(recyclerView, dayOfWeek.toString());
         }
-    }
-
-    private ArrayList<ClassTime> getClassTimes(DayOfWeek dayOfWeek) {
-        ArrayList<ClassTime> classTimes = new ArrayList<>();
-        TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
-
-        Cursor cursor = dbHelper.getReadableDatabase().query(
-                ClassTimesSchema.TABLE_NAME,
-                null,
-                ClassTimesSchema.COL_DAY + "=?",
-                new String[] {String.valueOf(dayOfWeek.getValue())},
-                null, null, null);
-        if (cursor.getCount() == 0) {
-            return classTimes; // the empty ArrayList
-        }
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            classTimes.add(new ClassTime(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
-
-        Collections.sort(classTimes, new Comparator<ClassTime>() {
-            @Override
-            public int compare(ClassTime ct1, ClassTime ct2) {
-                return ct1.getStartTime().compareTo(ct2.getStartTime());
-            }
-        });
-
-        return classTimes;
     }
 
     private void goToNow() {

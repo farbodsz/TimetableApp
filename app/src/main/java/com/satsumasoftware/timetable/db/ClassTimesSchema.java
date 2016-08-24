@@ -7,6 +7,7 @@ import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
 public final class ClassTimesSchema implements BaseColumns {
 
     public static final String TABLE_NAME = "class_times";
+    public static final String COL_TIMETABLE_ID = "timetable_id";
     public static final String COL_CLASS_DETAIL_ID = "class_detail_id";
     public static final String COL_DAY = "day";
     public static final String COL_START_TIME_HRS = "start_time_hrs";
@@ -16,6 +17,7 @@ public final class ClassTimesSchema implements BaseColumns {
 
     protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
+            COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_CLASS_DETAIL_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_DAY + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_START_TIME_HRS + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +

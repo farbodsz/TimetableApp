@@ -1,8 +1,10 @@
 package com.satsumasoftware.timetable.db.util
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
+import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.ClassDetailsSchema
 import com.satsumasoftware.timetable.db.ClassTimesSchema
 import com.satsumasoftware.timetable.db.ClassesSchema
@@ -10,18 +12,26 @@ import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime
+import org.threeten.bp.DayOfWeek
 import java.util.*
 
 const val LOG_TAG_CLASS = "ClassUtils"
 
-fun getClasses(context: Context): ArrayList<Class> {
+fun getClasses(activity: Activity): ArrayList<Class> {
     val classes = ArrayList<Class>()
-    val dbHelper = TimetableDbHelper.getInstance(context)
+
+    val timetable = (activity.application as TimetableApplication).currentTimetable!!
+
+    val dbHelper = TimetableDbHelper.getInstance(activity)
     val cursor = dbHelper.readableDatabase.query(
-            ClassesSchema.TABLE_NAME, null, null, null, null, null, null)
+            ClassesSchema.TABLE_NAME,
+            null,
+            "${ClassesSchema.COL_TIMETABLE_ID}=?",
+            arrayOf(timetable.id.toString()),
+            null, null, null)
     cursor.moveToFirst()
     while (!cursor.isAfterLast) {
-        classes.add(Class(context, cursor))
+        classes.add(Class(activity, cursor))
         cursor.moveToNext()
     }
     cursor.close()
@@ -151,6 +161,7 @@ fun addClass(context: Context, cls: Class) {
     val values = ContentValues()
     with(values) {
         put(ClassesSchema._ID, cls.id)
+        put(ClassesSchema.COL_TIMETABLE_ID, cls.timetableId)
         put(ClassesSchema.COL_SUBJECT_ID, cls.subjectId)
     }
 
@@ -211,6 +222,28 @@ fun replaceClassDetail(context: Context, oldClassDetailId: Int, newClassDetail: 
     addClassDetail(context, newClassDetail)
 }
 
+fun getClassTimesForDay(activity: Activity, dayOfWeek: DayOfWeek): ArrayList<ClassTime> {
+    val classTimes = ArrayList<ClassTime>()
+
+    val timetable = (activity.application as TimetableApplication).currentTimetable!!
+
+    val dbHelper = TimetableDbHelper.getInstance(activity)
+    val cursor = dbHelper.readableDatabase.query(
+            ClassTimesSchema.TABLE_NAME,
+            null,
+            "${ClassTimesSchema.COL_TIMETABLE_ID}=? AND ${ClassTimesSchema.COL_DAY}=?",
+            arrayOf(timetable.id.toString(), dayOfWeek.value.toString()),
+            null, null, null)
+    cursor.moveToFirst()
+    while (!cursor.isAfterLast) {
+        classTimes.add(ClassTime(cursor))
+        cursor.moveToNext()
+    }
+    cursor.close()
+
+    return classTimes
+}
+
 fun getHighestClassTimeId(context: Context): Int {
     val db = TimetableDbHelper.getInstance(context).readableDatabase
     val cursor = db.query(
@@ -224,6 +257,7 @@ fun addClassTime(context: Context, classTime: ClassTime) {
     val values = ContentValues()
     with(values) {
         put(ClassTimesSchema._ID, classTime.id)
+        put(ClassTimesSchema.COL_TIMETABLE_ID, classTime.timetableId)
         put(ClassTimesSchema.COL_CLASS_DETAIL_ID, classTime.classDetailId)
         put(ClassTimesSchema.COL_DAY, classTime.day.value)
         put(ClassTimesSchema.COL_START_TIME_HRS, classTime.startTime.hour)

@@ -1,22 +1,29 @@
 package com.satsumasoftware.timetable.db.util
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
-import com.satsumasoftware.timetable.db.ClassesSchema
+import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.SubjectsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.Subject
 import java.util.*
 
 const val LOG_TAG_SUBJECT = "SubjectUtils"
 
-fun getSubjects(context: Context): ArrayList<Subject> {
+fun getSubjects(activity: Activity): ArrayList<Subject> {
     val subjects = ArrayList<Subject>()
-    val dbHelper = TimetableDbHelper.getInstance(context)
+
+    val timetable = (activity.application as TimetableApplication).currentTimetable!!
+
+    val dbHelper = TimetableDbHelper.getInstance(activity)
     val cursor = dbHelper.readableDatabase.query(
-            SubjectsSchema.TABLE_NAME, null, null, null, null, null, null)
+            SubjectsSchema.TABLE_NAME,
+            null,
+            "${SubjectsSchema.COL_TIMETABLE_ID}=?",
+            arrayOf(timetable.id.toString()),
+            null, null, null)
     cursor.moveToFirst()
     while (!cursor.isAfterLast) {
         subjects.add(Subject(cursor))
@@ -48,6 +55,7 @@ fun addSubject(context: Context, subject: Subject) {
     val values = ContentValues()
     with(values) {
         put(SubjectsSchema._ID, subject.id)
+        put(SubjectsSchema.COL_TIMETABLE_ID, subject.timetableId)
         put(SubjectsSchema.COL_NAME, subject.name)
         put(SubjectsSchema.COL_COLOR_ID, subject.colorId)
     }

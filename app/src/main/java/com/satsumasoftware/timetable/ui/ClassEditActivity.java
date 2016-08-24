@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
+import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
@@ -33,6 +34,7 @@ import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
+import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ClassTimesAdapter;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 
@@ -115,7 +117,7 @@ public class ClassEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
 
-                final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(getBaseContext());
+                final ArrayList<Subject> subjects = SubjectUtilsKt.getSubjects(ClassEditActivity.this);
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
                     public int compare(Subject subject, Subject t1) {
@@ -466,7 +468,10 @@ public class ClassEditActivity extends AppCompatActivity {
             ClassUtilsKt.replaceClassDetail(this, classDetailId, classDetail);
         }
 
-        mClass = new Class(classId, mSubject.getId(), classDetailIds);
+        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert timetable != null;
+
+        mClass = new Class(classId, timetable.getId(), mSubject.getId(), classDetailIds);
 
         if (mIsNew) {
             ClassUtilsKt.addClass(this, mClass);

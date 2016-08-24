@@ -1,21 +1,24 @@
 package com.satsumasoftware.timetable.ui;
 
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.ClassTimesSchema;
-import com.satsumasoftware.timetable.db.TimetableDbHelper;
+import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.AssignmentUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
 import com.satsumasoftware.timetable.db.util.ExamUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Exam;
+import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.HomeCardsAdapter;
 import com.satsumasoftware.timetable.ui.card.AssignmentsCard;
 import com.satsumasoftware.timetable.ui.card.ClassesCard;
@@ -40,6 +43,12 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Timetable currentTimetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert currentTimetable != null;
+
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setSubtitle(currentTimetable.getDisplayedName());
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -57,24 +66,17 @@ public class MainActivity extends BaseActivity {
     }
 
     private ArrayList<ClassTime> getClassesToday() {
-        ArrayList<ClassTime> classTimes = new ArrayList<>();
         DayOfWeek today = LocalDate.now().getDayOfWeek();
 
-        TimetableDbHelper dbHelper = TimetableDbHelper.getInstance(this);
-        Cursor cursor = dbHelper.getReadableDatabase().query(
-                ClassTimesSchema.TABLE_NAME,
-                null,
-                ClassTimesSchema.COL_DAY + "=?",
-                new String[] {String.valueOf(today.getValue())},
-                null,
-                null,
-                ClassTimesSchema.COL_START_TIME_HRS);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            classTimes.add(new ClassTime(cursor));
-            cursor.moveToNext();
-        }
-        cursor.close();
+        ArrayList<ClassTime> classTimes = ClassUtilsKt.getClassTimesForDay(this, today);
+
+        Collections.sort(classTimes, new Comparator<ClassTime>() {
+            @Override
+            public int compare(ClassTime ct1, ClassTime ct2) {
+                return ct1.getStartTime().compareTo(ct2.getStartTime());
+            }
+        });
+
         return classTimes;
     }
 
@@ -127,6 +129,25 @@ public class MainActivity extends BaseActivity {
         });
 
         return exams;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_manage_timetables:
+                Intent intent = new Intent(this, TimetablesActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

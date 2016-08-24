@@ -7,6 +7,7 @@ import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
 public final class AssignmentsSchema implements BaseColumns {
 
     public static final String TABLE_NAME = "assignments";
+    public static final String COL_TIMETABLE_ID = "timetable_id";
     public static final String COL_CLASS_ID = "class_id";
     public static final String COL_TITLE = "title";
     public static final String COL_DETAIL = "detail";
@@ -17,6 +18,7 @@ public final class AssignmentsSchema implements BaseColumns {
 
     protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
+            COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_CLASS_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_TITLE + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_DETAIL + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +

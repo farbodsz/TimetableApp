@@ -13,14 +13,19 @@
         android:theme="@style/Timetable">
 
         <activity
-            android:name=".ui.MainActivity"
-            android:label="@string/title_activity_home"
-            android:theme="@style/Timetable.Home">
+            android:name=".ui.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Timetable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Timetable.Home" />
 
         <activity
             android:name=".ui.ScheduleActivity"
@@ -70,6 +75,15 @@
         <activity
             android:name=".ui.SubjectEditActivity"
             android:theme="@style/Timetable"/>
+
+        <activity
+            android:name=".ui.TimetablesActivity"
+            android:label="@string/title_activity_timetables"
+            android:theme="@style/Timetable"/>
+
+        <activity
+            android:name=".ui.TimetableEditActivity"
+            android:theme="@style/Timetable.EditItem"/>
 
     </application>
 

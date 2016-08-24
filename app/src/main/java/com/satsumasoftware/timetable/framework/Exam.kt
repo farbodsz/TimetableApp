@@ -8,12 +8,13 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 
-class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: LocalDate,
-           val startTime: LocalTime, val duration: Int, val seat: String, val room: String,
-           val resit: Boolean) : Parcelable {
+class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName: String,
+           val date: LocalDate, val startTime: LocalTime, val duration: Int, val seat: String,
+           val room: String, val resit: Boolean) : Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(ExamsSchema._ID)),
+            cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_TIMETABLE_ID)),
             cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_SUBJECT_ID)),
             cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_MODULE)),
             LocalDate.of(
@@ -29,6 +30,7 @@ class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: Lo
             cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_IS_RESIT)) == 1)
 
     constructor(source: Parcel): this(
+            source.readInt(),
             source.readInt(),
             source.readInt(),
             source.readString(),
@@ -51,6 +53,7 @@ class Exam(val id: Int, val subjectId: Int, val moduleName: String, val date: Lo
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeInt(id)
+        dest?.writeInt(timetableId)
         dest?.writeInt(subjectId)
         dest?.writeString(moduleName)
         dest?.writeSerializable(date)
