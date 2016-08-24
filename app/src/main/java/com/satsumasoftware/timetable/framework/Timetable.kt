@@ -16,11 +16,11 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate,
             LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_YEAR))),
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_DAY_OF_MONTH))),
             LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_YEAR))))
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH))))
 
     fun hasName() = name.trim().length != 0
 
