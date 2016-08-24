@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class TimetablesActivity extends BaseActivity {
+public class TimetablesActivity extends AppCompatActivity {
 
     protected static final int REQUEST_CODE_TIMETABLE_EDIT = 1;
 
@@ -109,26 +108,6 @@ public class TimetablesActivity extends BaseActivity {
                 refreshList();
             }
         }
-    }
-
-    @Override
-    protected Toolbar getSelfToolbar() {
-        return (Toolbar) findViewById(R.id.toolbar);
-    }
-
-    @Override
-    protected DrawerLayout getSelfDrawerLayout() {
-        return (DrawerLayout) findViewById(R.id.drawerLayout);
-    }
-
-    @Override
-    protected int getSelfNavDrawerItem() {
-        return super.getSelfNavDrawerItem();
-    }
-
-    @Override
-    protected NavigationView getSelfNavigationView() {
-        return (NavigationView) findViewById(R.id.navigationView);
     }
 
 }
