@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.TimetablesSchema
 import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 class Timetable(val id: Int, val name: String, val startDate: LocalDate,
                 val endDate: LocalDate) : Parcelable {
@@ -22,6 +23,11 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate,
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_YEAR))))
 
     fun hasName() = name.trim().length != 0
+
+    fun makeDefaultName(): String {
+        val formatter = DateTimeFormatter.ofPattern("MMM uuuu")
+        return "${startDate.format(formatter)} - ${endDate.format(formatter)}"
+    }
 
     constructor(source: Parcel) : this(
             source.readInt(),
