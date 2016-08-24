@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.ClassesSchema
-import com.satsumasoftware.timetable.db.util.getClassDetailIds
+import com.satsumasoftware.timetable.db.util.ClassUtils
 import java.util.*
 
 class Class(val id: Int, val timetableId: Int, val subjectId: Int,
@@ -15,7 +15,7 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             cursor.getInt(cursor.getColumnIndex(ClassesSchema._ID)),
             cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_TIMETABLE_ID)),
             cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_SUBJECT_ID)),
-            getClassDetailIds(context, cursor.getInt(cursor.getColumnIndex(ClassesSchema._ID))))
+            ClassUtils.getClassDetailIds(context, cursor.getInt(cursor.getColumnIndex(ClassesSchema._ID))))
 
     constructor(source: Parcel) : this(
             source.readInt(),

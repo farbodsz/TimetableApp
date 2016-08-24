@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -37,7 +37,7 @@ public class ClassesActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mClasses = ClassUtilsKt.getClasses(this);
+        mClasses = ClassUtils.getClasses(this);
         sortList();
 
         mAdapter = new ClassesAdapter(this, mClasses);
@@ -67,7 +67,7 @@ public class ClassesActivity extends BaseActivity {
 
     private void refreshList() {
         mClasses.clear();
-        mClasses.addAll(ClassUtilsKt.getClasses(this));
+        mClasses.addAll(ClassUtils.getClasses(this));
         sortList();
         mAdapter.notifyDataSetChanged();
     }

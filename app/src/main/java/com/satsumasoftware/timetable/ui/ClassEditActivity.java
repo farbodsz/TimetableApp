@@ -27,7 +27,7 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -168,7 +168,7 @@ public class ClassEditActivity extends AppCompatActivity {
             updateLinkedSubject();
 
             ArrayList<ClassDetail> classDetails =
-                    ClassUtilsKt.getClassDetailsFromIds(this, mClass.getClassDetailIds());
+                    ClassUtils.getClassDetailsFromIds(this, mClass.getClassDetailIds());
             for (ClassDetail classDetail : classDetails) {
                 addDetailTab(classDetail, false);
             }
@@ -194,7 +194,7 @@ public class ClassEditActivity extends AppCompatActivity {
         final int pagerCount = mPagerAdapter.getCount();
 
         final int classDetailId = isNewDetail ?
-                ClassUtilsKt.getHighestClassDetailId(this) + mNewDetailIdCount :
+                ClassUtils.getHighestClassDetailId(this) + mNewDetailIdCount :
                 classDetail.getId();
         mClassDetailIds.add(classDetailId);
 
@@ -216,7 +216,7 @@ public class ClassEditActivity extends AppCompatActivity {
         }
 
         final ArrayList<ClassTime> classTimes = isNewDetail ? new ArrayList<ClassTime>() :
-                ClassUtilsKt.getClassTimesFromIds(this, classDetail.getClassTimeIds());
+                ClassUtils.getClassTimesFromIds(this, classDetail.getClassTimeIds());
         sortClassTimes(classTimes);
         mClassTimes.add(classTimes);
 
@@ -319,16 +319,16 @@ public class ClassEditActivity extends AppCompatActivity {
                     case ClassTimeEditActivity.ACTION_NEW:
                         someTimes.add(classTime);
                         sortClassTimes(someTimes);
-                        ClassUtilsKt.addClassTime(this, classTime);
+                        ClassUtils.addClassTime(this, classTime);
                         break;
                     case ClassTimeEditActivity.ACTION_EDIT:
                         someTimes.set(listPos, classTime);
                         sortClassTimes(someTimes);
-                        ClassUtilsKt.replaceClassTime(this, classTime.getId(), classTime);
+                        ClassUtils.replaceClassTime(this, classTime.getId(), classTime);
                         break;
                     case ClassTimeEditActivity.ACTION_DELETE:
                         someTimes.remove(listPos);
-                        ClassUtilsKt.completelyDeleteClassTime(this, classTime.getId());
+                        ClassUtils.completelyDeleteClassTime(this, classTime.getId());
                         break;
                 }
                 mAdapters.get(tabIndex).notifyDataSetChanged();
@@ -453,7 +453,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
         // now write the data (replace class detail values)
 
-        int classId = mIsNew ? ClassUtilsKt.getHighestClassId(this) + 1 : mClass.getId();
+        int classId = mIsNew ? ClassUtils.getHighestClassId(this) + 1 : mClass.getId();
 
         for (int i = 0; i < rooms.size(); i++) {
             int classDetailId = classDetailIds.get(i);
@@ -465,7 +465,7 @@ public class ClassEditActivity extends AppCompatActivity {
             ClassDetail classDetail =
                     new ClassDetail(classDetailId, classId, room, building, teacher, classTimeIds);
 
-            ClassUtilsKt.replaceClassDetail(this, classDetailId, classDetail);
+            ClassUtils.replaceClassDetail(this, classDetailId, classDetail);
         }
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
@@ -474,9 +474,9 @@ public class ClassEditActivity extends AppCompatActivity {
         mClass = new Class(classId, timetable.getId(), mSubject.getId(), classDetailIds);
 
         if (mIsNew) {
-            ClassUtilsKt.addClass(this, mClass);
+            ClassUtils.addClass(this, mClass);
         } else {
-            ClassUtilsKt.replaceClass(this, mClass.getId(), mClass);
+            ClassUtils.replaceClass(this, mClass.getId(), mClass);
         }
 
         setResult(Activity.RESULT_OK);
@@ -484,10 +484,9 @@ public class ClassEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        ClassUtilsKt.completelyDeleteClass(this, mClass);
+        ClassUtils.completelyDeleteClass(this, mClass);
         setResult(Activity.RESULT_OK);
         finish();
     }
-
 
 }

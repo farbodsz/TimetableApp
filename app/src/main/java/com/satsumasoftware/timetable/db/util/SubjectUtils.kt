@@ -78,8 +78,8 @@ fun completelyDeleteSubject(context: Context, subject: Subject) {
 
     deleteSubject(context, subject.id)
 
-    for (cls in getClassesForSubject(context, subject.id)) {
-        completelyDeleteClass(context, cls)
+    for (cls in ClassUtils.getClassesForSubject(context, subject.id)) {
+        ClassUtils.completelyDeleteClass(context, cls)
     }
 
     for (exam in getExamsForSubject(context, subject.id)) {

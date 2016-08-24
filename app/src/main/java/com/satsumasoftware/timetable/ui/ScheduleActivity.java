@@ -18,7 +18,7 @@ import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -28,8 +28,6 @@ import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class ScheduleActivity extends BaseActivity {
 
@@ -69,7 +67,7 @@ public class ScheduleActivity extends BaseActivity {
         mPagerAdapter.removeAllViews(mViewPager);
 
         for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
-            final ArrayList<ClassTime> classTimes = ClassUtilsKt.getClassTimesForDay(this, dayOfWeek);
+            final ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, dayOfWeek);
 
             if (classTimes.isEmpty()) {
                 View placeholder = LayoutInflater.from(this).inflate(R.layout.placeholder_schedule, null);
@@ -83,9 +81,9 @@ public class ScheduleActivity extends BaseActivity {
                 public void onEntryClick(View view, int position) {
                     ClassTime classTime = classTimes.get(position);
                     ClassDetail classDetail =
-                            ClassUtilsKt.getClassDetailWithId(getBaseContext(), classTime.getClassDetailId());
+                            ClassUtils.getClassDetailWithId(getBaseContext(), classTime.getClassDetailId());
                     Class cls =
-                            ClassUtilsKt.getClassWithId(getBaseContext(), classDetail.getClassId());
+                            ClassUtils.getClassWithId(getBaseContext(), classDetail.getClassId());
 
                     Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
                     intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);

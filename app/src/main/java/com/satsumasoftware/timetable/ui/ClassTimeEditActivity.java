@@ -18,7 +18,7 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsuware.usefulviews.LabelledSpinner;
@@ -219,7 +219,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         int id;
         @Action int actionType;
         if (mIsNewTime) {
-            id = ClassUtilsKt.getHighestClassTimeId(this) + 1;
+            id = ClassUtils.getHighestClassTimeId(this) + 1;
             actionType = ACTION_NEW;
         } else {
             id = mClassTime.getId();

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -47,7 +47,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
                 mContext, color.getPrimaryColorResId(mContext)));
 
         ArrayList<ClassDetail> classDetails =
-                ClassUtilsKt.getClassDetailsFromIds(mContext, cls.getClassDetailIds());
+                ClassUtils.getClassDetailsFromIds(mContext, cls.getClassDetailIds());
 
         StringBuilder builder = new StringBuilder();
 

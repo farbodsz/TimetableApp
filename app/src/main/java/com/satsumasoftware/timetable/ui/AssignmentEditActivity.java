@@ -23,7 +23,7 @@ import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
-import com.satsumasoftware.timetable.db.util.ClassUtilsKt;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtilsKt;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
@@ -97,7 +97,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
 
         mClassText = (TextView) findViewById(R.id.textView_class);
         if (!mIsNew) {
-            mClass = ClassUtilsKt.getClassWithId(this, mAssignment.getClassId());
+            mClass = ClassUtils.getClassWithId(this, mAssignment.getClassId());
             updateLinkedClass();
         }
         mClassText.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +105,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentEditActivity.this);
 
-                final ArrayList<Class> classes = ClassUtilsKt.getClasses(AssignmentEditActivity.this);
+                final ArrayList<Class> classes = ClassUtils.getClasses(AssignmentEditActivity.this);
 
                 ClassesAdapter adapter = new ClassesAdapter(getBaseContext(), classes);
                 adapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
