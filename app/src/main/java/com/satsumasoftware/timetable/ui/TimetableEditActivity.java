@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.TimetableUtilsKt;
+import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.Timetable;
 
 import org.threeten.bp.LocalDate;
@@ -198,13 +198,13 @@ public class TimetableEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? TimetableUtilsKt.getHighestTimetableId(this) + 1 : mTimetable.getId();
+        int id = mIsNew ? TimetableUtils.getHighestTimetableId(this) + 1 : mTimetable.getId();
         mTimetable = new Timetable(id, name, mStartDate, mEndDate);
 
         if (mIsNew) {
-            TimetableUtilsKt.addTimetable(this, mTimetable);
+            TimetableUtils.addTimetable(this, mTimetable);
         } else {
-            TimetableUtilsKt.replaceTimetable(this, mTimetable.getId(), mTimetable);
+            TimetableUtils.replaceTimetable(this, mTimetable.getId(), mTimetable);
         }
 
         ((TimetableApplication) getApplication()).setCurrentTimetable(mTimetable);
@@ -214,17 +214,17 @@ public class TimetableEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        if (TimetableUtilsKt.getTimetables(this).size() == 1) {
+        if (TimetableUtils.getTimetables(this).size() == 1) {
             // there needs to be at least one timetable for the app to work
             Snackbar.make(findViewById(R.id.rootView),
                     R.string.message_first_timetable_required, Snackbar.LENGTH_SHORT);
             return;
         }
 
-        TimetableUtilsKt.completelyDeleteTimetable(this, mTimetable.getId());
+        TimetableUtils.completelyDeleteTimetable(this, mTimetable.getId());
 
-        int highestId = TimetableUtilsKt.getHighestTimetableId(this);
-        Timetable newCurrentTimetable = TimetableUtilsKt.getTimetableWithId(this, highestId);
+        int highestId = TimetableUtils.getHighestTimetableId(this);
+        Timetable newCurrentTimetable = TimetableUtils.getTimetableWithId(this, highestId);
 
         ((TimetableApplication) getApplication()).setCurrentTimetable(newCurrentTimetable);
 
