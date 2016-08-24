@@ -135,6 +135,7 @@ public class MainActivity extends BaseActivity {
             case R.id.action_manage_timetables:
                 Intent intent = new Intent(this, TimetablesActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
 

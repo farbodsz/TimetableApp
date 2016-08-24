@@ -39,6 +39,8 @@ public class TimetablesActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(TimetablesActivity.this, MainActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
