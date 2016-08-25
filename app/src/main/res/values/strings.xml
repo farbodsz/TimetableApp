@@ -104,6 +104,8 @@
     <string name="showing_past_assignments">Showing past assignments</string>
     <string name="showing_past_exams">Showing past exams</string>
 
+    <string name="placeholder_classes">You haven\'t added any classes yet</string>
+
     <string name="choose_class">Select a class</string>
     <string name="choose_color">Pick a color</string>
     <string name="choose_subject">Select a subject</string>

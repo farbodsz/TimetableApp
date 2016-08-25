@@ -10,8 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
@@ -28,6 +30,9 @@ public class ClassesActivity extends BaseActivity {
 
     private ArrayList<Class> mClasses;
     private ClassesAdapter mAdapter;
+
+    private RecyclerView mRecyclerView;
+    private FrameLayout mPlaceholderLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +55,10 @@ public class ClassesActivity extends BaseActivity {
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +68,9 @@ public class ClassesActivity extends BaseActivity {
                 startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
             }
         });
+
+        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
+        refreshPlaceholderStatus();
     }
 
     private void refreshList() {
@@ -70,6 +78,7 @@ public class ClassesActivity extends BaseActivity {
         mClasses.addAll(ClassUtils.getClasses(this));
         sortList();
         mAdapter.notifyDataSetChanged();
+        refreshPlaceholderStatus();
     }
 
     private void sortList() {
@@ -83,6 +92,21 @@ public class ClassesActivity extends BaseActivity {
                 return s1.getName().compareTo(s2.getName());
             }
         });
+    }
+
+    private void refreshPlaceholderStatus() {
+        if (mClasses.isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            mPlaceholderLayout.setVisibility(View.VISIBLE);
+
+            mPlaceholderLayout.removeAllViews();
+            mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
+                    R.drawable.ic_class_black_24dp, R.string.placeholder_classes));
+
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mPlaceholderLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
