@@ -14,11 +14,12 @@
 
     <TextView
         android:id="@+id/textView"
-        android:text="@string/home_card_classes_placeholder"
+        android:text="Some really random but interesting placeholder text"
         android:textSize="20sp"
         android:textColor="@color/mdu_text_black_secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mdu_padding_normal"/>
+        android:gravity="center"
+        android:padding="@dimen/mdu_padding_normal"/>
 
 </LinearLayout>
