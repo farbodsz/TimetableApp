@@ -10,8 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
@@ -27,6 +29,9 @@ public class SubjectsActivity extends BaseActivity {
 
     private ArrayList<Subject> mSubjects;
     private SubjectsAdapter mAdapter;
+
+    private RecyclerView mRecyclerView;
+    private FrameLayout mPlaceholderLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +54,11 @@ public class SubjectsActivity extends BaseActivity {
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +68,9 @@ public class SubjectsActivity extends BaseActivity {
                 startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
             }
         });
+
+        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
+        refreshPlaceholderStatus();
     }
 
     private void refreshList() {
@@ -71,6 +79,7 @@ public class SubjectsActivity extends BaseActivity {
         mSubjects.addAll(SubjectUtils.getSubjects(this));
         sortList();
         mAdapter.notifyDataSetChanged();
+        refreshPlaceholderStatus();
     }
 
     private void sortList() {
@@ -80,6 +89,21 @@ public class SubjectsActivity extends BaseActivity {
                 return subject.getName().compareTo(t1.getName());
             }
         });
+    }
+
+    private void refreshPlaceholderStatus() {
+        if (mSubjects.isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            mPlaceholderLayout.setVisibility(View.VISIBLE);
+
+            mPlaceholderLayout.removeAllViews();
+            mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
+                    R.drawable.ic_list_black_24dp, R.string.placeholder_subjects));
+
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mPlaceholderLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override

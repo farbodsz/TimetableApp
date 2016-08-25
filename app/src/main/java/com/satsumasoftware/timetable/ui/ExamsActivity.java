@@ -12,10 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.DateUtils;
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.ui.adapter.ExamsAdapter;
@@ -35,6 +37,9 @@ public class ExamsActivity extends BaseActivity {
     private ArrayList<String> mHeaders;
     private ArrayList<Exam> mExams;
     private ExamsAdapter mAdapter;
+
+    private RecyclerView mRecyclerView;
+    private FrameLayout mPlaceholderLayout;
 
     private boolean mShowPast;
 
@@ -60,11 +65,11 @@ public class ExamsActivity extends BaseActivity {
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +80,8 @@ public class ExamsActivity extends BaseActivity {
             }
         });
 
+        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
+        refreshPlaceholderStatus();
     }
 
     private void refreshList() {
@@ -82,6 +89,7 @@ public class ExamsActivity extends BaseActivity {
         mExams.addAll(ExamUtils.getExams(this));
         sortList();
         mAdapter.notifyDataSetChanged();
+        refreshPlaceholderStatus();
     }
 
     private void sortList() {
@@ -148,6 +156,24 @@ public class ExamsActivity extends BaseActivity {
 
         mExams.clear();
         mExams.addAll(exams);
+    }
+
+    private void refreshPlaceholderStatus() {
+        if (mExams.isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            mPlaceholderLayout.setVisibility(View.VISIBLE);
+
+            int stringRes = mShowPast ? R.string.placeholder_exams_past :
+                    R.string.placeholder_exams;
+
+            mPlaceholderLayout.removeAllViews();
+            mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
+                    R.drawable.ic_assessment_black_24dp, stringRes));
+
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mPlaceholderLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
