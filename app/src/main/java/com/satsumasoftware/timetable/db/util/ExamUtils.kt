@@ -65,7 +65,10 @@ class ExamUtils {
                     arrayOf(subjectId.toString()),
                     null, null, null)
             cursor.moveToFirst()
-            exams.add(Exam(cursor))
+            while (cursor.isAfterLast) {
+                exams.add(Exam(cursor))
+                cursor.moveToNext()
+            }
             cursor.close()
             return exams
         }
