@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -180,7 +181,7 @@ public class TimetableEditActivity extends AppCompatActivity {
     }
 
     private void handleDoneAction() {
-        String name = mEditTextName.getText().toString();
+        String name = TextUtilsKt.title(mEditTextName.getText().toString());
 
         if (mStartDate == null || mEndDate == null) {
             Snackbar.make(findViewById(R.id.rootView),
