@@ -216,8 +216,8 @@ public class TimetableEditActivity extends AppCompatActivity {
     private void handleDeleteAction() {
         if (TimetableUtils.getTimetables(this).size() == 1) {
             // there needs to be at least one timetable for the app to work
-            Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_first_timetable_required, Snackbar.LENGTH_SHORT);
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_first_timetable_required,
+                    Snackbar.LENGTH_SHORT).show();
             return;
         }
 
