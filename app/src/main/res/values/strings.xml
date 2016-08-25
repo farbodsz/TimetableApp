@@ -107,6 +107,8 @@
     <string name="placeholder_classes">You haven\'t added any classes yet</string>
     <string name="placeholder_assignments">You don\'t have any incomplete assignments</string>
     <string name="placeholder_assignments_past">You haven\'t completed any assignments yet</string>
+    <string name="placeholder_exams">You don\'t have any upcoming exams</string>
+    <string name="placeholder_exams_past">You haven\'t sat any exams yet</string>
 
     <string name="choose_class">Select a class</string>
     <string name="choose_color">Pick a color</string>
