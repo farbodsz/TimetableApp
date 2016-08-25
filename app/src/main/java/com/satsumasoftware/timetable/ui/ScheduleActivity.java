@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,7 +69,8 @@ public class ScheduleActivity extends BaseActivity {
             final ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, dayOfWeek);
 
             if (classTimes.isEmpty()) {
-                View placeholder = LayoutInflater.from(this).inflate(R.layout.placeholder_schedule, null);
+                View placeholder = ThemeUtils.makePlaceholderView(this,
+                        R.drawable.ic_class_black_24dp, R.string.home_card_classes_placeholder);
                 mPagerAdapter.addViewWithTitle(placeholder, dayOfWeek.toString());
                 continue;
             }
