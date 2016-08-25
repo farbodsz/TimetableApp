@@ -71,7 +71,10 @@ class ClassUtils {
                     arrayOf(subjectId.toString()),
                     null, null, null)
             cursor.moveToFirst()
-            classes.add(Class(context, cursor))
+            while (!cursor.isAfterLast) {
+                classes.add(Class(context, cursor))
+                cursor.moveToNext()
+            }
             cursor.close()
             return classes
         }
