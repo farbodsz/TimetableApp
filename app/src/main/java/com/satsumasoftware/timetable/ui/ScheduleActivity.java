@@ -70,7 +70,7 @@ public class ScheduleActivity extends BaseActivity {
 
             if (classTimes.isEmpty()) {
                 View placeholder = ThemeUtils.makePlaceholderView(this,
-                        R.drawable.ic_class_black_24dp, R.string.home_card_classes_placeholder);
+                        R.drawable.ic_today_black_24dp, R.string.home_card_classes_placeholder);
                 mPagerAdapter.addViewWithTitle(placeholder, dayOfWeek.toString());
                 continue;
             }
