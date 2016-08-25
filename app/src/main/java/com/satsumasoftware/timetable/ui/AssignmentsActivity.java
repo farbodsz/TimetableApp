@@ -89,7 +89,11 @@ public class AssignmentsActivity extends BaseActivity {
             public int compare(Assignment a1, Assignment a2) {
                 LocalDate dueDate1 = a1.getDueDate();
                 LocalDate dueDate2 = a2.getDueDate();
-                return dueDate1.compareTo(dueDate2);
+                if (mShowPast) {
+                    return dueDate2.compareTo(dueDate1);
+                } else {
+                    return dueDate1.compareTo(dueDate2);
+                }
             }
         });
 

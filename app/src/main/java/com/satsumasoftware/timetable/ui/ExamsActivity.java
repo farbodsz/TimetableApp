@@ -90,7 +90,11 @@ public class ExamsActivity extends BaseActivity {
             public int compare(Exam e1, Exam e2) {
                 LocalDateTime dateTime1 = e1.makeDateTimeObject();
                 LocalDateTime dateTime2 = e2.makeDateTimeObject();
-                return dateTime1.compareTo(dateTime2);
+                if (mShowPast) {
+                    return dateTime2.compareTo(dateTime1);
+                } else {
+                    return dateTime1.compareTo(dateTime2);
+                }
             }
         });
 
