@@ -7,10 +7,14 @@ import android.os.Build
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
+import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import com.satsumasoftware.timetable.framework.Color
 
 class ThemeUtils {
@@ -49,6 +53,20 @@ class ThemeUtils {
                 val icon = menu.findItem(menuItem).icon
                 icon?.let { tintDrawable(context, icon) }
             }
+        }
+
+
+        @JvmStatic
+        fun makePlaceholderView(context: Context, @DrawableRes drawableRes: Int, @StringRes stringRes: Int): View {
+            val placeholderView = LayoutInflater.from(context).inflate(R.layout.placeholder_schedule, null)
+
+            val image = placeholderView.findViewById(R.id.imageView) as ImageView
+            image.setImageResource(drawableRes)
+
+            val text = placeholderView.findViewById(R.id.textView) as TextView
+            text.setText(stringRes)
+
+            return placeholderView
         }
 
     }
