@@ -6,12 +6,14 @@
     android:gravity="center">
 
     <ImageView
+        android:id="@+id/imageView"
         android:src="@drawable/ic_class_black_24dp"
         android:tint="@color/mdu_grey_700"
         android:layout_width="72dp"
         android:layout_height="72dp" />
 
     <TextView
+        android:id="@+id/textView"
         android:text="@string/home_card_classes_placeholder"
         android:textSize="20sp"
         android:textColor="@color/mdu_text_black_secondary"
