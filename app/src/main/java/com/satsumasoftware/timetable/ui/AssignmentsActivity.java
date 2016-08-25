@@ -12,10 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.DateUtils;
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
@@ -34,6 +36,9 @@ public class AssignmentsActivity extends BaseActivity {
     private ArrayList<String> mHeaders;
     private ArrayList<Assignment> mAssignments;
     private AssignmentsAdapter mAdapter;
+
+    private RecyclerView mRecyclerView;
+    private FrameLayout mPlaceholderLayout;
 
     private boolean mShowPast;
 
@@ -59,11 +64,11 @@ public class AssignmentsActivity extends BaseActivity {
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +79,8 @@ public class AssignmentsActivity extends BaseActivity {
             }
         });
 
+        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
+        refreshPlaceholderStatus();
     }
 
     private void refreshList() {
@@ -81,6 +88,7 @@ public class AssignmentsActivity extends BaseActivity {
         mAssignments.addAll(AssignmentUtils.getAssignments(this));
         sortList();
         mAdapter.notifyDataSetChanged();
+        refreshPlaceholderStatus();
     }
 
     private void sortList() {
@@ -147,6 +155,24 @@ public class AssignmentsActivity extends BaseActivity {
 
         mAssignments.clear();
         mAssignments.addAll(assignments);
+    }
+
+    private void refreshPlaceholderStatus() {
+        if (mAssignments.isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            mPlaceholderLayout.setVisibility(View.VISIBLE);
+
+            int stringRes = mShowPast ? R.string.placeholder_assignments_past :
+                    R.string.placeholder_assignments;
+
+            mPlaceholderLayout.removeAllViews();
+            mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
+                    R.drawable.ic_assignment_black_24dp, stringRes));
+
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mPlaceholderLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
