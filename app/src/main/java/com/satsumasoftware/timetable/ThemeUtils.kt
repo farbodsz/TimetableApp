@@ -58,7 +58,7 @@ class ThemeUtils {
 
         @JvmStatic
         fun makePlaceholderView(context: Context, @DrawableRes drawableRes: Int, @StringRes stringRes: Int): View {
-            val placeholderView = LayoutInflater.from(context).inflate(R.layout.placeholder_schedule, null)
+            val placeholderView = LayoutInflater.from(context).inflate(R.layout.placeholder, null)
 
             val image = placeholderView.findViewById(R.id.imageView) as ImageView
             image.setImageResource(drawableRes)
