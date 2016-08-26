@@ -74,7 +74,13 @@ public class ScheduleActivity extends BaseActivity {
         for (int weekNumber = 1; weekNumber <= timetable.getWeekRotations(); weekNumber++) {
             for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
 
-                String tabTitle = dayOfWeek.toString() + " " + weekNumber;
+                StringBuilder titleBuilder = new StringBuilder();
+                titleBuilder.append(dayOfWeek.toString());
+                if (!timetable.hasFixedScheduling()) {
+                    titleBuilder.append(" ")
+                            .append(weekNumber);
+                }
+                String tabTitle = titleBuilder.toString();
 
                 final ArrayList<ClassTime> classTimes =
                         ClassUtils.getClassTimesForDay(this, dayOfWeek, weekNumber);
