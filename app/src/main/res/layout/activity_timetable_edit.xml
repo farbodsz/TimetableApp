@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -63,6 +64,38 @@
                 android:id="@+id/textView_end_date"
                 android:text="@string/property_end_date"
                 style="@style/Widget.Timetable.TextView.Item.Selectable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <include layout="@layout/divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/ic_repeat_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/mdu_keyline_1" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/mdu_keyline_2"
+            android:layout_marginRight="@dimen/mdu_keyline_1">
+            <com.satsuware.usefulviews.LabelledSpinner
+                android:id="@+id/spinner_scheduling_type"
+                app:labelText="@string/property_scheduling_type"
+                app:spinnerEntries="@array/scheduling_types"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <com.satsuware.usefulviews.LabelledSpinner
+                android:id="@+id/spinner_scheduling_detail"
+                app:labelText="@string/property_scheduling_number_of_weeks"
+                app:spinnerEntries="@array/scheduling_week_rotations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

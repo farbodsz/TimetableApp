@@ -45,6 +45,17 @@
     <string name="property_start_date">Start date</string>
     <string name="property_end_date">End date</string>
     <string name="message_first_timetable_required">You need to have at least one timetable to use the functionality of this app.</string>
+    <string name="property_scheduling_type">Scheduling type</string>
+    <string name="property_scheduling_number_of_weeks">Number of weeks</string>
+    <string-array name="scheduling_types">
+        <item>Fixed</item>
+        <item>Week rotation</item>
+    </string-array>
+    <string-array name="scheduling_week_rotations">
+        <item>2 weeks</item>
+        <item>3 weeks</item>
+        <item>4 weeks</item>
+    </string-array>
 
     <string name="property_subject">Subject</string>
     <string name="property_room">Room</string>

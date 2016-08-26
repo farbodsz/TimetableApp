@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,11 +20,12 @@ import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.Timetable;
+import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
-public class TimetableEditActivity extends AppCompatActivity {
+public class TimetableEditActivity extends AppCompatActivity implements LabelledSpinner.OnItemChosenListener {
 
     protected static final String EXTRA_TIMETABLE = "extra_timetable";
 
@@ -33,11 +35,12 @@ public class TimetableEditActivity extends AppCompatActivity {
     private boolean mIsNew;
 
     private EditText mEditTextName;
-    private TextView mStartDateText, mEndDateText;
 
+    private TextView mStartDateText, mEndDateText;
     private LocalDate mStartDate, mEndDate;
 
-    private int mWeekRotations = 1; // TODO
+    private LabelledSpinner mSpinnerScheduling, mSpinnerWeekRotations;
+    private int mWeekRotations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +127,22 @@ public class TimetableEditActivity extends AppCompatActivity {
                 ).show();
             }
         });
+
+        mSpinnerScheduling = (LabelledSpinner) findViewById(R.id.spinner_scheduling_type);
+        mSpinnerWeekRotations = (LabelledSpinner) findViewById(R.id.spinner_scheduling_detail);
+
+        mSpinnerScheduling.setOnItemChosenListener(this);
+        mSpinnerWeekRotations.setOnItemChosenListener(this);
+
+        mWeekRotations = mIsNew ? 1 : mTimetable.getWeekRotations();
+
+        if (mWeekRotations == 1) {
+            mSpinnerScheduling.setSelection(0);
+        } else {
+            mSpinnerScheduling.setSelection(1);
+            // e.g. weekRotations of 2 will be position 0 as in the string-array
+            mSpinnerWeekRotations.setSelection(mWeekRotations - 2);
+        }
     }
 
     private void updateDateTexts() {
@@ -137,6 +156,27 @@ public class TimetableEditActivity extends AppCompatActivity {
             mEndDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
         }
     }
+
+    @Override
+    public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
+                             int position, long id) {
+        switch (labelledSpinner.getId()) {
+            case R.id.spinner_scheduling_type:
+                if (position == 0) { // fixed scheduling
+                    mWeekRotations = 1;
+                    mSpinnerWeekRotations.setVisibility(View.GONE);
+                } else {  // week rotation scheduling
+                    mSpinnerWeekRotations.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.spinner_scheduling_detail:
+                mWeekRotations = position + 2; // as '2 weeks' is position 0
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
