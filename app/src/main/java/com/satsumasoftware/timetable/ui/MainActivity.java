@@ -67,8 +67,9 @@ public class MainActivity extends BaseActivity {
 
     private ArrayList<ClassTime> getClassesToday() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
+        int weekNumber = 1; // TODO
 
-        ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, today);
+        ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, today, weekNumber);
 
         Collections.sort(classTimes, new Comparator<ClassTime>() {
             @Override

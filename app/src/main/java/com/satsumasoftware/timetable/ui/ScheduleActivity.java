@@ -65,8 +65,11 @@ public class ScheduleActivity extends BaseActivity {
     private void setupLayout() {
         mPagerAdapter.removeAllViews(mViewPager);
 
+        int weekNumber = 1; // TODO
+
         for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
-            final ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, dayOfWeek);
+            final ArrayList<ClassTime> classTimes =
+                    ClassUtils.getClassTimesForDay(this, dayOfWeek, weekNumber);
 
             if (classTimes.isEmpty()) {
                 View placeholder = ThemeUtils.makePlaceholderView(this,
