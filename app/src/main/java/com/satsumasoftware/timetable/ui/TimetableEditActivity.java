@@ -37,6 +37,8 @@ public class TimetableEditActivity extends AppCompatActivity {
 
     private LocalDate mStartDate, mEndDate;
 
+    private int mWeekRotations = 1; // TODO
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,7 +202,7 @@ public class TimetableEditActivity extends AppCompatActivity {
         }
 
         int id = mIsNew ? TimetableUtils.getHighestTimetableId(this) + 1 : mTimetable.getId();
-        mTimetable = new Timetable(id, name, mStartDate, mEndDate);
+        mTimetable = new Timetable(id, name, mStartDate, mEndDate, mWeekRotations);
 
         if (mIsNew) {
             TimetableUtils.addTimetable(this, mTimetable);

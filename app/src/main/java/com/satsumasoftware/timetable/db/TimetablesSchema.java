@@ -14,6 +14,7 @@ public final class TimetablesSchema implements BaseColumns {
     public static final String COL_END_DATE_DAY_OF_MONTH = "end_date_day_of_month";
     public static final String COL_END_DATE_MONTH = "end_date_month";
     public static final String COL_END_DATE_YEAR = "end_date_year";
+    public static final String COL_WEEK_ROTATIONS = "week_rotations";
 
     protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
@@ -23,7 +24,8 @@ public final class TimetablesSchema implements BaseColumns {
             COL_START_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_END_DATE_DAY_OF_MONTH + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_END_DATE_MONTH + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
-            COL_END_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE +
+            COL_END_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
+            COL_WEEK_ROTATIONS + SchemaUtilsKt.INTEGER_TYPE +
             " )";
 
     protected static final String SQL_DELETE =

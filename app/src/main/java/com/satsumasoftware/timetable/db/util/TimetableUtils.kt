@@ -59,6 +59,7 @@ class TimetableUtils {
                 put(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH, timetable.endDate.dayOfMonth)
                 put(TimetablesSchema.COL_END_DATE_MONTH, timetable.endDate.monthValue)
                 put(TimetablesSchema.COL_END_DATE_YEAR, timetable.endDate.year)
+                put(TimetablesSchema.COL_WEEK_ROTATIONS, timetable.weekRotations)
             }
 
             val db = TimetableDbHelper.getInstance(context).writableDatabase
