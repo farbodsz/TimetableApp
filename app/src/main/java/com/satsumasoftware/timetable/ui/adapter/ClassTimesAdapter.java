@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.ui.adapter;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,15 +8,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Timetable;
 
 import java.util.ArrayList;
 
 public class ClassTimesAdapter extends RecyclerView.Adapter<ClassTimesAdapter.ClassTimesViewHolder> {
 
+    private Activity mActivity;
     private ArrayList<ClassTime> mClassTimes;
 
-    public ClassTimesAdapter(ArrayList<ClassTime> classTimes) {
+    public ClassTimesAdapter(Activity activity, ArrayList<ClassTime> classTimes) {
+        mActivity = activity;
         mClassTimes = classTimes;
     }
 
@@ -29,10 +34,21 @@ public class ClassTimesAdapter extends RecyclerView.Adapter<ClassTimesAdapter.Cl
     public void onBindViewHolder(ClassTimesViewHolder holder, int position) {
         ClassTime classTime = mClassTimes.get(position);
 
-        holder.mTime.setText(classTime.getStartTime().toString() + " - " +
-                classTime.getEndTime().toString());
+        String timeText = classTime.getStartTime().toString() + " - " +
+                classTime.getEndTime().toString();
+        holder.mTime.setText(timeText);
 
-        holder.mDay.setText(classTime.getDay().toString());
+        Timetable timetable = ((TimetableApplication) mActivity.getApplication()).getCurrentTimetable();
+        assert timetable != null;
+
+        StringBuilder dayTextBuilder = new StringBuilder();
+        dayTextBuilder.append(classTime.getDay().toString());
+        if (!timetable.hasFixedScheduling()) {
+            dayTextBuilder.append(" ")
+                    .append(classTime.getWeekNumber());
+        }
+        String dayText = dayTextBuilder.toString();
+        holder.mDay.setText(dayText);
     }
 
     @Override

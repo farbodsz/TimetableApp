@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.satsumasoftware.timetable.DateUtils;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
@@ -67,8 +68,9 @@ public class MainActivity extends BaseActivity {
 
     private ArrayList<ClassTime> getClassesToday() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
+        int weekNumber = DateUtils.findWeekNumber(this);
 
-        ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, today);
+        ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, today, weekNumber);
 
         Collections.sort(classTimes, new Comparator<ClassTime>() {
             @Override

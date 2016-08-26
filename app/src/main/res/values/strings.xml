@@ -45,6 +45,17 @@
     <string name="property_start_date">Start date</string>
     <string name="property_end_date">End date</string>
     <string name="message_first_timetable_required">You need to have at least one timetable to use the functionality of this app.</string>
+    <string name="property_scheduling_type">Scheduling type</string>
+    <string name="property_scheduling_number_of_weeks">Number of weeks</string>
+    <string-array name="scheduling_types">
+        <item>Fixed</item>
+        <item>Week rotation</item>
+    </string-array>
+    <string-array name="scheduling_week_rotations">
+        <item>2 weeks</item>
+        <item>3 weeks</item>
+        <item>4 weeks</item>
+    </string-array>
 
     <string name="property_subject">Subject</string>
     <string name="property_room">Room</string>
@@ -55,6 +66,7 @@
     <string name="message_missing_time_for_detail">Some detail tabs are missing time periods</string>
 
     <string name="property_day">Day</string>
+    <string name="property_week">Week</string>
     <string name="property_start_time">Start Time</string>
     <string name="property_end_time">End Time</string>
     <string name="message_start_time_after_end">The start time of your class cannot be after the end time</string>
@@ -69,6 +81,7 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+    <string name="week_item">Week %1$s</string>
 
     <string name="property_title">Title</string>
     <string name="property_detail">Detail</string>

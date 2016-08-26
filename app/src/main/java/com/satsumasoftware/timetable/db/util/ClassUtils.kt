@@ -250,7 +250,8 @@ class ClassUtils {
             addClassDetail(context, newClassDetail)
         }
 
-        @JvmStatic fun getClassTimesForDay(activity: Activity, dayOfWeek: DayOfWeek): ArrayList<ClassTime> {
+        @JvmStatic fun getClassTimesForDay(activity: Activity, dayOfWeek: DayOfWeek,
+                                           weekNumber: Int): ArrayList<ClassTime> {
             val classTimes = ArrayList<ClassTime>()
 
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
@@ -259,8 +260,9 @@ class ClassUtils {
             val cursor = dbHelper.readableDatabase.query(
                     ClassTimesSchema.TABLE_NAME,
                     null,
-                    "${ClassTimesSchema.COL_TIMETABLE_ID}=? AND ${ClassTimesSchema.COL_DAY}=?",
-                    arrayOf(timetable.id.toString(), dayOfWeek.value.toString()),
+                    "${ClassTimesSchema.COL_TIMETABLE_ID}=? AND ${ClassTimesSchema.COL_DAY}=? " +
+                            "AND ${ClassTimesSchema.COL_WEEK_NUMBER}=?",
+                    arrayOf(timetable.id.toString(), dayOfWeek.value.toString(), weekNumber.toString()),
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
@@ -298,6 +300,7 @@ class ClassUtils {
                 put(ClassTimesSchema.COL_TIMETABLE_ID, classTime.timetableId)
                 put(ClassTimesSchema.COL_CLASS_DETAIL_ID, classTime.classDetailId)
                 put(ClassTimesSchema.COL_DAY, classTime.day.value)
+                put(ClassTimesSchema.COL_WEEK_NUMBER, classTime.weekNumber)
                 put(ClassTimesSchema.COL_START_TIME_HRS, classTime.startTime.hour)
                 put(ClassTimesSchema.COL_START_TIME_MINS, classTime.startTime.minute)
                 put(ClassTimesSchema.COL_END_TIME_HRS, classTime.endTime.hour)

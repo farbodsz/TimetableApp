@@ -15,12 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.satsumasoftware.timetable.DateUtils;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtils;
+import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ScheduleAdapter;
 
 import org.threeten.bp.DayOfWeek;
@@ -65,46 +68,63 @@ public class ScheduleActivity extends BaseActivity {
     private void setupLayout() {
         mPagerAdapter.removeAllViews(mViewPager);
 
-        for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
-            final ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, dayOfWeek);
+        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert timetable != null;
 
-            if (classTimes.isEmpty()) {
-                View placeholder = ThemeUtils.makePlaceholderView(this,
-                        R.drawable.ic_today_black_24dp, R.string.home_card_classes_placeholder);
-                mPagerAdapter.addViewWithTitle(placeholder, dayOfWeek.toString());
-                continue;
-            }
+        for (int weekNumber = 1; weekNumber <= timetable.getWeekRotations(); weekNumber++) {
+            for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
 
-            ScheduleAdapter adapter = new ScheduleAdapter(this, classTimes);
-            adapter.setOnEntryClickListener(new ScheduleAdapter.OnEntryClickListener() {
-                @Override
-                public void onEntryClick(View view, int position) {
-                    ClassTime classTime = classTimes.get(position);
-                    ClassDetail classDetail =
-                            ClassUtils.getClassDetailWithId(getBaseContext(), classTime.getClassDetailId());
-                    Class cls =
-                            ClassUtils.getClassWithId(getBaseContext(), classDetail.getClassId());
-
-                    Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
-                    intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);
-                    startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
+                StringBuilder titleBuilder = new StringBuilder();
+                titleBuilder.append(dayOfWeek.toString());
+                if (!timetable.hasFixedScheduling()) {
+                    titleBuilder.append(" ")
+                            .append(weekNumber);
                 }
-            });
+                String tabTitle = titleBuilder.toString();
 
-            RecyclerView recyclerView = new RecyclerView(this);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setHasFixedSize(true);
-            recyclerView.addItemDecoration(new DividerItemDecoration(
-                    this, DividerItemDecoration.VERTICAL_LIST));
-            recyclerView.setAdapter(adapter);
+                final ArrayList<ClassTime> classTimes =
+                        ClassUtils.getClassTimesForDay(this, dayOfWeek, weekNumber);
 
-            mPagerAdapter.addViewWithTitle(recyclerView, dayOfWeek.toString());
+                if (classTimes.isEmpty()) {
+                    View placeholder = ThemeUtils.makePlaceholderView(this,
+                            R.drawable.ic_today_black_24dp, R.string.home_card_classes_placeholder);
+                    mPagerAdapter.addViewWithTitle(placeholder, tabTitle);
+                    continue;
+                }
+
+                ScheduleAdapter adapter = new ScheduleAdapter(this, classTimes);
+                adapter.setOnEntryClickListener(new ScheduleAdapter.OnEntryClickListener() {
+                    @Override
+                    public void onEntryClick(View view, int position) {
+                        ClassTime classTime = classTimes.get(position);
+                        ClassDetail classDetail = ClassUtils.getClassDetailWithId(
+                                getBaseContext(), classTime.getClassDetailId());
+                        Class cls = ClassUtils.getClassWithId(
+                                getBaseContext(), classDetail.getClassId());
+
+                        Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
+                        intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);
+                        startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
+                    }
+                });
+
+                RecyclerView recyclerView = new RecyclerView(this);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setHasFixedSize(true);
+                recyclerView.addItemDecoration(new DividerItemDecoration(
+                        this, DividerItemDecoration.VERTICAL_LIST));
+                recyclerView.setAdapter(adapter);
+
+                mPagerAdapter.addViewWithTitle(recyclerView, tabTitle);
+            }
         }
     }
 
     private void goToNow() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
-        int index = today.getValue() - 1;
+        int nthWeek = DateUtils.findWeekNumber(this);
+
+        int index = today.getValue() + ((nthWeek - 1) * 7) - 1;
         mViewPager.setCurrentItem(index);
     }
 

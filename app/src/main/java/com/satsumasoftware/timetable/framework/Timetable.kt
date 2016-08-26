@@ -7,8 +7,8 @@ import com.satsumasoftware.timetable.db.TimetablesSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
-class Timetable(val id: Int, val name: String, val startDate: LocalDate,
-                val endDate: LocalDate) : Parcelable {
+class Timetable(val id: Int, val name: String, val startDate: LocalDate, val endDate: LocalDate,
+                val weekRotations: Int) : Parcelable {
 
     val displayedName: String
         get() {
@@ -30,15 +30,19 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate,
             LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH))))
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH))),
+            cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_WEEK_ROTATIONS)))
 
     fun hasName() = name.trim().length != 0
+
+    fun hasFixedScheduling() = weekRotations == 1
 
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readString(),
             source.readSerializable() as LocalDate,
-            source.readSerializable() as LocalDate)
+            source.readSerializable() as LocalDate,
+            source.readInt())
 
     override fun describeContents() = 0
 
@@ -47,6 +51,7 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate,
         dest?.writeString(name)
         dest?.writeSerializable(startDate)
         dest?.writeSerializable(endDate)
+        dest?.writeInt(weekRotations)
     }
 
     companion object {

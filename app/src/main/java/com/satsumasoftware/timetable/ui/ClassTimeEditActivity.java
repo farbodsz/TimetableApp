@@ -28,6 +28,7 @@ import org.threeten.bp.LocalTime;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 
 public class ClassTimeEditActivity extends AppCompatActivity {
 
@@ -55,6 +56,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     private TextView mStartTimeText, mEndTimeText;
 
     private DayOfWeek mDayOfWeek;
+    private int mWeekNumber = 1;  // TODO
     private LocalTime mStartTime, mEndTime;
 
     @Override
@@ -88,18 +90,49 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             }
         });
 
-        LabelledSpinner spinner = (LabelledSpinner) findViewById(R.id.spinner_day);
+        LabelledSpinner spinnerDay = (LabelledSpinner) findViewById(R.id.spinner_day);
         if (!mIsNewTime) {
-            spinner.setSelection(mClassTime.getDay().getValue() - 1);
+            spinnerDay.setSelection(mClassTime.getDay().getValue() - 1);
         }
-        spinner.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+        spinnerDay.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
             @Override
-            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView, int position, long id) {
+            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
+                                     int position, long id) {
                 mDayOfWeek = DayOfWeek.of(position + 1);
             }
             @Override
             public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
         });
+
+        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert timetable != null;
+        int weekRotations = timetable.getWeekRotations();
+
+        mWeekNumber = mIsNewTime ? 1 : mClassTime.getWeekNumber();
+        LabelledSpinner spinnerWeek = (LabelledSpinner) findViewById(R.id.spinner_week);
+
+        if (timetable.hasFixedScheduling()) {
+            spinnerWeek.setVisibility(View.GONE);
+
+        } else {
+            ArrayList<String> weekItems = new ArrayList<>();
+            for (int i = 1; i <= weekRotations; i++) {
+                String item = getString(R.string.week_item, String.valueOf(i));
+                weekItems.add(item);
+            }
+
+            spinnerWeek.setItemsArray(weekItems);
+            spinnerWeek.setSelection(mWeekNumber - 1);
+            spinnerWeek.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+                @Override
+                public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
+                                         int position, long id) {
+                    mWeekNumber = position + 1;
+                }
+                @Override
+                public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
+            });
+        }
 
         mStartTimeText = (TextView) findViewById(R.id.textView_start_time);
         mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
@@ -230,7 +263,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         assert timetable != null;
 
         mClassTime = new ClassTime(
-                id, timetable.getId(), mClassDetailId, mDayOfWeek, mStartTime, mEndTime);
+                id, timetable.getId(), mClassDetailId, mDayOfWeek, mWeekNumber, mStartTime, mEndTime);
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_CLASS_TIME, mClassTime);
