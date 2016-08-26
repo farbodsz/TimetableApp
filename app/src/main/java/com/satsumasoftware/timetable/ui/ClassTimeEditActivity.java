@@ -108,26 +108,31 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         assert timetable != null;
         int weekRotations = timetable.getWeekRotations();
 
-        ArrayList<String> weekItems = new ArrayList<>();
-        for (int i = 1; i <= weekRotations; i++) {
-            String item = getString(R.string.week_item, String.valueOf(i));
-            weekItems.add(item);
-        }
-
         mWeekNumber = mIsNewTime ? 1 : mClassTime.getWeekNumber();
-
         LabelledSpinner spinnerWeek = (LabelledSpinner) findViewById(R.id.spinner_week);
-        spinnerWeek.setItemsArray(weekItems);
-        spinnerWeek.setSelection(mWeekNumber - 1);
-        spinnerWeek.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
-            @Override
-            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
-                                     int position, long id) {
-                mWeekNumber = position + 1;
+
+        if (timetable.hasFixedScheduling()) {
+            spinnerWeek.setVisibility(View.GONE);
+
+        } else {
+            ArrayList<String> weekItems = new ArrayList<>();
+            for (int i = 1; i <= weekRotations; i++) {
+                String item = getString(R.string.week_item, String.valueOf(i));
+                weekItems.add(item);
             }
-            @Override
-            public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
-        });
+
+            spinnerWeek.setItemsArray(weekItems);
+            spinnerWeek.setSelection(mWeekNumber - 1);
+            spinnerWeek.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+                @Override
+                public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
+                                         int position, long id) {
+                    mWeekNumber = position + 1;
+                }
+                @Override
+                public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
+            });
+        }
 
         mStartTimeText = (TextView) findViewById(R.id.textView_start_time);
         mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
