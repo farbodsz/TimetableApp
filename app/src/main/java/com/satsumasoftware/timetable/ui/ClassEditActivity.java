@@ -220,7 +220,7 @@ public class ClassEditActivity extends AppCompatActivity {
         sortClassTimes(classTimes);
         mClassTimes.add(classTimes);
 
-        ClassTimesAdapter adapter = new ClassTimesAdapter(classTimes);
+        ClassTimesAdapter adapter = new ClassTimesAdapter(this, classTimes);
         adapter.setOnEntryClickListener(new ClassTimesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
