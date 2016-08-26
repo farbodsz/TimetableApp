@@ -29,10 +29,12 @@ public class ClassTimesAdapter extends RecyclerView.Adapter<ClassTimesAdapter.Cl
     public void onBindViewHolder(ClassTimesViewHolder holder, int position) {
         ClassTime classTime = mClassTimes.get(position);
 
-        holder.mTime.setText(classTime.getStartTime().toString() + " - " +
-                classTime.getEndTime().toString());
+        String timeText = classTime.getStartTime().toString() + " - " +
+                classTime.getEndTime().toString();
+        holder.mTime.setText(timeText);
 
-        holder.mDay.setText(classTime.getDay().toString());
+        String dayText = classTime.getDay().toString() + " " + classTime.getWeekNumber();
+        holder.mDay.setText(dayText);
     }
 
     @Override
