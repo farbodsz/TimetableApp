@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.satsumasoftware.timetable.DateUtils;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
@@ -115,7 +116,9 @@ public class ScheduleActivity extends BaseActivity {
 
     private void goToNow() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
-        int index = today.getValue() - 1;
+        int nthWeek = DateUtils.findWeekNumber(this);
+
+        int index = today.getValue() + ((nthWeek - 1) * 7) - 1;
         mViewPager.setCurrentItem(index);
     }
 
