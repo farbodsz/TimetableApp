@@ -1,7 +1,9 @@
 package com.satsumasoftware.timetable
 
+import android.app.Activity
 import android.content.Context
 import org.threeten.bp.LocalDate
+import org.threeten.bp.Period
 import org.threeten.bp.temporal.WeekFields
 import java.util.*
 
@@ -43,6 +45,17 @@ class DateUtils {
                 else -> throw IllegalArgumentException("invalid time period id '$timePeriodId'")
             }
             return context.getString(stringRes)
+        }
+
+        @JvmStatic fun findWeekNumber(activity: Activity): Int {
+            val timetable = (activity.application as TimetableApplication).currentTimetable!!
+            val today = LocalDate.now()
+
+            val days = Period.between(timetable.startDate, today).days
+            val nthWeek = days / 7
+
+            val weekNo = (nthWeek % timetable.weekRotations) + 1
+            return weekNo
         }
 
     }
