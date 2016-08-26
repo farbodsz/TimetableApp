@@ -298,6 +298,7 @@ class ClassUtils {
                 put(ClassTimesSchema.COL_TIMETABLE_ID, classTime.timetableId)
                 put(ClassTimesSchema.COL_CLASS_DETAIL_ID, classTime.classDetailId)
                 put(ClassTimesSchema.COL_DAY, classTime.day.value)
+                put(ClassTimesSchema.COL_WEEK_NUMBER, classTime.weekNumber)
                 put(ClassTimesSchema.COL_START_TIME_HRS, classTime.startTime.hour)
                 put(ClassTimesSchema.COL_START_TIME_MINS, classTime.startTime.minute)
                 put(ClassTimesSchema.COL_END_TIME_HRS, classTime.endTime.hour)

@@ -55,6 +55,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     private TextView mStartTimeText, mEndTimeText;
 
     private DayOfWeek mDayOfWeek;
+    private int mWeekNumber = 1;  // TODO
     private LocalTime mStartTime, mEndTime;
 
     @Override
@@ -230,7 +231,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         assert timetable != null;
 
         mClassTime = new ClassTime(
-                id, timetable.getId(), mClassDetailId, mDayOfWeek, mStartTime, mEndTime);
+                id, timetable.getId(), mClassDetailId, mDayOfWeek, mWeekNumber, mStartTime, mEndTime);
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_CLASS_TIME, mClassTime);
