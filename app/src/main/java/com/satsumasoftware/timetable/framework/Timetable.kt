@@ -35,6 +35,8 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate, val end
 
     fun hasName() = name.trim().length != 0
 
+    fun hasFixedScheduling() = weekRotations == 1
+
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readString(),
