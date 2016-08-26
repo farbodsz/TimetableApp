@@ -2,6 +2,7 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +19,11 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.ClassTimesSchema;
+import com.satsumasoftware.timetable.db.TimetableDbHelper;
+import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
+import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsuware.usefulviews.LabelledSpinner;
 
@@ -239,6 +244,24 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             Snackbar.make(findViewById(R.id.rootView),
                     R.string.message_start_time_after_end, Snackbar.LENGTH_SHORT).show();
             return;
+        }
+
+        // delete class times with an invalid week number
+        if (mWeekRotations < mTimetable.getWeekRotations()) {
+            TimetableDbHelper helper = TimetableDbHelper.getInstance(this);
+            Cursor cursor = helper.getReadableDatabase().query(
+                    ClassTimesSchema.TABLE_NAME,
+                    null,
+                    ClassTimesSchema.COL_WEEK_NUMBER + ">?",
+                    new String[] {String.valueOf(mWeekRotations)},
+                    null, null, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                ClassTime classTime = new ClassTime(cursor);
+                ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+                cursor.moveToNext();
+            }
+            cursor.close();
         }
 
         int id = mIsNew ? TimetableUtils.getHighestTimetableId(this) + 1 : mTimetable.getId();
