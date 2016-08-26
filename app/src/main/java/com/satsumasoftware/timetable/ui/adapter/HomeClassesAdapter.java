@@ -51,12 +51,22 @@ public class HomeClassesAdapter extends RecyclerView.Adapter<HomeClassesAdapter.
         holder.mColorCircle.setImageResource(color.getPrimaryColorResId(mContext));
 
         StringBuilder detailBuilder = new StringBuilder();
-        detailBuilder
-                .append(classTime.getStartTime().toString())
+
+        detailBuilder.append(classTime.getStartTime().toString())
                 .append(" - ")
-                .append(classTime.getEndTime().toString())
-                .append(" \u2022 ")
-                .append(classDetail.getRoom());
+                .append(classTime.getEndTime().toString());
+
+        if (classDetail.hasRoom() || classDetail.hasBuilding()) {
+            detailBuilder.append(" \u2022 ");
+
+            if (classDetail.hasRoom()) {
+                detailBuilder.append(classDetail.getRoom());
+                if (classDetail.hasBuilding()) detailBuilder.append(", ");
+            }
+            if (classDetail.hasBuilding()) {
+                detailBuilder.append(classDetail.getBuilding());
+            }
+        }
 
         holder.mDetails.setText(detailBuilder.toString());
     }
