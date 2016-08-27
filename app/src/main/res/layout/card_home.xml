@@ -35,7 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/mdu_spacing_normal">
+            android:paddingLeft="@dimen/mdu_spacing_normal"
+            android:paddingRight="@dimen/mdu_spacing_normal">
             <ImageView
                 android:src="@drawable/ic_arrow_forward_black_24dp"
                 android:tint="@color/mdu_grey_500"
