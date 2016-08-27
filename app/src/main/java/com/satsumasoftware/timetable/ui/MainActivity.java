@@ -143,8 +143,13 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_manage_timetables:
-                Intent intent = new Intent(this, TimetablesActivity.class);
-                startActivity(intent);
+                Intent manageIntent = new Intent(this, TimetablesActivity.class);
+                startActivity(manageIntent);
+                finish();
+                break;
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 finish();
                 break;
         }
