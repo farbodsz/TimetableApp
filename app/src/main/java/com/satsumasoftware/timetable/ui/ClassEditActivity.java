@@ -281,6 +281,10 @@ public class ClassEditActivity extends AppCompatActivity {
     }
 
     private ArrayList<ClassTimeGroup> sortAndGroupTimes(ArrayList<ClassTime> classTimes) {
+        if (classTimes.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         Collections.sort(classTimes, new Comparator<ClassTime>() {
             @Override
             public int compare(ClassTime ct1, ClassTime ct2) {
@@ -329,6 +333,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 currentGroup.addClassTime(classTime);
             }
         }
+        classTimeGroups.add(currentGroup); // add what has was made in the last round of iterations
 
         return classTimeGroups;
     }
