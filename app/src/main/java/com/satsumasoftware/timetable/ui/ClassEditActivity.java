@@ -224,8 +224,11 @@ public class ClassEditActivity extends AppCompatActivity {
         adapter.setOnEntryClickListener(new ClassTimesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
+                ArrayList<ClassTime> tempList = new ArrayList<>();
+                tempList.add(classTimes.get(position));
+
                 Intent intent = new Intent(ClassEditActivity.this, ClassTimeEditActivity.class);
-                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME, classTimes.get(position));
+                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME, tempList);
                 intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);

@@ -37,7 +37,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     private int mTabPos;
     private boolean mIsNewTime;
 
-    private ClassTime mClassTime;
+    private ArrayList<ClassTime> mClassTimes;
     private int mClassDetailId;
 
     private TextView mStartTimeText, mEndTimeText;
@@ -64,10 +64,30 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         mClassDetailId = extras.getInt(EXTRA_CLASS_DETAIL_ID);
         mTabPos = extras.getInt(EXTRA_TAB_POSITION);
 
-        if (extras.getParcelable(EXTRA_CLASS_TIME) != null) {
-            mClassTime = extras.getParcelable(EXTRA_CLASS_TIME); // TODO get array
+        if (extras.getParcelableArrayList(EXTRA_CLASS_TIME) != null) {
+            mClassTimes = extras.getParcelableArrayList(EXTRA_CLASS_TIME);
         }
-        mIsNewTime = mClassTime == null;
+        mIsNewTime = mClassTimes == null;
+
+        // validation
+        if (!mIsNewTime) {
+            LocalTime startTime = null;
+            LocalTime endTime = null;
+            for (ClassTime classTime : mClassTimes) {
+                if (startTime == null) {
+                    // set values in first iteration
+                    startTime = classTime.getStartTime();
+                    endTime = classTime.getEndTime();
+                    continue;
+                }
+
+                if (!classTime.getStartTime().equals(startTime) ||
+                        !classTime.getEndTime().equals(endTime)) {
+                    throw new IllegalArgumentException("invalid time - all start and end times " +
+                            "must be the same");
+                }
+            }
+        }
 
         mDaysOfWeek = new SparseArray<>();
         mWeekNumbers = new SparseArray<>();
@@ -86,8 +106,10 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         mDayText = (TextView) findViewById(R.id.textView_day);
         if (!mIsNewTime) {
-            DayOfWeek dayOfWeek = mClassTime.getDay();
-            mDaysOfWeek.put(dayOfWeek.getValue() - 1, dayOfWeek); // TODO for a list of class times
+            for (ClassTime classTime : mClassTimes) {
+                DayOfWeek dayOfWeek = classTime.getDay();
+                mDaysOfWeek.put(dayOfWeek.getValue() - 1, dayOfWeek);
+            }
             updateDayText();
         }
         mDayText.setOnClickListener(new View.OnClickListener() {
@@ -136,8 +158,10 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         } else {
             if (!mIsNewTime) {
-                int weekNumber = mClassTime.getWeekNumber();
-                mWeekNumbers.put(weekNumber - 1, weekNumber);
+                for (ClassTime classTime : mClassTimes) {
+                    int weekNumber = classTime.getWeekNumber();
+                    mWeekNumbers.put(weekNumber - 1, weekNumber);
+                }
                 updateWeekText();
             }
 
@@ -187,8 +211,8 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
 
         if (!mIsNewTime) {
-            mStartTime = mClassTime.getStartTime();
-            mEndTime = mClassTime.getEndTime();
+            mStartTime = mClassTimes.get(0).getStartTime();
+            mEndTime = mClassTimes.get(0).getEndTime();
             updateTimeTexts();
         }
 
@@ -347,7 +371,9 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         assert timetable != null;
 
         if (!mIsNewTime) {
-            ClassUtils.completelyDeleteClassTime(this, mClassTime.getId()); // TODO for a list of class times
+            for (ClassTime classTime : mClassTimes) {
+                ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+            }
         }
 
         for (int i = 0; i < timetable.getWeekRotations(); i++) {
@@ -362,15 +388,15 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                     continue;
                 }
 
-                int id = mIsNewTime ? ClassUtils.getHighestClassTimeId(this) + 1 : mClassTime.getId();
+                int id = ClassUtils.getHighestClassTimeId(this) + 1;
 
-                mClassTime = new ClassTime(id, timetable.getId(), mClassDetailId, dayOfWeek,
-                        weekNumber, mStartTime, mEndTime);
+                ClassTime classTime = new ClassTime(id, timetable.getId(), mClassDetailId,
+                        dayOfWeek, weekNumber, mStartTime, mEndTime);
 
                 // Everything will be added fresh regardless of whether or not it is new.
                 // This is because there may be more or less ClassTimes than before so ids cannot
                 // be replaced exactly (delete 1, add 1).
-                ClassUtils.addClassTime(this, mClassTime);
+                ClassUtils.addClassTime(this, classTime);
             }
 
             Intent intent = new Intent();
@@ -381,7 +407,9 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        ClassUtils.completelyDeleteClassTime(this, mClassTime.getId());
+        for (ClassTime classTime : mClassTimes) {
+            ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+        }
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
         setResult(Activity.RESULT_OK, intent);
