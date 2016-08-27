@@ -357,20 +357,11 @@ public class ClassEditActivity extends AppCompatActivity {
 
                 ArrayList<ClassTimeGroup> thisTabTimeGroups = mAllClassTimeGroups.get(tabIndex);
 
-                Log.i(LOG_TAG, "Currently contains groups = " + thisTabTimeGroups.size());
-
                 ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDetail(
                         this, mClassDetailIds.get(tabIndex));
 
-                Log.i(LOG_TAG, "Has class times = " + classTimes.size());
-
                 thisTabTimeGroups.clear();
-
-                ArrayList<ClassTimeGroup> newTimeGroups = sortAndGroupTimes(classTimes);
-
-                Log.i(LOG_TAG, "After sorting into groups = " + newTimeGroups.size());
-
-                thisTabTimeGroups.addAll(newTimeGroups);
+                thisTabTimeGroups.addAll(sortAndGroupTimes(classTimes));
 
                 mAdapters.get(tabIndex).notifyDataSetChanged();
             }
