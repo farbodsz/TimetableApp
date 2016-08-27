@@ -32,7 +32,7 @@ public class HomeClassesAdapter extends RecyclerView.Adapter<HomeClassesAdapter.
 
     @Override
     public ClassesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_card_detail, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_general_small, parent, false);
         return new ClassesViewHolder(view);
     }
 
