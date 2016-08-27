@@ -49,7 +49,6 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private TextView mWeekText;
     private AlertDialog mWeekDialog;
-    private int mWeekNumber; // TODO remove
     private SparseArray<Integer> mWeekNumbers;
 
     @Override
