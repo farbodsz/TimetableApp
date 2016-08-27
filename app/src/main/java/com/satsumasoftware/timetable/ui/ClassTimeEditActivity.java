@@ -122,7 +122,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                     checkedItems[i] = mDaysOfWeek.get(i) != null;
                 }
 
-                builder.setTitle(R.string.property_day)
+                builder.setTitle(R.string.property_days)
                         .setMultiChoiceItems(R.array.days, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -182,7 +182,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                         checkedItems[i] = mWeekNumbers.get(i) != null;
                     }
 
-                    builder.setTitle(R.string.property_week)
+                    builder.setTitle(R.string.property_weeks)
                             .setMultiChoiceItems(weekItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -257,7 +257,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private void updateDayText() {
         if (mDaysOfWeek.size() == 0) {
-            mDayText.setText(R.string.property_day);
+            mDayText.setText(R.string.property_days);
             mDayText.setTextColor(ContextCompat.getColor(
                     getBaseContext(), R.color.mdu_text_black_secondary));
             return;
@@ -278,7 +278,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private void updateWeekText() {
         if (mWeekNumbers.size() == 0) {
-            mWeekText.setText(R.string.property_week);
+            mWeekText.setText(R.string.property_weeks);
             mWeekText.setTextColor(ContextCompat.getColor(
                     getBaseContext(), R.color.mdu_text_black_secondary));
             return;

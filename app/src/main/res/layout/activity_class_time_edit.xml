@@ -32,13 +32,13 @@
             android:layout_marginRight="@dimen/mdu_keyline_1">
             <TextView
                 android:id="@+id/textView_day"
-                android:text="@string/property_day"
+                android:text="@string/property_days"
                 style="@style/Widget.Timetable.TextView.Item.Selectable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/textView_week"
-                android:text="@string/property_week"
+                android:text="@string/property_weeks"
                 style="@style/Widget.Timetable.TextView.Item.Selectable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

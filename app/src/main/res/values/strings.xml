@@ -65,8 +65,8 @@
     <string name="message_empty_detail">Please check your inputs! At least one detail tab is completely empty</string>
     <string name="message_missing_time_for_detail">Some detail tabs are missing time periods</string>
 
-    <string name="property_day">Day</string>
-    <string name="property_week">Week</string>
+    <string name="property_days">Days</string>
+    <string name="property_weeks">Weeks</string>
     <string name="property_start_time">Start Time</string>
     <string name="property_end_time">End Time</string>
     <string name="message_days_required">You need to choose at least one day</string>
