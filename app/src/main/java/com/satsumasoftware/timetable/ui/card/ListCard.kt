@@ -23,7 +23,7 @@ interface ListCard : HomeCard {
         val view: View
 
         if (isListEmpty) {
-            view = inflater.inflate(R.layout.card_home_list_placeholder, null)
+            view = inflater.inflate(R.layout.placeholder_home_card, null)
             val textView = view.findViewById(R.id.placeholder) as TextView
             textView.text = placeholderText
 
