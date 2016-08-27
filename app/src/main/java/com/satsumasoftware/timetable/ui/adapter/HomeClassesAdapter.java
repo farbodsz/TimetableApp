@@ -85,8 +85,8 @@ public class HomeClassesAdapter extends RecyclerView.Adapter<HomeClassesAdapter.
             super(itemView);
             itemView.setOnClickListener(this);
             mColorCircle = (CircleImageView) itemView.findViewById(R.id.imageView);
-            mSubject = (TextView) itemView.findViewById(R.id.subject);
-            mDetails = (TextView) itemView.findViewById(R.id.details);
+            mSubject = (TextView) itemView.findViewById(R.id.text1);
+            mDetails = (TextView) itemView.findViewById(R.id.text2);
         }
 
         @Override

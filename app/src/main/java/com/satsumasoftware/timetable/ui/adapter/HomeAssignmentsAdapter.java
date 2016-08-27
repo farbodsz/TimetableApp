@@ -90,8 +90,8 @@ public class HomeAssignmentsAdapter extends RecyclerView.Adapter<HomeAssignments
             super(itemView);
             itemView.setOnClickListener(this);
             mColorCircle = (CircleImageView) itemView.findViewById(R.id.imageView);
-            mTitle = (TextView) itemView.findViewById(R.id.subject);
-            mDetails = (TextView) itemView.findViewById(R.id.details);
+            mTitle = (TextView) itemView.findViewById(R.id.text1);
+            mDetails = (TextView) itemView.findViewById(R.id.text2);
         }
 
         @Override
