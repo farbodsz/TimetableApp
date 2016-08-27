@@ -117,10 +117,10 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             itemView.setOnClickListener(this);
             mColorView = itemView.findViewById(R.id.color);
-            mTitle = (TextView) itemView.findViewById(R.id.title);
-            mSubject = (TextView) itemView.findViewById(R.id.subject);
-            mDueDate = (TextView) itemView.findViewById(R.id.due_date);
-            mCompletion = (TextView) itemView.findViewById(R.id.completion_progress);
+            mTitle = (TextView) itemView.findViewById(R.id.text1);
+            mSubject = (TextView) itemView.findViewById(R.id.text2);
+            mDueDate = (TextView) itemView.findViewById(R.id.text3);
+            mCompletion = (TextView) itemView.findViewById(R.id.text4);
         }
 
         @Override

@@ -131,10 +131,10 @@ public class ExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super(itemView);
             itemView.setOnClickListener(this);
             mColorView = itemView.findViewById(R.id.color);
-            mTitle = (TextView) itemView.findViewById(R.id.title);
-            mDetail = (TextView) itemView.findViewById(R.id.subject);
-            mDate = (TextView) itemView.findViewById(R.id.due_date);
-            mDuration = (TextView) itemView.findViewById(R.id.completion_progress);
+            mTitle = (TextView) itemView.findViewById(R.id.text1);
+            mDetail = (TextView) itemView.findViewById(R.id.text2);
+            mDate = (TextView) itemView.findViewById(R.id.text3);
+            mDuration = (TextView) itemView.findViewById(R.id.text4);
         }
 
         @Override
