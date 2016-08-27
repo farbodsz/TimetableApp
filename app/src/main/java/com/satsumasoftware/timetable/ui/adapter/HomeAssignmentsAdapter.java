@@ -35,7 +35,7 @@ public class HomeAssignmentsAdapter extends RecyclerView.Adapter<HomeAssignments
 
     @Override
     public AssignmentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_card_detail, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_general_small, parent, false);
         return new AssignmentsViewHolder(view);
     }
 
@@ -90,8 +90,8 @@ public class HomeAssignmentsAdapter extends RecyclerView.Adapter<HomeAssignments
             super(itemView);
             itemView.setOnClickListener(this);
             mColorCircle = (CircleImageView) itemView.findViewById(R.id.imageView);
-            mTitle = (TextView) itemView.findViewById(R.id.subject);
-            mDetails = (TextView) itemView.findViewById(R.id.details);
+            mTitle = (TextView) itemView.findViewById(R.id.text1);
+            mDetails = (TextView) itemView.findViewById(R.id.text2);
         }
 
         @Override

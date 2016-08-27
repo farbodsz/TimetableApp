@@ -42,7 +42,7 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.subheader, parent, false);
                 return new HeaderViewHolder(header);
             case VIEW_TYPE_ITEM:
-                View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_assignment, parent, false);
+                View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_general, parent, false);
                 return new AssignmentViewHolder(item);
             default:
                 throw new IllegalArgumentException("invalid view type");
@@ -117,10 +117,10 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             itemView.setOnClickListener(this);
             mColorView = itemView.findViewById(R.id.color);
-            mTitle = (TextView) itemView.findViewById(R.id.title);
-            mSubject = (TextView) itemView.findViewById(R.id.subject);
-            mDueDate = (TextView) itemView.findViewById(R.id.due_date);
-            mCompletion = (TextView) itemView.findViewById(R.id.completion_progress);
+            mTitle = (TextView) itemView.findViewById(R.id.text1);
+            mSubject = (TextView) itemView.findViewById(R.id.text2);
+            mDueDate = (TextView) itemView.findViewById(R.id.text3);
+            mCompletion = (TextView) itemView.findViewById(R.id.text4);
         }
 
         @Override

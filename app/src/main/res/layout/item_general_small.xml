@@ -21,14 +21,14 @@
         android:layout_marginLeft="@dimen/mdu_padding_normal">
 
         <TextView
-            android:id="@+id/subject"
+            android:id="@+id/text1"
             android:text="Geography"
             android:textColor="@color/mdu_text_black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/details"
+            android:id="@+id/text2"
             android:text="11:35 - 12:35 &#8901; W5"
             android:textColor="@color/mdu_text_black_secondary"
             android:textSize="13sp"

@@ -32,7 +32,7 @@ public class HomeClassesAdapter extends RecyclerView.Adapter<HomeClassesAdapter.
 
     @Override
     public ClassesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_card_detail, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_general_small, parent, false);
         return new ClassesViewHolder(view);
     }
 
@@ -85,8 +85,8 @@ public class HomeClassesAdapter extends RecyclerView.Adapter<HomeClassesAdapter.
             super(itemView);
             itemView.setOnClickListener(this);
             mColorCircle = (CircleImageView) itemView.findViewById(R.id.imageView);
-            mSubject = (TextView) itemView.findViewById(R.id.subject);
-            mDetails = (TextView) itemView.findViewById(R.id.details);
+            mSubject = (TextView) itemView.findViewById(R.id.text1);
+            mDetails = (TextView) itemView.findViewById(R.id.text2);
         }
 
         @Override

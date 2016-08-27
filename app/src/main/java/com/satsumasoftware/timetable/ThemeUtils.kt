@@ -69,5 +69,12 @@ class ThemeUtils {
             return placeholderView
         }
 
+        @JvmStatic
+        fun dpToPixels(context: Context, dps: Int): Int {
+            val density = context.resources.displayMetrics.density
+            val dpAsPixels = (dps * density + 0.5f).toInt()
+            return dpAsPixels
+        }
+
     }
 }

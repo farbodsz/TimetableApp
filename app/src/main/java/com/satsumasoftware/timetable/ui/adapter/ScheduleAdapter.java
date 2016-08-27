@@ -31,7 +31,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
 
     @Override
     public ScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_assignment, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_general, parent, false);
         return new ScheduleViewHolder(view);
     }
 
@@ -84,10 +84,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
             super(itemView);
             itemView.setOnClickListener(this);
             mColorView = itemView.findViewById(R.id.color);
-            mSubject = (TextView) itemView.findViewById(R.id.title);
-            mDetails = (TextView) itemView.findViewById(R.id.subject);
-            mTimes = (TextView) itemView.findViewById(R.id.due_date);
-            itemView.findViewById(R.id.completion_progress).setVisibility(View.GONE);
+            mSubject = (TextView) itemView.findViewById(R.id.text1);
+            mDetails = (TextView) itemView.findViewById(R.id.text2);
+            mTimes = (TextView) itemView.findViewById(R.id.text3);
+            itemView.findViewById(R.id.text4).setVisibility(View.GONE);
         }
 
         @Override
