@@ -10,21 +10,6 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:visibility="gone"
-            android:id="@+id/status"
-            android:text="3 classes today - more stuff"
-            android:textColor="@color/mdu_text_white"
-            android:textSize="@dimen/card_text_primary_subtitle"
-            android:background="@color/mdu_light_blue_700"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:paddingLeft="@dimen/card_padding"
-            android:paddingRight="@dimen/card_padding"
-            android:gravity="center_vertical"/>
-
-        <TextView
             android:id="@+id/title"
             android:text="Agenda"
             android:textColor="@color/mdu_text_white"
