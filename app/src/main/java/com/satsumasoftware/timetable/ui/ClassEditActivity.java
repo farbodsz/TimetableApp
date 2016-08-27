@@ -32,6 +32,7 @@ import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.ClassTimeGroup;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -68,7 +69,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private DynamicPagerAdapter mPagerAdapter;
 
-    private ArrayList<ArrayList<ClassTime>> mClassTimes;
+    private ArrayList<ArrayList<ClassTimeGroup>> mAllClassTimeGroups;
     private ArrayList<ClassTimesAdapter> mAdapters;
 
     @Override
@@ -160,7 +161,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
         mClassDetailIds = new ArrayList<>();
 
-        mClassTimes = new ArrayList<>();
+        mAllClassTimeGroups = new ArrayList<>();
         mAdapters = new ArrayList<>();
 
         if (!mIsNew) {
@@ -215,20 +216,19 @@ public class ClassEditActivity extends AppCompatActivity {
             teacher.setText(classDetail.getTeacher());
         }
 
-        final ArrayList<ClassTime> classTimes = isNewDetail ? new ArrayList<ClassTime>() :
+        ArrayList<ClassTime> classTimes = isNewDetail ? new ArrayList<ClassTime>() :
                 ClassUtils.getClassTimesForDetail(this, classDetail.getId());
-        sortClassTimes(classTimes);
-        mClassTimes.add(classTimes);
+        final ArrayList<ClassTimeGroup> classTimeGroups = sortAndGroupTimes(classTimes);
+        mAllClassTimeGroups.add(classTimeGroups);
 
-        ClassTimesAdapter adapter = new ClassTimesAdapter(this, classTimes);
+        ClassTimesAdapter adapter = new ClassTimesAdapter(this, classTimeGroups);
         adapter.setOnEntryClickListener(new ClassTimesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                ArrayList<ClassTime> tempList = new ArrayList<>();
-                tempList.add(classTimes.get(position));
+                ClassTimeGroup classTimeGroup = classTimeGroups.get(position);
 
                 Intent intent = new Intent(ClassEditActivity.this, ClassTimeEditActivity.class);
-                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME, tempList);
+                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME, classTimeGroup.getClassTimes());
                 intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
@@ -280,19 +280,57 @@ public class ClassEditActivity extends AppCompatActivity {
         }
     }
 
-    private void sortClassTimes(ArrayList<ClassTime> classTimes) {
+    private ArrayList<ClassTimeGroup> sortAndGroupTimes(ArrayList<ClassTime> classTimes) {
         Collections.sort(classTimes, new Comparator<ClassTime>() {
             @Override
             public int compare(ClassTime ct1, ClassTime ct2) {
-                int dayComparison = ct1.getDay().compareTo(ct2.getDay());
-                if (dayComparison == 0) {
-                    // days are equal
-                    return ct1.getStartTime().compareTo(ct2.getStartTime());
+                // sort by start time, then end time, then days, then week numbers
+                int startTimeCompare = ct1.getStartTime().compareTo(ct2.getStartTime());
+
+                if (startTimeCompare == 0) {
+                    // start times are equal, so compare end times
+                    int endTimeCompare = ct1.getEndTime().compareTo(ct2.getEndTime());
+
+                    if (endTimeCompare == 0) {
+                        // end times are equal, so compare days
+                        int dayCompare = ct1.getDay().compareTo(ct2.getDay());
+
+                        if (dayCompare == 0) {
+                            // days are equal, so compare week numbers
+                            return ct1.getWeekNumber() - ct2.getWeekNumber();
+                        } else {
+                            return dayCompare;
+                        }
+                    } else {
+                        return endTimeCompare;
+                    }
                 } else {
-                    return dayComparison;
+                    return startTimeCompare;
                 }
             }
         });
+
+        ArrayList<ClassTimeGroup> classTimeGroups = new ArrayList<>();
+
+        ClassTimeGroup currentGroup = null;
+
+        for (ClassTime classTime : classTimes) {
+            if (currentGroup == null) {
+                currentGroup = new ClassTimeGroup(classTime.getStartTime(), classTime.getEndTime());
+                currentGroup.addClassTime(classTime);
+                continue;
+            }
+
+            if (currentGroup.canAdd(classTime)) {
+                currentGroup.addClassTime(classTime);
+            } else {
+                classTimeGroups.add(currentGroup); // add what has been produced up to this point
+                currentGroup = new ClassTimeGroup(classTime.getStartTime(), classTime.getEndTime());
+                currentGroup.addClassTime(classTime);
+            }
+        }
+
+        return classTimeGroups;
     }
 
     @Override
@@ -312,13 +350,23 @@ public class ClassEditActivity extends AppCompatActivity {
 
                 Log.i(LOG_TAG, "Reloading class times list for tab index " + tabIndex);
 
-                ArrayList<ClassTime> someTimes = mClassTimes.get(tabIndex);
+                ArrayList<ClassTimeGroup> thisTabTimeGroups = mAllClassTimeGroups.get(tabIndex);
 
-                someTimes.clear();
-                someTimes.addAll(ClassUtils.getClassTimesForDetail(
-                        this, mClassDetailIds.get(tabIndex)));
+                Log.i(LOG_TAG, "Currently contains groups = " + thisTabTimeGroups.size());
 
-                sortClassTimes(someTimes);
+                ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDetail(
+                        this, mClassDetailIds.get(tabIndex));
+
+                Log.i(LOG_TAG, "Has class times = " + classTimes.size());
+
+                thisTabTimeGroups.clear();
+
+                ArrayList<ClassTimeGroup> newTimeGroups = sortAndGroupTimes(classTimes);
+
+                Log.i(LOG_TAG, "After sorting into groups = " + newTimeGroups.size());
+
+                thisTabTimeGroups.addAll(newTimeGroups);
+
                 mAdapters.get(tabIndex).notifyDataSetChanged();
             }
         }
@@ -403,8 +451,8 @@ public class ClassEditActivity extends AppCompatActivity {
             String teacher = TextUtilsKt.title(teacherText.getText().toString());
             Log.d(LOG_TAG, "teacher: " + teacher);
 
-            ArrayList<ClassTime> classTimes = mClassTimes.get(i);
-            if (classTimes.isEmpty()) {
+            ArrayList<ClassTimeGroup> classTimeGroups = mAllClassTimeGroups.get(i);
+            if (classTimeGroups.isEmpty()) {
                 Log.d(LOG_TAG, "class times list is empty!");
                 if (room.trim().equals("") && teacher.trim().equals("")) {
                     // this is an empty detail page: room, teacher and times are empty

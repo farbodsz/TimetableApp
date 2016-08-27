@@ -3,12 +3,14 @@
     android:orientation="vertical"
     android:background="?selectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="48dp">
+    android:layout_height="wrap_content"
+    android:minHeight="48dp">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="47dp"
+        android:layout_height="wrap_content"
+        android:minHeight="47dp"
         android:gravity="center_vertical">
 
         <TextView
