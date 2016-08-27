@@ -26,24 +26,7 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
                     cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_HRS)),
                     cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_MINS))))
 
-    fun displayWeekValue(activity: Activity): String {
-        val timetable = (activity.application as TimetableApplication).currentTimetable!!
-        if (timetable.hasFixedScheduling()) {
-            return ""
-        } else {
-            if (PrefUtils.displayWeeksAsLetters(activity)) {
-                return when(weekNumber) {
-                    1 -> "A"
-                    2 -> "B"
-                    3 -> "C"
-                    4 -> "D"
-                    else -> throw IllegalArgumentException("invalid week number '$weekNumber'")
-                }
-            } else {
-                return weekNumber.toString()
-            }
-        }
-    }
+    fun displayWeekValue(activity: Activity) = Companion.displayWeekValue(activity, weekNumber)
 
     constructor(source: Parcel) : this(
             source.readInt(),
@@ -67,9 +50,29 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
     }
 
     companion object {
+
         @JvmField val CREATOR: Parcelable.Creator<ClassTime> = object : Parcelable.Creator<ClassTime> {
             override fun createFromParcel(source: Parcel): ClassTime = ClassTime(source)
             override fun newArray(size: Int): Array<ClassTime?> = arrayOfNulls(size)
+        }
+
+        @JvmStatic fun displayWeekValue(activity: Activity, weekNumber: Int): String {
+            val timetable = (activity.application as TimetableApplication).currentTimetable!!
+            if (timetable.hasFixedScheduling()) {
+                return ""
+            } else {
+                if (PrefUtils.displayWeeksAsLetters(activity)) {
+                    return when(weekNumber) {
+                        1 -> "A"
+                        2 -> "B"
+                        3 -> "C"
+                        4 -> "D"
+                        else -> throw IllegalArgumentException("invalid week number '$weekNumber'")
+                    }
+                } else {
+                    return weekNumber.toString()
+                }
+            }
         }
     }
 }
