@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/prefCategory_general">
+
+        <CheckBoxPreference
+            android:key="pref_display_weeks_as_letters"
+            android:title="@string/pref_weeksAsLetters"
+            android:summaryOn="@string/pref_weeksAsLetters_summaryOn"
+            android:summaryOff="@string/pref_weeksAsLetters_summaryOff"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
