@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,32 +25,19 @@ import com.satsuware.usefulviews.LabelledSpinner;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalTime;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
 public class ClassTimeEditActivity extends AppCompatActivity {
 
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({ACTION_NEW, ACTION_EDIT, ACTION_DELETE})
-    public @interface Action {}
-    public static final int ACTION_NEW = 0;
-    public static final int ACTION_EDIT = 1;
-    public static final int ACTION_DELETE = 2;
-
     protected static final String EXTRA_CLASS_TIME = "extra_class_time";
     protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
     protected static final String EXTRA_TAB_POSITION = "extra_tab_position";
-    protected static final String EXTRA_LIST_POS = "extra_list_position";
-    protected static final String EXTRA_RESULT_ACTION = "extra_result_action";
 
     private int mTabPos;
     private boolean mIsNewTime;
 
     private ClassTime mClassTime;
     private int mClassDetailId;
-
-    private int mListPosition = SubjectsActivity.LIST_POS_INVALID;
 
     private TextView mStartTimeText, mEndTimeText;
 
@@ -74,7 +60,6 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         if (extras.getParcelable(EXTRA_CLASS_TIME) != null) {
             mClassTime = extras.getParcelable(EXTRA_CLASS_TIME);
-            mListPosition = extras.getInt(EXTRA_LIST_POS);
         }
         mIsNewTime = mClassTime == null;
 
@@ -249,37 +234,30 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id;
-        @Action int actionType;
-        if (mIsNewTime) {
-            id = ClassUtils.getHighestClassTimeId(this) + 1;
-            actionType = ACTION_NEW;
-        } else {
-            id = mClassTime.getId();
-            actionType = ACTION_EDIT;
-        }
+        int id = mIsNewTime ? ClassUtils.getHighestClassTimeId(this) + 1 : mClassTime.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mClassTime = new ClassTime(
-                id, timetable.getId(), mClassDetailId, mDayOfWeek, mWeekNumber, mStartTime, mEndTime);
+        mClassTime = new ClassTime(id, timetable.getId(), mClassDetailId, mDayOfWeek, mWeekNumber,
+                mStartTime, mEndTime);
+
+        if (mIsNewTime) {
+            ClassUtils.addClassTime(this, mClassTime);
+        } else {
+            ClassUtils.replaceClassTime(this, mClassTime.getId(), mClassTime);
+        }
 
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_CLASS_TIME, mClassTime);
         intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
-        intent.putExtra(EXTRA_LIST_POS, mListPosition);
-        intent.putExtra(EXTRA_RESULT_ACTION, actionType);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
 
     private void handleDeleteAction() {
+        ClassUtils.completelyDeleteClassTime(this, mClassTime.getId());
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_CLASS_TIME, mClassTime);
         intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
-        intent.putExtra(EXTRA_LIST_POS, mListPosition);
-        intent.putExtra(EXTRA_RESULT_ACTION, ACTION_DELETE);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

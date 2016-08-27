@@ -228,7 +228,6 @@ public class ClassEditActivity extends AppCompatActivity {
                 intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME, classTimes.get(position));
                 intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
-                intent.putExtra(ClassTimeEditActivity.EXTRA_LIST_POS, position);
                 startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
             }
         });
@@ -306,31 +305,17 @@ public class ClassEditActivity extends AppCompatActivity {
 
         } else if (requestCode == REQUEST_CODE_CLASS_TIME_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                ClassTime classTime = data.getParcelableExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME);
                 int tabIndex = data.getIntExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, -1);
-                int listPos = data.getIntExtra(ClassTimeEditActivity.EXTRA_LIST_POS, -1);
-                @ClassTimeEditActivity.Action int actionType =
-                        data.getIntExtra(ClassTimeEditActivity.EXTRA_RESULT_ACTION, -1);
 
-                Log.d(LOG_TAG, "Refreshing adapter at tab index " + tabIndex);
+                Log.i(LOG_TAG, "Reloading class times list for tab index " + tabIndex);
 
                 ArrayList<ClassTime> someTimes = mClassTimes.get(tabIndex);
-                switch (actionType) {
-                    case ClassTimeEditActivity.ACTION_NEW:
-                        someTimes.add(classTime);
-                        sortClassTimes(someTimes);
-                        ClassUtils.addClassTime(this, classTime);
-                        break;
-                    case ClassTimeEditActivity.ACTION_EDIT:
-                        someTimes.set(listPos, classTime);
-                        sortClassTimes(someTimes);
-                        ClassUtils.replaceClassTime(this, classTime.getId(), classTime);
-                        break;
-                    case ClassTimeEditActivity.ACTION_DELETE:
-                        someTimes.remove(listPos);
-                        ClassUtils.completelyDeleteClassTime(this, classTime.getId());
-                        break;
-                }
+
+                someTimes.clear();
+                someTimes.addAll(ClassUtils.getClassTimesForDetail(
+                        this, mClassDetailIds.get(tabIndex)));
+
+                sortClassTimes(someTimes);
                 mAdapters.get(tabIndex).notifyDataSetChanged();
             }
         }
