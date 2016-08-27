@@ -246,22 +246,24 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             return;
         }
 
-        // delete class times with an invalid week number
-        if (mWeekRotations < mTimetable.getWeekRotations()) {
-            TimetableDbHelper helper = TimetableDbHelper.getInstance(this);
-            Cursor cursor = helper.getReadableDatabase().query(
-                    ClassTimesSchema.TABLE_NAME,
-                    null,
-                    ClassTimesSchema.COL_WEEK_NUMBER + ">?",
-                    new String[] {String.valueOf(mWeekRotations)},
-                    null, null, null);
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                ClassTime classTime = new ClassTime(cursor);
-                ClassUtils.completelyDeleteClassTime(this, classTime.getId());
-                cursor.moveToNext();
+        if (!mIsNew) {
+            // delete class times with an invalid week number
+            if (mWeekRotations < mTimetable.getWeekRotations()) {
+                TimetableDbHelper helper = TimetableDbHelper.getInstance(this);
+                Cursor cursor = helper.getReadableDatabase().query(
+                        ClassTimesSchema.TABLE_NAME,
+                        null,
+                        ClassTimesSchema.COL_WEEK_NUMBER + ">?",
+                        new String[]{String.valueOf(mWeekRotations)},
+                        null, null, null);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    ClassTime classTime = new ClassTime(cursor);
+                    ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+                    cursor.moveToNext();
+                }
+                cursor.close();
             }
-            cursor.close();
         }
 
         int id = mIsNew ? TimetableUtils.getHighestTimetableId(this) + 1 : mTimetable.getId();
