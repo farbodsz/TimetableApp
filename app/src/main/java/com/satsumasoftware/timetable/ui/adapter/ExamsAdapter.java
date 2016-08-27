@@ -40,7 +40,7 @@ public class ExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.subheader, parent, false);
                 return new HeaderViewHolder(header);
             case VIEW_TYPE_ITEM:
-                View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_assignment, parent, false);
+                View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_general, parent, false);
                 return new ExamViewHolder(item);
             default:
                 throw new IllegalArgumentException("invalid view type");
