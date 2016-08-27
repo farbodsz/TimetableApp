@@ -2,16 +2,18 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -20,7 +22,6 @@ import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
-import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalTime;
@@ -36,14 +37,19 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     private int mTabPos;
     private boolean mIsNewTime;
 
-    private ClassTime mClassTime;
+    private ArrayList<ClassTime> mClassTimes;
     private int mClassDetailId;
 
     private TextView mStartTimeText, mEndTimeText;
-
-    private DayOfWeek mDayOfWeek;
-    private int mWeekNumber;
     private LocalTime mStartTime, mEndTime;
+
+    private TextView mDayText;
+    private AlertDialog mDayDialog;
+    private SparseArray<DayOfWeek> mDaysOfWeek;
+
+    private TextView mWeekText;
+    private AlertDialog mWeekDialog;
+    private SparseArray<Integer> mWeekNumbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +64,33 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         mClassDetailId = extras.getInt(EXTRA_CLASS_DETAIL_ID);
         mTabPos = extras.getInt(EXTRA_TAB_POSITION);
 
-        if (extras.getParcelable(EXTRA_CLASS_TIME) != null) {
-            mClassTime = extras.getParcelable(EXTRA_CLASS_TIME);
+        if (extras.getParcelableArrayList(EXTRA_CLASS_TIME) != null) {
+            mClassTimes = extras.getParcelableArrayList(EXTRA_CLASS_TIME);
         }
-        mIsNewTime = mClassTime == null;
+        mIsNewTime = mClassTimes == null;
+
+        // validation
+        if (!mIsNewTime) {
+            LocalTime startTime = null;
+            LocalTime endTime = null;
+            for (ClassTime classTime : mClassTimes) {
+                if (startTime == null) {
+                    // set values in first iteration
+                    startTime = classTime.getStartTime();
+                    endTime = classTime.getEndTime();
+                    continue;
+                }
+
+                if (!classTime.getStartTime().equals(startTime) ||
+                        !classTime.getEndTime().equals(endTime)) {
+                    throw new IllegalArgumentException("invalid time - all start and end times " +
+                            "must be the same");
+                }
+            }
+        }
+
+        mDaysOfWeek = new SparseArray<>();
+        mWeekNumbers = new SparseArray<>();
 
         int titleResId = mIsNewTime ? R.string.title_activity_class_time_new :
                 R.string.title_activity_class_time_edit;
@@ -75,47 +104,106 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             }
         });
 
-        LabelledSpinner spinnerDay = (LabelledSpinner) findViewById(R.id.spinner_day);
+        mDayText = (TextView) findViewById(R.id.textView_day);
         if (!mIsNewTime) {
-            spinnerDay.setSelection(mClassTime.getDay().getValue() - 1);
-        }
-        spinnerDay.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
-            @Override
-            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
-                                     int position, long id) {
-                mDayOfWeek = DayOfWeek.of(position + 1);
+            for (ClassTime classTime : mClassTimes) {
+                DayOfWeek dayOfWeek = classTime.getDay();
+                mDaysOfWeek.put(dayOfWeek.getValue() - 1, dayOfWeek);
             }
+            updateDayText();
+        }
+        mDayText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ClassTimeEditActivity.this);
+
+                boolean[] checkedItems = new boolean[7];
+                for (int i = 0; i < 7; i++) {
+                    checkedItems[i] = mDaysOfWeek.get(i) != null;
+                }
+
+                builder.setTitle(R.string.property_days)
+                        .setMultiChoiceItems(R.array.days, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                if (isChecked) {
+                                    mDaysOfWeek.put(which, DayOfWeek.of(which + 1));
+                                } else {
+                                    mDaysOfWeek.remove(which);
+                                }
+                            }
+                        })
+                        .setPositiveButton(R.string.action_done, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                updateDayText();
+                                mDayDialog.dismiss();
+                            }
+                        });
+
+                mDayDialog = builder.create();
+                mDayDialog.show();
+            }
         });
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
-        int weekRotations = timetable.getWeekRotations();
+        final int weekRotations = timetable.getWeekRotations();
 
-        mWeekNumber = mIsNewTime ? 1 : mClassTime.getWeekNumber();
-        LabelledSpinner spinnerWeek = (LabelledSpinner) findViewById(R.id.spinner_week);
+        mWeekText = (TextView) findViewById(R.id.textView_week);
 
         if (timetable.hasFixedScheduling()) {
-            spinnerWeek.setVisibility(View.GONE);
+            mWeekText.setVisibility(View.GONE);
+            mWeekNumbers.put(0, 1);
 
         } else {
-            ArrayList<String> weekItems = new ArrayList<>();
-            for (int i = 1; i <= weekRotations; i++) {
-                String item = getString(R.string.week_item, String.valueOf(i));
-                weekItems.add(item);
+            if (!mIsNewTime) {
+                for (ClassTime classTime : mClassTimes) {
+                    int weekNumber = classTime.getWeekNumber();
+                    mWeekNumbers.put(weekNumber - 1, weekNumber);
+                }
+                updateWeekText();
             }
 
-            spinnerWeek.setItemsArray(weekItems);
-            spinnerWeek.setSelection(mWeekNumber - 1);
-            spinnerWeek.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+            mWeekText.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
-                                         int position, long id) {
-                    mWeekNumber = position + 1;
+                public void onClick(View view) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ClassTimeEditActivity.this);
+
+                    ArrayList<String> weekItemsList = new ArrayList<>();
+                    for (int i = 1; i <= weekRotations; i++) {
+                        String item = getString(R.string.week_item, String.valueOf(i));
+                        weekItemsList.add(item);
+                    }
+                    final String[] weekItems = weekItemsList.toArray(new String[weekItemsList.size()]);
+
+                    boolean[] checkedItems = new boolean[weekRotations];
+                    for (int i = 0; i < weekRotations; i++) {
+                        checkedItems[i] = mWeekNumbers.get(i) != null;
+                    }
+
+                    builder.setTitle(R.string.property_weeks)
+                            .setMultiChoiceItems(weekItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                    if (isChecked) {
+                                        mWeekNumbers.put(which, which + 1);
+                                    } else {
+                                        mWeekNumbers.remove(which);
+                                    }
+                                }
+                            })
+                            .setPositiveButton(R.string.action_done, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    updateWeekText();
+                                    mWeekDialog.dismiss();
+                                }
+                            });
+
+                    mWeekDialog = builder.create();
+                    mWeekDialog.show();
                 }
-                @Override
-                public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
             });
         }
 
@@ -123,8 +211,8 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
 
         if (!mIsNewTime) {
-            mStartTime = mClassTime.getStartTime();
-            mEndTime = mClassTime.getEndTime();
+            mStartTime = mClassTimes.get(0).getStartTime();
+            mEndTime = mClassTimes.get(0).getEndTime();
             updateTimeTexts();
         }
 
@@ -165,6 +253,51 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 }, initialHour, initialMinute, true).show();
             }
         });
+    }
+
+    private void updateDayText() {
+        if (mDaysOfWeek.size() == 0) {
+            mDayText.setText(R.string.property_days);
+            mDayText.setTextColor(ContextCompat.getColor(
+                    getBaseContext(), R.color.mdu_text_black_secondary));
+            return;
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 7; i++) {
+            DayOfWeek dayOfWeek = mDaysOfWeek.get(i);
+            if (mDaysOfWeek.get(i) != null) {
+                builder.append(dayOfWeek.toString());
+                builder.append(", ");
+            }
+        }
+
+        mDayText.setText(builder.toString());
+        mDayText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+    }
+
+    private void updateWeekText() {
+        if (mWeekNumbers.size() == 0) {
+            mWeekText.setText(R.string.property_weeks);
+            mWeekText.setTextColor(ContextCompat.getColor(
+                    getBaseContext(), R.color.mdu_text_black_secondary));
+            return;
+        }
+
+        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert timetable != null;
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < timetable.getWeekRotations(); i++) {
+            if (mWeekNumbers.get(i) != null) {
+                int weekNumber = mWeekNumbers.get(i);
+                builder.append(weekNumber);
+                builder.append(", ");
+            }
+        }
+
+        mWeekText.setText(builder.toString());
+        mWeekText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
     }
 
     private void updateTimeTexts() {
@@ -218,6 +351,17 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     }
 
     private void handleDoneAction() {
+        if (mDaysOfWeek.size() == 0) {
+            Snackbar.make(findViewById(R.id.rootView),
+                    R.string.message_days_required, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (mWeekNumbers.size() == 0) {
+            Snackbar.make(findViewById(R.id.rootView),
+                    R.string.message_weeks_required, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
         if (mStartTime == null || mEndTime == null) {
             Snackbar.make(findViewById(R.id.rootView),
                     R.string.message_times_required, Snackbar.LENGTH_SHORT).show();
@@ -234,28 +378,49 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNewTime ? ClassUtils.getHighestClassTimeId(this) + 1 : mClassTime.getId();
-
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mClassTime = new ClassTime(id, timetable.getId(), mClassDetailId, mDayOfWeek, mWeekNumber,
-                mStartTime, mEndTime);
-
-        if (mIsNewTime) {
-            ClassUtils.addClassTime(this, mClassTime);
-        } else {
-            ClassUtils.replaceClassTime(this, mClassTime.getId(), mClassTime);
+        if (!mIsNewTime) {
+            for (ClassTime classTime : mClassTimes) {
+                ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+            }
         }
 
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
-        setResult(Activity.RESULT_OK, intent);
-        finish();
+        for (int i = 0; i < timetable.getWeekRotations(); i++) {
+            if (mWeekNumbers.get(i) == null) {
+                continue;
+            }
+            int weekNumber = mWeekNumbers.get(i);
+
+            for (int j = 0; j < 7; j++) {
+                DayOfWeek dayOfWeek = mDaysOfWeek.get(j);
+                if (dayOfWeek == null) {
+                    continue;
+                }
+
+                int id = ClassUtils.getHighestClassTimeId(this) + 1;
+
+                ClassTime classTime = new ClassTime(id, timetable.getId(), mClassDetailId,
+                        dayOfWeek, weekNumber, mStartTime, mEndTime);
+
+                // Everything will be added fresh regardless of whether or not it is new.
+                // This is because there may be more or less ClassTimes than before so ids cannot
+                // be replaced exactly (delete 1, add 1).
+                ClassUtils.addClassTime(this, classTime);
+            }
+
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
     }
 
     private void handleDeleteAction() {
-        ClassUtils.completelyDeleteClassTime(this, mClassTime.getId());
+        for (ClassTime classTime : mClassTimes) {
+            ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+        }
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
         setResult(Activity.RESULT_OK, intent);

@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.ClassTimeGroup;
 import com.satsumasoftware.timetable.framework.Timetable;
 
 import java.util.ArrayList;
@@ -17,11 +19,11 @@ import java.util.ArrayList;
 public class ClassTimesAdapter extends RecyclerView.Adapter<ClassTimesAdapter.ClassTimesViewHolder> {
 
     private Activity mActivity;
-    private ArrayList<ClassTime> mClassTimes;
+    private ArrayList<ClassTimeGroup> mClassTimeGroups;
 
-    public ClassTimesAdapter(Activity activity, ArrayList<ClassTime> classTimes) {
+    public ClassTimesAdapter(Activity activity, ArrayList<ClassTimeGroup> classTimeGroups) {
         mActivity = activity;
-        mClassTimes = classTimes;
+        mClassTimeGroups = classTimeGroups;
     }
 
     @Override
@@ -32,28 +34,39 @@ public class ClassTimesAdapter extends RecyclerView.Adapter<ClassTimesAdapter.Cl
 
     @Override
     public void onBindViewHolder(ClassTimesViewHolder holder, int position) {
-        ClassTime classTime = mClassTimes.get(position);
+        ClassTimeGroup group = mClassTimeGroups.get(position);
 
-        String timeText = classTime.getStartTime().toString() + " - " +
-                classTime.getEndTime().toString();
+        String timeText = group.getStartTime().toString() + " - " + group.getEndTime().toString();
         holder.mTime.setText(timeText);
 
         Timetable timetable = ((TimetableApplication) mActivity.getApplication()).getCurrentTimetable();
         assert timetable != null;
 
         StringBuilder dayTextBuilder = new StringBuilder();
-        dayTextBuilder.append(classTime.getDay().toString());
-        if (!timetable.hasFixedScheduling()) {
-            dayTextBuilder.append(" ")
-                    .append(classTime.getWeekNumber());
+
+        ArrayList<ClassTime> classTimes = group.getClassTimes();
+        for (int i = 0; i < classTimes.size(); i++) {
+            ClassTime classTime = classTimes.get(i);
+
+            dayTextBuilder.append(TextUtilsKt.title(classTime.getDay().toString().toLowerCase()));
+
+            if (!timetable.hasFixedScheduling()) {
+                String weekItem = mActivity.getString(R.string.week_item, classTime.getWeekNumber());
+
+                dayTextBuilder.append(" ")
+                        .append(weekItem);
+            }
+
+            if (i != classTimes.size() - 1) dayTextBuilder.append("\n");
         }
+
         String dayText = dayTextBuilder.toString();
         holder.mDay.setText(dayText);
     }
 
     @Override
     public int getItemCount() {
-        return mClassTimes.size();
+        return mClassTimeGroups.size();
     }
 
     public class ClassTimesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

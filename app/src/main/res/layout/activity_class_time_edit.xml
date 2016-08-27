@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -31,15 +30,16 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/mdu_keyline_2"
             android:layout_marginRight="@dimen/mdu_keyline_1">
-            <com.satsuware.usefulviews.LabelledSpinner
-                android:id="@+id/spinner_day"
-                app:labelText="@string/property_day"
-                app:spinnerEntries="@array/days"
+            <TextView
+                android:id="@+id/textView_day"
+                android:text="@string/property_days"
+                style="@style/Widget.Timetable.TextView.Item.Selectable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-            <com.satsuware.usefulviews.LabelledSpinner
-                android:id="@+id/spinner_week"
-                app:labelText="@string/property_week"
+            <TextView
+                android:id="@+id/textView_week"
+                android:text="@string/property_weeks"
+                style="@style/Widget.Timetable.TextView.Item.Selectable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
