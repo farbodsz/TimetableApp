@@ -85,6 +85,10 @@
             android:name=".ui.TimetableEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:theme="@style/Timetable"/>
+
     </application>
 
 </manifest>
