@@ -26,6 +26,8 @@ import com.satsumasoftware.timetable.framework.Timetable;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalTime;
 
+import java.util.ArrayList;
+
 public class ClassTimeEditActivity extends AppCompatActivity {
 
     protected static final String EXTRA_CLASS_TIME = "extra_class_time";
@@ -46,7 +48,9 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     private SparseArray<DayOfWeek> mDaysOfWeek;
 
     private TextView mWeekText;
-    private int mWeekNumber;
+    private AlertDialog mWeekDialog;
+    private int mWeekNumber; // TODO remove
+    private SparseArray<Integer> mWeekNumbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         mIsNewTime = mClassTime == null;
 
         mDaysOfWeek = new SparseArray<>();
+        mWeekNumbers = new SparseArray<>();
 
         int titleResId = mIsNewTime ? R.string.title_activity_class_time_new :
                 R.string.title_activity_class_time_edit;
@@ -122,37 +127,62 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
-        int weekRotations = timetable.getWeekRotations();
+        final int weekRotations = timetable.getWeekRotations();
 
-        mWeekNumber = 1;  // TODO
-        //mWeekNumber = mIsNewTime ? 1 : mClassTime.getWeekNumber();
-
-        /*
-        LabelledSpinner spinnerWeek = (LabelledSpinner) findViewById(R.id.textView_week);
+        mWeekText = (TextView) findViewById(R.id.textView_week);
 
         if (timetable.hasFixedScheduling()) {
-            spinnerWeek.setVisibility(View.GONE);
+            mWeekText.setVisibility(View.GONE);
+            mWeekNumbers.put(0, 1);
 
         } else {
-            ArrayList<String> weekItems = new ArrayList<>();
-            for (int i = 1; i <= weekRotations; i++) {
-                String item = getString(R.string.week_item, String.valueOf(i));
-                weekItems.add(item);
+            if (!mIsNewTime) {
+                int weekNumber = mClassTime.getWeekNumber();
+                mWeekNumbers.put(weekNumber - 1, weekNumber);
+                updateWeekText();
             }
 
-            spinnerWeek.setItemsArray(weekItems);
-            spinnerWeek.setSelection(mWeekNumber - 1);
-            spinnerWeek.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+            mWeekText.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
-                                         int position, long id) {
-                    mWeekNumber = position + 1;
+                public void onClick(View view) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(ClassTimeEditActivity.this);
+
+                    ArrayList<String> weekItemsList = new ArrayList<>();
+                    for (int i = 1; i <= weekRotations; i++) {
+                        String item = getString(R.string.week_item, String.valueOf(i));
+                        weekItemsList.add(item);
+                    }
+                    final String[] weekItems = weekItemsList.toArray(new String[weekItemsList.size()]);
+
+                    boolean[] checkedItems = new boolean[weekRotations];
+                    for (int i = 0; i < weekRotations; i++) {
+                        checkedItems[i] = mWeekNumbers.get(i) != null;
+                    }
+
+                    builder.setTitle(R.string.property_week)
+                            .setMultiChoiceItems(weekItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                    if (isChecked) {
+                                        mWeekNumbers.put(which, which + 1);
+                                    } else {
+                                        mWeekNumbers.remove(which);
+                                    }
+                                }
+                            })
+                            .setPositiveButton(R.string.action_done, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    updateWeekText();
+                                    mWeekDialog.dismiss();
+                                }
+                            });
+
+                    mWeekDialog = builder.create();
+                    mWeekDialog.show();
                 }
-                @Override
-                public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
             });
         }
-        */
 
         mStartTimeText = (TextView) findViewById(R.id.textView_start_time);
         mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
@@ -221,6 +251,30 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         mDayText.setText(builder.toString());
         mDayText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+    }
+
+    private void updateWeekText() {
+        if (mWeekNumbers.size() == 0) {
+            mWeekText.setText(R.string.property_week);
+            mWeekText.setTextColor(ContextCompat.getColor(
+                    getBaseContext(), R.color.mdu_text_black_secondary));
+            return;
+        }
+
+        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert timetable != null;
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < timetable.getWeekRotations(); i++) {
+            if (mWeekNumbers.get(i) != null) {
+                int weekNumber = mWeekNumbers.get(i);
+                builder.append(weekNumber);
+                builder.append(", ");
+            }
+        }
+
+        mWeekText.setText(builder.toString());
+        mWeekText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
     }
 
     private void updateTimeTexts() {
@@ -297,27 +351,34 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             ClassUtils.completelyDeleteClassTime(this, mClassTime.getId()); // TODO for a list of class times
         }
 
-        for (int i = 0; i < 7; i++) {
-            DayOfWeek dayOfWeek = mDaysOfWeek.get(i);
-            if (dayOfWeek == null) {
+        for (int i = 0; i < timetable.getWeekRotations(); i++) {
+            if (mWeekNumbers.get(i) == null) {
                 continue;
             }
+            int weekNumber = mWeekNumbers.get(i);
 
-            int id = mIsNewTime ? ClassUtils.getHighestClassTimeId(this) + 1 : mClassTime.getId();
+            for (int j = 0; j < 7; j++) {
+                DayOfWeek dayOfWeek = mDaysOfWeek.get(j);
+                if (dayOfWeek == null) {
+                    continue;
+                }
 
-            mClassTime = new ClassTime(id, timetable.getId(), mClassDetailId, dayOfWeek, mWeekNumber,
-                    mStartTime, mEndTime);
+                int id = mIsNewTime ? ClassUtils.getHighestClassTimeId(this) + 1 : mClassTime.getId();
 
-            // Everything will be added fresh regardless of whether or not it is new.
-            // This is because there may be more or less ClassTimes than before so ids cannot
-            // be replaced exactly (delete 1, add 1).
-            ClassUtils.addClassTime(this, mClassTime);
+                mClassTime = new ClassTime(id, timetable.getId(), mClassDetailId, dayOfWeek,
+                        weekNumber, mStartTime, mEndTime);
+
+                // Everything will be added fresh regardless of whether or not it is new.
+                // This is because there may be more or less ClassTimes than before so ids cannot
+                // be replaced exactly (delete 1, add 1).
+                ClassUtils.addClassTime(this, mClassTime);
+            }
+
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         }
-
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
-        setResult(Activity.RESULT_OK, intent);
-        finish();
     }
 
     private void handleDeleteAction() {

@@ -37,7 +37,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
-                android:visibility="gone"
                 android:id="@+id/textView_week"
                 android:text="@string/property_week"
                 style="@style/Widget.Timetable.TextView.Item.Selectable"
