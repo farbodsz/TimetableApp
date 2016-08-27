@@ -3,15 +3,15 @@
     android:orientation="vertical"
     android:background="?selectableItemBackground"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="48dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="47dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/mdu_spacing_micro"
+        android:paddingBottom="@dimen/mdu_spacing_micro">
 
         <TextView
             android:id="@+id/time"
@@ -23,12 +23,11 @@
 
         <TextView
             android:id="@+id/day"
-            android:text="Wednesday Week A"
+            android:text="Wednesday Week A\nThursday Week B"
             android:textColor="@color/mdu_text_black_secondary"
             android:textSize="14sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="2dp"/>
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <include layout="@layout/divider"

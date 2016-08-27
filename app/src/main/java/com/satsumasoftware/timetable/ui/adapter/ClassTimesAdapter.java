@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.ClassTimeGroup;
@@ -47,10 +48,13 @@ public class ClassTimesAdapter extends RecyclerView.Adapter<ClassTimesAdapter.Cl
         for (int i = 0; i < classTimes.size(); i++) {
             ClassTime classTime = classTimes.get(i);
 
-            dayTextBuilder.append(classTime.getDay().toString());
+            dayTextBuilder.append(TextUtilsKt.title(classTime.getDay().toString().toLowerCase()));
+
             if (!timetable.hasFixedScheduling()) {
+                String weekItem = mActivity.getString(R.string.week_item, classTime.getWeekNumber());
+
                 dayTextBuilder.append(" ")
-                        .append(classTime.getWeekNumber());
+                        .append(weekItem);
             }
 
             if (i != classTimes.size() - 1) dayTextBuilder.append("\n");
