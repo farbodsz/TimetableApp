@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -172,7 +173,8 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
                     ArrayList<String> weekItemsList = new ArrayList<>();
                     for (int i = 1; i <= weekRotations; i++) {
-                        String item = getString(R.string.week_item, String.valueOf(i));
+                        String item = getString(R.string.week_item,
+                                ClassTime.displayWeekValue(ClassTimeEditActivity.this, i));
                         weekItemsList.add(item);
                     }
                     final String[] weekItems = weekItemsList.toArray(new String[weekItemsList.size()]);
@@ -267,12 +269,14 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         for (int i = 0; i < 7; i++) {
             DayOfWeek dayOfWeek = mDaysOfWeek.get(i);
             if (mDaysOfWeek.get(i) != null) {
-                builder.append(dayOfWeek.toString());
+                builder.append(TextUtilsKt.title(dayOfWeek.toString().toLowerCase()));
                 builder.append(", ");
             }
         }
+        String text = builder.toString();
+        String displayed = text.substring(0, text.length() - 2);
 
-        mDayText.setText(builder.toString());
+        mDayText.setText(displayed);
         mDayText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
     }
 
@@ -291,12 +295,14 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         for (int i = 0; i < timetable.getWeekRotations(); i++) {
             if (mWeekNumbers.get(i) != null) {
                 int weekNumber = mWeekNumbers.get(i);
-                builder.append(weekNumber);
+                builder.append(ClassTime.displayWeekValue(this, weekNumber));
                 builder.append(", ");
             }
         }
+        String text = builder.toString();
+        String displayed = text.substring(0, text.length() - 2);
 
-        mWeekText.setText(builder.toString());
+        mWeekText.setText(displayed);
         mWeekText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
     }
 
