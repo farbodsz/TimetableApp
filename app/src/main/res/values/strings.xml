@@ -69,6 +69,8 @@
     <string name="property_week">Week</string>
     <string name="property_start_time">Start Time</string>
     <string name="property_end_time">End Time</string>
+    <string name="message_days_required">You need to choose at least one day</string>
+    <string name="message_weeks_required">You need to select at least one week</string>
     <string name="message_start_time_after_end">The start time of your class cannot be after the end time</string>
     <string name="message_start_time_equal_end">The start time of your class cannot equal the end time</string>
     <string name="message_times_required">You need to enter a start time and end time</string>

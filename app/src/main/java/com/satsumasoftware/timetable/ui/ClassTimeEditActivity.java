@@ -351,6 +351,17 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     }
 
     private void handleDoneAction() {
+        if (mDaysOfWeek.size() == 0) {
+            Snackbar.make(findViewById(R.id.rootView),
+                    R.string.message_days_required, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (mWeekNumbers.size() == 0) {
+            Snackbar.make(findViewById(R.id.rootView),
+                    R.string.message_weeks_required, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
         if (mStartTime == null || mEndTime == null) {
             Snackbar.make(findViewById(R.id.rootView),
                     R.string.message_times_required, Snackbar.LENGTH_SHORT).show();
