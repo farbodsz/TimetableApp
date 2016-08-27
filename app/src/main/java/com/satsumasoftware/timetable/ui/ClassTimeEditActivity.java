@@ -56,7 +56,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     private TextView mStartTimeText, mEndTimeText;
 
     private DayOfWeek mDayOfWeek;
-    private int mWeekNumber = 1;  // TODO
+    private int mWeekNumber;
     private LocalTime mStartTime, mEndTime;
 
     @Override
