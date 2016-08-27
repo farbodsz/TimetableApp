@@ -43,7 +43,6 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private TextView mDayText;
     private AlertDialog mDayDialog;
-    private DayOfWeek mDayOfWeek;  // TODO remove
     private SparseArray<DayOfWeek> mDaysOfWeek;
 
     private TextView mWeekText;
@@ -83,8 +82,8 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         mDayText = (TextView) findViewById(R.id.textView_day);
         if (!mIsNewTime) {
-            mDayOfWeek = mClassTime.getDay();
-            mDaysOfWeek.put(mDayOfWeek.getValue() - 1, mDayOfWeek);
+            DayOfWeek dayOfWeek = mClassTime.getDay();
+            mDaysOfWeek.put(dayOfWeek.getValue() - 1, dayOfWeek); // TODO for a list of class times
             updateDayText();
         }
         mDayText.setOnClickListener(new View.OnClickListener() {
