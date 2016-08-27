@@ -295,7 +295,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         for (int i = 0; i < timetable.getWeekRotations(); i++) {
             if (mWeekNumbers.get(i) != null) {
                 int weekNumber = mWeekNumbers.get(i);
-                builder.append(weekNumber);
+                builder.append(ClassTime.displayWeekValue(this, weekNumber));
                 builder.append(", ");
             }
         }
