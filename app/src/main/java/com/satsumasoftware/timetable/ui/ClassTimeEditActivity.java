@@ -2,16 +2,18 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -20,12 +22,9 @@ import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
-import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalTime;
-
-import java.util.ArrayList;
 
 public class ClassTimeEditActivity extends AppCompatActivity {
 
@@ -40,10 +39,15 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     private int mClassDetailId;
 
     private TextView mStartTimeText, mEndTimeText;
-
-    private DayOfWeek mDayOfWeek;
-    private int mWeekNumber;
     private LocalTime mStartTime, mEndTime;
+
+    private TextView mDayText;
+    private AlertDialog mDayDialog;
+    private DayOfWeek mDayOfWeek;  // TODO remove
+    private SparseArray<DayOfWeek> mDaysOfWeek;
+
+    private TextView mWeekText;
+    private int mWeekNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +63,11 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         mTabPos = extras.getInt(EXTRA_TAB_POSITION);
 
         if (extras.getParcelable(EXTRA_CLASS_TIME) != null) {
-            mClassTime = extras.getParcelable(EXTRA_CLASS_TIME);
+            mClassTime = extras.getParcelable(EXTRA_CLASS_TIME); // TODO get array
         }
         mIsNewTime = mClassTime == null;
+
+        mDaysOfWeek = new SparseArray<>();
 
         int titleResId = mIsNewTime ? R.string.title_activity_class_time_new :
                 R.string.title_activity_class_time_edit;
@@ -75,26 +81,55 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             }
         });
 
-        LabelledSpinner spinnerDay = (LabelledSpinner) findViewById(R.id.spinner_day);
+        mDayText = (TextView) findViewById(R.id.textView_day);
         if (!mIsNewTime) {
-            spinnerDay.setSelection(mClassTime.getDay().getValue() - 1);
+            mDayOfWeek = mClassTime.getDay();
+            mDaysOfWeek.put(mDayOfWeek.getValue() - 1, mDayOfWeek);
+            updateDayText();
         }
-        spinnerDay.setOnItemChosenListener(new LabelledSpinner.OnItemChosenListener() {
+        mDayText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
-                                     int position, long id) {
-                mDayOfWeek = DayOfWeek.of(position + 1);
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ClassTimeEditActivity.this);
+
+                boolean[] checkedItems = new boolean[7];
+                for (int i = 0; i < 7; i++) {
+                    checkedItems[i] = mDaysOfWeek.get(i) != null;
+                }
+
+                builder.setTitle(R.string.property_day)
+                        .setMultiChoiceItems(R.array.days, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                if (isChecked) {
+                                    mDaysOfWeek.put(which, DayOfWeek.of(which + 1));
+                                } else {
+                                    mDaysOfWeek.remove(which);
+                                }
+                            }
+                        })
+                        .setPositiveButton(R.string.action_done, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                updateDayText();
+                                mDayDialog.dismiss();
+                            }
+                        });
+
+                mDayDialog = builder.create();
+                mDayDialog.show();
             }
-            @Override
-            public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
         });
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
         int weekRotations = timetable.getWeekRotations();
 
-        mWeekNumber = mIsNewTime ? 1 : mClassTime.getWeekNumber();
-        LabelledSpinner spinnerWeek = (LabelledSpinner) findViewById(R.id.spinner_week);
+        mWeekNumber = 1;  // TODO
+        //mWeekNumber = mIsNewTime ? 1 : mClassTime.getWeekNumber();
+
+        /*
+        LabelledSpinner spinnerWeek = (LabelledSpinner) findViewById(R.id.textView_week);
 
         if (timetable.hasFixedScheduling()) {
             spinnerWeek.setVisibility(View.GONE);
@@ -118,6 +153,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
             });
         }
+        */
 
         mStartTimeText = (TextView) findViewById(R.id.textView_start_time);
         mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
@@ -165,6 +201,27 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 }, initialHour, initialMinute, true).show();
             }
         });
+    }
+
+    private void updateDayText() {
+        if (mDaysOfWeek.size() == 0) {
+            mDayText.setText(R.string.property_day);
+            mDayText.setTextColor(ContextCompat.getColor(
+                    getBaseContext(), R.color.mdu_text_black_secondary));
+            return;
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 7; i++) {
+            DayOfWeek dayOfWeek = mDaysOfWeek.get(i);
+            if (mDaysOfWeek.get(i) != null) {
+                builder.append(dayOfWeek.toString());
+                builder.append(", ");
+            }
+        }
+
+        mDayText.setText(builder.toString());
+        mDayText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
     }
 
     private void updateTimeTexts() {
@@ -234,18 +291,28 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNewTime ? ClassUtils.getHighestClassTimeId(this) + 1 : mClassTime.getId();
-
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mClassTime = new ClassTime(id, timetable.getId(), mClassDetailId, mDayOfWeek, mWeekNumber,
-                mStartTime, mEndTime);
+        if (!mIsNewTime) {
+            ClassUtils.completelyDeleteClassTime(this, mClassTime.getId()); // TODO for a list of class times
+        }
 
-        if (mIsNewTime) {
+        for (int i = 0; i < 7; i++) {
+            DayOfWeek dayOfWeek = mDaysOfWeek.get(i);
+            if (dayOfWeek == null) {
+                continue;
+            }
+
+            int id = mIsNewTime ? ClassUtils.getHighestClassTimeId(this) + 1 : mClassTime.getId();
+
+            mClassTime = new ClassTime(id, timetable.getId(), mClassDetailId, dayOfWeek, mWeekNumber,
+                    mStartTime, mEndTime);
+
+            // Everything will be added fresh regardless of whether or not it is new.
+            // This is because there may be more or less ClassTimes than before so ids cannot
+            // be replaced exactly (delete 1, add 1).
             ClassUtils.addClassTime(this, mClassTime);
-        } else {
-            ClassUtils.replaceClassTime(this, mClassTime.getId(), mClassTime);
         }
 
         Intent intent = new Intent();
