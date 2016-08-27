@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -225,10 +224,7 @@ public class ExamEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
-                LayoutInflater inflater = getLayoutInflater();
-                View customView = inflater.inflate(R.layout.dialog_exam_duration, null);
-
-                final NumberPicker numberPicker = (NumberPicker) customView.findViewById(R.id.numberPicker);
+                NumberPicker numberPicker = new NumberPicker(getBaseContext());
                 numberPicker.setMinValue(10);
                 numberPicker.setMaxValue(360);
 
@@ -242,7 +238,11 @@ public class ExamEditActivity extends AppCompatActivity {
                     }
                 });
 
-                builder.setView(customView)
+                View titleView = getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
+                ((TextView) titleView.findViewById(R.id.title)).setText(R.string.property_duration);
+
+                builder.setView(numberPicker)
+                        .setCustomTitle(titleView)
                         .setPositiveButton(R.string.action_done, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int which) {
