@@ -52,7 +52,7 @@ public class ClassTimesAdapter extends RecyclerView.Adapter<ClassTimesAdapter.Cl
 
             String weekItem = " " + mActivity.getString(R.string.week_item,
                     classTime.displayWeekValue(mActivity));
-            dayTextBuilder.append(weekItem.trim());
+            dayTextBuilder.append(weekItem);
 
             if (i != classTimes.size() - 1) dayTextBuilder.append("\n");
         }
