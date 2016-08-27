@@ -216,7 +216,7 @@ public class ClassEditActivity extends AppCompatActivity {
         }
 
         final ArrayList<ClassTime> classTimes = isNewDetail ? new ArrayList<ClassTime>() :
-                ClassUtils.getClassTimesFromIds(this, classDetail.getClassTimeIds());
+                ClassUtils.getClassTimesForDetail(this, classDetail.getId());
         sortClassTimes(classTimes);
         mClassTimes.add(classTimes);
 
@@ -394,7 +394,6 @@ public class ClassEditActivity extends AppCompatActivity {
         ArrayList<String> rooms = new ArrayList<>();
         ArrayList<String> buildings = new ArrayList<>();
         ArrayList<String> teachers = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> classTimeIdsList = new ArrayList<>();
 
         // note the - 1 from .size() to exclude the placeholder tab
         for (int i = 0; i < pages.size() - 1; i++) {
@@ -438,10 +437,6 @@ public class ClassEditActivity extends AppCompatActivity {
             rooms.add(room);
             buildings.add(building);
             teachers.add(teacher);
-
-            ArrayList<Integer> arrayList = new ArrayList<>();
-            for (ClassTime classTime : classTimes) arrayList.add(classTime.getId());
-            classTimeIdsList.add(arrayList);
         }
 
         if (rooms.size() == 0) {
@@ -460,10 +455,9 @@ public class ClassEditActivity extends AppCompatActivity {
             String room = rooms.get(i);
             String building = buildings.get(i);
             String teacher = teachers.get(i);
-            ArrayList<Integer> classTimeIds = classTimeIdsList.get(i);
 
             ClassDetail classDetail =
-                    new ClassDetail(classDetailId, classId, room, building, teacher, classTimeIds);
+                    new ClassDetail(classDetailId, classId, room, building, teacher);
 
             ClassUtils.replaceClassDetail(this, classDetailId, classDetail);
         }
