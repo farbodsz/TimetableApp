@@ -28,10 +28,9 @@ interface ListCard : HomeCard {
             textView.text = placeholderText
 
         } else {
-            view = inflater.inflate(R.layout.card_home_list_content, null)
-            val recyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
+            view = RecyclerView(context)
 
-            with(recyclerView) {
+            with(view) {
                 layoutManager = object : LinearLayoutManager(context) {
                     override fun canScrollVertically(): Boolean {
                         return false
