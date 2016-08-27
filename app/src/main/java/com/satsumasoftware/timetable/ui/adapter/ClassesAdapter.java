@@ -47,7 +47,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
                 mContext, color.getPrimaryColorResId(mContext)));
 
         ArrayList<ClassDetail> classDetails =
-                ClassUtils.getClassDetailsFromIds(mContext, cls.getClassDetailIds());
+                ClassUtils.getClassDetailsForClass(mContext, cls.getId());
 
         StringBuilder builder = new StringBuilder();
 

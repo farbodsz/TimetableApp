@@ -168,7 +168,7 @@ public class ClassEditActivity extends AppCompatActivity {
             updateLinkedSubject();
 
             ArrayList<ClassDetail> classDetails =
-                    ClassUtils.getClassDetailsFromIds(this, mClass.getClassDetailIds());
+                    ClassUtils.getClassDetailsForClass(this, mClass.getId());
             for (ClassDetail classDetail : classDetails) {
                 addDetailTab(classDetail, false);
             }
@@ -465,7 +465,7 @@ public class ClassEditActivity extends AppCompatActivity {
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mClass = new Class(classId, timetable.getId(), mSubject.getId(), classDetailIds);
+        mClass = new Class(classId, timetable.getId(), mSubject.getId());
 
         if (mIsNew) {
             ClassUtils.addClass(this, mClass);

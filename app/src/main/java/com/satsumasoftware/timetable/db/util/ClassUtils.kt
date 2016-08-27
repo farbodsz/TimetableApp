@@ -35,7 +35,7 @@ class ClassUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                classes.add(Class(activity, cursor))
+                classes.add(Class(cursor))
                 cursor.moveToNext()
             }
             cursor.close()
@@ -56,7 +56,7 @@ class ClassUtils {
                 cursor.close()
                 return null
             }
-            val cls = Class(context, cursor)
+            val cls = Class(cursor)
             cursor.close()
             return cls
         }
@@ -72,29 +72,11 @@ class ClassUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                classes.add(Class(context, cursor))
+                classes.add(Class(cursor))
                 cursor.moveToNext()
             }
             cursor.close()
             return classes
-        }
-
-        @JvmStatic fun getClassDetailIds(context: Context, classId: Int): ArrayList<Int> {
-            val classDetailIds = ArrayList<Int>()
-            val dbHelper = TimetableDbHelper.getInstance(context)
-            val cursor = dbHelper.readableDatabase.query(
-                    ClassDetailsSchema.TABLE_NAME,
-                    null,
-                    "${ClassDetailsSchema.COL_CLASS_ID}=?",
-                    arrayOf(classId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            while (!cursor.isAfterLast) {
-                classDetailIds.add(cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema._ID)))
-                cursor.moveToNext()
-            }
-            cursor.close()
-            return classDetailIds
         }
 
         @JvmStatic fun getClassDetailWithId(context: Context, classDetailId: Int): ClassDetail {
@@ -111,11 +93,21 @@ class ClassUtils {
             return classDetail
         }
 
-        @JvmStatic fun getClassDetailsFromIds(context: Context, classDetailIds: ArrayList<Int>): ArrayList<ClassDetail> {
+        @JvmStatic fun getClassDetailsForClass(context: Context, classId: Int): ArrayList<ClassDetail> {
             val classDetails = ArrayList<ClassDetail>()
-            for (classDetailId in classDetailIds) {
-                classDetails.add(getClassDetailWithId(context, classDetailId))
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    ClassDetailsSchema.TABLE_NAME,
+                    null,
+                    "${ClassDetailsSchema.COL_CLASS_ID}=?",
+                    arrayOf(classId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            while (!cursor.isAfterLast) {
+                classDetails.add(ClassDetail(cursor))
+                cursor.moveToNext()
             }
+            cursor.close()
             return classDetails
         }
 
@@ -335,8 +327,8 @@ class ClassUtils {
                 AssignmentUtils.deleteAssignment(context, assignment.id)
             }
 
-            for (classDetailId in cls.classDetailIds) {
-                completelyDeleteClassDetail(context, classDetailId)
+            for (classDetail in getClassDetailsForClass(context, cls.id)) {
+                completelyDeleteClassDetail(context, classDetail.id)
             }
         }
 
