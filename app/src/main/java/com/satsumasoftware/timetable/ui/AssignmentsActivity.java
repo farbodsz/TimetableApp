@@ -164,10 +164,12 @@ public class AssignmentsActivity extends BaseActivity {
 
             int stringRes = mShowPast ? R.string.placeholder_assignments_past :
                     R.string.placeholder_assignments;
+            int drawableRes = mShowPast ? R.drawable.ic_assignment_black_24dp :
+                    R.drawable.ic_assignment_turned_in_black_24dp;
 
             mPlaceholderLayout.removeAllViews();
             mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
-                    R.drawable.ic_assignment_black_24dp, stringRes));
+                    drawableRes, stringRes));
 
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);
