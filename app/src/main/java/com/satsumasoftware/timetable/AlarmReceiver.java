@@ -58,7 +58,9 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 .setSmallIcon(R.drawable.ic_class_black_24dp)
                 .setContentText(makeDescriptionText(classDetail, classTime))
                 .setContentIntent(pendingIntent)
-                .setColor(colorArgb);
+                .setColor(colorArgb)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setTicker(subject.getName() + " class starting in 5 minutes");
 
         NotificationManager manager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
