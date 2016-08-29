@@ -89,6 +89,8 @@
             android:name=".ui.SettingsActivity"
             android:theme="@style/Timetable"/>
 
+        <receiver android:name=".AlarmReceiver" />
+
     </application>
 
 </manifest>
