@@ -47,11 +47,11 @@ class DateUtils {
             return context.getString(stringRes)
         }
 
-        @JvmStatic fun findWeekNumber(activity: Activity): Int {
+        @JvmOverloads
+        @JvmStatic fun findWeekNumber(activity: Activity, localDate: LocalDate = LocalDate.now()): Int {
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
-            val today = LocalDate.now()
 
-            val days = Period.between(timetable.startDate, today).days
+            val days = Period.between(timetable.startDate, localDate).days
             val nthWeek = days / 7
 
             val weekNo = (nthWeek % timetable.weekRotations) + 1
