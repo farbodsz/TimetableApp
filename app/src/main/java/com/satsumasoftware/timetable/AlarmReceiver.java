@@ -10,6 +10,12 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.util.SubjectUtils;
+import com.satsumasoftware.timetable.framework.Class;
+import com.satsumasoftware.timetable.framework.ClassDetail;
+import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.MainActivity;
 
 import java.util.Calendar;
@@ -26,8 +32,14 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent data) {
         int classTimeId = data.getExtras().getInt(EXTRA_NOTIFICATION_ID);
+        ClassTime classTime = ClassUtils.getClassTimeWithId(context, classTimeId);
 
-        //ClassTime classTime = ClassUtils.getClassTimeWithId();
+        ClassDetail classDetail = ClassUtils.getClassDetailWithId(context, classTime.getClassDetailId());
+        Class cls = ClassUtils.getClassWithId(context, classDetail.getClassId());
+        assert cls != null;
+
+        Subject subject = SubjectUtils.getSubjectWithId(context, cls.getSubjectId());
+        assert subject != null;
 
         Intent intent = new Intent(context, MainActivity.class);
 
@@ -35,9 +47,9 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 context, classTimeId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentTitle("ClassTime id: " + classTimeId)
+                .setContentTitle(subject.getName())
                 .setSmallIcon(R.drawable.ic_class_black_24dp)
-                .setContentText("Test description")
+                .setContentText(makeDescriptionText(classDetail, classTime))
                 .setContentIntent(pendingIntent);
 
         NotificationManager manager =
@@ -84,5 +96,27 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         // Disable alarm
         // TODO
+    }
+
+    private String makeDescriptionText(ClassDetail classDetail, ClassTime classTime) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(classTime.getStartTime().toString())
+                .append(" - ")
+                .append(classTime.getEndTime().toString());
+
+        if (classDetail.hasRoom() || classDetail.hasBuilding()) {
+            builder.append(" \u2022 ");
+
+            if (classDetail.hasRoom()) {
+                builder.append(classDetail.getRoom());
+                if (classDetail.hasBuilding()) builder.append(", ");
+            }
+            if (classDetail.hasBuilding()) {
+                builder.append(classDetail.getBuilding());
+            }
+        }
+
+        return builder.toString();
     }
 }
