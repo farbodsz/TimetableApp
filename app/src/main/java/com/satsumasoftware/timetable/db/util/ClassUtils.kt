@@ -14,6 +14,7 @@ import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime
+import com.satsumasoftware.timetable.framework.Timetable
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -265,10 +266,25 @@ class ClassUtils {
         }
 
         @JvmStatic fun getAllClassTimes(activity: Activity): ArrayList<ClassTime> {
+            return getAllClassTimes(activity, null, null)
+        }
+
+        @JvmStatic fun getAllClassTimes(activity: Activity, timetable: Timetable): ArrayList<ClassTime> {
+            return getAllClassTimes(activity,
+                    ClassTimesSchema.COL_TIMETABLE_ID + "=?",
+                    arrayOf(timetable.id.toString()))
+        }
+
+        private fun getAllClassTimes(activity: Activity, selection: String?,
+                                     selectionArgs: Array<String>?): ArrayList<ClassTime> {
             val classTimes = ArrayList<ClassTime>()
             val dbHelper = TimetableDbHelper.getInstance(activity)
             val cursor = dbHelper.readableDatabase.query(
-                    ClassTimesSchema.TABLE_NAME, null, null, null, null, null, null)
+                    ClassTimesSchema.TABLE_NAME,
+                    null,
+                    selection,
+                    selectionArgs,
+                    null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
                 classTimes.add(ClassTime(cursor))
@@ -343,7 +359,7 @@ class ClassUtils {
             Log.i(LOG_TAG, "Added ClassTime with id ${classTime.id}")
         }
 
-        private fun addAlarmsForClassTime(activity: Activity, classTime: ClassTime) {
+        @JvmStatic fun addAlarmsForClassTime(activity: Activity, classTime: ClassTime) {
             // First, try to find a suitable start date for the alarms
 
             var possibleDate = if (classTime.day != LocalDate.now().dayOfWeek ||
