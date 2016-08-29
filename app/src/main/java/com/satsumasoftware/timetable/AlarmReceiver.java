@@ -8,12 +8,15 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
 
 import com.satsumasoftware.timetable.ui.MainActivity;
 
 import java.util.Calendar;
 
 public class AlarmReceiver extends WakefulBroadcastReceiver {
+
+    private static final String LOG_TAG = "AlarmReceiver";
 
     private static final String EXTRA_NOTIFICATION_ID = "extra_notification_id";
 
@@ -42,7 +45,10 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         manager.notify(classTimeId, builder.build());
     }
 
-    public void setAlarm(Context context, Calendar startDate, int classTimeId) {
+    public void setRepeatingAlarm(Context context, Calendar startDateTime, int classTimeId,
+                                  long repeatInterval) {
+        Log.i(LOG_TAG, "Setting repeated alarm for calendar: " + startDateTime.toString());
+
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, AlarmReceiver.class);
@@ -52,13 +58,14 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
         // Calculate notification time
-        long startTime = startDate.getTimeInMillis();
-        long currentTime = Calendar.getInstance().getTimeInMillis();
-        long diffTime = startTime - currentTime;
+        long startTimeMs = startDateTime.getTimeInMillis();
+        long currentTimeMs = Calendar.getInstance().getTimeInMillis();
+        long diffTime = startTimeMs - currentTimeMs;
 
-        // Start alarm using notification time
-        mAlarmManager.set(AlarmManager.ELAPSED_REALTIME,
+        // Start alarm(s) using notification time
+        mAlarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + diffTime,
+                repeatInterval,
                 mPendingIntent);
 
         // Restart alarm if device is rebooted
@@ -66,6 +73,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     }
 
     public void cancelAlarm(Context context, int classTimeId) {
+        Log.i(LOG_TAG, "Cancelling repeated alarm for classTimeId: " + classTimeId);
+
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         // Cancel alarm using ClassTime id
