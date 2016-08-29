@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -15,6 +16,7 @@ import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.MainActivity;
 
@@ -46,11 +48,17 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context, classTimeId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Color color = new Color(subject.getColorId());
+        String hexString = Integer.toHexString(
+                ContextCompat.getColor(context, color.getPrimaryColorResId(context)));
+        int colorArgb = android.graphics.Color.parseColor("#" + hexString);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentTitle(subject.getName())
                 .setSmallIcon(R.drawable.ic_class_black_24dp)
                 .setContentText(makeDescriptionText(classDetail, classTime))
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .setColor(colorArgb);
 
         NotificationManager manager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
