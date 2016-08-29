@@ -264,6 +264,20 @@ class ClassUtils {
             addClassDetail(context, newClassDetail)
         }
 
+        @JvmStatic fun getAllClassTimes(activity: Activity): ArrayList<ClassTime> {
+            val classTimes = ArrayList<ClassTime>()
+            val dbHelper = TimetableDbHelper.getInstance(activity)
+            val cursor = dbHelper.readableDatabase.query(
+                    ClassTimesSchema.TABLE_NAME, null, null, null, null, null, null)
+            cursor.moveToFirst()
+            while (!cursor.isAfterLast) {
+                classTimes.add(ClassTime(cursor))
+                cursor.moveToNext()
+            }
+            cursor.close()
+            return classTimes
+        }
+
         @JvmStatic fun getClassTimesForDay(activity: Activity, dayOfWeek: DayOfWeek,
                                            weekNumber: Int): ArrayList<ClassTime> {
             val classTimes = ArrayList<ClassTime>()
