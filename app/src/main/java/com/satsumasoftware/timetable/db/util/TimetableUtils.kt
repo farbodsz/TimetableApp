@@ -1,8 +1,10 @@
 package com.satsumasoftware.timetable.db.util
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
+import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.SubjectsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.TimetablesSchema
@@ -75,10 +77,14 @@ class TimetableUtils {
             Log.i(LOG_TAG, "Deleted Timetable with id $timetableId")
         }
 
-        @JvmStatic fun replaceTimetable(context: Context, oldTimetableId: Int, newTimetable: Timetable) {
+        @JvmStatic fun replaceTimetable(activity: Activity, oldTimetableId: Int, newTimetable: Timetable) {
             Log.i(LOG_TAG, "Replacing Timetable...")
-            deleteTimetable(context, oldTimetableId)
-            addTimetable(context, newTimetable)
+
+            deleteTimetable(activity, oldTimetableId)
+            addTimetable(activity, newTimetable)
+
+            // Refresh alarms in case start/end dates have changed
+            (activity.application as TimetableApplication).refreshAlarms(activity)
         }
 
         @JvmStatic fun getHighestTimetableId(context: Context): Int {

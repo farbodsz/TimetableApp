@@ -275,7 +275,9 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             TimetableUtils.replaceTimetable(this, mTimetable.getId(), mTimetable);
         }
 
-        ((TimetableApplication) getApplication()).setCurrentTimetable(mTimetable);
+        TimetableApplication application = (TimetableApplication) getApplication();
+        application.setCurrentTimetable(mTimetable);
+        application.refreshAlarms(this);
 
         setResult(Activity.RESULT_OK);
         finish();
@@ -294,7 +296,9 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         int highestId = TimetableUtils.getHighestTimetableId(this);
         Timetable newCurrentTimetable = TimetableUtils.getTimetableWithId(this, highestId);
 
-        ((TimetableApplication) getApplication()).setCurrentTimetable(newCurrentTimetable);
+        TimetableApplication application = (TimetableApplication) getApplication();
+        application.setCurrentTimetable(mTimetable);
+        application.refreshAlarms(this);
 
         setResult(Activity.RESULT_OK);
         finish();

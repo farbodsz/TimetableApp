@@ -48,7 +48,7 @@ public class TimetablesActivity extends AppCompatActivity {
         mTimetables = TimetableUtils.getTimetables(this);
         sortList();
 
-        mAdapter = new TimetablesAdapter(getApplication(), mTimetables);
+        mAdapter = new TimetablesAdapter(this, mTimetables);
         mAdapter.setOnEntryClickListener(new TimetablesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
