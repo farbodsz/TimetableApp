@@ -111,24 +111,6 @@ class ClassUtils {
             return classDetails
         }
 
-        @JvmStatic fun getClassTimeIds(context: Context, classDetailId: Int): ArrayList<Int> {
-            val classTimeIds = ArrayList<Int>()
-            val dbHelper = TimetableDbHelper.getInstance(context)
-            val cursor = dbHelper.readableDatabase.query(
-                    ClassTimesSchema.TABLE_NAME,
-                    null,
-                    "${ClassTimesSchema.COL_CLASS_DETAIL_ID}=?",
-                    arrayOf(classDetailId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            while (!cursor.isAfterLast) {
-                classTimeIds.add(cursor.getInt(cursor.getColumnIndex(ClassTimesSchema._ID)))
-                cursor.moveToNext()
-            }
-            cursor.close()
-            return classTimeIds
-        }
-
         @JvmStatic fun getClassTimesForDetail(context: Context, classDetailId: Int): ArrayList<ClassTime> {
             val classTimes = ArrayList<ClassTime>()
             val db = TimetableDbHelper.getInstance(context).readableDatabase
@@ -337,8 +319,8 @@ class ClassUtils {
 
             deleteClassDetail(context, classDetailId)
 
-            for (classTimeId in getClassTimeIds(context, classDetailId)) {
-                completelyDeleteClassTime(context, classTimeId)
+            for (classTime in getClassTimesForDetail(context, classDetailId)) {
+                completelyDeleteClassTime(context, classTime.id)
             }
         }
 
