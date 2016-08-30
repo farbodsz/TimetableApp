@@ -103,6 +103,30 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         manager.notify(notificationId, builder.build());
     }
 
+    public void setAlarm(Context context, @Type int notificationType, Calendar dateTime,
+                         int itemId) {
+        Log.i(LOG_TAG, "Setting normal alarm for calendar: " + dateTime.toString());
+
+        mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra(EXTRA_ITEM_ID, itemId);
+        intent.putExtra(EXTRA_NOTIFICATION_TYPE, notificationType);
+
+        mPendingIntent = PendingIntent.getBroadcast(context, itemId, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        // Calculate notification time
+        long startTimeMs = dateTime.getTimeInMillis();
+        long currentTimeMs = Calendar.getInstance().getTimeInMillis();
+        long diffTime = startTimeMs - currentTimeMs;
+
+        // Start alarm(s) using notification time
+        mAlarmManager.set(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime() + diffTime,
+                mPendingIntent);
+    }
+
     public void setRepeatingAlarm(Context context, @Type int notificationType,
                                   Calendar startDateTime, int itemId, long repeatInterval) {
         Log.i(LOG_TAG, "Setting repeated alarm for calendar: " + startDateTime.toString());
