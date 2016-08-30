@@ -38,7 +38,7 @@ class TimetableApplication : Application() {
             alarmReceiver.cancelAlarm(activity, classTime.id)
         }
 
-        Log.i(LOG_TAG, "Addiing alarms for the current timetable (id: ${currentTimetable!!.id})")
+        Log.i(LOG_TAG, "Adding alarms for the current timetable (id: ${currentTimetable!!.id})")
         for (classTime in ClassUtils.getAllClassTimes(activity, currentTimetable!!)) {
             ClassUtils.addAlarmsForClassTime(activity, classTime)
         }
