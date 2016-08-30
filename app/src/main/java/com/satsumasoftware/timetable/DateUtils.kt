@@ -3,6 +3,7 @@ package com.satsumasoftware.timetable
 import android.app.Activity
 import android.content.Context
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Period
 import org.threeten.bp.temporal.WeekFields
 import java.util.*
@@ -57,6 +58,13 @@ class DateUtils {
             val weekNo = (nthWeek % timetable.weekRotations) + 1
             return weekNo
         }
+
+        @JvmStatic fun asCalendar(localDateTime: LocalDateTime) = GregorianCalendar(
+                localDateTime.year,
+                localDateTime.monthValue - 1,
+                localDateTime.dayOfMonth,
+                localDateTime.hour,
+                localDateTime.minute)
 
     }
 }

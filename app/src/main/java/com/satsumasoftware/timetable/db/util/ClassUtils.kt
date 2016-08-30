@@ -384,21 +384,16 @@ class ClassUtils {
             val startDateTime = LocalDateTime.of(possibleDate,
                     classTime.startTime.minusMinutes(5)) // remind 5 mins before start
 
-            // Make this into a Calendar object
-            val calDateTime = GregorianCalendar(
-                    startDateTime.year,
-                    startDateTime.monthValue - 1,
-                    startDateTime.dayOfMonth,
-                    startDateTime.hour,
-                    startDateTime.minute)
-
             // Find the repeat interval in milliseconds (for the alarm to repeat)
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
             val repeatInterval = timetable.weekRotations * WEEK_AS_MILLISECONDS
 
             // Set repeating alarm
-            AlarmReceiver().setRepeatingAlarm(activity, AlarmReceiver.Type.CLASS, calDateTime,
-                    classTime.id, repeatInterval)
+            AlarmReceiver().setRepeatingAlarm(activity,
+                    AlarmReceiver.Type.CLASS,
+                    DateUtils.asCalendar(startDateTime),
+                    classTime.id,
+                    repeatInterval)
         }
 
         private fun deleteClassTime(context: Context, classTimeId: Int) {
