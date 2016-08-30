@@ -14,15 +14,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
+import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
+import com.satsumasoftware.timetable.ui.AssignmentsActivity;
 import com.satsumasoftware.timetable.ui.ExamsActivity;
 import com.satsumasoftware.timetable.ui.MainActivity;
 
@@ -42,6 +45,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {
         int CLASS = 1;
+        int ASSIGNMENT = 2;
         int EXAM = 3;
     }
 
@@ -79,6 +83,24 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 drawableRes = R.drawable.ic_class_white_24dp;
                 contentText = makeClassText(classDetail, classTime);
                 tickerText = subject.getName() + " class starting in 5 minutes";
+                break;
+
+            case Type.ASSIGNMENT:
+                Assignment assignment = AssignmentUtils.getAssignmentWithId(context, id);
+                assert assignment != null;
+
+                Class c = ClassUtils.getClassWithId(context, assignment.getClassId());
+                assert c != null;
+
+                subject = SubjectUtils.getSubjectWithId(context, c.getSubjectId());
+                assert subject != null;
+
+                intent = new Intent(context, AssignmentsActivity.class);
+
+                contentTitle = subject.getName() + " assignment";
+                drawableRes = R.drawable.ic_assignment_white_24dp;
+                contentText = "";
+                tickerText = contentTitle;
                 break;
 
             case Type.EXAM:
