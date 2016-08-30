@@ -397,7 +397,8 @@ class ClassUtils {
             val repeatInterval = timetable.weekRotations * WEEK_AS_MILLISECONDS
 
             // Set repeating alarm
-            AlarmReceiver().setRepeatingAlarm(activity, calDateTime, classTime.id, repeatInterval)
+            AlarmReceiver().setRepeatingAlarm(activity, AlarmReceiver.Type.CLASS, calDateTime,
+                    classTime.id, repeatInterval)
         }
 
         private fun deleteClassTime(context: Context, classTimeId: Int) {

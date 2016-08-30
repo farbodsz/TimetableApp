@@ -34,11 +34,11 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     private static final String EXTRA_ITEM_ID = "extra_item_id";
     private static final String EXTRA_NOTIFICATION_TYPE = "extra_notification_type";
 
-    @IntDef({TYPE_CLASS})
+    @IntDef({Type.CLASS})
     @Retention(RetentionPolicy.SOURCE)
-    @interface NotificationType {}
-
-    private static final int TYPE_CLASS = 1;
+    public @interface Type {
+        int CLASS = 1;
+    }
 
     private static final int ID_PREFIX = 100000;
 
@@ -49,7 +49,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent data) {
         Bundle extras = data.getExtras();
         int id = extras.getInt(EXTRA_ITEM_ID);
-        @NotificationType int notificationType = extras.getInt(EXTRA_NOTIFICATION_TYPE);
+        @Type int notificationType = extras.getInt(EXTRA_NOTIFICATION_TYPE);
 
         Subject subject;
         Intent intent;
@@ -59,14 +59,14 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         @DrawableRes int drawableRes;
 
         switch (notificationType) {
-            case TYPE_CLASS:
+            case Type.CLASS:
                 ClassTime classTime = ClassUtils.getClassTimeWithId(context, id);
                 ClassDetail classDetail = ClassUtils.getClassDetailWithId(
                         context, classTime.getClassDetailId());
                 Class cls = ClassUtils.getClassWithId(context, classDetail.getClassId());
                 assert cls != null;
 
-                notificationId = (ID_PREFIX * TYPE_CLASS) + classTime.getId();
+                notificationId = (ID_PREFIX * Type.CLASS) + classTime.getId();
 
                 subject = SubjectUtils.getSubjectWithId(context, cls.getSubjectId());
                 assert subject != null;
@@ -106,17 +106,17 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         manager.notify(notificationId, builder.build());
     }
 
-    public void setRepeatingAlarm(Context context, Calendar startDateTime, int classTimeId,
-                                  long repeatInterval) {
+    public void setRepeatingAlarm(Context context, @Type int notificationType,
+                                  Calendar startDateTime, int itemId, long repeatInterval) {
         Log.i(LOG_TAG, "Setting repeated alarm for calendar: " + startDateTime.toString());
 
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, AlarmReceiver.class);
-        intent.putExtra(EXTRA_ITEM_ID, classTimeId);
-        intent.putExtra(EXTRA_NOTIFICATION_TYPE, TYPE_CLASS);
+        intent.putExtra(EXTRA_ITEM_ID, itemId);
+        intent.putExtra(EXTRA_NOTIFICATION_TYPE, notificationType);
 
-        mPendingIntent = PendingIntent.getBroadcast(context, classTimeId, intent,
+        mPendingIntent = PendingIntent.getBroadcast(context, itemId, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
         // Calculate notification time
