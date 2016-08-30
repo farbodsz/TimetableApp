@@ -5,7 +5,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IntDef;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -20,33 +23,68 @@ import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.MainActivity;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Calendar;
 
 public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     private static final String LOG_TAG = "AlarmReceiver";
 
-    private static final String EXTRA_NOTIFICATION_ID = "extra_notification_id";
+    private static final String EXTRA_ITEM_ID = "extra_item_id";
+    private static final String EXTRA_NOTIFICATION_TYPE = "extra_notification_type";
+
+    @IntDef({TYPE_CLASS})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface NotificationType {}
+
+    private static final int TYPE_CLASS = 1;
+
+    private static final int ID_PREFIX = 100000;
 
     private AlarmManager mAlarmManager;
     private PendingIntent mPendingIntent;
 
     @Override
     public void onReceive(Context context, Intent data) {
-        int classTimeId = data.getExtras().getInt(EXTRA_NOTIFICATION_ID);
-        ClassTime classTime = ClassUtils.getClassTimeWithId(context, classTimeId);
+        Bundle extras = data.getExtras();
+        int id = extras.getInt(EXTRA_ITEM_ID);
+        @NotificationType int notificationType = extras.getInt(EXTRA_NOTIFICATION_TYPE);
 
-        ClassDetail classDetail = ClassUtils.getClassDetailWithId(context, classTime.getClassDetailId());
-        Class cls = ClassUtils.getClassWithId(context, classDetail.getClassId());
-        assert cls != null;
+        Subject subject;
+        Intent intent;
+        int notificationId;
 
-        Subject subject = SubjectUtils.getSubjectWithId(context, cls.getSubjectId());
-        assert subject != null;
+        String contentTitle, contentText, tickerText;
+        @DrawableRes int drawableRes;
 
-        Intent intent = new Intent(context, MainActivity.class);
+        switch (notificationType) {
+            case TYPE_CLASS:
+                ClassTime classTime = ClassUtils.getClassTimeWithId(context, id);
+                ClassDetail classDetail = ClassUtils.getClassDetailWithId(
+                        context, classTime.getClassDetailId());
+                Class cls = ClassUtils.getClassWithId(context, classDetail.getClassId());
+                assert cls != null;
+
+                notificationId = (ID_PREFIX * TYPE_CLASS) + classTime.getId();
+
+                subject = SubjectUtils.getSubjectWithId(context, cls.getSubjectId());
+                assert subject != null;
+
+                intent = new Intent(context, MainActivity.class);
+
+                contentTitle = subject.getName();
+                drawableRes = R.drawable.ic_class_white_24dp;
+                contentText = makeDescriptionText(classDetail, classTime);
+                tickerText = subject.getName() + " class starting in 5 minutes";
+                break;
+
+            default:
+                throw new IllegalArgumentException("invalid notification type");
+        }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(
-                context, classTimeId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Color color = new Color(subject.getColorId());
         String hexString = Integer.toHexString(
@@ -54,18 +92,18 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         int colorArgb = android.graphics.Color.parseColor("#" + hexString);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentTitle(subject.getName())
-                .setSmallIcon(R.drawable.ic_class_white_24dp)
-                .setContentText(makeDescriptionText(classDetail, classTime))
+                .setContentTitle(contentTitle)
+                .setSmallIcon(drawableRes)
+                .setContentText(contentText)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setColor(colorArgb)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setTicker(subject.getName() + " class starting in 5 minutes");
+                .setTicker(tickerText);
 
         NotificationManager manager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(classTimeId, builder.build());
+        manager.notify(notificationId, builder.build());
     }
 
     public void setRepeatingAlarm(Context context, Calendar startDateTime, int classTimeId,
@@ -75,7 +113,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, AlarmReceiver.class);
-        intent.putExtra(EXTRA_NOTIFICATION_ID, classTimeId);
+        intent.putExtra(EXTRA_ITEM_ID, classTimeId);
+        intent.putExtra(EXTRA_NOTIFICATION_TYPE, TYPE_CLASS);
 
         mPendingIntent = PendingIntent.getBroadcast(context, classTimeId, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
