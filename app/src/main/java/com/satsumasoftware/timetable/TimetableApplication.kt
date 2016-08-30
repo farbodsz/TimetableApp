@@ -6,6 +6,7 @@ import android.util.Log
 
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.satsumasoftware.timetable.db.util.ClassUtils
+import com.satsumasoftware.timetable.db.util.ExamUtils
 import com.satsumasoftware.timetable.framework.Timetable
 
 class TimetableApplication : Application() {
@@ -37,10 +38,16 @@ class TimetableApplication : Application() {
         for (classTime in ClassUtils.getAllClassTimes(activity)) {
             alarmReceiver.cancelAlarm(activity, AlarmReceiver.Type.CLASS, classTime.id)
         }
+        for (exam in ExamUtils.getAllExams(activity)) {
+            alarmReceiver.cancelAlarm(activity, AlarmReceiver.Type.EXAM, exam.id)
+        }
 
         Log.i(LOG_TAG, "Adding alarms for the current timetable (id: ${currentTimetable!!.id})")
         for (classTime in ClassUtils.getAllClassTimes(activity, currentTimetable!!)) {
             ClassUtils.addAlarmsForClassTime(activity, classTime)
+        }
+        for (exam in ExamUtils.getExams(activity)) {
+            ExamUtils.addAlarmForExam(activity, exam)
         }
     }
 

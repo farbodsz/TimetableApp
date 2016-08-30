@@ -15,12 +15,15 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Color;
+import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
+import com.satsumasoftware.timetable.ui.ExamsActivity;
 import com.satsumasoftware.timetable.ui.MainActivity;
 
 import java.lang.annotation.Retention;
@@ -35,10 +38,11 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     private static final String EXTRA_ITEM_ID = "extra_item_id";
     private static final String EXTRA_NOTIFICATION_TYPE = "extra_notification_type";
 
-    @IntDef({Type.CLASS})
+    @IntDef({Type.CLASS, Type.EXAM})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {
         int CLASS = 1;
+        int EXAM = 3;
     }
 
     private AlarmManager mAlarmManager;
@@ -73,8 +77,23 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
                 contentTitle = subject.getName();
                 drawableRes = R.drawable.ic_class_white_24dp;
-                contentText = makeDescriptionText(classDetail, classTime);
+                contentText = makeClassText(classDetail, classTime);
                 tickerText = subject.getName() + " class starting in 5 minutes";
+                break;
+
+            case Type.EXAM:
+                Exam exam = ExamUtils.getExamWithId(context, id);
+                assert exam != null;
+
+                subject = SubjectUtils.getSubjectWithId(context, exam.getSubjectId());
+                assert subject != null;
+
+                intent = new Intent(context, ExamsActivity.class);
+
+                contentTitle = subject.getName() + exam.getModuleName() + " exam";
+                drawableRes = R.drawable.ic_assessment_white_24dp;
+                contentText = makeExamText(exam);
+                tickerText = subject.getName() + " exam starting in 30 minutes";
                 break;
 
             default:
@@ -169,7 +188,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         return (notificationType * 100000) + itemId;
     }
 
-    private String makeDescriptionText(ClassDetail classDetail, ClassTime classTime) {
+    private String makeClassText(ClassDetail classDetail, ClassTime classTime) {
         StringBuilder builder = new StringBuilder();
 
         builder.append(classTime.getStartTime().toString())
@@ -190,4 +209,25 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         return builder.toString();
     }
+
+    private String makeExamText(Exam exam) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(exam.getStartTime());
+
+        if (exam.hasSeat() || exam.hasRoom()) {
+            builder.append(" \u2022 ");
+
+            if (exam.hasSeat()) {
+                builder.append(exam.getSeat());
+                if (exam.hasRoom()) builder.append(", ");
+            }
+            if (exam.hasRoom()) {
+                builder.append(exam.getRoom());
+            }
+        }
+
+        return builder.toString();
+    }
+
 }
