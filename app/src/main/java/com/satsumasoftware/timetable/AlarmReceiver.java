@@ -40,8 +40,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         int CLASS = 1;
     }
 
-    private static final int ID_PREFIX = 100000;
-
     private AlarmManager mAlarmManager;
     private PendingIntent mPendingIntent;
 
@@ -51,9 +49,10 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         int id = extras.getInt(EXTRA_ITEM_ID);
         @Type int notificationType = extras.getInt(EXTRA_NOTIFICATION_TYPE);
 
+        int notificationId = (notificationType * 100000) + id;
+
         Subject subject;
         Intent intent;
-        int notificationId;
 
         String contentTitle, contentText, tickerText;
         @DrawableRes int drawableRes;
@@ -65,8 +64,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                         context, classTime.getClassDetailId());
                 Class cls = ClassUtils.getClassWithId(context, classDetail.getClassId());
                 assert cls != null;
-
-                notificationId = (ID_PREFIX * Type.CLASS) + classTime.getId();
 
                 subject = SubjectUtils.getSubjectWithId(context, cls.getSubjectId());
                 assert subject != null;
