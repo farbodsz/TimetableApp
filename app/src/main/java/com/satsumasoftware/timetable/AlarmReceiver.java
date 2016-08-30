@@ -50,7 +50,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         int id = extras.getInt(EXTRA_ITEM_ID);
         @Type int notificationType = extras.getInt(EXTRA_NOTIFICATION_TYPE);
 
-        int notificationId = (notificationType * 100000) + id;
+        int notificationId = makeNotificationId(notificationType, id);
 
         Subject subject;
         Intent intent;
@@ -122,7 +122,9 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         intent.putExtra(EXTRA_ITEM_ID, itemId);
         intent.putExtra(EXTRA_NOTIFICATION_TYPE, notificationType);
 
-        mPendingIntent = PendingIntent.getBroadcast(context, itemId, intent,
+        mPendingIntent = PendingIntent.getBroadcast(context,
+                makeNotificationId(notificationType, itemId),
+                intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
         // Calculate notification time
@@ -146,18 +148,25 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         // TODO
     }
 
-    public void cancelAlarm(Context context, int classTimeId) {
-        Log.i(LOG_TAG, "Cancelling repeated alarm for classTimeId: " + classTimeId);
+    public void cancelAlarm(Context context, @Type int notificationType, int itemId) {
+        Log.i(LOG_TAG, "Cancelling repeated alarm for an item with id: " + itemId);
 
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        // Cancel alarm using ClassTime id
+        // Cancel alarm using id
         Intent intent = new Intent(context, AlarmReceiver.class);
-        mPendingIntent = PendingIntent.getBroadcast(context, classTimeId, intent, 0);
+        mPendingIntent = PendingIntent.getBroadcast(context,
+                makeNotificationId(notificationType, itemId),
+                intent,
+                0);
         mAlarmManager.cancel(mPendingIntent);
 
         // Disable alarm
         // TODO
+    }
+
+    private int makeNotificationId(@Type int notificationType, int itemId) {
+        return (notificationType * 100000) + itemId;
     }
 
     private String makeDescriptionText(ClassDetail classDetail, ClassTime classTime) {

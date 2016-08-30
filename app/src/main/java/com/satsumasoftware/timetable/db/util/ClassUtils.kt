@@ -407,7 +407,7 @@ class ClassUtils {
                     "${ClassTimesSchema._ID}=?",
                     arrayOf(classTimeId.toString()))
 
-            AlarmReceiver().cancelAlarm(context, classTimeId)
+            AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.CLASS, classTimeId)
 
             Log.i(LOG_TAG, "Deleted ClassTime with id $classTimeId")
         }
