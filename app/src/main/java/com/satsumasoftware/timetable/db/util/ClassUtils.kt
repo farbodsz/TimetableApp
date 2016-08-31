@@ -374,7 +374,7 @@ class ClassUtils {
                 LocalDate.now()
             }
 
-            while (DateUtils.findWeekNumber(activity, possibleDate)
+            while (DateUtils.findWeekNumber(activity.application, possibleDate)
                     != classTime.weekNumber) {
                 // Find a week with the correct week number
                 possibleDate = possibleDate.plusWeeks(1)

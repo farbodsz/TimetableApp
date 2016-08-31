@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity {
 
     private ArrayList<ClassTime> getClassesToday() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
-        int weekNumber = DateUtils.findWeekNumber(this);
+        int weekNumber = DateUtils.findWeekNumber(getApplication());
 
         ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, today, weekNumber);
 
