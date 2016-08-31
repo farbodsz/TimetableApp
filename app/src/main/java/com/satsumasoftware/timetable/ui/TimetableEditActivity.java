@@ -294,7 +294,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         TimetableUtils.completelyDeleteTimetable(this, mTimetable.getId());
 
         int highestId = TimetableUtils.getHighestTimetableId(this);
-        Timetable newCurrentTimetable = TimetableUtils.getTimetableWithId(this, highestId);
+        Timetable newCurrentTimetable = Timetable.create(this, highestId);
 
         TimetableApplication application = (TimetableApplication) getApplication();
         application.setCurrentTimetable(mTimetable);

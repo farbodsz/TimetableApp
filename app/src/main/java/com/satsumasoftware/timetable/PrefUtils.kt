@@ -2,7 +2,6 @@ package com.satsumasoftware.timetable
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.satsumasoftware.timetable.db.util.TimetableUtils
 import com.satsumasoftware.timetable.framework.Timetable
 
 class PrefUtils {
@@ -17,7 +16,7 @@ class PrefUtils {
             return if (timetableId == -1) {
                 null
             } else {
-                TimetableUtils.getTimetableWithId(context, timetableId)
+                Timetable.create(context, timetableId)
             }
         }
 

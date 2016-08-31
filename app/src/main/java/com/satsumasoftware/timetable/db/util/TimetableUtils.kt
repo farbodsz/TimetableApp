@@ -32,24 +32,6 @@ class TimetableUtils {
             return timetables
         }
 
-        @JvmStatic fun getTimetableWithId(context: Context, timetableId: Int): Timetable? {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    TimetablesSchema.TABLE_NAME,
-                    null,
-                    "${TimetablesSchema._ID}=?",
-                    arrayOf(timetableId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            if (cursor.count == 0) {
-                cursor.close()
-                return null
-            }
-            val timetable = Timetable(cursor)
-            cursor.close()
-            return timetable
-        }
-
         @JvmStatic fun addTimetable(context: Context, timetable: Timetable) {
             val values = ContentValues()
             with(values) {
