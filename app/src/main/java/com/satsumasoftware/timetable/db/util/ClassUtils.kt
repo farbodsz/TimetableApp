@@ -53,24 +53,6 @@ class ClassUtils {
             return classes
         }
 
-        @JvmStatic fun getClassWithId(context: Context, classId: Int): Class? {
-            val dbHelper = TimetableDbHelper.getInstance(context)
-            val cursor = dbHelper.readableDatabase.query(
-                    ClassesSchema.TABLE_NAME,
-                    null,
-                    "${ClassesSchema._ID}=?",
-                    arrayOf(classId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            if (cursor.count == 0) {
-                cursor.close()
-                return null
-            }
-            val cls = Class(cursor)
-            cursor.close()
-            return cls
-        }
-
         @JvmStatic fun getClassesForSubject(context: Context, subjectId: Int): ArrayList<Class> {
             val classes = ArrayList<Class>()
             val dbHelper = TimetableDbHelper.getInstance(context)

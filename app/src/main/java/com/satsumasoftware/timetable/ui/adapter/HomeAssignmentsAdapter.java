@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
@@ -45,7 +44,7 @@ public class HomeAssignmentsAdapter extends RecyclerView.Adapter<HomeAssignments
 
         holder.mTitle.setText(assignment.getTitle());
 
-        Class cls = ClassUtils.getClassWithId(mContext, assignment.getClassId());
+        Class cls = Class.create(mContext, assignment.getClassId());
         assert cls != null;
 
         Subject subject = SubjectUtils.getSubjectWithId(mContext, cls.getSubjectId());

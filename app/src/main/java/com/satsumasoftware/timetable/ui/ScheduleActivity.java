@@ -99,8 +99,7 @@ public class ScheduleActivity extends BaseActivity {
                         ClassTime classTime = classTimes.get(position);
                         ClassDetail classDetail = ClassUtils.getClassDetailWithId(
                                 getBaseContext(), classTime.getClassDetailId());
-                        Class cls = ClassUtils.getClassWithId(
-                                getBaseContext(), classDetail.getClassId());
+                        Class cls = Class.create(getBaseContext(), classDetail.getClassId());
 
                         Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
                         intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);

@@ -74,7 +74,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 ClassTime classTime = ClassUtils.getClassTimeWithId(context, id);
                 ClassDetail classDetail = ClassUtils.getClassDetailWithId(
                         context, classTime.getClassDetailId());
-                Class cls = ClassUtils.getClassWithId(context, classDetail.getClassId());
+                Class cls = Class.create(context, classDetail.getClassId());
                 assert cls != null;
 
                 subject = SubjectUtils.getSubjectWithId(context, cls.getSubjectId());
@@ -92,7 +92,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 Assignment assignment = AssignmentUtils.getAssignmentWithId(context, id);
                 assert assignment != null;
 
-                Class c = ClassUtils.getClassWithId(context, assignment.getClassId());
+                Class c = Class.create(context, assignment.getClassId());
                 assert c != null;
 
                 subject = SubjectUtils.getSubjectWithId(context, c.getSubjectId());

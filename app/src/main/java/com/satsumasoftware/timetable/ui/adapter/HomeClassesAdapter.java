@@ -40,7 +40,7 @@ public class HomeClassesAdapter extends RecyclerView.Adapter<HomeClassesAdapter.
     public void onBindViewHolder(ClassesViewHolder holder, int position) {
         ClassTime classTime = mClassTimes.get(position);
         ClassDetail classDetail = ClassUtils.getClassDetailWithId(mContext, classTime.getClassDetailId());
-        Class cls = ClassUtils.getClassWithId(mContext, classDetail.getClassId());
+        Class cls = Class.create(mContext, classDetail.getClassId());
         assert cls != null;
 
         Subject subject = SubjectUtils.getSubjectWithId(mContext, cls.getSubjectId());

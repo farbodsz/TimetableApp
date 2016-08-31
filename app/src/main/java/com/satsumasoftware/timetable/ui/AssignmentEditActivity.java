@@ -97,7 +97,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
 
         mClassText = (TextView) findViewById(R.id.textView_class);
         if (!mIsNew) {
-            mClass = ClassUtils.getClassWithId(this, mAssignment.getClassId());
+            mClass = Class.create(this, mAssignment.getClassId());
             updateLinkedClass();
         }
         mClassText.setOnClickListener(new View.OnClickListener() {
