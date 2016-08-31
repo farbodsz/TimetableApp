@@ -71,20 +71,6 @@ class ClassUtils {
             return classes
         }
 
-        @JvmStatic fun getClassDetailWithId(context: Context, classDetailId: Int): ClassDetail {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    ClassDetailsSchema.TABLE_NAME,
-                    null,
-                    "${ClassDetailsSchema._ID}=?",
-                    arrayOf(classDetailId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            val classDetail = ClassDetail(cursor)
-            cursor.close()
-            return classDetail
-        }
-
         @JvmStatic fun getClassDetailsForClass(context: Context, classId: Int): ArrayList<ClassDetail> {
             val classDetails = ArrayList<ClassDetail>()
             val db = TimetableDbHelper.getInstance(context).readableDatabase

@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -39,7 +38,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
     public void onBindViewHolder(ScheduleViewHolder holder, int position) {
         ClassTime classTime = mClassTimes.get(position);
 
-        ClassDetail classDetail = ClassUtils.getClassDetailWithId(mContext, classTime.getClassDetailId());
+        ClassDetail classDetail = ClassDetail.create(mContext, classTime.getClassDetailId());
         Class cls = Class.create(mContext, classDetail.getClassId());
         assert cls != null;
 

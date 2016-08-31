@@ -97,7 +97,7 @@ public class ScheduleActivity extends BaseActivity {
                     @Override
                     public void onEntryClick(View view, int position) {
                         ClassTime classTime = classTimes.get(position);
-                        ClassDetail classDetail = ClassUtils.getClassDetailWithId(
+                        ClassDetail classDetail = ClassDetail.create(
                                 getBaseContext(), classTime.getClassDetailId());
                         Class cls = Class.create(getBaseContext(), classDetail.getClassId());
 
