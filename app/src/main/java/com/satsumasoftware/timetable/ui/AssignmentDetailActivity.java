@@ -119,7 +119,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_ASSIGNMENT_EDIT) {
             if (resultCode == RESULT_OK) {
                 // get the edited assignment (it would have the highest id if new, same id if not)
-                mAssignment = AssignmentUtils.getAssignmentWithId(this, mIsNew ?
+                mAssignment = Assignment.create(this, mIsNew ?
                         AssignmentUtils.getHighestAssignmentId(this) : mAssignment.getId());
 
                 if (mAssignment == null) {

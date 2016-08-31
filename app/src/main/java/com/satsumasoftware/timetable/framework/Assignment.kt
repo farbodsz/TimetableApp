@@ -1,9 +1,11 @@
 package com.satsumasoftware.timetable.framework
 
+import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.AssignmentsSchema
+import com.satsumasoftware.timetable.db.TimetableDbHelper
 import org.threeten.bp.LocalDate
 
 class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title: String,
@@ -45,9 +47,29 @@ class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title:
     }
 
     companion object {
+
         @JvmField val CREATOR: Parcelable.Creator<Assignment> = object : Parcelable.Creator<Assignment> {
             override fun createFromParcel(source: Parcel): Assignment = Assignment(source)
             override fun newArray(size: Int): Array<Assignment?> = arrayOfNulls(size)
         }
+
+        @JvmStatic fun create(context: Context, assignmentId: Int): Assignment? {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    AssignmentsSchema.TABLE_NAME,
+                    null,
+                    "${AssignmentsSchema._ID}=?",
+                    arrayOf(assignmentId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val assignment = Assignment(cursor)
+            cursor.close()
+            return assignment
+        }
+
     }
 }
