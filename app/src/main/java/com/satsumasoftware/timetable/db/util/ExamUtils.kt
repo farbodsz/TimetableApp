@@ -53,24 +53,6 @@ class ExamUtils {
             return exams
         }
 
-        @JvmStatic fun getExamWithId(context: Context, examId: Int): Exam? {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    ExamsSchema.TABLE_NAME,
-                    null,
-                    "${ExamsSchema._ID}=?",
-                    arrayOf(examId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            if (cursor.count == 0) {
-                cursor.close()
-                return null
-            }
-            val exam = Exam(cursor)
-            cursor.close()
-            return exam
-        }
-
         @JvmStatic fun getExamsForSubject(context: Context, subjectId: Int): ArrayList<Exam> {
             val exams = ArrayList<Exam>()
             val dbHelper = TimetableDbHelper.getInstance(context)
