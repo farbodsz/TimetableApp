@@ -43,7 +43,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     private static final String EXTRA_ITEM_ID = "extra_item_id";
     private static final String EXTRA_NOTIFICATION_TYPE = "extra_notification_type";
 
-    @IntDef({Type.CLASS, Type.EXAM})
+    @IntDef({Type.CLASS, Type.ASSIGNMENT, Type.EXAM})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {
         int CLASS = 1;
