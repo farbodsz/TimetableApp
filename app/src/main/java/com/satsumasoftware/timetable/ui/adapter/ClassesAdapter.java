@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.Color;
@@ -38,7 +37,7 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
     public void onBindViewHolder(ClassesViewHolder holder, int position) {
         Class cls = mClasses.get(position);
 
-        Subject subject = SubjectUtils.getSubjectWithId(mContext, cls.getSubjectId());
+        Subject subject = Subject.create(mContext, cls.getSubjectId());
         assert subject != null;
         holder.mSubject.setText(subject.getName());
 

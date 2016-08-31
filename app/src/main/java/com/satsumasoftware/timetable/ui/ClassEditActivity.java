@@ -165,7 +165,7 @@ public class ClassEditActivity extends AppCompatActivity {
         mAdapters = new ArrayList<>();
 
         if (!mIsNew) {
-            mSubject = SubjectUtils.getSubjectWithId(this, mClass.getSubjectId());
+            mSubject = Subject.create(this, mClass.getSubjectId());
             updateLinkedSubject();
 
             ArrayList<ClassDetail> classDetails =

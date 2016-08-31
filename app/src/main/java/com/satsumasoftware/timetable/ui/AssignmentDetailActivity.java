@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -69,7 +68,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
         Class cls = Class.create(this, mAssignment.getClassId());
         assert cls != null;
-        Subject subject = SubjectUtils.getSubjectWithId(this, cls.getSubjectId());
+        Subject subject = Subject.create(this, cls.getSubjectId());
         assert subject != null;
         getSupportActionBar().setSubtitle(subject.getName());
 

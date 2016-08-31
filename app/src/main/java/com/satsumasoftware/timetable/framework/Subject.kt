@@ -1,9 +1,11 @@
 package com.satsumasoftware.timetable.framework
 
+import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.SubjectsSchema
+import com.satsumasoftware.timetable.db.TimetableDbHelper
 
 class Subject(val id: Int, val timetableId: Int, var name: String, var colorId: Int) : Parcelable {
 
@@ -26,9 +28,29 @@ class Subject(val id: Int, val timetableId: Int, var name: String, var colorId: 
     }
 
     companion object {
+
         @JvmField val CREATOR: Parcelable.Creator<Subject> = object : Parcelable.Creator<Subject> {
             override fun createFromParcel(source: Parcel): Subject = Subject(source)
             override fun newArray(size: Int): Array<Subject?> = arrayOfNulls(size)
         }
+
+        @JvmStatic fun create(context: Context, subjectId: Int): Subject? {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    SubjectsSchema.TABLE_NAME,
+                    null,
+                    "${SubjectsSchema._ID}=?",
+                    arrayOf(subjectId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val subject = Subject(cursor)
+            cursor.close()
+            return subject
+        }
+
     }
 }

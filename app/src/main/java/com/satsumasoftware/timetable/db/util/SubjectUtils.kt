@@ -37,24 +37,6 @@ class SubjectUtils {
             return subjects
         }
 
-        @JvmStatic fun getSubjectWithId(context: Context, id: Int): Subject? {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    SubjectsSchema.TABLE_NAME,
-                    null,
-                    "${SubjectsSchema._ID}=?",
-                    arrayOf(id.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            if (cursor.count == 0) {
-                cursor.close()
-                return null
-            }
-            val subject = Subject(cursor)
-            cursor.close()
-            return subject
-        }
-
         @JvmStatic fun addSubject(context: Context, subject: Subject) {
             val values = ContentValues()
             with(values) {

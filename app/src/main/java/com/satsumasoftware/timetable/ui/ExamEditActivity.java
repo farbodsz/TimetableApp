@@ -117,7 +117,7 @@ public class ExamEditActivity extends AppCompatActivity {
 
         mSubjectText = (TextView) findViewById(R.id.textView_subject);
         if (!mIsNew) {
-            mSubject = SubjectUtils.getSubjectWithId(this, mExam.getSubjectId());
+            mSubject = Subject.create(this, mExam.getSubjectId());
             updateLinkedSubject();
         }
         mSubjectText.setOnClickListener(new View.OnClickListener() {

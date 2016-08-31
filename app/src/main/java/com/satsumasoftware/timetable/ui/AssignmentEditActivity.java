@@ -24,7 +24,6 @@ import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -164,7 +163,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     }
 
     private void updateLinkedClass() {
-        Subject subject = SubjectUtils.getSubjectWithId(getBaseContext(), mClass.getSubjectId());
+        Subject subject = Subject.create(getBaseContext(), mClass.getSubjectId());
         assert subject != null;
 
         mClassText.setText(subject.getName());

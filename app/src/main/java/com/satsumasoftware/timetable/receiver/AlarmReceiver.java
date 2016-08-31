@@ -17,7 +17,6 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -73,7 +72,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 Class cls = Class.create(context, classDetail.getClassId());
                 assert cls != null;
 
-                subject = SubjectUtils.getSubjectWithId(context, cls.getSubjectId());
+                subject = Subject.create(context, cls.getSubjectId());
                 assert subject != null;
 
                 intent = new Intent(context, MainActivity.class);
@@ -91,7 +90,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 Class c = Class.create(context, assignment.getClassId());
                 assert c != null;
 
-                subject = SubjectUtils.getSubjectWithId(context, c.getSubjectId());
+                subject = Subject.create(context, c.getSubjectId());
                 assert subject != null;
 
                 intent = new Intent(context, AssignmentsActivity.class);
@@ -106,7 +105,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 Exam exam = Exam.create(context, id);
                 assert exam != null;
 
-                subject = SubjectUtils.getSubjectWithId(context, exam.getSubjectId());
+                subject = Subject.create(context, exam.getSubjectId());
                 assert subject != null;
 
                 intent = new Intent(context, ExamsActivity.class);
