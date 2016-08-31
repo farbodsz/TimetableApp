@@ -3,8 +3,10 @@ package com.satsumasoftware.timetable;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.DrawableRes;
@@ -186,7 +188,11 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         }
 
         // Restart alarm if device is rebooted
-        // TODO
+        ComponentName receiver = new ComponentName(context, BootReceiver.class);
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
     public void cancelAlarm(Context context, @Type int notificationType, int itemId) {
@@ -203,7 +209,11 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         mAlarmManager.cancel(mPendingIntent);
 
         // Disable alarm
-        // TODO
+        ComponentName receiver = new ComponentName(context, BootReceiver.class);
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
     private int makeNotificationId(@Type int notificationType, int itemId) {
