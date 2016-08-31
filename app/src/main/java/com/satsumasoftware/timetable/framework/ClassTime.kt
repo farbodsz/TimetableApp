@@ -1,12 +1,14 @@
 package com.satsumasoftware.timetable.framework
 
 import android.app.Activity
+import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.PrefUtils
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.ClassTimesSchema
+import com.satsumasoftware.timetable.db.TimetableDbHelper
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime
 
@@ -54,6 +56,20 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
         @JvmField val CREATOR: Parcelable.Creator<ClassTime> = object : Parcelable.Creator<ClassTime> {
             override fun createFromParcel(source: Parcel): ClassTime = ClassTime(source)
             override fun newArray(size: Int): Array<ClassTime?> = arrayOfNulls(size)
+        }
+
+        @JvmStatic fun create(context: Context, classTimeId: Int): ClassTime {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    ClassTimesSchema.TABLE_NAME,
+                    null,
+                    "${ClassTimesSchema._ID}=?",
+                    arrayOf(classTimeId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            val classTime = ClassTime(cursor)
+            cursor.close()
+            return classTime
         }
 
         @JvmStatic fun displayWeekValue(activity: Activity, weekNumber: Int): String {

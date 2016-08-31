@@ -18,7 +18,6 @@ import android.util.Log;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
@@ -71,7 +70,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         switch (notificationType) {
             case Type.CLASS:
-                ClassTime classTime = ClassUtils.getClassTimeWithId(context, id);
+                ClassTime classTime = ClassTime.create(context, id);
                 ClassDetail classDetail = ClassDetail.create(context, classTime.getClassDetailId());
                 Class cls = Class.create(context, classDetail.getClassId());
                 assert cls != null;

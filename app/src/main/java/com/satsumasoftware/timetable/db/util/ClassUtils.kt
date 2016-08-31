@@ -107,20 +107,6 @@ class ClassUtils {
             return classTimes
         }
 
-        @JvmStatic fun getClassTimeWithId(context: Context, classTimeId: Int): ClassTime {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    ClassTimesSchema.TABLE_NAME,
-                    null,
-                    "${ClassTimesSchema._ID}=?",
-                    arrayOf(classTimeId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            val classTime = ClassTime(cursor)
-            cursor.close()
-            return classTime
-        }
-
         @JvmStatic fun getHighestClassId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
