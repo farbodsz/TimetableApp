@@ -2,6 +2,7 @@ package com.satsumasoftware.timetable
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.util.Log
 
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -31,30 +32,32 @@ class TimetableApplication : Application() {
         currentTimetable = PrefUtils.getCurrentTimetable(this)
     }
 
-    fun refreshAlarms(activity: Activity) {
+    fun refreshAlarms(activity: Activity) = refreshAlarms(activity, activity.application)
+
+    fun refreshAlarms(context: Context, application: Application) {
         // Cancel alarms from all timetables and add alarms for the current one
         val alarmReceiver = AlarmReceiver()
 
         Log.i(LOG_TAG, "Cancelling ALL alarms")
-        for (classTime in ClassUtils.getAllClassTimes(activity)) {
-            alarmReceiver.cancelAlarm(activity, AlarmReceiver.Type.CLASS, classTime.id)
+        for (classTime in ClassUtils.getAllClassTimes(context)) {
+            alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.CLASS, classTime.id)
         }
-        for (assignment in AssignmentUtils.getAllAssignments(activity)) {
-            alarmReceiver.cancelAlarm(activity, AlarmReceiver.Type.ASSIGNMENT, assignment.id)
+        for (assignment in AssignmentUtils.getAllAssignments(context)) {
+            alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.ASSIGNMENT, assignment.id)
         }
-        for (exam in ExamUtils.getAllExams(activity)) {
-            alarmReceiver.cancelAlarm(activity, AlarmReceiver.Type.EXAM, exam.id)
+        for (exam in ExamUtils.getAllExams(context)) {
+            alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.EXAM, exam.id)
         }
 
         Log.i(LOG_TAG, "Adding alarms for the current timetable (id: ${currentTimetable!!.id})")
-        for (classTime in ClassUtils.getAllClassTimes(activity, currentTimetable!!)) {
-            ClassUtils.addAlarmsForClassTime(activity, classTime)
+        for (classTime in ClassUtils.getAllClassTimes(context, currentTimetable!!)) {
+            ClassUtils.addAlarmsForClassTime(context, application, classTime)
         }
-        for (assignment in AssignmentUtils.getAssignments(activity)) {
-            AssignmentUtils.addAlarmForAssignment(activity, assignment)
+        for (assignment in AssignmentUtils.getAssignments(context, application)) {
+            AssignmentUtils.addAlarmForAssignment(context, assignment)
         }
-        for (exam in ExamUtils.getExams(activity)) {
-            ExamUtils.addAlarmForExam(activity, exam)
+        for (exam in ExamUtils.getExams(context, application)) {
+            ExamUtils.addAlarmForExam(context, exam)
         }
     }
 
