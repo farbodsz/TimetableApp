@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Assignment> assignments = new ArrayList<>();
         LocalDate now = LocalDate.now();
 
-        for (Assignment assignment : AssignmentUtils.getAssignments(this)) {
+        for (Assignment assignment : AssignmentUtils.getAssignments(this, getApplication())) {
             LocalDate dueDate = assignment.getDueDate();
 
             boolean isOverdue = dueDate.isBefore(now) && assignment.getCompletionProgress() != 100;

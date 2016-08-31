@@ -1,6 +1,6 @@
 package com.satsumasoftware.timetable.db.util
 
-import android.app.Activity
+import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
@@ -18,12 +18,12 @@ class AssignmentUtils {
 
         const val LOG_TAG = "AssignmentUtils"
 
-        @JvmStatic fun getAssignments(activity: Activity): ArrayList<Assignment> {
+        @JvmStatic fun getAssignments(context: Context, application: Application): ArrayList<Assignment> {
             val assignments = ArrayList<Assignment>()
 
-            val timetable = (activity.application as TimetableApplication).currentTimetable!!
+            val timetable = (application as TimetableApplication).currentTimetable!!
 
-            val dbHelper = TimetableDbHelper.getInstance(activity)
+            val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     AssignmentsSchema.TABLE_NAME,
                     null,
