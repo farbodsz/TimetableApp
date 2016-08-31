@@ -5,7 +5,6 @@ import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
-import com.satsumasoftware.timetable.DateUtils
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.ClassDetailsSchema
 import com.satsumasoftware.timetable.db.ClassTimesSchema
@@ -16,6 +15,7 @@ import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime
 import com.satsumasoftware.timetable.framework.Timetable
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
+import com.satsumasoftware.timetable.util.DateUtils
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime

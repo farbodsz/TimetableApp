@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;

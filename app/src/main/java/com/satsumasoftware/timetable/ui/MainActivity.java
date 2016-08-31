@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.satsumasoftware.timetable.DateUtils;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
@@ -25,6 +24,7 @@ import com.satsumasoftware.timetable.ui.card.AssignmentsCard;
 import com.satsumasoftware.timetable.ui.card.ClassesCard;
 import com.satsumasoftware.timetable.ui.card.ExamsCard;
 import com.satsumasoftware.timetable.ui.card.HomeCard;
+import com.satsumasoftware.timetable.util.DateUtils;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;

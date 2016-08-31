@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable
+package com.satsumasoftware.timetable.util
 
 fun String.title(): String {
     if (this.trim().length == 0) {

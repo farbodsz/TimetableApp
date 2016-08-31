@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.satsumasoftware.timetable.DateUtils;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
@@ -25,6 +24,7 @@ import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ScheduleAdapter;
+import com.satsumasoftware.timetable.util.DateUtils;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;

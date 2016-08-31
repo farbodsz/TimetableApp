@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable
+package com.satsumasoftware.timetable.util
 
 import android.app.Activity
 import android.content.Context

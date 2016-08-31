@@ -1,7 +1,9 @@
-package com.satsumasoftware.timetable
+package com.satsumasoftware.timetable.util
 
 import android.app.Application
 import android.content.Context
+import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.TimetableApplication
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Period
