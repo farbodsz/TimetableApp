@@ -39,9 +39,9 @@ class AssignmentUtils {
             return assignments
         }
 
-        @JvmStatic fun getAllAssignments(activity: Activity): ArrayList<Assignment> {
+        @JvmStatic fun getAllAssignments(context: Context): ArrayList<Assignment> {
             val assignments = ArrayList<Assignment>()
-            val dbHelper = TimetableDbHelper.getInstance(activity)
+            val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     AssignmentsSchema.TABLE_NAME, null, null, null, null, null, null)
             cursor.moveToFirst()

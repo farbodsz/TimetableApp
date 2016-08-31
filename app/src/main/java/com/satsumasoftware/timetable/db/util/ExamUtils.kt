@@ -39,9 +39,9 @@ class ExamUtils {
             return exams
         }
 
-        @JvmStatic fun getAllExams(activity: Activity): ArrayList<Exam> {
+        @JvmStatic fun getAllExams(context: Context): ArrayList<Exam> {
             val exams = ArrayList<Exam>()
-            val dbHelper = TimetableDbHelper.getInstance(activity)
+            val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     ExamsSchema.TABLE_NAME, null, null, null, null, null, null)
             cursor.moveToFirst()

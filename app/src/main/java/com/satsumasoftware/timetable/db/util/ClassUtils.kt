@@ -265,20 +265,20 @@ class ClassUtils {
             addClassDetail(context, newClassDetail)
         }
 
-        @JvmStatic fun getAllClassTimes(activity: Activity): ArrayList<ClassTime> {
-            return getAllClassTimes(activity, null, null)
+        @JvmStatic fun getAllClassTimes(context: Context): ArrayList<ClassTime> {
+            return getAllClassTimes(context, null, null)
         }
 
-        @JvmStatic fun getAllClassTimes(activity: Activity, timetable: Timetable): ArrayList<ClassTime> {
-            return getAllClassTimes(activity,
+        @JvmStatic fun getAllClassTimes(context: Context, timetable: Timetable): ArrayList<ClassTime> {
+            return getAllClassTimes(context,
                     ClassTimesSchema.COL_TIMETABLE_ID + "=?",
                     arrayOf(timetable.id.toString()))
         }
 
-        private fun getAllClassTimes(activity: Activity, selection: String?,
+        private fun getAllClassTimes(context: Context, selection: String?,
                                      selectionArgs: Array<String>?): ArrayList<ClassTime> {
             val classTimes = ArrayList<ClassTime>()
-            val dbHelper = TimetableDbHelper.getInstance(activity)
+            val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     ClassTimesSchema.TABLE_NAME,
                     null,
