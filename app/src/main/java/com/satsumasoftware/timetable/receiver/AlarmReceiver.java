@@ -17,7 +17,6 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
@@ -104,7 +103,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 break;
 
             case Type.EXAM:
-                Exam exam = ExamUtils.getExamWithId(context, id);
+                Exam exam = Exam.create(context, id);
                 assert exam != null;
 
                 subject = SubjectUtils.getSubjectWithId(context, exam.getSubjectId());

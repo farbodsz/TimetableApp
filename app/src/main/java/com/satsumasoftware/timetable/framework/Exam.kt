@@ -1,9 +1,11 @@
 package com.satsumasoftware.timetable.framework
 
+import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.ExamsSchema
+import com.satsumasoftware.timetable.db.TimetableDbHelper
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -65,9 +67,29 @@ class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName
     }
 
     companion object {
+
         @JvmField val CREATOR: Parcelable.Creator<Exam> = object : Parcelable.Creator<Exam> {
             override fun createFromParcel(source: Parcel): Exam = Exam(source)
             override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
         }
+
+        @JvmStatic fun create(context: Context, examId: Int): Exam? {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    ExamsSchema.TABLE_NAME,
+                    null,
+                    "${ExamsSchema._ID}=?",
+                    arrayOf(examId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val exam = Exam(cursor)
+            cursor.close()
+            return exam
+        }
+
     }
 }
