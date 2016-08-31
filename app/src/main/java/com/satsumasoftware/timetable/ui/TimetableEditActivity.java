@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
@@ -25,6 +24,7 @@ import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
+import com.satsumasoftware.timetable.util.TextUtilsKt;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.threeten.bp.LocalDate;

@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.TextUtilsKt;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.ClassTimeGroup;
 import com.satsumasoftware.timetable.framework.Timetable;
+import com.satsumasoftware.timetable.util.TextUtilsKt;
 
 import java.util.ArrayList;
 

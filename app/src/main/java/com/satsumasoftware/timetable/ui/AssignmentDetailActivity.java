@@ -14,12 +14,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
+import com.satsumasoftware.timetable.util.ThemeUtils;
 
 import org.threeten.bp.format.DateTimeFormatter;
 

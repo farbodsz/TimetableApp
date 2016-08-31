@@ -15,6 +15,7 @@ import android.view.Menu
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.framework.Color
 
 class ThemeUtils {

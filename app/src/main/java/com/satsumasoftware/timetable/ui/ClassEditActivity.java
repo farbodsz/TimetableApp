@@ -24,8 +24,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.TextUtilsKt;
-import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
@@ -38,6 +36,8 @@ import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ClassTimesAdapter;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
+import com.satsumasoftware.timetable.util.TextUtilsKt;
+import com.satsumasoftware.timetable.util.ThemeUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

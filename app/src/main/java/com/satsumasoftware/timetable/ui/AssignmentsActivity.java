@@ -16,11 +16,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.ThemeUtils;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
+import com.satsumasoftware.timetable.util.ThemeUtils;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
