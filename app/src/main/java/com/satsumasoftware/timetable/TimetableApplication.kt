@@ -1,10 +1,8 @@
 package com.satsumasoftware.timetable
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.util.Log
-
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.satsumasoftware.timetable.db.util.AssignmentUtils
 import com.satsumasoftware.timetable.db.util.ClassUtils
@@ -32,9 +30,7 @@ class TimetableApplication : Application() {
         currentTimetable = PrefUtils.getCurrentTimetable(this)
     }
 
-    fun refreshAlarms(activity: Activity) = refreshAlarms(activity, activity.application)
-
-    fun refreshAlarms(context: Context, application: Application) {
+    fun refreshAlarms(context: Context) {
         // Cancel alarms from all timetables and add alarms for the current one
         val alarmReceiver = AlarmReceiver()
 
@@ -51,12 +47,12 @@ class TimetableApplication : Application() {
 
         Log.i(LOG_TAG, "Adding alarms for the current timetable (id: ${currentTimetable!!.id})")
         for (classTime in ClassUtils.getAllClassTimes(context, currentTimetable!!)) {
-            ClassUtils.addAlarmsForClassTime(context, application, classTime)
+            ClassUtils.addAlarmsForClassTime(context, this, classTime)
         }
-        for (assignment in AssignmentUtils.getAssignments(context, application)) {
+        for (assignment in AssignmentUtils.getAssignments(context, this)) {
             AssignmentUtils.addAlarmForAssignment(context, assignment)
         }
-        for (exam in ExamUtils.getExams(context, application)) {
+        for (exam in ExamUtils.getExams(context, this)) {
             ExamUtils.addAlarmForExam(context, exam)
         }
     }
