@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.db.util
 
 import android.app.Activity
+import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
@@ -265,20 +266,20 @@ class ClassUtils {
             addClassDetail(context, newClassDetail)
         }
 
-        @JvmStatic fun getAllClassTimes(activity: Activity): ArrayList<ClassTime> {
-            return getAllClassTimes(activity, null, null)
+        @JvmStatic fun getAllClassTimes(context: Context): ArrayList<ClassTime> {
+            return getAllClassTimes(context, null, null)
         }
 
-        @JvmStatic fun getAllClassTimes(activity: Activity, timetable: Timetable): ArrayList<ClassTime> {
-            return getAllClassTimes(activity,
+        @JvmStatic fun getAllClassTimes(context: Context, timetable: Timetable): ArrayList<ClassTime> {
+            return getAllClassTimes(context,
                     ClassTimesSchema.COL_TIMETABLE_ID + "=?",
                     arrayOf(timetable.id.toString()))
         }
 
-        private fun getAllClassTimes(activity: Activity, selection: String?,
+        private fun getAllClassTimes(context: Context, selection: String?,
                                      selectionArgs: Array<String>?): ArrayList<ClassTime> {
             val classTimes = ArrayList<ClassTime>()
-            val dbHelper = TimetableDbHelper.getInstance(activity)
+            val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     ClassTimesSchema.TABLE_NAME,
                     null,
@@ -359,7 +360,10 @@ class ClassUtils {
             Log.i(LOG_TAG, "Added ClassTime with id ${classTime.id}")
         }
 
-        @JvmStatic fun addAlarmsForClassTime(activity: Activity, classTime: ClassTime) {
+        @JvmStatic fun addAlarmsForClassTime(activity: Activity, classTime: ClassTime) =
+                addAlarmsForClassTime(activity, activity.application, classTime)
+
+        @JvmStatic fun addAlarmsForClassTime(context: Context, application: Application, classTime: ClassTime) {
             // First, try to find a suitable start date for the alarms
 
             var possibleDate = if (classTime.day != LocalDate.now().dayOfWeek ||
@@ -374,7 +378,7 @@ class ClassUtils {
                 LocalDate.now()
             }
 
-            while (DateUtils.findWeekNumber(activity, possibleDate)
+            while (DateUtils.findWeekNumber(application, possibleDate)
                     != classTime.weekNumber) {
                 // Find a week with the correct week number
                 possibleDate = possibleDate.plusWeeks(1)
@@ -385,11 +389,11 @@ class ClassUtils {
                     classTime.startTime.minusMinutes(5)) // remind 5 mins before start
 
             // Find the repeat interval in milliseconds (for the alarm to repeat)
-            val timetable = (activity.application as TimetableApplication).currentTimetable!!
+            val timetable = (application as TimetableApplication).currentTimetable!!
             val repeatInterval = timetable.weekRotations * WEEK_AS_MILLISECONDS
 
             // Set repeating alarm
-            AlarmReceiver().setRepeatingAlarm(activity,
+            AlarmReceiver().setRepeatingAlarm(context,
                     AlarmReceiver.Type.CLASS,
                     DateUtils.asCalendar(startDateTime),
                     classTime.id,

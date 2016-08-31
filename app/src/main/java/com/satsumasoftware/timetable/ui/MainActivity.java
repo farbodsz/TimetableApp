@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity {
 
     private ArrayList<ClassTime> getClassesToday() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
-        int weekNumber = DateUtils.findWeekNumber(this);
+        int weekNumber = DateUtils.findWeekNumber(getApplication());
 
         ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDay(this, today, weekNumber);
 
@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Assignment> assignments = new ArrayList<>();
         LocalDate now = LocalDate.now();
 
-        for (Assignment assignment : AssignmentUtils.getAssignments(this)) {
+        for (Assignment assignment : AssignmentUtils.getAssignments(this, getApplication())) {
             LocalDate dueDate = assignment.getDueDate();
 
             boolean isOverdue = dueDate.isBefore(now) && assignment.getCompletionProgress() != 100;
@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Exam> exams = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
-        for (Exam exam : ExamUtils.getExams(this)) {
+        for (Exam exam : ExamUtils.getExams(this, getApplication())) {
             LocalDateTime examDateTime = exam.makeDateTimeObject();
 
             if (!examDateTime.isBefore(now) && examDateTime.isBefore(now.plusWeeks(6))) {

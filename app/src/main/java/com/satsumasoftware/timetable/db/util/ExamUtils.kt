@@ -1,6 +1,6 @@
 package com.satsumasoftware.timetable.db.util
 
-import android.app.Activity
+import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
@@ -18,12 +18,12 @@ class ExamUtils {
 
         const val LOG_TAG = "ExamUtils"
 
-        @JvmStatic fun getExams(activity: Activity): ArrayList<Exam> {
+        @JvmStatic fun getExams(context: Context, application: Application): ArrayList<Exam> {
             val exams = ArrayList<Exam>()
 
-            val timetable = (activity.application as TimetableApplication).currentTimetable!!
+            val timetable = (application as TimetableApplication).currentTimetable!!
 
-            val dbHelper = TimetableDbHelper.getInstance(activity)
+            val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     ExamsSchema.TABLE_NAME,
                     null,
@@ -39,9 +39,9 @@ class ExamUtils {
             return exams
         }
 
-        @JvmStatic fun getAllExams(activity: Activity): ArrayList<Exam> {
+        @JvmStatic fun getAllExams(context: Context): ArrayList<Exam> {
             val exams = ArrayList<Exam>()
-            val dbHelper = TimetableDbHelper.getInstance(activity)
+            val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     ExamsSchema.TABLE_NAME, null, null, null, null, null, null)
             cursor.moveToFirst()

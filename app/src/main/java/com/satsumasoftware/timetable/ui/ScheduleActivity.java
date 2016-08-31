@@ -122,7 +122,7 @@ public class ScheduleActivity extends BaseActivity {
 
     private void goToNow() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
-        int nthWeek = DateUtils.findWeekNumber(this);
+        int nthWeek = DateUtils.findWeekNumber(getApplication());
 
         int index = today.getValue() + ((nthWeek - 1) * 7) - 1;
         mViewPager.setCurrentItem(index);

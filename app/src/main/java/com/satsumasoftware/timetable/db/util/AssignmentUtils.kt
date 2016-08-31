@@ -1,9 +1,11 @@
 package com.satsumasoftware.timetable.db.util
 
-import android.app.Activity
+import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
+import com.satsumasoftware.timetable.AlarmReceiver
+import com.satsumasoftware.timetable.DateUtils
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.AssignmentsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
@@ -16,18 +18,32 @@ class AssignmentUtils {
 
         const val LOG_TAG = "AssignmentUtils"
 
-        @JvmStatic fun getAssignments(activity: Activity): ArrayList<Assignment> {
+        @JvmStatic fun getAssignments(context: Context, application: Application): ArrayList<Assignment> {
             val assignments = ArrayList<Assignment>()
 
-            val timetable = (activity.application as TimetableApplication).currentTimetable!!
+            val timetable = (application as TimetableApplication).currentTimetable!!
 
-            val dbHelper = TimetableDbHelper.getInstance(activity)
+            val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     AssignmentsSchema.TABLE_NAME,
                     null,
                     "${AssignmentsSchema.COL_TIMETABLE_ID}=?",
                     arrayOf(timetable.id.toString()),
                     null, null, null)
+            cursor.moveToFirst()
+            while (!cursor.isAfterLast) {
+                assignments.add(Assignment(cursor))
+                cursor.moveToNext()
+            }
+            cursor.close()
+            return assignments
+        }
+
+        @JvmStatic fun getAllAssignments(context: Context): ArrayList<Assignment> {
+            val assignments = ArrayList<Assignment>()
+            val dbHelper = TimetableDbHelper.getInstance(context)
+            val cursor = dbHelper.readableDatabase.query(
+                    AssignmentsSchema.TABLE_NAME, null, null, null, null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
                 assignments.add(Assignment(cursor))
@@ -89,7 +105,19 @@ class AssignmentUtils {
 
             val db = TimetableDbHelper.getInstance(context).writableDatabase
             db.insert(AssignmentsSchema.TABLE_NAME, null, values)
+
+            addAlarmForAssignment(context, assignment)
+
             Log.i(LOG_TAG, "Added Assignment with id ${assignment.id}")
+        }
+
+        @JvmStatic fun addAlarmForAssignment(context: Context, assignment: Assignment) {
+            // Remind the day before at 17:00
+            val reminderTime = assignment.dueDate.minusDays(1).atTime(17, 0)
+            AlarmReceiver().setAlarm(context,
+                    AlarmReceiver.Type.ASSIGNMENT,
+                    DateUtils.asCalendar(reminderTime),
+                    assignment.id)
         }
 
         @JvmStatic fun deleteAssignment(context: Context, assignmentId: Int) {
@@ -97,6 +125,9 @@ class AssignmentUtils {
             db.delete(AssignmentsSchema.TABLE_NAME,
                     "${AssignmentsSchema._ID}=?",
                     arrayOf(assignmentId.toString()))
+
+            AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.ASSIGNMENT, assignmentId)
+
             Log.i(LOG_TAG, "Deleted Assignment with id $assignmentId")
         }
 
