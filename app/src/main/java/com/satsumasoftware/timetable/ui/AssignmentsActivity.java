@@ -51,7 +51,7 @@ public class AssignmentsActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         mHeaders = new ArrayList<>();
-        mAssignments = AssignmentUtils.getAssignments(this);
+        mAssignments = AssignmentUtils.getAssignments(this, getApplication());
         sortList();
 
         mAdapter = new AssignmentsAdapter(this, mHeaders, mAssignments);
@@ -85,7 +85,7 @@ public class AssignmentsActivity extends BaseActivity {
 
     private void refreshList() {
         mAssignments.clear();
-        mAssignments.addAll(AssignmentUtils.getAssignments(this));
+        mAssignments.addAll(AssignmentUtils.getAssignments(this, getApplication()));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();

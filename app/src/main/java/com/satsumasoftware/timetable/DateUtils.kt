@@ -1,8 +1,9 @@
 package com.satsumasoftware.timetable
 
-import android.app.Activity
+import android.app.Application
 import android.content.Context
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Period
 import org.threeten.bp.temporal.WeekFields
 import java.util.*
@@ -47,16 +48,24 @@ class DateUtils {
             return context.getString(stringRes)
         }
 
-        @JvmStatic fun findWeekNumber(activity: Activity): Int {
-            val timetable = (activity.application as TimetableApplication).currentTimetable!!
-            val today = LocalDate.now()
+        @JvmOverloads
+        @JvmStatic fun findWeekNumber(application: Application,
+                                      localDate: LocalDate = LocalDate.now()): Int {
+            val timetable = (application as TimetableApplication).currentTimetable!!
 
-            val days = Period.between(timetable.startDate, today).days
+            val days = Period.between(timetable.startDate, localDate).days
             val nthWeek = days / 7
 
             val weekNo = (nthWeek % timetable.weekRotations) + 1
             return weekNo
         }
+
+        @JvmStatic fun asCalendar(localDateTime: LocalDateTime) = GregorianCalendar(
+                localDateTime.year,
+                localDateTime.monthValue - 1,
+                localDateTime.dayOfMonth,
+                localDateTime.hour,
+                localDateTime.minute)
 
     }
 }

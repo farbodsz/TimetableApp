@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.ui.adapter;
 
+import android.app.Activity;
 import android.app.Application;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,13 +20,15 @@ import java.util.ArrayList;
 
 public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.TimetablesViewHolder> {
 
+    private Activity mActivity;
     private Application mApplication;
     private ArrayList<Timetable> mTimetables;
 
     private boolean mBindingVH;
 
-    public TimetablesAdapter(Application application, ArrayList<Timetable> timetables) {
-        mApplication = application;
+    public TimetablesAdapter(Activity activity, ArrayList<Timetable> timetables) {
+        mActivity = activity;
+        mApplication = activity.getApplication();
         mTimetables = timetables;
     }
 
@@ -85,7 +88,9 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (!mBindingVH) {
                         Timetable timetable = mTimetables.get(getLayoutPosition());
-                        ((TimetableApplication) mApplication).setCurrentTimetable(timetable);
+                        TimetableApplication application = (TimetableApplication) mApplication;
+                        application.setCurrentTimetable(timetable);
+                        application.refreshAlarms(mActivity);
                         notifyDataSetChanged();
                     }
                 }

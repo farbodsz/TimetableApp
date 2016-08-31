@@ -52,7 +52,7 @@ public class ExamsActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         mHeaders = new ArrayList<>();
-        mExams = ExamUtils.getExams(this);
+        mExams = ExamUtils.getExams(this, getApplication());
         sortList();
 
         mAdapter = new ExamsAdapter(this, mHeaders, mExams);
@@ -86,7 +86,7 @@ public class ExamsActivity extends BaseActivity {
 
     private void refreshList() {
         mExams.clear();
-        mExams.addAll(ExamUtils.getExams(this));
+        mExams.addAll(ExamUtils.getExams(this, getApplication()));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();

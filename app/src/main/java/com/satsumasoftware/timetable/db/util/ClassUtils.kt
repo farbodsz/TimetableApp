@@ -1,9 +1,12 @@
 package com.satsumasoftware.timetable.db.util
 
 import android.app.Activity
+import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
+import com.satsumasoftware.timetable.AlarmReceiver
+import com.satsumasoftware.timetable.DateUtils
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.ClassDetailsSchema
 import com.satsumasoftware.timetable.db.ClassTimesSchema
@@ -12,7 +15,12 @@ import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime
+import com.satsumasoftware.timetable.framework.Timetable
 import org.threeten.bp.DayOfWeek
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
+import org.threeten.bp.temporal.TemporalAdjusters
 import java.util.*
 
 class ClassUtils {
@@ -20,6 +28,8 @@ class ClassUtils {
     companion object {
 
         const val LOG_TAG = "ClassUtils"
+
+        const val WEEK_AS_MILLISECONDS = 604800000L
 
         @JvmStatic fun getClasses(activity: Activity): ArrayList<Class> {
             val classes = ArrayList<Class>()
@@ -129,6 +139,20 @@ class ClassUtils {
             return classTimes
         }
 
+        @JvmStatic fun getClassTimeWithId(context: Context, classTimeId: Int): ClassTime {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    ClassTimesSchema.TABLE_NAME,
+                    null,
+                    "${ClassTimesSchema._ID}=?",
+                    arrayOf(classTimeId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            val classTime = ClassTime(cursor)
+            cursor.close()
+            return classTime
+        }
+
         @JvmStatic fun getHighestClassId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
@@ -224,6 +248,35 @@ class ClassUtils {
             addClassDetail(context, newClassDetail)
         }
 
+        @JvmStatic fun getAllClassTimes(context: Context): ArrayList<ClassTime> {
+            return getAllClassTimes(context, null, null)
+        }
+
+        @JvmStatic fun getAllClassTimes(context: Context, timetable: Timetable): ArrayList<ClassTime> {
+            return getAllClassTimes(context,
+                    ClassTimesSchema.COL_TIMETABLE_ID + "=?",
+                    arrayOf(timetable.id.toString()))
+        }
+
+        private fun getAllClassTimes(context: Context, selection: String?,
+                                     selectionArgs: Array<String>?): ArrayList<ClassTime> {
+            val classTimes = ArrayList<ClassTime>()
+            val dbHelper = TimetableDbHelper.getInstance(context)
+            val cursor = dbHelper.readableDatabase.query(
+                    ClassTimesSchema.TABLE_NAME,
+                    null,
+                    selection,
+                    selectionArgs,
+                    null, null, null)
+            cursor.moveToFirst()
+            while (!cursor.isAfterLast) {
+                classTimes.add(ClassTime(cursor))
+                cursor.moveToNext()
+            }
+            cursor.close()
+            return classTimes
+        }
+
         @JvmStatic fun getClassTimesForDay(activity: Activity, dayOfWeek: DayOfWeek,
                                            weekNumber: Int): ArrayList<ClassTime> {
             val classTimes = ArrayList<ClassTime>()
@@ -267,7 +320,7 @@ class ClassUtils {
             return highestId
         }
 
-        @JvmStatic fun addClassTime(context: Context, classTime: ClassTime) {
+        @JvmStatic fun addClassTime(activity: Activity, classTime: ClassTime) {
             val values = ContentValues()
             with(values) {
                 put(ClassTimesSchema._ID, classTime.id)
@@ -281,9 +334,52 @@ class ClassUtils {
                 put(ClassTimesSchema.COL_END_TIME_MINS, classTime.endTime.minute)
             }
 
-            val db = TimetableDbHelper.getInstance(context).writableDatabase
+            val db = TimetableDbHelper.getInstance(activity).writableDatabase
             db.insert(ClassTimesSchema.TABLE_NAME, null, values)
+
+            addAlarmsForClassTime(activity, classTime)
+
             Log.i(LOG_TAG, "Added ClassTime with id ${classTime.id}")
+        }
+
+        @JvmStatic fun addAlarmsForClassTime(activity: Activity, classTime: ClassTime) =
+                addAlarmsForClassTime(activity, activity.application, classTime)
+
+        @JvmStatic fun addAlarmsForClassTime(context: Context, application: Application, classTime: ClassTime) {
+            // First, try to find a suitable start date for the alarms
+
+            var possibleDate = if (classTime.day != LocalDate.now().dayOfWeek ||
+                    classTime.startTime.minusMinutes(5).isBefore(LocalTime.now())) {
+                // Class is on a different day of the week OR the 5 minute start notice has passed
+
+                val adjuster = TemporalAdjusters.next(classTime.day)
+                LocalDate.now().with(adjuster)
+
+            } else {
+                // Class is on the same day of the week (AND it has not yet begun)
+                LocalDate.now()
+            }
+
+            while (DateUtils.findWeekNumber(application, possibleDate)
+                    != classTime.weekNumber) {
+                // Find a week with the correct week number
+                possibleDate = possibleDate.plusWeeks(1)
+            }
+
+            // Make a LocalDateTime using the calculated start date and ClassTime
+            val startDateTime = LocalDateTime.of(possibleDate,
+                    classTime.startTime.minusMinutes(5)) // remind 5 mins before start
+
+            // Find the repeat interval in milliseconds (for the alarm to repeat)
+            val timetable = (application as TimetableApplication).currentTimetable!!
+            val repeatInterval = timetable.weekRotations * WEEK_AS_MILLISECONDS
+
+            // Set repeating alarm
+            AlarmReceiver().setRepeatingAlarm(context,
+                    AlarmReceiver.Type.CLASS,
+                    DateUtils.asCalendar(startDateTime),
+                    classTime.id,
+                    repeatInterval)
         }
 
         private fun deleteClassTime(context: Context, classTimeId: Int) {
@@ -291,13 +387,16 @@ class ClassUtils {
             db.delete(ClassTimesSchema.TABLE_NAME,
                     "${ClassTimesSchema._ID}=?",
                     arrayOf(classTimeId.toString()))
+
+            AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.CLASS, classTimeId)
+
             Log.i(LOG_TAG, "Deleted ClassTime with id $classTimeId")
         }
 
-        @JvmStatic fun replaceClassTime(context: Context, oldClassTimeId: Int, newClassTime: ClassTime) {
+        @JvmStatic fun replaceClassTime(activity: Activity, oldClassTimeId: Int, newClassTime: ClassTime) {
             Log.i(LOG_TAG, "Replacing ClassTime...")
-            deleteClassTime(context, oldClassTimeId)
-            addClassTime(context, newClassTime)
+            deleteClassTime(activity, oldClassTimeId)
+            addClassTime(activity, newClassTime)
         }
 
         @JvmStatic fun completelyDeleteClass(context: Context, cls: Class) {

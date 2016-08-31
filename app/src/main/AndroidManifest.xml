@@ -3,6 +3,8 @@
     package="com.satsumasoftware.timetable"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <uses-sdk tools:overrideLibrary="com.jakewharton.threetenabp" />
 
     <application
@@ -88,6 +90,14 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:theme="@style/Timetable"/>
+
+        <receiver android:name=".AlarmReceiver" />
+
+        <receiver android:name=".BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 
