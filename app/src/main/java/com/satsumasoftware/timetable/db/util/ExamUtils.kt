@@ -4,12 +4,12 @@ import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
-import com.satsumasoftware.timetable.AlarmReceiver
 import com.satsumasoftware.timetable.DateUtils
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.ExamsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.framework.Exam
+import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import java.util.*
 
 class ExamUtils {

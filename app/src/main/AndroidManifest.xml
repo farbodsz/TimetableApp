@@ -91,9 +91,9 @@
             android:name=".ui.SettingsActivity"
             android:theme="@style/Timetable"/>
 
-        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".receiver.AlarmReceiver" />
 
-        <receiver android:name=".BootReceiver">
+        <receiver android:name=".receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>

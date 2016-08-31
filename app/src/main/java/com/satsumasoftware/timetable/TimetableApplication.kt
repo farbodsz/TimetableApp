@@ -8,6 +8,7 @@ import com.satsumasoftware.timetable.db.util.AssignmentUtils
 import com.satsumasoftware.timetable.db.util.ClassUtils
 import com.satsumasoftware.timetable.db.util.ExamUtils
 import com.satsumasoftware.timetable.framework.Timetable
+import com.satsumasoftware.timetable.receiver.AlarmReceiver
 
 class TimetableApplication : Application() {
 

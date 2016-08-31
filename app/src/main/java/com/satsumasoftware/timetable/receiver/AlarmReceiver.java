@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable;
+package com.satsumasoftware.timetable.receiver;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.db.util.ExamUtils;
