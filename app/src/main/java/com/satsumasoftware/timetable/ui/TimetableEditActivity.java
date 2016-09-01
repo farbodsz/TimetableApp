@@ -307,7 +307,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         Timetable newCurrentTimetable = Timetable.create(this, highestId);
 
         TimetableApplication application = (TimetableApplication) getApplication();
-        application.setCurrentTimetable(mTimetable);
+        application.setCurrentTimetable(newCurrentTimetable);
         application.refreshAlarms(this);
 
         setResult(Activity.RESULT_OK);
