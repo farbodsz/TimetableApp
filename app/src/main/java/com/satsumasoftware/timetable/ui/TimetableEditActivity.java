@@ -140,14 +140,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         mSpinnerWeekRotations.setOnItemChosenListener(this);
 
         mWeekRotations = mIsNew ? 1 : mTimetable.getWeekRotations();
-
-        if (mWeekRotations == 1) {
-            mSpinnerScheduling.setSelection(0);
-        } else {
-            mSpinnerScheduling.setSelection(1);
-            // e.g. weekRotations of 2 will be position 0 as in the string-array
-            mSpinnerWeekRotations.setSelection(mWeekRotations - 2);
-        }
+        updateSchedulingSpinners();
     }
 
     private void updateDateTexts() {
@@ -162,20 +155,37 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         }
     }
 
+    private void updateSchedulingSpinners() {
+        if (mWeekRotations == 1) {
+            mSpinnerScheduling.setSelection(0);
+            mSpinnerWeekRotations.setVisibility(View.GONE);
+        } else {
+            mSpinnerScheduling.setSelection(1);
+            mSpinnerWeekRotations.setVisibility(View.VISIBLE);
+            // e.g. weekRotations of 2 will be position 0 as in the string-array
+            mSpinnerWeekRotations.setSelection(mWeekRotations - 2);
+        }
+    }
+
     @Override
     public void onItemChosen(View labelledSpinner, AdapterView<?> adapterView, View itemView,
                              int position, long id) {
         switch (labelledSpinner.getId()) {
             case R.id.spinner_scheduling_type:
-                if (position == 0) { // fixed scheduling
+                boolean isFixedScheduling = position == 0;
+                if (isFixedScheduling) {
                     mWeekRotations = 1;
-                    mSpinnerWeekRotations.setVisibility(View.GONE);
-                } else {  // week rotation scheduling
-                    mSpinnerWeekRotations.setVisibility(View.VISIBLE);
+                } else {
+                    mWeekRotations = (mIsNew || mTimetable.getWeekRotations() == 1) ?
+                            2 : mTimetable.getWeekRotations();
                 }
+                updateSchedulingSpinners();
                 break;
             case R.id.spinner_scheduling_detail:
-                mWeekRotations = position + 2; // as '2 weeks' is position 0
+                if (mWeekRotations != 1) {  // only modify mWeekRotations if not fixed scheduling
+                    mWeekRotations = position + 2; // as '2 weeks' is position 0
+                }
+                updateSchedulingSpinners();
                 break;
         }
     }
