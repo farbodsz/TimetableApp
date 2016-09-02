@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -43,6 +44,9 @@ public class WeekView extends View {
     private int mTextSize = 14;
     private int mTextColorRes = R.color.mdu_text_black;
     private Paint mTextPaint;
+
+    private int mTodayTextColorRes = R.color.mdu_blue_700;
+    private Paint mTodayTextPaint;
 
     private Paint mLinePaint;
     private int mLineColorRes = R.color.mdu_divider_black;
@@ -102,6 +106,11 @@ public class WeekView extends View {
         mTextPaint.setColor(ContextCompat.getColor(getContext(), mTextColorRes));
         mTextPaint.setTextSize(dpToPx(mTextSize));
 
+        mTodayTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mTodayTextPaint.setColor(ContextCompat.getColor(getContext(), mTodayTextColorRes));
+        mTodayTextPaint.setTextSize(dpToPx(mTextSize));
+        mTodayTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
         mLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLinePaint.setColor(ContextCompat.getColor(getContext(), mLineColorRes));
 
@@ -122,6 +131,8 @@ public class WeekView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        Calendar instance = Calendar.getInstance();
 
         Log.d("WKV", "getLeft() - " + getLeft());
         Log.d("WKV", "getTop() - " + getTop());
@@ -162,7 +173,16 @@ public class WeekView extends View {
             int textX = dpToPx(mTimeColWidth) + (dayWidth * i);
             int textY = dpToPx(mHeaderRowHeight / 2) + dpToPx(mTextSize / 2);
 
-            canvas.drawText(getDayText(thisDay), textX, textY, mTextPaint);
+            int instanceDowVal = instance.get(Calendar.DAY_OF_WEEK);  // Sunday is 1, Saturday is 7
+            instanceDowVal--;
+            if (instanceDowVal == 0) instanceDowVal = 7;  // now, Sunday is 7, Saturday is 6
+
+            boolean isToday = instanceDowVal == dowValue;
+
+            canvas.drawText(getDayText(thisDay),
+                    textX,
+                    textY,
+                    isToday ? mTodayTextPaint : mTextPaint);
 
             int lineStartY = dpToPx(mHeaderRowHeight);
             int lineEndY = getHeight();
@@ -200,7 +220,6 @@ public class WeekView extends View {
         }
 
         // Draw current line
-        Calendar instance = Calendar.getInstance();
         LocalTime now = LocalTime.of(instance.get(Calendar.HOUR_OF_DAY),
                 instance.get(Calendar.MINUTE));
         canvas.drawLine(dpToPx(mTimeColWidth),
