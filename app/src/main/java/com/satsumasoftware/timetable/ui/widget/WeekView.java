@@ -157,6 +157,7 @@ public class WeekView extends View {
             float lineY = getYForTime(time);
             canvas.drawLine(dpToPx(mTimeColWidth), lineY, getRight(), lineY, mLinePaint);
 
+            if (i == 0) continue;
             String timeText = i < 10 ? "0" + i + ":00" : i + ":00";
             float textX = dpToPx(4);
             float textY = lineY + dpToPx(mTextSize / 2);
