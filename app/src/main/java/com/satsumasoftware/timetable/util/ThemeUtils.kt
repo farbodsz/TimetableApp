@@ -63,11 +63,12 @@ class ThemeUtils {
         @JvmStatic
         fun makePlaceholderView(context: Context,
                                 @DrawableRes drawableRes: Int,
-                                @StringRes stringRes: Int,
+                                @StringRes titleRes: Int,
                                 @ColorRes backgroundColorRes: Int = R.color.mdu_grey_50,
                                 @ColorRes drawableColorRes: Int = R.color.mdu_grey_700,
                                 @ColorRes textColorRes: Int = R.color.mdu_text_black_secondary,
-                                largeIcon: Boolean = false): View {
+                                largeIcon: Boolean = false,
+                                @StringRes subtitleRes: Int? = null): View {
             val placeholderView = LayoutInflater.from(context).inflate(R.layout.placeholder, null)
 
             val background = placeholderView.findViewById(R.id.background)
@@ -80,9 +81,17 @@ class ThemeUtils {
                 image.layoutParams.height = dpToPixels(context, 108)
             }
 
-            val text = placeholderView.findViewById(R.id.textView) as TextView
-            text.setText(stringRes)
-            text.setTextColor(ContextCompat.getColor(context, textColorRes))
+            val title = placeholderView.findViewById(R.id.title) as TextView
+            title.setText(titleRes)
+            title.setTextColor(ContextCompat.getColor(context, textColorRes))
+
+            val subtitle = placeholderView.findViewById(R.id.subtitle) as TextView
+            if (subtitleRes == null) {
+                subtitle.visibility = View.GONE
+            } else {
+                subtitle.setText(subtitleRes)
+                subtitle.setTextColor(ContextCompat.getColor(context, textColorRes))
+            }
 
             return placeholderView
         }
