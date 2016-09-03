@@ -168,7 +168,12 @@ public class ExamsActivity extends BaseActivity {
 
             mPlaceholderLayout.removeAllViews();
             mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
-                    R.drawable.ic_assessment_black_24dp, stringRes));
+                    R.drawable.ic_assessment_black_24dp,
+                    stringRes,
+                    R.color.mdu_blue_400,
+                    R.color.mdu_white,
+                    R.color.mdu_white,
+                    true));
 
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);

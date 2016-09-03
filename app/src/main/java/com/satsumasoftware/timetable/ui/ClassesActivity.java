@@ -100,7 +100,12 @@ public class ClassesActivity extends BaseActivity {
 
             mPlaceholderLayout.removeAllViews();
             mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
-                    R.drawable.ic_class_black_24dp, R.string.placeholder_classes));
+                    R.drawable.ic_class_black_24dp,
+                    R.string.placeholder_classes,
+                    R.color.mdu_blue_400,
+                    R.color.mdu_white,
+                    R.color.mdu_white,
+                    true));
 
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);

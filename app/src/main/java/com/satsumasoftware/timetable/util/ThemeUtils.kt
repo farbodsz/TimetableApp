@@ -8,6 +8,7 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.LayoutInflater
@@ -35,15 +36,9 @@ class ThemeUtils {
 
         @JvmOverloads
         @JvmStatic
-        fun tintDrawable(context: Context, @DrawableRes drawableRes: Int,
-                         @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
-            return tintDrawable(context, ContextCompat.getDrawable(context, drawableRes), colorRes)
-        }
-
-        @JvmOverloads
-        @JvmStatic
-        fun tintDrawable(context: Context, d: Drawable, @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
-            val drawable = DrawableCompat.wrap(d)
+        fun tintDrawable(context: Context, @DrawableRes drawableRes: Int, @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
+            val vectorDrawableCompat = VectorDrawableCompat.create(context.resources, drawableRes, null)
+            val drawable = DrawableCompat.wrap(vectorDrawableCompat!!.current)
             DrawableCompat.setTint(drawable, ContextCompat.getColor(context, colorRes))
             return drawable
         }
@@ -52,20 +47,28 @@ class ThemeUtils {
         fun tintMenuIcons(context: Context, menu: Menu, vararg @IdRes menuItems: Int) {
             for (@IdRes menuItem in menuItems) {
                 val icon = menu.findItem(menuItem).icon
-                icon?.let { tintDrawable(context, icon) }
+                icon?.let {
+                    tintMenuDrawableWhite(context, icon)
+                }
             }
         }
 
+        private fun tintMenuDrawableWhite(context: Context, d: Drawable): Drawable {
+            val drawable = DrawableCompat.wrap(d)
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.mdu_white))
+            return drawable
+        }
 
         @JvmOverloads
         @JvmStatic
         fun makePlaceholderView(context: Context,
                                 @DrawableRes drawableRes: Int,
-                                @StringRes stringRes: Int,
+                                @StringRes titleRes: Int,
                                 @ColorRes backgroundColorRes: Int = R.color.mdu_grey_50,
                                 @ColorRes drawableColorRes: Int = R.color.mdu_grey_700,
                                 @ColorRes textColorRes: Int = R.color.mdu_text_black_secondary,
-                                largeIcon: Boolean = false): View {
+                                largeIcon: Boolean = false,
+                                @StringRes subtitleRes: Int? = null): View {
             val placeholderView = LayoutInflater.from(context).inflate(R.layout.placeholder, null)
 
             val background = placeholderView.findViewById(R.id.background)
@@ -74,13 +77,21 @@ class ThemeUtils {
             val image = placeholderView.findViewById(R.id.imageView) as ImageView
             image.setImageDrawable(tintDrawable(context, drawableRes, drawableColorRes))
             if (largeIcon) {
-                image.layoutParams.width = dpToPixels(context, 112)
-                image.layoutParams.height = dpToPixels(context, 112)
+                image.layoutParams.width = dpToPixels(context, 108)
+                image.layoutParams.height = dpToPixels(context, 108)
             }
 
-            val text = placeholderView.findViewById(R.id.textView) as TextView
-            text.setText(stringRes)
-            text.setTextColor(ContextCompat.getColor(context, textColorRes))
+            val title = placeholderView.findViewById(R.id.title) as TextView
+            title.setText(titleRes)
+            title.setTextColor(ContextCompat.getColor(context, textColorRes))
+
+            val subtitle = placeholderView.findViewById(R.id.subtitle) as TextView
+            if (subtitleRes == null) {
+                subtitle.visibility = View.GONE
+            } else {
+                subtitle.setText(subtitleRes)
+                subtitle.setTextColor(ContextCompat.getColor(context, textColorRes))
+            }
 
             return placeholderView
         }

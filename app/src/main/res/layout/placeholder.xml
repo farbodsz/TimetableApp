@@ -13,13 +13,27 @@
         android:layout_height="72dp" />
 
     <TextView
-        android:id="@+id/textView"
-        android:text="Some really random but interesting placeholder text"
-        android:textSize="20sp"
+        android:id="@+id/title"
+        android:text="Short text"
+        android:textSize="22sp"
         android:textColor="@color/mdu_text_black_secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="@dimen/mdu_padding_normal"/>
+        android:paddingTop="@dimen/mdu_padding_normal"
+        android:paddingBottom="@dimen/mdu_spacing_normal"
+        android:paddingRight="@dimen/mdu_padding_normal"
+        android:paddingLeft="@dimen/mdu_padding_normal"
+        android:maxWidth="272dp"/>
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:text="Longer placeholder description"
+        android:textSize="16sp"
+        android:textColor="@color/mdu_text_black_secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxWidth="272dp"/>
 
 </LinearLayout>

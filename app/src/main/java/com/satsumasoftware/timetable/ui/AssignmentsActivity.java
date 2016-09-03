@@ -162,14 +162,24 @@ public class AssignmentsActivity extends BaseActivity {
             mRecyclerView.setVisibility(View.GONE);
             mPlaceholderLayout.setVisibility(View.VISIBLE);
 
-            int stringRes = mShowPast ? R.string.placeholder_assignments_past :
-                    R.string.placeholder_assignments;
+            int titleRes = mShowPast ? R.string.placeholder_assignments_past_title :
+                    R.string.placeholder_assignments_title;
+
+            int subtitleRes = mShowPast ? R.string.placeholder_assignments_past_subtitle :
+                    R.string.placeholder_assignments_subtitle;
+
             int drawableRes = mShowPast ? R.drawable.ic_assignment_black_24dp :
                     R.drawable.ic_assignment_turned_in_black_24dp;
 
             mPlaceholderLayout.removeAllViews();
             mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
-                    drawableRes, stringRes));
+                    drawableRes,
+                    titleRes,
+                    R.color.mdu_blue_400,
+                    R.color.mdu_white,
+                    R.color.mdu_white,
+                    true,
+                    subtitleRes));
 
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);
