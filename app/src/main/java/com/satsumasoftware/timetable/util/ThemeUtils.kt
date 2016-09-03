@@ -8,6 +8,7 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
+import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.LayoutInflater
@@ -35,15 +36,9 @@ class ThemeUtils {
 
         @JvmOverloads
         @JvmStatic
-        fun tintDrawable(context: Context, @DrawableRes drawableRes: Int,
-                         @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
-            return tintDrawable(context, ContextCompat.getDrawable(context, drawableRes), colorRes)
-        }
-
-        @JvmOverloads
-        @JvmStatic
-        fun tintDrawable(context: Context, d: Drawable, @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
-            val drawable = DrawableCompat.wrap(d)
+        fun tintDrawable(context: Context, @DrawableRes drawableRes: Int, @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
+            val vectorDrawableCompat = VectorDrawableCompat.create(context.resources, drawableRes, null)
+            val drawable = DrawableCompat.wrap(vectorDrawableCompat!!.current)
             DrawableCompat.setTint(drawable, ContextCompat.getColor(context, colorRes))
             return drawable
         }
@@ -52,10 +47,17 @@ class ThemeUtils {
         fun tintMenuIcons(context: Context, menu: Menu, vararg @IdRes menuItems: Int) {
             for (@IdRes menuItem in menuItems) {
                 val icon = menu.findItem(menuItem).icon
-                icon?.let { tintDrawable(context, icon) }
+                icon?.let {
+                    tintMenuDrawableWhite(context, icon)
+                }
             }
         }
 
+        private fun tintMenuDrawableWhite(context: Context, d: Drawable): Drawable {
+            val drawable = DrawableCompat.wrap(d)
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.mdu_white))
+            return drawable
+        }
 
         @JvmOverloads
         @JvmStatic
