@@ -98,7 +98,12 @@ public class SubjectsActivity extends BaseActivity {
 
             mPlaceholderLayout.removeAllViews();
             mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
-                    R.drawable.ic_list_black_24dp, R.string.placeholder_subjects));
+                    R.drawable.ic_list_black_24dp,
+                    R.string.placeholder_subjects,
+                    R.color.theme_primary, // TODO get this programmatically
+                    R.color.mdu_white,
+                    R.color.mdu_white,
+                    true));
 
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);

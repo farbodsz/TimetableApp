@@ -169,7 +169,12 @@ public class AssignmentsActivity extends BaseActivity {
 
             mPlaceholderLayout.removeAllViews();
             mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
-                    drawableRes, stringRes));
+                    drawableRes,
+                    stringRes,
+                    R.color.theme_primary, // TODO get primary color programmatically
+                    R.color.mdu_white,
+                    R.color.mdu_white,
+                    true));
 
         } else {
             mRecyclerView.setVisibility(View.VISIBLE);
