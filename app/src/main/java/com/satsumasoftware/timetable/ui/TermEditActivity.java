@@ -19,7 +19,6 @@ import com.satsumasoftware.timetable.db.util.TermUtils;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
-import com.satsumasoftware.timetable.util.ThemeUtils;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -146,7 +145,6 @@ public class TermEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 
