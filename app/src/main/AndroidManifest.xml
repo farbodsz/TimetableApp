@@ -88,6 +88,10 @@
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
+            android:name=".ui.TermEditActivity"
+            android:theme="@style/Timetable.EditItem"/>
+
+        <activity
             android:name=".ui.SettingsActivity"
             android:theme="@style/Timetable"/>
 

@@ -158,14 +158,17 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         mWeekRotations = mIsNew ? 1 : mTimetable.getWeekRotations();
         updateSchedulingSpinners();
 
-        mTerms = TermUtils.getTerms(this, mTimetable);
+        mTerms = TermUtils.getTerms(this, findTimetableId());
         sortList();
 
         mAdapter = new TermsAdapter(mTerms);
         mAdapter.setOnEntryClickListener(new TermsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                // TODO
+                Intent intent = new Intent(TimetableEditActivity.this, TermEditActivity.class);
+                intent.putExtra(TermEditActivity.EXTRA_TERM, mTerms.get(position));
+                intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
+                startActivityForResult(intent, REQUEST_CODE_TERM_EDIT);
             }
         });
 
@@ -183,8 +186,9 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         btnAddTerm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
-                // startActivityForResult
+                Intent intent = new Intent(TimetableEditActivity.this, TermEditActivity.class);
+                intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
+                startActivityForResult(intent, REQUEST_CODE_TERM_EDIT);
             }
         });
     }
@@ -238,7 +242,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
 
     private void refreshList() {
         mTerms.clear();
-        mTerms.addAll(TermUtils.getTerms(this, mTimetable));
+        mTerms.addAll(TermUtils.getTerms(this, findTimetableId()));
         sortList();
         mAdapter.notifyDataSetChanged();
     }
@@ -250,6 +254,10 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                 return t1.getStartDate().compareTo(t2.getStartDate());
             }
         });
+    }
+
+    private int findTimetableId() {
+        return mTimetable == null ? TimetableUtils.getHighestTimetableId(this) : mTimetable.getId();
     }
 
     @Override
@@ -349,8 +357,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             }
         }
 
-        int id = mIsNew ? TimetableUtils.getHighestTimetableId(this) + 1 : mTimetable.getId();
-        mTimetable = new Timetable(id, name, mStartDate, mEndDate, mWeekRotations);
+        mTimetable = new Timetable(findTimetableId(), name, mStartDate, mEndDate, mWeekRotations);
 
         if (mIsNew) {
             TimetableUtils.addTimetable(this, mTimetable);
