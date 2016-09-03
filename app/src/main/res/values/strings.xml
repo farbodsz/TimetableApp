@@ -105,6 +105,7 @@
     <string name="message_exam_duration_required">You must select an exam duration</string>
 
     <string name="action_add_detail">Add detail</string>
+    <string name="action_add_term">Add term</string>
     <string name="action_add_time">Add time</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
