@@ -192,17 +192,17 @@ public class TermEditActivity extends AppCompatActivity {
 
         if (mStartDate == null || mEndDate == null) {
             Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_times_required, Snackbar.LENGTH_SHORT).show();
+                    R.string.message_term_dates_required, Snackbar.LENGTH_SHORT).show();
             return;
         }
         if (mStartDate.equals(mEndDate)) {
             Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_start_time_equal_end, Snackbar.LENGTH_SHORT).show();
+                    R.string.message_start_date_equal_end_date, Snackbar.LENGTH_SHORT).show();
             return;
         }
         if (mStartDate.isAfter(mEndDate)) {
             Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_start_time_after_end, Snackbar.LENGTH_SHORT).show();
+                    R.string.message_start_date_after_end_date, Snackbar.LENGTH_SHORT).show();
             return;
         }
 

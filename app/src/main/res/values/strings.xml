@@ -106,6 +106,10 @@
     <string name="message_exam_time_required">You must enter an exam time</string>
     <string name="message_exam_duration_required">You must select an exam duration</string>
 
+    <string name="message_term_dates_required">You must specify term dates</string>
+    <string name="message_start_date_equal_end_date">Your start and end dates must be different</string>
+    <string name="message_start_date_after_end_date">The start date cannot be after the end date</string>
+
     <string name="action_add_detail">Add detail</string>
     <string name="action_add_term">Add term</string>
     <string name="action_add_time">Add time</string>
