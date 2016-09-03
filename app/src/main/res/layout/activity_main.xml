@@ -22,6 +22,7 @@
                 style="@style/Widget.Timetable.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+            <include layout="@layout/info_bar" />
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView

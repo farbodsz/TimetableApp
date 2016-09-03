@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
@@ -29,6 +31,7 @@ import com.satsumasoftware.timetable.util.DateUtils;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +52,12 @@ public class MainActivity extends BaseActivity {
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setSubtitle(currentTimetable.getDisplayedName());
+
+        TextView infoBar = (TextView) findViewById(R.id.text_infoBar);
+        infoBar.setVisibility(View.VISIBLE);
+
+        String todayText = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy"));
+        infoBar.setText(todayText);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
