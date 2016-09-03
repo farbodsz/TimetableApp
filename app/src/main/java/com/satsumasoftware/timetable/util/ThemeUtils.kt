@@ -57,9 +57,16 @@ class ThemeUtils {
         }
 
 
+        @JvmOverloads
         @JvmStatic
-        fun makePlaceholderView(context: Context, @DrawableRes drawableRes: Int, @StringRes stringRes: Int): View {
+        fun makePlaceholderView(context: Context,
+                                @DrawableRes drawableRes: Int,
+                                @StringRes stringRes: Int,
+                                @ColorRes backgroundColorRes: Int = R.color.mdu_grey_50): View {
             val placeholderView = LayoutInflater.from(context).inflate(R.layout.placeholder, null)
+
+            val background = placeholderView.findViewById(R.id.background)
+            background.setBackgroundColor(ContextCompat.getColor(context, backgroundColorRes))
 
             val image = placeholderView.findViewById(R.id.imageView) as ImageView
             image.setImageResource(drawableRes)
