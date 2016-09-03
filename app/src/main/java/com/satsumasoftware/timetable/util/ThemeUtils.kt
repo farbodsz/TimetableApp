@@ -62,17 +62,20 @@ class ThemeUtils {
         fun makePlaceholderView(context: Context,
                                 @DrawableRes drawableRes: Int,
                                 @StringRes stringRes: Int,
-                                @ColorRes backgroundColorRes: Int = R.color.mdu_grey_50): View {
+                                @ColorRes backgroundColorRes: Int = R.color.mdu_grey_50,
+                                @ColorRes drawableColorRes: Int = R.color.mdu_grey_700,
+                                @ColorRes textColorRes: Int = R.color.mdu_text_black_secondary): View {
             val placeholderView = LayoutInflater.from(context).inflate(R.layout.placeholder, null)
 
             val background = placeholderView.findViewById(R.id.background)
             background.setBackgroundColor(ContextCompat.getColor(context, backgroundColorRes))
 
             val image = placeholderView.findViewById(R.id.imageView) as ImageView
-            image.setImageResource(drawableRes)
+            image.setImageDrawable(tintDrawable(context, drawableRes, drawableColorRes))
 
             val text = placeholderView.findViewById(R.id.textView) as TextView
             text.setText(stringRes)
+            text.setTextColor(ContextCompat.getColor(context, textColorRes))
 
             return placeholderView
         }
