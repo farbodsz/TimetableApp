@@ -2,16 +2,20 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,18 +25,27 @@ import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.util.TermUtils;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
+import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.framework.Timetable;
+import com.satsumasoftware.timetable.ui.adapter.TermsAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class TimetableEditActivity extends AppCompatActivity implements LabelledSpinner.OnItemChosenListener {
 
     protected static final String EXTRA_TIMETABLE = "extra_timetable";
+
+    private static final int REQUEST_CODE_TERM_EDIT = 1;
 
     private boolean mIsFirst;
 
@@ -46,6 +59,9 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
 
     private LabelledSpinner mSpinnerScheduling, mSpinnerWeekRotations;
     private int mWeekRotations;
+
+    private TermsAdapter mAdapter;
+    private ArrayList<Term> mTerms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +157,40 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
 
         mWeekRotations = mIsNew ? 1 : mTimetable.getWeekRotations();
         updateSchedulingSpinners();
+
+        mTerms = TermUtils.getTerms(this, findTimetableId());
+        sortList();
+
+        mAdapter = new TermsAdapter(mTerms);
+        mAdapter.setOnEntryClickListener(new TermsAdapter.OnEntryClickListener() {
+            @Override
+            public void onEntryClick(View view, int position) {
+                Intent intent = new Intent(TimetableEditActivity.this, TermEditActivity.class);
+                intent.putExtra(TermEditActivity.EXTRA_TERM, mTerms.get(position));
+                intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
+                startActivityForResult(intent, REQUEST_CODE_TERM_EDIT);
+            }
+        });
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        recyclerView.setAdapter(mAdapter);
+
+        Button btnAddTerm = (Button) findViewById(R.id.button_add_term);
+        btnAddTerm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TimetableEditActivity.this, TermEditActivity.class);
+                intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
+                startActivityForResult(intent, REQUEST_CODE_TERM_EDIT);
+            }
+        });
     }
 
     private void updateDateTexts() {
@@ -187,6 +237,37 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                 }
                 updateSchedulingSpinners();
                 break;
+        }
+    }
+
+    private void refreshList() {
+        mTerms.clear();
+        mTerms.addAll(TermUtils.getTerms(this, findTimetableId()));
+        sortList();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void sortList() {
+        Collections.sort(mTerms, new Comparator<Term>() {
+            @Override
+            public int compare(Term t1, Term t2) {
+                return t1.getStartDate().compareTo(t2.getStartDate());
+            }
+        });
+    }
+
+    private int findTimetableId() {
+        return mTimetable == null ? TimetableUtils.getHighestTimetableId(this) : mTimetable.getId();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_TERM_EDIT) {
+            if (resultCode == Activity.RESULT_OK) {
+                refreshList();
+            }
         }
     }
 
@@ -276,8 +357,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             }
         }
 
-        int id = mIsNew ? TimetableUtils.getHighestTimetableId(this) + 1 : mTimetable.getId();
-        mTimetable = new Timetable(id, name, mStartDate, mEndDate, mWeekRotations);
+        mTimetable = new Timetable(findTimetableId(), name, mStartDate, mEndDate, mWeekRotations);
 
         if (mIsNew) {
             TimetableUtils.addTimetable(this, mTimetable);

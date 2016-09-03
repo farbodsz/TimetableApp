@@ -21,6 +21,8 @@
     <string name="title_activity_timetables">Timetables</string>
     <string name="title_activity_timetable_new">New Timetable</string>
     <string name="title_activity_timetable_edit">Edit Timetable</string>
+    <string name="title_activity_term_new">New Term</string>
+    <string name="title_activity_term_edit">Edit Term</string>
 
     <string name="home_card_classes_title">Agenda</string>
     <string name="home_card_classes_action">Open schedule</string>
@@ -104,7 +106,12 @@
     <string name="message_exam_time_required">You must enter an exam time</string>
     <string name="message_exam_duration_required">You must select an exam duration</string>
 
+    <string name="message_term_dates_required">You must specify term dates</string>
+    <string name="message_start_date_equal_end_date">Your start and end dates must be different</string>
+    <string name="message_start_date_after_end_date">The start date cannot be after the end date</string>
+
     <string name="action_add_detail">Add detail</string>
+    <string name="action_add_term">Add term</string>
     <string name="action_add_time">Add time</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
