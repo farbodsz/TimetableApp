@@ -1,14 +1,13 @@
 package com.satsumasoftware.timetable.db.util
 
 import android.app.Activity
-import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
-import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.TermsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.framework.Term
+import com.satsumasoftware.timetable.framework.Timetable
 import java.util.*
 
 class TermUtils {
@@ -17,11 +16,8 @@ class TermUtils {
 
         const val LOG_TAG = "TermUtils"
 
-        @JvmStatic fun getTerms(context: Context, application: Application): ArrayList<Term> {
+        @JvmStatic fun getTerms(context: Context, timetable: Timetable): ArrayList<Term> {
             val terms = ArrayList<Term>()
-
-            val timetable = (application as TimetableApplication).currentTimetable!!
-
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     TermsSchema.TABLE_NAME,
