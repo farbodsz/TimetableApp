@@ -158,7 +158,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         mWeekRotations = mIsNew ? 1 : mTimetable.getWeekRotations();
         updateSchedulingSpinners();
 
-        mTerms = TermUtils.getTerms(this, getApplication());
+        mTerms = TermUtils.getTerms(this, mTimetable);
         sortList();
 
         mAdapter = new TermsAdapter(mTerms);
@@ -238,7 +238,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
 
     private void refreshList() {
         mTerms.clear();
-        mTerms.addAll(TermUtils.getTerms(this, getApplication()));
+        mTerms.addAll(TermUtils.getTerms(this, mTimetable));
         sortList();
         mAdapter.notifyDataSetChanged();
     }
