@@ -16,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        toolbar.navigationIcon = ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp)
+        toolbar.navigationIcon = ThemeUtils.tintDrawable(this, R.drawable.ic_done_black_24dp)
         toolbar.setNavigationOnClickListener { finish() }
 
         fragmentManager.beginTransaction()
