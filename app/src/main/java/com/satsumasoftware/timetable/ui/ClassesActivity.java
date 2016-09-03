@@ -102,7 +102,7 @@ public class ClassesActivity extends BaseActivity {
             mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
                     R.drawable.ic_class_black_24dp,
                     R.string.placeholder_classes,
-                    R.color.theme_primary, // TODO get programmatically
+                    R.color.mdu_blue_400,
                     R.color.mdu_white,
                     R.color.mdu_white,
                     true));

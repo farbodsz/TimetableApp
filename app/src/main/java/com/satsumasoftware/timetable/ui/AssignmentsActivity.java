@@ -171,7 +171,7 @@ public class AssignmentsActivity extends BaseActivity {
             mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
                     drawableRes,
                     stringRes,
-                    R.color.theme_primary, // TODO get primary color programmatically
+                    R.color.mdu_blue_400,
                     R.color.mdu_white,
                     R.color.mdu_white,
                     true));

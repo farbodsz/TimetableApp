@@ -170,7 +170,7 @@ public class ExamsActivity extends BaseActivity {
             mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
                     R.drawable.ic_assessment_black_24dp,
                     stringRes,
-                    R.color.theme_primary, // TODO get this programmatically,
+                    R.color.mdu_blue_400,
                     R.color.mdu_white,
                     R.color.mdu_white,
                     true));
