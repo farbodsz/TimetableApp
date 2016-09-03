@@ -76,8 +76,8 @@ class ThemeUtils {
             val image = placeholderView.findViewById(R.id.imageView) as ImageView
             image.setImageDrawable(tintDrawable(context, drawableRes, drawableColorRes))
             if (largeIcon) {
-                image.layoutParams.width = dpToPixels(context, 112)
-                image.layoutParams.height = dpToPixels(context, 112)
+                image.layoutParams.width = dpToPixels(context, 108)
+                image.layoutParams.height = dpToPixels(context, 108)
             }
 
             val text = placeholderView.findViewById(R.id.textView) as TextView
