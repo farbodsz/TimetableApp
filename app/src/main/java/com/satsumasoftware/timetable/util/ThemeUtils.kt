@@ -64,7 +64,8 @@ class ThemeUtils {
                                 @StringRes stringRes: Int,
                                 @ColorRes backgroundColorRes: Int = R.color.mdu_grey_50,
                                 @ColorRes drawableColorRes: Int = R.color.mdu_grey_700,
-                                @ColorRes textColorRes: Int = R.color.mdu_text_black_secondary): View {
+                                @ColorRes textColorRes: Int = R.color.mdu_text_black_secondary,
+                                largeIcon: Boolean = false): View {
             val placeholderView = LayoutInflater.from(context).inflate(R.layout.placeholder, null)
 
             val background = placeholderView.findViewById(R.id.background)
@@ -72,6 +73,10 @@ class ThemeUtils {
 
             val image = placeholderView.findViewById(R.id.imageView) as ImageView
             image.setImageDrawable(tintDrawable(context, drawableRes, drawableColorRes))
+            if (largeIcon) {
+                image.layoutParams.width = dpToPixels(context, 112)
+                image.layoutParams.height = dpToPixels(context, 112)
+            }
 
             val text = placeholderView.findViewById(R.id.textView) as TextView
             text.setText(stringRes)
