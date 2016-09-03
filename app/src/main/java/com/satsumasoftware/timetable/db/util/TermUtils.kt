@@ -53,7 +53,7 @@ class TermUtils {
             Log.i(LOG_TAG, "Added Term with id ${term.id}")
         }
 
-        private fun deleteTerm(context: Context, termId: Int) {
+        @JvmStatic fun deleteTerm(context: Context, termId: Int) {
             val db = TimetableDbHelper.getInstance(context).writableDatabase
             db.delete(TermsSchema.TABLE_NAME,
                     "${TermsSchema._ID}=?",
