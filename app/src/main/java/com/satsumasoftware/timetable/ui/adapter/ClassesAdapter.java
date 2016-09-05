@@ -39,7 +39,8 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
 
         Subject subject = Subject.create(mContext, cls.getSubjectId());
         assert subject != null;
-        holder.mSubject.setText(subject.getName());
+
+        holder.mSubject.setText(Class.makeName(cls, subject));
 
         Color color = new Color(subject.getColorId());
         holder.mColorView.setBackgroundColor(ContextCompat.getColor(

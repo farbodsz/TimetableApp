@@ -91,5 +91,11 @@ class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName
             return exam
         }
 
+        @JvmStatic fun makeName(exam: Exam, subject: Subject) = if (exam.hasModuleName()) {
+            "${subject.name}: ${exam.moduleName}"
+        } else {
+            subject.name
+        }
+
     }
 }

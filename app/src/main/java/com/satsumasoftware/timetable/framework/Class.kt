@@ -7,17 +7,22 @@ import android.os.Parcelable
 import com.satsumasoftware.timetable.db.ClassesSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 
-class Class(val id: Int, val timetableId: Int, val subjectId: Int) : Parcelable {
+class Class(val id: Int, val timetableId: Int, val subjectId: Int,
+            val moduleName: String) : Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(ClassesSchema._ID)),
             cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_TIMETABLE_ID)),
-            cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_SUBJECT_ID)))
+            cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_SUBJECT_ID)),
+            cursor.getString(cursor.getColumnIndex(ClassesSchema.COL_MODULE_NAME)))
 
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
-            source.readInt())
+            source.readInt(),
+            source.readString())
+
+    fun hasModuleName() = moduleName.trim().length != 0
 
     override fun describeContents() = 0
 
@@ -25,6 +30,7 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int) : Parcelable 
         dest?.writeInt(id)
         dest?.writeInt(timetableId)
         dest?.writeInt(subjectId)
+        dest?.writeString(moduleName)
     }
 
     companion object {
@@ -50,6 +56,12 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int) : Parcelable 
             val cls = Class(cursor)
             cursor.close()
             return cls
+        }
+
+        @JvmStatic fun makeName(cls: Class, subject: Subject) = if (cls.hasModuleName()) {
+            "${subject.name}: ${cls.moduleName}"
+        } else {
+            subject.name
         }
 
     }

@@ -61,6 +61,8 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private Subject mSubject;
 
+    private EditText mEditTextModule;
+
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
 
@@ -159,6 +161,11 @@ public class ClassEditActivity extends AppCompatActivity {
             }
         });
 
+        mEditTextModule = (EditText) findViewById(R.id.editText_module);
+        if (!mIsNew) {
+            mEditTextModule.setText(mClass.getModuleName());
+        }
+
         mClassDetailIds = new ArrayList<>();
 
         mAllClassTimeGroups = new ArrayList<>();
@@ -182,7 +189,7 @@ public class ClassEditActivity extends AppCompatActivity {
     private void updateLinkedSubject() {
         mSubjectText.setText(mSubject.getName());
         mSubjectText.setTextColor(ContextCompat.getColor(
-                ClassEditActivity.this, R.color.mdu_text_white));
+                ClassEditActivity.this, R.color.mdu_text_black));
 
         Color color = new Color(mSubject.getColorId());
         ThemeUtils.setBarColors(color, this, mAppBarLayout, mToolbar);
@@ -410,12 +417,13 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private void handleDoneAction() {
         // validate subject
-
         if (mSubject == null) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_subject_required,
                     Snackbar.LENGTH_SHORT).show();
             return;
         }
+
+        String moduleName = TextUtilsKt.title(mEditTextModule.getText().toString());
 
         // go through each page and only collect data first - so any validation
         // errors can be resolved without any data being written or saved
@@ -497,7 +505,7 @@ public class ClassEditActivity extends AppCompatActivity {
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mClass = new Class(classId, timetable.getId(), mSubject.getId());
+        mClass = new Class(classId, timetable.getId(), mSubject.getId(), moduleName);
 
         if (mIsNew) {
             ClassUtils.addClass(this, mClass);
