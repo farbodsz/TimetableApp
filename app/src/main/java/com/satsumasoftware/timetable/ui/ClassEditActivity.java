@@ -61,6 +61,8 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private Subject mSubject;
 
+    private EditText mEditTextModule;
+
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
 
@@ -158,6 +160,8 @@ public class ClassEditActivity extends AppCompatActivity {
                 mSubjectDialog.show();
             }
         });
+
+        mEditTextModule = (EditText) findViewById(R.id.editText_module);
 
         mClassDetailIds = new ArrayList<>();
 
@@ -416,7 +420,7 @@ public class ClassEditActivity extends AppCompatActivity {
             return;
         }
 
-        String moduleName = ""; // TODO
+        String moduleName = mEditTextModule.getText().toString();
 
         // go through each page and only collect data first - so any validation
         // errors can be resolved without any data being written or saved
