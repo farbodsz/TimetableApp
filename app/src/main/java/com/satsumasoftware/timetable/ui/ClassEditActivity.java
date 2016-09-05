@@ -410,12 +410,13 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private void handleDoneAction() {
         // validate subject
-
         if (mSubject == null) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_subject_required,
                     Snackbar.LENGTH_SHORT).show();
             return;
         }
+
+        String moduleName = ""; // TODO
 
         // go through each page and only collect data first - so any validation
         // errors can be resolved without any data being written or saved
@@ -497,7 +498,7 @@ public class ClassEditActivity extends AppCompatActivity {
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mClass = new Class(classId, timetable.getId(), mSubject.getId());
+        mClass = new Class(classId, timetable.getId(), mSubject.getId(), moduleName);
 
         if (mIsNew) {
             ClassUtils.addClass(this, mClass);

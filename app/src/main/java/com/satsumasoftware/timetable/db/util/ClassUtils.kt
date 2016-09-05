@@ -132,6 +132,7 @@ class ClassUtils {
                 put(ClassesSchema._ID, cls.id)
                 put(ClassesSchema.COL_TIMETABLE_ID, cls.timetableId)
                 put(ClassesSchema.COL_SUBJECT_ID, cls.subjectId)
+                put(ClassesSchema.COL_MODULE_NAME, cls.moduleName)
             }
 
             val db = TimetableDbHelper.getInstance(context).writableDatabase
