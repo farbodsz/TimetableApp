@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.ClassTimesSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
@@ -28,7 +29,7 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
                     cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_HRS)),
                     cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_MINS))))
 
-    fun displayWeekValue(activity: Activity) = Companion.displayWeekValue(activity, weekNumber)
+    fun getWeekText(activity: Activity) = Companion.getWeekText(activity, weekNumber)
 
     constructor(source: Parcel) : this(
             source.readInt(),
@@ -72,13 +73,13 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
             return classTime
         }
 
-        @JvmStatic fun displayWeekValue(activity: Activity, weekNumber: Int): String {
+        @JvmStatic fun getWeekText(activity: Activity, weekNumber: Int): String {
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
             if (timetable.hasFixedScheduling()) {
                 return ""
             } else {
-                if (PrefUtils.displayWeeksAsLetters(activity)) {
-                    return when(weekNumber) {
+                val weekChar = if (PrefUtils.displayWeeksAsLetters(activity)) {
+                    when(weekNumber) {
                         1 -> "A"
                         2 -> "B"
                         3 -> "C"
@@ -86,8 +87,9 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
                         else -> throw IllegalArgumentException("invalid week number '$weekNumber'")
                     }
                 } else {
-                    return weekNumber.toString()
+                    weekNumber.toString()
                 }
+                return activity.getString(R.string.week_item, weekChar)
             }
         }
     }

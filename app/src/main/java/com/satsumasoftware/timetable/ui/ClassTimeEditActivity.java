@@ -173,8 +173,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
                     ArrayList<String> weekItemsList = new ArrayList<>();
                     for (int i = 1; i <= weekRotations; i++) {
-                        String item = getString(R.string.week_item,
-                                ClassTime.displayWeekValue(ClassTimeEditActivity.this, i));
+                        String item = ClassTime.getWeekText(ClassTimeEditActivity.this, i);
                         weekItemsList.add(item);
                     }
                     final String[] weekItems = weekItemsList.toArray(new String[weekItemsList.size()]);
@@ -295,7 +294,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         for (int i = 0; i < timetable.getWeekRotations(); i++) {
             if (mWeekNumbers.get(i) != null) {
                 int weekNumber = mWeekNumbers.get(i);
-                builder.append(ClassTime.displayWeekValue(this, weekNumber));
+                builder.append(ClassTime.getWeekText(this, weekNumber));
                 builder.append(", ");
             }
         }

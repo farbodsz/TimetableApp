@@ -50,9 +50,10 @@ public class ClassTimesAdapter extends RecyclerView.Adapter<ClassTimesAdapter.Cl
 
             dayTextBuilder.append(TextUtilsKt.title(classTime.getDay().toString().toLowerCase()));
 
-            String weekItem = " " + mActivity.getString(R.string.week_item,
-                    classTime.displayWeekValue(mActivity));
-            dayTextBuilder.append(weekItem);
+            if (!timetable.hasFixedScheduling()) {
+                String weekItem = classTime.getWeekText(mActivity);
+                dayTextBuilder.append(" ").append(weekItem);
+            }
 
             if (i != classTimes.size() - 1) dayTextBuilder.append("\n");
         }
