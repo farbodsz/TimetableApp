@@ -162,6 +162,9 @@ public class ClassEditActivity extends AppCompatActivity {
         });
 
         mEditTextModule = (EditText) findViewById(R.id.editText_module);
+        if (!mIsNew) {
+            mEditTextModule.setText(mClass.getModuleName());
+        }
 
         mClassDetailIds = new ArrayList<>();
 
