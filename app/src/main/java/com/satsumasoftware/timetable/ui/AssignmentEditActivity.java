@@ -55,8 +55,6 @@ public class AssignmentEditActivity extends AppCompatActivity {
     private TextView mDateText;
     private LocalDate mDueDate;
 
-    private int mCompletionProgess = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -245,6 +243,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
         }
 
         int id = mIsNew ? AssignmentUtils.getHighestAssignmentId(this) + 1 : mAssignment.getId();
+        int completionProgress = mIsNew ? 0 : mAssignment.getCompletionProgress();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
@@ -256,7 +255,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 newTitle,
                 mEditTextDetail.getText().toString(),
                 mDueDate,
-                mCompletionProgess);
+                completionProgress);
 
         if (mIsNew) {
             AssignmentUtils.addAssignment(this, mAssignment);
