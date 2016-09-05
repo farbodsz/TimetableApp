@@ -73,6 +73,14 @@ public class ScheduleActivity extends BaseActivity {
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
+        if (!timetable.isValidToday()) {
+            View placeholder = ThemeUtils.makePlaceholderView(this,
+                    R.drawable.ic_today_black_24dp, R.string.home_card_classes_placeholder);
+            mPagerAdapter.addViewWithTitle(
+                    placeholder, getString(R.string.title_activity_schedule));
+            return;
+        }
+
         for (int weekNumber = 1; weekNumber <= timetable.getWeekRotations(); weekNumber++) {
             for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
 
