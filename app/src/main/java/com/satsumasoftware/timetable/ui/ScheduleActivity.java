@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -163,7 +164,7 @@ public class ScheduleActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_today);
+        ThemeUtils.tintMenuIcons(this, menu, R.id.action_today, R.id.action_view_week);
         return true;
     }
 
@@ -172,6 +173,10 @@ public class ScheduleActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.action_today:
                 goToNow();
+                break;
+            case R.id.action_view_week:
+                Snackbar.make(findViewById(R.id.drawerLayout), "Week view coming soon",
+                        Snackbar.LENGTH_SHORT).show();
                 break;
         }
 

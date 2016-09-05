@@ -123,6 +123,7 @@
     <string name="action_show_past_exams">Show past exams</string>
     <string name="action_settings">Settings</string>
     <string name="action_today">Today</string>
+    <string name="action_view_week">View week</string>
 
     <string name="showing_past_assignments">Showing past assignments</string>
     <string name="showing_past_exams">Showing past exams</string>
