@@ -62,7 +62,7 @@ public class HomeAssignmentsAdapter extends RecyclerView.Adapter<HomeAssignments
             details.append("</b> \u2022 ");
         }
 
-        details.append(subject.getName())
+        details.append(Class.makeName(cls, subject))
                 .append(" \u2022 ");
         details.append(assignment.getDueDate().format(DateTimeFormatter.ofPattern("d MMM")));
         details.append(" \u2022 ")

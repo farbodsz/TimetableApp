@@ -43,7 +43,8 @@ public class HomeClassesAdapter extends RecyclerView.Adapter<HomeClassesAdapter.
 
         Subject subject = Subject.create(mContext, cls.getSubjectId());
         assert subject != null;
-        holder.mSubject.setText(subject.getName());
+
+        holder.mSubject.setText(Class.makeName(cls, subject));
 
         Color color = new Color(subject.getColorId());
         holder.mColorCircle.setImageResource(color.getPrimaryColorResId(mContext));
