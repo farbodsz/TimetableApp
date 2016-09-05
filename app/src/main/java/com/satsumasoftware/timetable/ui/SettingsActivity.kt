@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceFragment
 import android.support.v7.app.AppCompatActivity
@@ -17,7 +18,10 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         toolbar.navigationIcon = ThemeUtils.tintDrawable(this, R.drawable.ic_done_black_24dp)
-        toolbar.setNavigationOnClickListener { finish() }
+        toolbar.setNavigationOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
 
         fragmentManager.beginTransaction()
                 .replace(R.id.content, SettingsFragment())

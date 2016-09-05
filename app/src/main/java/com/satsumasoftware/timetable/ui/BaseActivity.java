@@ -211,6 +211,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             case NAVDRAWER_ITEM_SETTINGS:
                 intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
     }
