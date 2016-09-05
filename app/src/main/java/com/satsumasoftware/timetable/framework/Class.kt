@@ -58,5 +58,11 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             return cls
         }
 
+        @JvmStatic fun makeName(cls: Class, subject: Subject) = if (cls.hasModuleName()) {
+            "${subject.name}: ${cls.moduleName}"
+        } else {
+            subject.name
+        }
+
     }
 }
