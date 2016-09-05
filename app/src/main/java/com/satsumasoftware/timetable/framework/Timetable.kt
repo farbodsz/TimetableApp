@@ -39,6 +39,8 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate, val end
 
     fun hasFixedScheduling() = weekRotations == 1
 
+    fun isValidToday() = !LocalDate.now().isBefore(startDate) && !LocalDate.now().isAfter(endDate)
+
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readString(),
