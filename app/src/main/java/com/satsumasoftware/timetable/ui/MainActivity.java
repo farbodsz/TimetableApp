@@ -1,14 +1,11 @@
 package com.satsumasoftware.timetable.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -140,29 +137,6 @@ public class MainActivity extends BaseActivity {
         });
 
         return exams;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_manage_timetables:
-                Intent manageIntent = new Intent(this, TimetablesActivity.class);
-                startActivity(manageIntent);
-                finish();
-                break;
-            case R.id.action_settings:
-                Intent settingsIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingsIntent);
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
