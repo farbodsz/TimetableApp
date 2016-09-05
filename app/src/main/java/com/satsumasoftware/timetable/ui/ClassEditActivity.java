@@ -182,7 +182,7 @@ public class ClassEditActivity extends AppCompatActivity {
     private void updateLinkedSubject() {
         mSubjectText.setText(mSubject.getName());
         mSubjectText.setTextColor(ContextCompat.getColor(
-                ClassEditActivity.this, R.color.mdu_text_white));
+                ClassEditActivity.this, R.color.mdu_text_black));
 
         Color color = new Color(mSubject.getColorId());
         ThemeUtils.setBarColors(color, this, mAppBarLayout, mToolbar);

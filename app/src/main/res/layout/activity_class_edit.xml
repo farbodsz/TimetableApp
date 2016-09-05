@@ -16,15 +16,23 @@
             style="@style/Widget.Timetable.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/textView_subject"
-            android:text="@string/property_subject"
-            style="@style/Widget.Timetable.TextView.Item.Selectable"
-            android:textColor="@color/mdu_text_white_secondary"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/mdu_keyline_2"
-            android:layout_marginRight="@dimen/mdu_keyline_1" />
+            android:layout_marginRight="@dimen/mdu_keyline_1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textView_subject"
+                    android:text="@string/property_subject"
+                    style="@style/Widget.Timetable.TextView.Item.Selectable"
+                    android:textColor="@color/mdu_text_black_secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
