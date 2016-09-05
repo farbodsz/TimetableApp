@@ -73,7 +73,9 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
             return classTime
         }
 
-        @JvmStatic fun getWeekText(activity: Activity, weekNumber: Int): String {
+        @JvmOverloads
+        @JvmStatic fun getWeekText(activity: Activity, weekNumber: Int,
+                                   fullText: Boolean = true): String {
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
             if (timetable.hasFixedScheduling()) {
                 return ""
@@ -89,7 +91,7 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
                 } else {
                     weekNumber.toString()
                 }
-                return activity.getString(R.string.week_item, weekChar)
+                return if (fullText) activity.getString(R.string.week_item, weekChar) else weekChar
             }
         }
     }
