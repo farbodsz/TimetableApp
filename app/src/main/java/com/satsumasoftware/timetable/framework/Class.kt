@@ -22,6 +22,8 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             source.readInt(),
             source.readString())
 
+    fun hasModuleName() = moduleName.trim().length != 0
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
