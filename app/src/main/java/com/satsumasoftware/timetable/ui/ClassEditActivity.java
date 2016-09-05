@@ -420,7 +420,7 @@ public class ClassEditActivity extends AppCompatActivity {
             return;
         }
 
-        String moduleName = mEditTextModule.getText().toString();
+        String moduleName = TextUtilsKt.title(mEditTextModule.getText().toString());
 
         // go through each page and only collect data first - so any validation
         // errors can be resolved without any data being written or saved
