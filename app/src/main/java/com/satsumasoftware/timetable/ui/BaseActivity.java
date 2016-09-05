@@ -60,6 +60,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static final int NAVDRAWER_ITEM_ASSIGNMENTS = R.id.navigation_item_assignments;
     protected static final int NAVDRAWER_ITEM_EXAMS = R.id.navigation_item_exams;
     protected static final int NAVDRAWER_ITEM_SUBJECTS = R.id.navigation_item_subjects;
+    protected static final int NAVDRAWER_ITEM_MANAGE_TIMETABLES = R.id.navigation_item_manage_timetables;
+    protected static final int NAVDRAWER_ITEM_SETTINGS = R.id.navigation_item_settings;
     protected static final int NAVDRAWER_ITEM_INVALID = -1;
 
     /*
@@ -200,6 +202,15 @@ public abstract class BaseActivity extends AppCompatActivity {
                 intent = new Intent(this, SubjectsActivity.class);
                 startActivity(intent);
                 finish();
+                break;
+            case NAVDRAWER_ITEM_MANAGE_TIMETABLES:
+                intent = new Intent(this, TimetablesActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case NAVDRAWER_ITEM_SETTINGS:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
         }
     }
