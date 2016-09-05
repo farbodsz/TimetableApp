@@ -80,7 +80,7 @@ public class ScheduleActivity extends BaseActivity {
                 titleBuilder.append(dayOfWeek.toString());
                 if (!timetable.hasFixedScheduling()) {
                     titleBuilder.append(" ")
-                            .append(weekNumber);
+                            .append(ClassTime.getWeekText(this, weekNumber, false));
                 }
                 String tabTitle = titleBuilder.toString();
 
