@@ -18,14 +18,21 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         toolbar.navigationIcon = ThemeUtils.tintDrawable(this, R.drawable.ic_done_black_24dp)
-        toolbar.setNavigationOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
+        toolbar.setNavigationOnClickListener { actionDone() }
 
         fragmentManager.beginTransaction()
                 .replace(R.id.content, SettingsFragment())
                 .commit()
+    }
+
+    override fun onBackPressed() {
+        actionDone()
+        super.onBackPressed()
+    }
+
+    fun actionDone() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     class SettingsFragment : PreferenceFragment() {

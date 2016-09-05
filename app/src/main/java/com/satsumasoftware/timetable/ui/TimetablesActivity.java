@@ -39,9 +39,7 @@ public class TimetablesActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TimetablesActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                actionDone();
             }
         });
 
@@ -99,6 +97,18 @@ public class TimetablesActivity extends AppCompatActivity {
                 refreshList();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        actionDone();
+        super.onBackPressed();
+    }
+
+    private void actionDone() {
+        Intent intent = new Intent(TimetablesActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }
