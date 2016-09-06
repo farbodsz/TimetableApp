@@ -155,6 +155,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         if (timetable.hasFixedScheduling()) {
             mWeekText.setVisibility(View.GONE);
+            findViewById(R.id.divider).setVisibility(View.GONE);
             mWeekNumbers.put(0, 1);
 
         } else {
