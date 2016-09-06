@@ -2,6 +2,7 @@ package com.satsumasoftware.timetable.ui.adapter;
 
 import android.app.Activity;
 import android.app.Application;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,13 +24,15 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
     private Activity mActivity;
     private Application mApplication;
     private ArrayList<Timetable> mTimetables;
+    private View mRootView;
 
     private boolean mBindingVH;
 
-    public TimetablesAdapter(Activity activity, ArrayList<Timetable> timetables) {
+    public TimetablesAdapter(Activity activity, ArrayList<Timetable> timetables, View rootView) {
         mActivity = activity;
         mApplication = activity.getApplication();
         mTimetables = timetables;
+        mRootView = rootView;
     }
 
     @Override
@@ -91,6 +94,11 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
                         TimetableApplication application = (TimetableApplication) mApplication;
                         application.setCurrentTimetable(mActivity, timetable);
                         notifyDataSetChanged();
+
+                        String snackbarText = mActivity.getString(
+                                R.string.message_set_current_timetable,
+                                timetable.getDisplayedName());
+                        Snackbar.make(mRootView, snackbarText, Snackbar.LENGTH_SHORT).show();
                     }
                 }
             });
