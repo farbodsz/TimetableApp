@@ -38,7 +38,7 @@ public class TimetablesActivity extends BaseActivity {
         mTimetables = TimetableUtils.getTimetables(this);
         sortList();
 
-        mAdapter = new TimetablesAdapter(this, mTimetables, findViewById(R.id.drawerLayout));
+        mAdapter = new TimetablesAdapter(this, mTimetables, findViewById(R.id.coordinatorLayout));
         mAdapter.setOnEntryClickListener(new TimetablesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
