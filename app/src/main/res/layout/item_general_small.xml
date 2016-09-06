@@ -4,8 +4,8 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/mdu_padding_normal"
-    android:paddingRight="@dimen/mdu_padding_normal"
+    android:paddingLeft="@dimen/mdu_keyline_1"
+    android:paddingRight="@dimen/mdu_keyline_1"
     android:paddingTop="@dimen/mdu_spacing_normal"
     android:paddingBottom="@dimen/mdu_spacing_normal">
 
@@ -16,9 +16,10 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/mdu_padding_normal">
+        android:paddingLeft="@dimen/mdu_keyline_1"
+        android:paddingRight="@dimen/mdu_keyline_1">
 
         <TextView
             android:id="@+id/text1"
