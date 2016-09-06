@@ -53,10 +53,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/ic_event_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_gravity="center_vertical" />
+            style="@style/Widget.Timetable.ItemIcon" />
         <TextView
             android:id="@+id/textView_date"
             android:text="@string/property_exam_date"
@@ -71,10 +68,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/ic_access_time_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_gravity="center_vertical" />
+            style="@style/Widget.Timetable.ItemIcon" />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -104,10 +98,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/ic_event_seat_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_gravity="center_vertical" />
+            style="@style/Widget.Timetable.ItemIcon" />
         <android.support.design.widget.TextInputLayout
             android:hint="@string/property_seat"
             android:layout_width="match_parent"
@@ -127,10 +118,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/ic_room_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_gravity="center_vertical" />
+            style="@style/Widget.Timetable.ItemIcon" />
         <android.support.design.widget.TextInputLayout
             android:hint="@string/property_room"
             android:layout_width="match_parent"
@@ -152,10 +140,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/ic_restore_page_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_gravity="center_vertical" />
+            style="@style/Widget.Timetable.ItemIcon" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

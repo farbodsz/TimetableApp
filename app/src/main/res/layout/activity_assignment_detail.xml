@@ -20,10 +20,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/ic_event_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_gravity="center_vertical" />
+            style="@style/Widget.Timetable.ItemIcon" />
         <TextView
             android:id="@+id/textView_date"
             style="@style/Widget.Timetable.TextView.Item"
@@ -39,10 +36,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/ic_track_changes_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_gravity="center_vertical" />
+            style="@style/Widget.Timetable.ItemIcon" />
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -72,10 +66,7 @@
         android:layout_height="wrap_content">
         <ImageView
             android:src="@drawable/ic_event_note_black_24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_gravity="center_vertical" />
+            style="@style/Widget.Timetable.ItemIcon" />
         <TextView
             android:id="@+id/textView_detail"
             style="@style/Widget.Timetable.TextView.Item"

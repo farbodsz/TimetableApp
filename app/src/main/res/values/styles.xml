@@ -38,6 +38,14 @@
         <item name="cardUseCompatPadding">true</item>
     </style>
 
+    <style name="Widget.Timetable.ItemIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/mdu_keyline_1</item>
+        <item name="android:contentDescription">Icon</item>
+    </style>
+
     <style name="Widget.Timetable.TextView" />
 
     <style name="Widget.Timetable.TextView.Item">

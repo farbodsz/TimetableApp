@@ -22,11 +22,7 @@
                 android:paddingTop="@dimen/mdu_spacing_normal">
                 <ImageView
                     android:src="@drawable/ic_room_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/mdu_keyline_1"
-                    android:layout_marginRight="@dimen/mdu_keyline_1" />
+                    style="@style/Widget.Timetable.ItemIcon" />
                 <android.support.design.widget.TextInputLayout
                     android:hint="@string/property_room"
                     android:layout_width="match_parent"
@@ -73,11 +69,7 @@
                 android:paddingBottom="@dimen/mdu_padding_normal">
                 <ImageView
                     android:src="@drawable/ic_person_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/mdu_keyline_1"
-                    android:layout_marginRight="@dimen/mdu_keyline_1" />
+                    style="@style/Widget.Timetable.ItemIcon" />
                 <android.support.design.widget.TextInputLayout
                     android:hint="@string/property_teacher"
                     android:layout_width="match_parent"
@@ -101,11 +93,7 @@
 
                 <ImageView
                     android:src="@drawable/ic_access_time_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/mdu_keyline_1"
-                    android:layout_marginRight="@dimen/mdu_keyline_1" />
+                    style="@style/Widget.Timetable.ItemIcon" />
 
                 <LinearLayout
                     android:orientation="vertical"
