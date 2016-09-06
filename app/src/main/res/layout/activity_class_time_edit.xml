@@ -15,62 +15,77 @@
             android:layout_height="wrap_content" />
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:src="@drawable/ic_today_black_24dp"
-            style="@style/Widget.Timetable.ItemIcon" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/content_vertical_padding"
+        android:layout_marginLeft="@dimen/content_lateral_padding"
+        android:layout_marginRight="@dimen/content_lateral_padding">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_2">
-            <TextView
-                android:id="@+id/textView_day"
-                android:text="@string/property_days"
-                style="@style/Widget.Timetable.TextView.Item.Selectable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <include android:id="@+id/divider" layout="@layout/divider" />
-            <TextView
-                android:id="@+id/textView_week"
-                android:text="@string/property_weeks"
-                style="@style/Widget.Timetable.TextView.Item.Selectable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-    </FrameLayout>
+            android:layout_height="wrap_content">
 
-    <include layout="@layout/divider" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:src="@drawable/ic_access_time_black_24dp"
-            style="@style/Widget.Timetable.ItemIcon" />
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/mdu_keyline_2">
-            <TextView
-                android:id="@+id/textView_start_time"
-                android:text="@string/property_start_time"
-                style="@style/Widget.Timetable.TextView.Item.Selectable"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/ic_today_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/mdu_keyline_2">
+                    <TextView
+                        android:id="@+id/textView_day"
+                        android:text="@string/property_days"
+                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <include android:id="@+id/divider" layout="@layout/divider" />
+                    <TextView
+                        android:id="@+id/textView_week"
+                        android:text="@string/property_weeks"
+                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </FrameLayout>
+
             <include layout="@layout/divider" />
-            <TextView
-                android:id="@+id/textView_end_time"
-                android:text="@string/property_end_time"
-                style="@style/Widget.Timetable.TextView.Item.Selectable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </FrameLayout>
 
-    <include layout="@layout/divider" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:src="@drawable/ic_access_time_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/mdu_keyline_2">
+                    <TextView
+                        android:id="@+id/textView_start_time"
+                        android:text="@string/property_start_time"
+                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <include layout="@layout/divider" />
+                    <TextView
+                        android:id="@+id/textView_end_time"
+                        android:text="@string/property_end_time"
+                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>
