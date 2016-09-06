@@ -257,7 +257,8 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
     }
 
     private int findTimetableId() {
-        return mTimetable == null ? TimetableUtils.getHighestTimetableId(this) : mTimetable.getId();
+        return mTimetable == null ?
+                TimetableUtils.getHighestTimetableId(this) + 1 : mTimetable.getId();
     }
 
     @Override
