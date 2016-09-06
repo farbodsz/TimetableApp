@@ -18,8 +18,8 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/mdu_keyline_1"
         android:paddingRight="@dimen/mdu_keyline_1"
-        android:paddingTop="@dimen/mdu_padding_normal"
-        android:paddingBottom="@dimen/mdu_padding_normal">
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
         <TextView
             android:id="@+id/subject"
