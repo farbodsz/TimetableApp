@@ -89,8 +89,7 @@ public class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.Ti
                     if (!mBindingVH) {
                         Timetable timetable = mTimetables.get(getLayoutPosition());
                         TimetableApplication application = (TimetableApplication) mApplication;
-                        application.setCurrentTimetable(timetable);
-                        application.refreshAlarms(mActivity);
+                        application.setCurrentTimetable(mActivity, timetable);
                         notifyDataSetChanged();
                     }
                 }

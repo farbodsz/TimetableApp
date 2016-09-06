@@ -16,7 +16,7 @@ class TimetableApplication : Application() {
     private val LOG_TAG = "TimetableApplication"
 
     var currentTimetable: Timetable? = null
-        set(value) {
+        private set(value) {
             field = value
             value?.let {
                 PrefUtils.setCurrentTimetable(this, field!!)
@@ -32,7 +32,14 @@ class TimetableApplication : Application() {
         currentTimetable = PrefUtils.getCurrentTimetable(this)
     }
 
+    fun setCurrentTimetable(context: Context, timetable: Timetable?) {
+        currentTimetable = timetable
+        refreshAlarms(context)
+    }
+
     fun refreshAlarms(context: Context) {
+        Log.i(LOG_TAG, "Refreshing alarms...")
+
         // Cancel alarms from all timetables and add alarms for the current one
         val alarmReceiver = AlarmReceiver()
 

@@ -367,8 +367,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         }
 
         TimetableApplication application = (TimetableApplication) getApplication();
-        application.setCurrentTimetable(mTimetable);
-        application.refreshAlarms(this);
+        application.setCurrentTimetable(this, mTimetable);
 
         setResult(Activity.RESULT_OK);
         finish();
@@ -388,8 +387,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         Timetable newCurrentTimetable = Timetable.create(this, highestId);
 
         TimetableApplication application = (TimetableApplication) getApplication();
-        application.setCurrentTimetable(newCurrentTimetable);
-        application.refreshAlarms(this);
+        application.setCurrentTimetable(this, newCurrentTimetable);
 
         setResult(Activity.RESULT_OK);
         finish();
