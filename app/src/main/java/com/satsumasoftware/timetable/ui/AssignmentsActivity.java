@@ -64,7 +64,7 @@ public class AssignmentsActivity extends BaseActivity {
                 intent.putExtra(AssignmentDetailActivity.EXTRA_ASSIGNMENT, mAssignments.get(position));
 
                 Bundle bundle = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                if (ThemeUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     AssignmentsActivity.this,
