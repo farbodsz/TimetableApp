@@ -23,113 +23,123 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/content_vertical_padding"
+            android:layout_marginLeft="@dimen/content_lateral_padding"
+            android:layout_marginRight="@dimen/content_lateral_padding">
 
-            <android.support.design.widget.TextInputLayout
-                android:hint="@string/property_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/mdu_keyline_1"
-                android:paddingRight="@dimen/mdu_keyline_1"
-                android:paddingTop="@dimen/mdu_padding_normal"
-                android:paddingBottom="@dimen/mdu_padding_normal">
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/editText_name"
-                    android:inputType="textShortMessage"
-                    android:maxLines="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </android.support.design.widget.TextInputLayout>
-
-            <include layout="@layout/divider" />
-
-            <FrameLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:src="@drawable/ic_date_range_black_24dp"
-                    style="@style/Widget.Timetable.ItemIcon" />
-                <LinearLayout
-                    android:orientation="vertical"
+
+                <android.support.design.widget.TextInputLayout
+                    android:hint="@string/property_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/mdu_keyline_2">
-                    <TextView
-                        android:id="@+id/textView_start_date"
-                        android:text="@string/property_start_date"
-                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                    android:paddingLeft="@dimen/mdu_keyline_1"
+                    android:paddingRight="@dimen/mdu_keyline_1"
+                    android:paddingTop="@dimen/mdu_padding_normal"
+                    android:paddingBottom="@dimen/mdu_padding_normal">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/editText_name"
+                        android:inputType="textShortMessage"
+                        android:maxLines="1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <include layout="@layout/divider" />
-                    <TextView
-                        android:id="@+id/textView_end_date"
-                        android:text="@string/property_end_date"
-                        style="@style/Widget.Timetable.TextView.Item.Selectable"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </FrameLayout>
+                        android:layout_height="match_parent" />
+                </android.support.design.widget.TextInputLayout>
 
-            <include layout="@layout/divider" />
+                <include layout="@layout/divider" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:src="@drawable/ic_repeat_black_24dp"
-                    style="@style/Widget.Timetable.ItemIcon" />
-                <LinearLayout
-                    android:orientation="vertical"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/mdu_keyline_2"
-                    android:layout_marginRight="@dimen/mdu_keyline_1">
-                    <com.satsuware.usefulviews.LabelledSpinner
-                        android:id="@+id/spinner_scheduling_type"
-                        app:labelText="@string/property_scheduling_type"
-                        app:spinnerEntries="@array/scheduling_types"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/ic_date_range_black_24dp"
+                        style="@style/Widget.Timetable.ItemIcon" />
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <com.satsuware.usefulviews.LabelledSpinner
-                        android:id="@+id/spinner_scheduling_detail"
-                        app:labelText="@string/property_scheduling_number_of_weeks"
-                        app:spinnerEntries="@array/scheduling_week_rotations"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </FrameLayout>
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/mdu_keyline_2">
+                        <TextView
+                            android:id="@+id/textView_start_date"
+                            android:text="@string/property_start_date"
+                            style="@style/Widget.Timetable.TextView.Item.Selectable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <include layout="@layout/divider" />
+                        <TextView
+                            android:id="@+id/textView_end_date"
+                            android:text="@string/property_end_date"
+                            style="@style/Widget.Timetable.TextView.Item.Selectable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </FrameLayout>
 
-            <include layout="@layout/divider" />
+                <include layout="@layout/divider" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:src="@drawable/ic_event_note_black_24dp"
-                    style="@style/Widget.Timetable.ItemIcon" />
-                <LinearLayout
-                    android:orientation="vertical"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/mdu_keyline_2">
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerView"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/ic_repeat_black_24dp"
+                        style="@style/Widget.Timetable.ItemIcon" />
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <Button
-                        android:id="@+id/button_add_term"
-                        android:text="@string/action_add_term"
-                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:gravity="center_vertical" />
-                </LinearLayout>
-            </FrameLayout>
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/mdu_keyline_2"
+                        android:layout_marginRight="@dimen/mdu_keyline_1">
+                        <com.satsuware.usefulviews.LabelledSpinner
+                            android:id="@+id/spinner_scheduling_type"
+                            app:labelText="@string/property_scheduling_type"
+                            app:spinnerEntries="@array/scheduling_types"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <com.satsuware.usefulviews.LabelledSpinner
+                            android:id="@+id/spinner_scheduling_detail"
+                            app:labelText="@string/property_scheduling_number_of_weeks"
+                            app:spinnerEntries="@array/scheduling_week_rotations"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </FrameLayout>
 
-        </LinearLayout>
+                <include layout="@layout/divider" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/ic_event_note_black_24dp"
+                        style="@style/Widget.Timetable.ItemIcon" />
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/mdu_keyline_2">
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <Button
+                            android:id="@+id/button_add_term"
+                            android:text="@string/action_add_term"
+                            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:gravity="center_vertical" />
+                    </LinearLayout>
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
     </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

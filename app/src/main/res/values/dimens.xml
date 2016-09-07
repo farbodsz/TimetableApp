@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="content_vertical_padding">0dp</dimen>
+    <dimen name="content_lateral_padding">0dp</dimen>
+
     <dimen name="drawer_width">@dimen/match_parent</dimen>
 
     <dimen name="fab_padding">76dp</dimen> <!-- TODO: check MD guidelines if this is the correct amount -->

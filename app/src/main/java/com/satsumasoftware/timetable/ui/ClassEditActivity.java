@@ -65,6 +65,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
+    private TabLayout mTabLayout;
 
     private TextView mSubjectText;
     private AlertDialog mSubjectDialog;
@@ -102,15 +103,15 @@ public class ClassEditActivity extends AppCompatActivity {
             }
         });
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         mPagerAdapter = new DynamicPagerAdapter();
         viewPager.setAdapter(mPagerAdapter);
 
-        tabLayout.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setTabTextColors(
+        mTabLayout.setupWithViewPager(viewPager);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.setTabTextColors(
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white));
 
@@ -192,7 +193,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 ClassEditActivity.this, R.color.mdu_text_black));
 
         Color color = new Color(mSubject.getColorId());
-        ThemeUtils.setBarColors(color, this, mAppBarLayout, mToolbar);
+        ThemeUtils.setBarColors(color, this, mAppBarLayout, mToolbar, mTabLayout);
     }
 
     private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {
