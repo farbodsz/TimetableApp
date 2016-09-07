@@ -70,7 +70,7 @@ public class ExamsActivity extends BaseActivity {
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     ExamsActivity.this,
                                     view,
-                                    getString(R.string.transition_name));
+                                    getString(R.string.transition_1));
                     bundle = options.toBundle();
                 }
 

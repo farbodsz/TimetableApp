@@ -59,7 +59,7 @@ public class ClassesActivity extends BaseActivity {
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     ClassesActivity.this,
                                     view,
-                                    getString(R.string.transition_name));
+                                    getString(R.string.transition_1));
                     bundle = options.toBundle();
                 }
 

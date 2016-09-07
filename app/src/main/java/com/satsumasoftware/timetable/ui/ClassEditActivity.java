@@ -248,7 +248,7 @@ public class ClassEditActivity extends AppCompatActivity {
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     ClassEditActivity.this,
                                     view,
-                                    getString(R.string.transition_name));
+                                    getString(R.string.transition_1));
                     bundle = options.toBundle();
                 }
 
