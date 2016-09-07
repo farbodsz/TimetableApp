@@ -3,6 +3,7 @@ package com.satsumasoftware.timetable.ui;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -63,6 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static final int NAVDRAWER_ITEM_SETTINGS = R.id.navigation_item_settings;
     protected static final int NAVDRAWER_ITEM_INVALID = -1;
 
+    private static final int NAVDRAWER_LAUNCH_DELAY = 250;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -133,7 +135,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        goToNavDrawerItem(menuItem.getItemId());
+        // launch the target Activity after a short delay, to allow the close animation to play
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                goToNavDrawerItem(menuItem.getItemId());
+            }
+        }, NAVDRAWER_LAUNCH_DELAY);
 
         if (menuItem.isCheckable()) {
             mNavigationView.getMenu().findItem(getSelfNavDrawerItem()).setChecked(false);
