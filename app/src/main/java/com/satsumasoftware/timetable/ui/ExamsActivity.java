@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,7 +63,19 @@ public class ExamsActivity extends BaseActivity {
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
                 intent.putExtra(ExamEditActivity.EXTRA_EXAM, mExams.get(position));
-                startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT);
+
+                Bundle bundle = null;
+                if (ThemeUtils.isApi21()) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    ExamsActivity.this,
+                                    view,
+                                    getString(R.string.transition_name));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        ExamsActivity.this, intent, REQUEST_CODE_EXAM_EDIT, bundle);
             }
         });
 
