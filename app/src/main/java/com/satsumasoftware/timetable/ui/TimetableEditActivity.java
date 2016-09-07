@@ -178,7 +178,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     TimetableEditActivity.this,
                                     view,
-                                    getString(R.string.transition_1));
+                                    getString(R.string.transition_2));
                     bundle = options.toBundle();
                 }
 
@@ -203,7 +203,19 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             public void onClick(View view) {
                 Intent intent = new Intent(TimetableEditActivity.this, TermEditActivity.class);
                 intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
-                startActivityForResult(intent, REQUEST_CODE_TERM_EDIT);
+
+                Bundle bundle = null;
+                if (ThemeUtils.isApi21()) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    TimetableEditActivity.this,
+                                    view,
+                                    getString(R.string.transition_2));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        TimetableEditActivity.this, intent, REQUEST_CODE_TERM_EDIT, bundle);
             }
         });
     }

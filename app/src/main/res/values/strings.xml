@@ -147,5 +147,6 @@
     <string name="drawer_close" translatable="false">Close drawer</string>
 
     <string name="transition_1" translatable="false">transition_1</string>
+    <string name="transition_2" translatable="false">transition_2</string>
 
 </resources>

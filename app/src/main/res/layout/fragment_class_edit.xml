@@ -108,6 +108,7 @@
                         android:id="@+id/button_add_time"
                         android:text="@string/action_add_time"
                         style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:transitionName="@string/transition_1"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:gravity="center_vertical" />

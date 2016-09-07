@@ -132,6 +132,7 @@
                             android:id="@+id/button_add_term"
                             android:text="@string/action_add_term"
                             style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                            android:transitionName="@string/transition_2"
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
                             android:gravity="center_vertical" />

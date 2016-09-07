@@ -248,7 +248,7 @@ public class ClassEditActivity extends AppCompatActivity {
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     ClassEditActivity.this,
                                     view,
-                                    getString(R.string.transition_1));
+                                    getString(R.string.transition_2));
                     bundle = options.toBundle();
                 }
 
@@ -275,7 +275,19 @@ public class ClassEditActivity extends AppCompatActivity {
                 Intent intent = new Intent(ClassEditActivity.this, ClassTimeEditActivity.class);
                 intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
-                startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
+
+                Bundle bundle = null;
+                if (ThemeUtils.isApi21()) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    ClassEditActivity.this,
+                                    view,
+                                    getString(R.string.transition_2));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        ClassEditActivity.this, intent, REQUEST_CODE_CLASS_TIME_DETAIL, bundle);
             }
         });
 
