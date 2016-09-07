@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:foreground="?selectableItemBackground"
     android:background="@color/mdu_white"
+    android:transitionName="@string/transition_name"
     android:layout_width="match_parent"
     android:layout_height="72dp">
 

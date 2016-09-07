@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,7 +62,22 @@ public class AssignmentsActivity extends BaseActivity {
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
                 intent.putExtra(AssignmentDetailActivity.EXTRA_ASSIGNMENT, mAssignments.get(position));
-                startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
+
+                Bundle bundle = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    AssignmentsActivity.this,
+                                    view,
+                                    getString(R.string.transition_name));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        AssignmentsActivity.this,
+                        intent,
+                        REQUEST_CODE_ASSIGNMENT_DETAIL,
+                        bundle);
             }
         });
 
