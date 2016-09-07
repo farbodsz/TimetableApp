@@ -164,7 +164,6 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         saveEditsAndClose();
-        super.onBackPressed();
     }
 
     private void cancelAndClose() {

@@ -333,7 +333,6 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
     @Override
     public void onBackPressed() {
         handleCloseAction();
-        super.onBackPressed();
     }
 
     private void handleCloseAction() {

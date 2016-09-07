@@ -348,7 +348,6 @@ public class ClassTimeEditActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         handleCloseAction();
-        super.onBackPressed();
     }
 
     private void handleCloseAction() {
