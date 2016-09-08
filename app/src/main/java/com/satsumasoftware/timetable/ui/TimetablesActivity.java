@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
+import com.satsumasoftware.timetable.util.ThemeUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +47,19 @@ public class TimetablesActivity extends BaseActivity {
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(TimetablesActivity.this, TimetableEditActivity.class);
                 intent.putExtra(TimetableEditActivity.EXTRA_TIMETABLE, mTimetables.get(position));
-                startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT);
+
+                Bundle bundle = null;
+                if (ThemeUtils.isApi21()) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    TimetablesActivity.this,
+                                    view,
+                                    getString(R.string.transition_1));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        TimetablesActivity.this, intent, REQUEST_CODE_TIMETABLE_EDIT, bundle);
             }
         });
 

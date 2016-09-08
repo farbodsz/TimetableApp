@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -214,7 +216,7 @@ public class ClassEditActivity extends AppCompatActivity {
             room.setText(classDetail.getRoom());
         }
 
-        EditText building = (EditText) page.findViewById(R.id.editText_building);
+        final EditText building = (EditText) page.findViewById(R.id.editText_building);
         if (!isNewDetail) {
             building.setText(classDetail.getBuilding());
         }
@@ -239,7 +241,19 @@ public class ClassEditActivity extends AppCompatActivity {
                 intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME, classTimeGroup.getClassTimes());
                 intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
-                startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
+
+                Bundle bundle = null;
+                if (ThemeUtils.isApi21()) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    ClassEditActivity.this,
+                                    view,
+                                    getString(R.string.transition_2));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        ClassEditActivity.this, intent, REQUEST_CODE_CLASS_TIME_DETAIL, bundle);
             }
         });
         mAdapters.add(adapter);
@@ -261,7 +275,19 @@ public class ClassEditActivity extends AppCompatActivity {
                 Intent intent = new Intent(ClassEditActivity.this, ClassTimeEditActivity.class);
                 intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
                 intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
-                startActivityForResult(intent, REQUEST_CODE_CLASS_TIME_DETAIL);
+
+                Bundle bundle = null;
+                if (ThemeUtils.isApi21()) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    ClassEditActivity.this,
+                                    view,
+                                    getString(R.string.transition_2));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        ClassEditActivity.this, intent, REQUEST_CODE_CLASS_TIME_DETAIL, bundle);
             }
         });
 
@@ -408,12 +434,11 @@ public class ClassEditActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         handleCloseAction();
-        super.onBackPressed();
     }
 
     private void handleCloseAction() {
         setResult(Activity.RESULT_CANCELED);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDoneAction() {
@@ -515,7 +540,7 @@ public class ClassEditActivity extends AppCompatActivity {
         }
 
         setResult(Activity.RESULT_OK);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDeleteAction() {

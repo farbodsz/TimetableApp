@@ -64,17 +64,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static final int NAVDRAWER_ITEM_SETTINGS = R.id.navigation_item_settings;
     protected static final int NAVDRAWER_ITEM_INVALID = -1;
 
-    /*
-     * Variables for BaseActivity
-     */
     private static final int NAVDRAWER_LAUNCH_DELAY = 250;
-    private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
-    private static final int MAIN_CONTENT_FADEOUT_DURATION = 150;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView mNavigationView;
-    private View mMainContent;
 
 
     /*
@@ -94,14 +88,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (mDrawerLayout == null) {
             return;
         }
-
-        // gets the main content view in the DrawerLayout
-        mMainContent = mDrawerLayout.getChildAt(0);
-
-        mMainContent.setAlpha(0);
-        mMainContent.animate()
-                .alpha(1)
-                .setDuration(MAIN_CONTENT_FADEIN_DURATION);
 
         setupLayout();
     }
@@ -161,10 +147,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (menuItem.isCheckable()) {
             mNavigationView.getMenu().findItem(getSelfNavDrawerItem()).setChecked(false);
             menuItem.setChecked(true);
-
-            mMainContent.animate()
-                    .alpha(0)
-                    .setDuration(MAIN_CONTENT_FADEOUT_DURATION);
         }
 
         mDrawerLayout.closeDrawers();
@@ -176,41 +158,49 @@ public abstract class BaseActivity extends AppCompatActivity {
             case NAVDRAWER_ITEM_HOME:
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
                 break;
             case NAVDRAWER_ITEM_SCHEDULE:
                 intent = new Intent(this, ScheduleActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
                 break;
             case NAVDRAWER_ITEM_CLASSES:
                 intent = new Intent(this, ClassesActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
                 break;
             case NAVDRAWER_ITEM_ASSIGNMENTS:
                 intent = new Intent(this, AssignmentsActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
                 break;
             case NAVDRAWER_ITEM_EXAMS:
                 intent = new Intent(this, ExamsActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
                 break;
             case NAVDRAWER_ITEM_SUBJECTS:
                 intent = new Intent(this, SubjectsActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
                 break;
             case NAVDRAWER_ITEM_MANAGE_TIMETABLES:
                 intent = new Intent(this, TimetablesActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
                 break;
             case NAVDRAWER_ITEM_SETTINGS:
                 intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
                 break;
         }

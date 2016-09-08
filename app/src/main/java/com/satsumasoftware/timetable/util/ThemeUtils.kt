@@ -103,5 +103,8 @@ class ThemeUtils {
             return dpAsPixels
         }
 
+        @JvmStatic
+        fun isApi21() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+
     }
 }

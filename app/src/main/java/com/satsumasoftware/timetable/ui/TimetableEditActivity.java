@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +34,7 @@ import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TermsAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
+import com.satsumasoftware.timetable.util.ThemeUtils;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.threeten.bp.LocalDate;
@@ -168,7 +171,19 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                 Intent intent = new Intent(TimetableEditActivity.this, TermEditActivity.class);
                 intent.putExtra(TermEditActivity.EXTRA_TERM, mTerms.get(position));
                 intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
-                startActivityForResult(intent, REQUEST_CODE_TERM_EDIT);
+
+                Bundle bundle = null;
+                if (ThemeUtils.isApi21()) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    TimetableEditActivity.this,
+                                    view,
+                                    getString(R.string.transition_2));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        TimetableEditActivity.this, intent, REQUEST_CODE_TERM_EDIT, bundle);
             }
         });
 
@@ -188,7 +203,19 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             public void onClick(View view) {
                 Intent intent = new Intent(TimetableEditActivity.this, TermEditActivity.class);
                 intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
-                startActivityForResult(intent, REQUEST_CODE_TERM_EDIT);
+
+                Bundle bundle = null;
+                if (ThemeUtils.isApi21()) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    TimetableEditActivity.this,
+                                    view,
+                                    getString(R.string.transition_2));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        TimetableEditActivity.this, intent, REQUEST_CODE_TERM_EDIT, bundle);
             }
         });
     }
@@ -306,7 +333,6 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
     @Override
     public void onBackPressed() {
         handleCloseAction();
-        super.onBackPressed();
     }
 
     private void handleCloseAction() {
@@ -316,7 +342,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             return;
         }
         setResult(Activity.RESULT_CANCELED);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDoneAction() {
@@ -370,7 +396,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         application.setCurrentTimetable(this, mTimetable);
 
         setResult(Activity.RESULT_OK);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDeleteAction() {

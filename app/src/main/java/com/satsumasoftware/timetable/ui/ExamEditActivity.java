@@ -334,12 +334,11 @@ public class ExamEditActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         handleCloseAction();
-        super.onBackPressed();
     }
 
     private void handleCloseAction() {
         setResult(Activity.RESULT_CANCELED);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDoneAction() {
@@ -395,7 +394,7 @@ public class ExamEditActivity extends AppCompatActivity {
 
         Intent intent = new Intent();
         setResult(Activity.RESULT_OK, intent);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDeleteAction() {

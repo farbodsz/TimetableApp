@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,7 +52,19 @@ public class SubjectsActivity extends BaseActivity {
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(SubjectsActivity.this, SubjectEditActivity.class);
                 intent.putExtra(SubjectEditActivity.EXTRA_SUBJECT, mSubjects.get(position));
-                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
+
+                Bundle bundle = null;
+                if (ThemeUtils.isApi21()) {
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                    SubjectsActivity.this,
+                                    view,
+                                    getString(R.string.transition_1));
+                    bundle = options.toBundle();
+                }
+
+                ActivityCompat.startActivityForResult(
+                        SubjectsActivity.this, intent, REQUEST_CODE_SUBJECT_DETAIL, bundle);
             }
         });
 
