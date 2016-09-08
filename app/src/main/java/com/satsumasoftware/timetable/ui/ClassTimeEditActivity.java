@@ -352,7 +352,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private void handleCloseAction() {
         setResult(Activity.RESULT_CANCELED);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDoneAction() {
@@ -418,7 +418,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra(EXTRA_TAB_POSITION, mTabPos);
             setResult(Activity.RESULT_OK, intent);
-            finish();
+            supportFinishAfterTransition();
         }
     }
 

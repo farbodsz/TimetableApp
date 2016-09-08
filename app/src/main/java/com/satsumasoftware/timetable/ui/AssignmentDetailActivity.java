@@ -168,7 +168,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
     private void cancelAndClose() {
         setResult(RESULT_CANCELED);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void saveEditsAndClose() {
@@ -176,7 +176,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         AssignmentUtils.replaceAssignment(this, mAssignment.getId(), mAssignment);
 
         setResult(RESULT_OK); // to reload any changes in AssignmentsActivity
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void saveDeleteAndClose() {

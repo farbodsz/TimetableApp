@@ -342,7 +342,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             return;
         }
         setResult(Activity.RESULT_CANCELED);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDoneAction() {
@@ -396,7 +396,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         application.setCurrentTimetable(this, mTimetable);
 
         setResult(Activity.RESULT_OK);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDeleteAction() {

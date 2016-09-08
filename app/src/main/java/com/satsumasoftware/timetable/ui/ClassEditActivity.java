@@ -438,7 +438,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private void handleCloseAction() {
         setResult(Activity.RESULT_CANCELED);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDoneAction() {
@@ -540,7 +540,7 @@ public class ClassEditActivity extends AppCompatActivity {
         }
 
         setResult(Activity.RESULT_OK);
-        finish();
+        supportFinishAfterTransition();
     }
 
     private void handleDeleteAction() {
