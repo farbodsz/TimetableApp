@@ -58,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:src="@drawable/ic_date_range_black_24dp"
+                        app:srcCompat="@drawable/ic_date_range_black_24dp"
                         style="@style/Widget.Timetable.ItemIcon" />
                     <LinearLayout
                         android:orientation="vertical"
@@ -87,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:src="@drawable/ic_repeat_black_24dp"
+                        app:srcCompat="@drawable/ic_repeat_black_24dp"
                         style="@style/Widget.Timetable.ItemIcon" />
                     <LinearLayout
                         android:orientation="vertical"
@@ -116,7 +116,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:src="@drawable/ic_event_note_black_24dp"
+                        app:srcCompat="@drawable/ic_event_note_black_24dp"
                         style="@style/Widget.Timetable.ItemIcon" />
                     <LinearLayout
                         android:orientation="vertical"

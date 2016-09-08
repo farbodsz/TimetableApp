@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -21,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/mdu_spacing_normal">
                 <ImageView
-                    android:src="@drawable/ic_room_black_24dp"
+                    app:srcCompat="@drawable/ic_room_black_24dp"
                     style="@style/Widget.Timetable.ItemIcon" />
                 <android.support.design.widget.TextInputLayout
                     android:hint="@string/property_room"
@@ -68,7 +69,7 @@
                 android:paddingTop="@dimen/mdu_spacing_normal"
                 android:paddingBottom="@dimen/mdu_padding_normal">
                 <ImageView
-                    android:src="@drawable/ic_person_black_24dp"
+                    app:srcCompat="@drawable/ic_person_black_24dp"
                     style="@style/Widget.Timetable.ItemIcon" />
                 <android.support.design.widget.TextInputLayout
                     android:hint="@string/property_teacher"
@@ -92,7 +93,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:src="@drawable/ic_access_time_black_24dp"
+                    app:srcCompat="@drawable/ic_access_time_black_24dp"
                     style="@style/Widget.Timetable.ItemIcon" />
 
                 <LinearLayout

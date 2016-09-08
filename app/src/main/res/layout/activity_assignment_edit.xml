@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -53,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:src="@drawable/ic_class_black_24dp"
+                    app:srcCompat="@drawable/ic_class_black_24dp"
                     style="@style/Widget.Timetable.ItemIcon" />
                 <TextView
                     android:id="@+id/textView_class"
@@ -70,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:src="@drawable/ic_event_black_24dp"
+                    app:srcCompat="@drawable/ic_event_black_24dp"
                     style="@style/Widget.Timetable.ItemIcon" />
                 <TextView
                     android:id="@+id/textView_date"
@@ -87,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:src="@drawable/ic_event_note_black_24dp"
+                    app:srcCompat="@drawable/ic_event_note_black_24dp"
                     style="@style/Widget.Timetable.ItemIcon" />
                 <android.support.design.widget.TextInputLayout
                     android:hint="@string/property_detail"

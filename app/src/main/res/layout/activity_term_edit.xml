@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -48,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:src="@drawable/ic_date_range_black_24dp"
+                    app:srcCompat="@drawable/ic_date_range_black_24dp"
                     style="@style/Widget.Timetable.ItemIcon" />
 
                 <LinearLayout
