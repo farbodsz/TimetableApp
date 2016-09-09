@@ -341,6 +341,11 @@ public class AssignmentsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Do not show the menu in DISPLAY_TODO mode
+        if (mMode == DISPLAY_TODO) {
+            return false;
+        }
+
         getMenuInflater().inflate(R.menu.menu_assignments, menu);
         return true;
     }
