@@ -134,8 +134,9 @@
     <string name="placeholder_subjects">You haven\'t added any subjects yet</string>
     <string name="placeholder_classes">You haven\'t added any classes yet</string>
     <string name="placeholder_assignments_title">All done!</string>
-    <string name="placeholder_assignments_subtitle">You don\'t have any incomplete assignments</string>
     <string name="placeholder_assignments_past_title">Nothing completed</string>
+    <string name="placeholder_assignments_upcoming_subtitle">You don\'t have any upcoming assignments</string>
+    <string name="placeholder_assignments_todo_subtitle">You don\'t have any incomplete assignments</string>
     <string name="placeholder_assignments_past_subtitle">You haven\'t completed any assignments yet</string>
     <string name="placeholder_exams">You don\'t have any upcoming exams</string>
     <string name="placeholder_exams_past">You haven\'t sat any exams yet</string>

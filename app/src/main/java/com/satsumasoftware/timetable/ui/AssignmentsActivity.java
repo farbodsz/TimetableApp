@@ -306,8 +306,13 @@ public class AssignmentsActivity extends BaseActivity {
             int titleRes = mShowPast ? R.string.placeholder_assignments_past_title :
                     R.string.placeholder_assignments_title;
 
-            int subtitleRes = mShowPast ? R.string.placeholder_assignments_past_subtitle :
-                    R.string.placeholder_assignments_subtitle;
+            int subtitleRes;
+            if (mMode == DISPLAY_TODO) {
+                subtitleRes = R.string.placeholder_assignments_todo_subtitle;
+            } else {
+                subtitleRes = mShowPast ? R.string.placeholder_assignments_past_subtitle :
+                        R.string.placeholder_assignments_upcoming_subtitle;
+            }
 
             int drawableRes = mShowPast ? R.drawable.ic_assignment_black_24dp :
                     R.drawable.ic_assignment_turned_in_black_24dp;
