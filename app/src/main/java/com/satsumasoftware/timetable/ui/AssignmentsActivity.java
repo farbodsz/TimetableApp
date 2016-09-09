@@ -198,7 +198,9 @@ public class AssignmentsActivity extends BaseActivity {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         });
-        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+        if (mMode == DISPLAY_TODO) {
+            itemTouchHelper.attachToRecyclerView(mRecyclerView);
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
