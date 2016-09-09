@@ -95,7 +95,12 @@ public class AssignmentsActivity extends BaseActivity {
             @Override
             public int getMovementFlags(RecyclerView recyclerView,
                                         RecyclerView.ViewHolder viewHolder) {
-                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                int position = viewHolder.getAdapterPosition();
+                boolean isHeader = mAssignments.get(position) == null;
+
+                int swipeFlags = isHeader ? 0 :
+                        ItemTouchHelper.START | ItemTouchHelper.END;
+                
                 return makeMovementFlags(0, swipeFlags);
             }
 
