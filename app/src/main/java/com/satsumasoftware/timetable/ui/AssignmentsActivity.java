@@ -62,7 +62,11 @@ public class AssignmentsActivity extends BaseActivity {
         setContentView(R.layout.activity_content_list);
 
         Bundle extras = getIntent().getExtras();
-        mMode = extras.getInt(EXTRA_MODE, DISPLAY_ALL_UPCOMING);
+        if (extras != null) {
+            mMode = extras.getInt(EXTRA_MODE);
+        } else {
+            mMode = DISPLAY_ALL_UPCOMING;
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
