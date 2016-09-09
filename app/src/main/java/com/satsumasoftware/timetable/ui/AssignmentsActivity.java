@@ -223,7 +223,7 @@ public class AssignmentsActivity extends BaseActivity {
             LocalDate dueDate = assignment.getDueDate();
             int timePeriodId;
 
-            if (dueDate.isBefore(LocalDate.now()) && assignment.getCompletionProgress() == 100) {
+            if (assignment.isPastAndDone()) {
                 if (mShowPast) {
                     timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
                             String.valueOf(dueDate.getMonthValue()));
