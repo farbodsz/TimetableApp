@@ -34,6 +34,8 @@ class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title:
 
     fun hasDetail() = detail.trim().length != 0
 
+    fun isComplete() = completionProgress == 100
+
     fun isPastAndDone() = dueDate.isBefore(LocalDate.now()) && completionProgress == 100
 
     override fun describeContents() = 0
