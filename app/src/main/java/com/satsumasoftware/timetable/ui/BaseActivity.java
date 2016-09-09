@@ -176,6 +176,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
             case NAVDRAWER_ITEM_TODO:
                 intent = new Intent(this, AssignmentsActivity.class);
+                intent.putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
                 finish();

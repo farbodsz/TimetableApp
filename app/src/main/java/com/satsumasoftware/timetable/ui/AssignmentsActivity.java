@@ -41,6 +41,12 @@ public class AssignmentsActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
 
+    protected static final String EXTRA_MODE = "extra_mode";
+    protected static final int DISPLAY_TODO = 1;
+    protected static final int DISPLAY_ALL_UPCOMING = 2;
+
+    private int mMode;
+
     private ArrayList<String> mHeaders;
     private ArrayList<Assignment> mAssignments;
     private AssignmentsAdapter mAdapter;
@@ -55,8 +61,26 @@ public class AssignmentsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content_list);
 
+        Bundle extras = getIntent().getExtras();
+        mMode = extras.getInt(EXTRA_MODE, DISPLAY_ALL_UPCOMING);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (mMode == DISPLAY_TODO) {
+            assert getSupportActionBar() != null;
+            getSupportActionBar().setTitle(R.string.title_activity_todo);
+        }
+
+        ArrayList<Assignment> assignments = AssignmentUtils.getAssignments(this, getApplication());
+        if (mMode == DISPLAY_TODO) {
+            mAssignments = new ArrayList<>();
+            for (Assignment assignment : assignments) {
+                if (!assignment.isComplete()) mAssignments.add(assignment);
+            }
+        } else {
+            mAssignments = assignments;
+        }
 
         mHeaders = new ArrayList<>();
         mAssignments = AssignmentUtils.getAssignments(this, getApplication());
