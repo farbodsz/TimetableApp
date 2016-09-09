@@ -9,7 +9,8 @@
     <string name="title_activity_class_edit">Edit Class</string>
     <string name="title_activity_class_time_new">New Time</string>
     <string name="title_activity_class_time_edit">Edit Time</string>
-    <string name="title_activity_assignments">Assignments</string>
+    <string name="title_activity_todo">Incomplete assignments</string>
+    <string name="title_activity_assignments">All upcoming assignments</string>
     <string name="title_activity_assignment_new">New Assignment</string>
     <string name="title_activity_assignment_edit">Edit Assignment</string>
     <string name="title_activity_exams">Exams</string>

@@ -57,6 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static final int NAVDRAWER_ITEM_HOME = R.id.navigation_item_home;
     protected static final int NAVDRAWER_ITEM_SCHEDULE = R.id.navigation_item_schedule;
     protected static final int NAVDRAWER_ITEM_CLASSES = R.id.navigation_item_classes;
+    protected static final int NAVDRAWER_ITEM_TODO = R.id.navigation_item_todo;
     protected static final int NAVDRAWER_ITEM_ASSIGNMENTS = R.id.navigation_item_assignments;
     protected static final int NAVDRAWER_ITEM_EXAMS = R.id.navigation_item_exams;
     protected static final int NAVDRAWER_ITEM_SUBJECTS = R.id.navigation_item_subjects;
@@ -169,6 +170,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
             case NAVDRAWER_ITEM_CLASSES:
                 intent = new Intent(this, ClassesActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                finish();
+                break;
+            case NAVDRAWER_ITEM_TODO:
+                intent = new Intent(this, AssignmentsActivity.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
                 finish();
