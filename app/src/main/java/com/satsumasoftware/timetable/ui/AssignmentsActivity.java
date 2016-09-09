@@ -61,12 +61,7 @@ public class AssignmentsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content_list);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mMode = extras.getInt(EXTRA_MODE);
-        } else {
-            mMode = DISPLAY_ALL_UPCOMING;
-        }
+        determineDisplayMode();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -218,6 +213,19 @@ public class AssignmentsActivity extends BaseActivity {
         refreshPlaceholderStatus();
     }
 
+    private void determineDisplayMode() {
+        if (mMode != 0) {
+            return;
+        }
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mMode = extras.getInt(EXTRA_MODE);
+        } else {
+            mMode = DISPLAY_ALL_UPCOMING;
+        }
+    }
+
     private void refreshList() {
         mAssignments.clear();
         mAssignments.addAll(AssignmentUtils.getAssignments(this, getApplication()));
@@ -367,7 +375,8 @@ public class AssignmentsActivity extends BaseActivity {
 
     @Override
     protected int getSelfNavDrawerItem() {
-        return NAVDRAWER_ITEM_ASSIGNMENTS;
+        determineDisplayMode();
+        return mMode == DISPLAY_ALL_UPCOMING ? NAVDRAWER_ITEM_ASSIGNMENTS : NAVDRAWER_ITEM_TODO;
     }
 
     @Override
