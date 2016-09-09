@@ -251,7 +251,7 @@ public class AssignmentsActivity extends BaseActivity {
             LocalDate dueDate = assignment.getDueDate();
             int timePeriodId;
 
-            if (assignment.isPastAndDone() && mShowPast) {
+            if (mMode == DISPLAY_ALL_UPCOMING && assignment.isPastAndDone() && mShowPast) {
                 timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
                         String.valueOf(dueDate.getMonthValue()));
 
@@ -265,7 +265,8 @@ public class AssignmentsActivity extends BaseActivity {
 
                 currentTimePeriod = timePeriodId;
 
-            } else if (!assignment.isPastAndDone() && !mShowPast) {
+            } else if ((mMode == DISPLAY_ALL_UPCOMING && !assignment.isPastAndDone() && !mShowPast)
+                    || (mMode == DISPLAY_TODO && !assignment.isComplete())) {
                 timePeriodId = DateUtils.getDatePeriodId(dueDate);
 
                 if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
