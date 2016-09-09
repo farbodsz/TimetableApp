@@ -41,6 +41,12 @@ public class AssignmentsActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
 
+    protected static final String EXTRA_MODE = "extra_mode";
+    protected static final int DISPLAY_TODO = 1;
+    protected static final int DISPLAY_ALL_UPCOMING = 2;
+
+    private int mMode;
+
     private ArrayList<String> mHeaders;
     private ArrayList<Assignment> mAssignments;
     private AssignmentsAdapter mAdapter;
@@ -55,8 +61,25 @@ public class AssignmentsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content_list);
 
+        determineDisplayMode();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (mMode == DISPLAY_TODO) {
+            assert getSupportActionBar() != null;
+            getSupportActionBar().setTitle(R.string.title_activity_todo);
+        }
+
+        ArrayList<Assignment> assignments = AssignmentUtils.getAssignments(this, getApplication());
+        if (mMode == DISPLAY_TODO) {
+            mAssignments = new ArrayList<>();
+            for (Assignment assignment : assignments) {
+                if (!assignment.isComplete()) mAssignments.add(assignment);
+            }
+        } else {
+            mAssignments = assignments;
+        }
 
         mHeaders = new ArrayList<>();
         mAssignments = AssignmentUtils.getAssignments(this, getApplication());
@@ -190,6 +213,19 @@ public class AssignmentsActivity extends BaseActivity {
         refreshPlaceholderStatus();
     }
 
+    private void determineDisplayMode() {
+        if (mMode != 0) {
+            return;
+        }
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mMode = extras.getInt(EXTRA_MODE);
+        } else {
+            mMode = DISPLAY_ALL_UPCOMING;
+        }
+    }
+
     private void refreshList() {
         mAssignments.clear();
         mAssignments.addAll(AssignmentUtils.getAssignments(this, getApplication()));
@@ -223,37 +259,33 @@ public class AssignmentsActivity extends BaseActivity {
             LocalDate dueDate = assignment.getDueDate();
             int timePeriodId;
 
-            if (assignment.isPastAndDone()) {
-                if (mShowPast) {
-                    timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
-                            String.valueOf(dueDate.getMonthValue()));
+            if (mMode == DISPLAY_ALL_UPCOMING && assignment.isPastAndDone() && mShowPast) {
+                timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
+                        String.valueOf(dueDate.getMonthValue()));
 
-                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(dueDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")));
-                        assignments.add(null);
-                    }
-
-                    headers.add(null);
-                    assignments.add(assignment);
-
-                    currentTimePeriod = timePeriodId;
+                if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                    headers.add(dueDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")));
+                    assignments.add(null);
                 }
 
-            } else {
+                headers.add(null);
+                assignments.add(assignment);
 
-                if (!mShowPast) {
-                    timePeriodId = DateUtils.getDatePeriodId(dueDate);
+                currentTimePeriod = timePeriodId;
 
-                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(DateUtils.makeHeaderName(this, timePeriodId));
-                        assignments.add(null);
-                    }
+            } else if ((mMode == DISPLAY_ALL_UPCOMING && !assignment.isPastAndDone() && !mShowPast)
+                    || (mMode == DISPLAY_TODO && !assignment.isComplete())) {
+                timePeriodId = DateUtils.getDatePeriodId(dueDate);
 
-                    headers.add(null);
-                    assignments.add(assignment);
-
-                    currentTimePeriod = timePeriodId;
+                if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                    headers.add(DateUtils.makeHeaderName(this, timePeriodId));
+                    assignments.add(null);
                 }
+
+                headers.add(null);
+                assignments.add(assignment);
+
+                currentTimePeriod = timePeriodId;
             }
         }
 
@@ -343,7 +375,8 @@ public class AssignmentsActivity extends BaseActivity {
 
     @Override
     protected int getSelfNavDrawerItem() {
-        return NAVDRAWER_ITEM_ASSIGNMENTS;
+        determineDisplayMode();
+        return mMode == DISPLAY_ALL_UPCOMING ? NAVDRAWER_ITEM_ASSIGNMENTS : NAVDRAWER_ITEM_TODO;
     }
 
     @Override
