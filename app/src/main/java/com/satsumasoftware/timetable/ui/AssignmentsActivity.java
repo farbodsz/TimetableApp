@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,6 +87,55 @@ public class AssignmentsActivity extends BaseActivity {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView,
+                                        RecyclerView.ViewHolder viewHolder) {
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(0, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+
+                Assignment assignment = mAssignments.get(position);
+                assignment.setCompletionProgress(100);
+                AssignmentUtils.replaceAssignment(getBaseContext(), assignment.getId(), assignment);
+
+                // Check if assignment is only one in date group
+                if (mAssignments.get(position - 1) == null
+                        && (mAssignments.size() == position + 1
+                        || mAssignments.get(position + 1) == null)) {
+                    // Positions either side of the assignment are empty (i.e. headers)
+                    int headerPosition = position - 1;
+
+                    // Remove the header from both lists
+                    mHeaders.remove(headerPosition);
+                    mAssignments.remove(headerPosition);
+                    mAdapter.notifyItemRemoved(position);
+
+                    // Update the position of the assignment because we just removed an item
+                    position -= 1;
+                }
+
+                // Remove the assignment from both lists
+                mHeaders.remove(position);
+                mAssignments.remove(position);
+                mAdapter.notifyItemRemoved(position);
+
+                // No need to refresh the list now, but check if it's empty and needs a placeholder
+                refreshPlaceholderStatus();
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
