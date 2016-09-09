@@ -2,6 +2,8 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -100,7 +102,7 @@ public class AssignmentsActivity extends BaseActivity {
 
                 int swipeFlags = isHeader ? 0 :
                         ItemTouchHelper.START | ItemTouchHelper.END;
-                
+
                 return makeMovementFlags(0, swipeFlags);
             }
 
@@ -156,6 +158,19 @@ public class AssignmentsActivity extends BaseActivity {
                         itemView.getBottom());
 
                 background.draw(c);
+
+                Bitmap icon =
+                        BitmapFactory.decodeResource(getResources(), R.drawable.ic_done_white_24dp);
+
+                float left = dX > 0 ?
+                        itemView.getLeft() + ThemeUtils.dpToPixels(getBaseContext(), 16) :
+                        itemView.getRight() - ThemeUtils.dpToPixels(getBaseContext(), 16)
+                                - icon.getWidth();
+
+                float top = itemView.getTop() +
+                        (itemView.getBottom() - itemView.getTop() - icon.getHeight()) / 2;
+
+                c.drawBitmap(icon, left, top, null);
 
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
