@@ -251,37 +251,32 @@ public class AssignmentsActivity extends BaseActivity {
             LocalDate dueDate = assignment.getDueDate();
             int timePeriodId;
 
-            if (assignment.isPastAndDone()) {
-                if (mShowPast) {
-                    timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
-                            String.valueOf(dueDate.getMonthValue()));
+            if (assignment.isPastAndDone() && mShowPast) {
+                timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
+                        String.valueOf(dueDate.getMonthValue()));
 
-                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(dueDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")));
-                        assignments.add(null);
-                    }
-
-                    headers.add(null);
-                    assignments.add(assignment);
-
-                    currentTimePeriod = timePeriodId;
+                if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                    headers.add(dueDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")));
+                    assignments.add(null);
                 }
 
-            } else {
+                headers.add(null);
+                assignments.add(assignment);
 
-                if (!mShowPast) {
-                    timePeriodId = DateUtils.getDatePeriodId(dueDate);
+                currentTimePeriod = timePeriodId;
 
-                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(DateUtils.makeHeaderName(this, timePeriodId));
-                        assignments.add(null);
-                    }
+            } else if (!assignment.isPastAndDone() && !mShowPast) {
+                timePeriodId = DateUtils.getDatePeriodId(dueDate);
 
-                    headers.add(null);
-                    assignments.add(assignment);
-
-                    currentTimePeriod = timePeriodId;
+                if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                    headers.add(DateUtils.makeHeaderName(this, timePeriodId));
+                    assignments.add(null);
                 }
+
+                headers.add(null);
+                assignments.add(assignment);
+
+                currentTimePeriod = timePeriodId;
             }
         }
 
