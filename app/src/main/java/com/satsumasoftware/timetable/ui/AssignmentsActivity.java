@@ -2,11 +2,14 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -133,6 +136,23 @@ public class AssignmentsActivity extends BaseActivity {
 
                 // No need to refresh the list now, but check if it's empty and needs a placeholder
                 refreshPlaceholderStatus();
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView,
+                                    RecyclerView.ViewHolder viewHolder, float dX, float dY,
+                                    int actionState, boolean isCurrentlyActive) {
+                View itemView = viewHolder.itemView;
+
+                ColorDrawable background = new ColorDrawable(
+                        ContextCompat.getColor(getBaseContext(), R.color.item_done_background));
+
+                background.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getRight(),
+                        itemView.getBottom());
+
+                background.draw(c);
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         });
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
