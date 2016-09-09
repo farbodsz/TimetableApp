@@ -7,4 +7,6 @@
 
     <color name="window_background">#FFF5F5F5</color>
 
+    <color name="item_done_background">#0F9D58</color>
+
 </resources>

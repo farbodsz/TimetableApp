@@ -2,15 +2,21 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +41,12 @@ public class AssignmentsActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
 
+    protected static final String EXTRA_MODE = "extra_mode";
+    protected static final int DISPLAY_TODO = 1;
+    protected static final int DISPLAY_ALL_UPCOMING = 2;
+
+    private int mMode;
+
     private ArrayList<String> mHeaders;
     private ArrayList<Assignment> mAssignments;
     private AssignmentsAdapter mAdapter;
@@ -49,8 +61,25 @@ public class AssignmentsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content_list);
 
+        determineDisplayMode();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (mMode == DISPLAY_TODO) {
+            assert getSupportActionBar() != null;
+            getSupportActionBar().setTitle(R.string.title_activity_todo);
+        }
+
+        ArrayList<Assignment> assignments = AssignmentUtils.getAssignments(this, getApplication());
+        if (mMode == DISPLAY_TODO) {
+            mAssignments = new ArrayList<>();
+            for (Assignment assignment : assignments) {
+                if (!assignment.isComplete()) mAssignments.add(assignment);
+            }
+        } else {
+            mAssignments = assignments;
+        }
 
         mHeaders = new ArrayList<>();
         mAssignments = AssignmentUtils.getAssignments(this, getApplication());
@@ -87,6 +116,92 @@ public class AssignmentsActivity extends BaseActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView,
+                                        RecyclerView.ViewHolder viewHolder) {
+                int position = viewHolder.getAdapterPosition();
+                boolean isHeader = mAssignments.get(position) == null;
+
+                int swipeFlags = isHeader ? 0 :
+                        ItemTouchHelper.START | ItemTouchHelper.END;
+
+                return makeMovementFlags(0, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+
+                Assignment assignment = mAssignments.get(position);
+                assignment.setCompletionProgress(100);
+                AssignmentUtils.replaceAssignment(getBaseContext(), assignment.getId(), assignment);
+
+                // Check if assignment is only one in date group
+                if (mAssignments.get(position - 1) == null
+                        && (mAssignments.size() == position + 1
+                        || mAssignments.get(position + 1) == null)) {
+                    // Positions either side of the assignment are empty (i.e. headers)
+                    int headerPosition = position - 1;
+
+                    // Remove the header from both lists
+                    mHeaders.remove(headerPosition);
+                    mAssignments.remove(headerPosition);
+                    mAdapter.notifyItemRemoved(position);
+
+                    // Update the position of the assignment because we just removed an item
+                    position -= 1;
+                }
+
+                // Remove the assignment from both lists
+                mHeaders.remove(position);
+                mAssignments.remove(position);
+                mAdapter.notifyItemRemoved(position);
+
+                // No need to refresh the list now, but check if it's empty and needs a placeholder
+                refreshPlaceholderStatus();
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView,
+                                    RecyclerView.ViewHolder viewHolder, float dX, float dY,
+                                    int actionState, boolean isCurrentlyActive) {
+                View itemView = viewHolder.itemView;
+
+                ColorDrawable background = new ColorDrawable(
+                        ContextCompat.getColor(getBaseContext(), R.color.item_done_background));
+
+                background.setBounds(itemView.getLeft(), itemView.getTop(), itemView.getRight(),
+                        itemView.getBottom());
+
+                background.draw(c);
+
+                Bitmap icon =
+                        BitmapFactory.decodeResource(getResources(), R.drawable.ic_done_white_24dp);
+
+                float left = dX > 0 ?
+                        itemView.getLeft() + ThemeUtils.dpToPixels(getBaseContext(), 16) :
+                        itemView.getRight() - ThemeUtils.dpToPixels(getBaseContext(), 16)
+                                - icon.getWidth();
+
+                float top = itemView.getTop() +
+                        (itemView.getBottom() - itemView.getTop() - icon.getHeight()) / 2;
+
+                c.drawBitmap(icon, left, top, null);
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        });
+        if (mMode == DISPLAY_TODO) {
+            itemTouchHelper.attachToRecyclerView(mRecyclerView);
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +213,19 @@ public class AssignmentsActivity extends BaseActivity {
 
         mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
         refreshPlaceholderStatus();
+    }
+
+    private void determineDisplayMode() {
+        if (mMode != 0) {
+            return;
+        }
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mMode = extras.getInt(EXTRA_MODE);
+        } else {
+            mMode = DISPLAY_ALL_UPCOMING;
+        }
     }
 
     private void refreshList() {
@@ -133,37 +261,33 @@ public class AssignmentsActivity extends BaseActivity {
             LocalDate dueDate = assignment.getDueDate();
             int timePeriodId;
 
-            if (dueDate.isBefore(LocalDate.now()) && assignment.getCompletionProgress() == 100) {
-                if (mShowPast) {
-                    timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
-                            String.valueOf(dueDate.getMonthValue()));
+            if (mMode == DISPLAY_ALL_UPCOMING && assignment.isPastAndDone() && mShowPast) {
+                timePeriodId = Integer.parseInt(String.valueOf(dueDate.getYear()) +
+                        String.valueOf(dueDate.getMonthValue()));
 
-                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(dueDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")));
-                        assignments.add(null);
-                    }
-
-                    headers.add(null);
-                    assignments.add(assignment);
-
-                    currentTimePeriod = timePeriodId;
+                if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                    headers.add(dueDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")));
+                    assignments.add(null);
                 }
 
-            } else {
+                headers.add(null);
+                assignments.add(assignment);
 
-                if (!mShowPast) {
-                    timePeriodId = DateUtils.getDatePeriodId(dueDate);
+                currentTimePeriod = timePeriodId;
 
-                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(DateUtils.makeHeaderName(this, timePeriodId));
-                        assignments.add(null);
-                    }
+            } else if ((mMode == DISPLAY_ALL_UPCOMING && !assignment.isPastAndDone() && !mShowPast)
+                    || (mMode == DISPLAY_TODO && !assignment.isComplete())) {
+                timePeriodId = DateUtils.getDatePeriodId(dueDate);
 
-                    headers.add(null);
-                    assignments.add(assignment);
-
-                    currentTimePeriod = timePeriodId;
+                if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                    headers.add(DateUtils.makeHeaderName(this, timePeriodId));
+                    assignments.add(null);
                 }
+
+                headers.add(null);
+                assignments.add(assignment);
+
+                currentTimePeriod = timePeriodId;
             }
         }
 
@@ -182,8 +306,13 @@ public class AssignmentsActivity extends BaseActivity {
             int titleRes = mShowPast ? R.string.placeholder_assignments_past_title :
                     R.string.placeholder_assignments_title;
 
-            int subtitleRes = mShowPast ? R.string.placeholder_assignments_past_subtitle :
-                    R.string.placeholder_assignments_subtitle;
+            int subtitleRes;
+            if (mMode == DISPLAY_TODO) {
+                subtitleRes = R.string.placeholder_assignments_todo_subtitle;
+            } else {
+                subtitleRes = mShowPast ? R.string.placeholder_assignments_past_subtitle :
+                        R.string.placeholder_assignments_upcoming_subtitle;
+            }
 
             int drawableRes = mShowPast ? R.drawable.ic_assignment_black_24dp :
                     R.drawable.ic_assignment_turned_in_black_24dp;
@@ -217,6 +346,11 @@ public class AssignmentsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Do not show the menu in DISPLAY_TODO mode
+        if (mMode == DISPLAY_TODO) {
+            return false;
+        }
+
         getMenuInflater().inflate(R.menu.menu_assignments, menu);
         return true;
     }
@@ -253,7 +387,8 @@ public class AssignmentsActivity extends BaseActivity {
 
     @Override
     protected int getSelfNavDrawerItem() {
-        return NAVDRAWER_ITEM_ASSIGNMENTS;
+        determineDisplayMode();
+        return mMode == DISPLAY_ALL_UPCOMING ? NAVDRAWER_ITEM_ASSIGNMENTS : NAVDRAWER_ITEM_TODO;
     }
 
     @Override
