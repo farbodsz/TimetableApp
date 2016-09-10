@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -145,6 +146,11 @@ public class AssignmentsActivity extends BaseActivity {
 
     private ItemTouchHelper makeItemTouchHelper() {
         return new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            private String mRemovedHeader;
+            private Assignment mRemovedAssignment;
+            private int mRemovedAssignmentPos;
+            private int mRemovedCompletionProgress;
+
             @Override
             public int getMovementFlags(RecyclerView recyclerView,
                                         RecyclerView.ViewHolder viewHolder) {
@@ -168,6 +174,13 @@ public class AssignmentsActivity extends BaseActivity {
                 int position = viewHolder.getAdapterPosition();
 
                 Assignment assignment = mAssignments.get(position);
+
+                // Store the assignment we're about to remove for the undo action
+                mRemovedHeader = null;
+                mRemovedAssignmentPos = position;
+                mRemovedAssignment = assignment;
+                mRemovedCompletionProgress = assignment.getCompletionProgress();
+
                 assignment.setCompletionProgress(100);
                 AssignmentUtils.replaceAssignment(getBaseContext(), assignment.getId(), assignment);
 
@@ -177,6 +190,9 @@ public class AssignmentsActivity extends BaseActivity {
                         || mAssignments.get(position + 1) == null)) {
                     // Positions either side of the assignment are empty (i.e. headers)
                     int headerPosition = position - 1;
+
+                    // Store the header we're about to remove for the undo action
+                    mRemovedHeader = mHeaders.get(headerPosition);
 
                     // Remove the header from both lists
                     mHeaders.remove(headerPosition);
@@ -191,6 +207,36 @@ public class AssignmentsActivity extends BaseActivity {
                 mHeaders.remove(position);
                 mAssignments.remove(position);
                 mAdapter.notifyItemRemoved(position);
+
+                // Show a Snackbar with the undo action
+                Snackbar.make(findViewById(R.id.coordinatorLayout),
+                        R.string.message_assignment_completed,
+                        Snackbar.LENGTH_SHORT)
+                        .setAction(R.string.action_undo, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mRemovedHeader != null) {
+                                    mHeaders.add(mRemovedAssignmentPos - 1, mRemovedHeader);
+                                    mAssignments.add(mRemovedAssignmentPos - 1, null);
+                                    mAdapter.notifyItemInserted(mRemovedAssignmentPos - 1);
+                                }
+
+                                Assignment assignment = mRemovedAssignment;
+                                assignment.setCompletionProgress(mRemovedCompletionProgress);
+
+                                mHeaders.add(mRemovedAssignmentPos, null);
+                                mAssignments.add(mRemovedAssignmentPos, assignment);
+                                mAdapter.notifyItemInserted(mRemovedAssignmentPos);
+
+                                AssignmentUtils.replaceAssignment(
+                                        getBaseContext(),
+                                        assignment.getId(),
+                                        assignment);
+
+                                refreshPlaceholderStatus();
+                            }
+                        })
+                        .show();
 
                 // No need to refresh the list now, but check if it's empty and needs a placeholder
                 refreshPlaceholderStatus();
