@@ -71,16 +71,6 @@ public class AssignmentsActivity extends BaseActivity {
             getSupportActionBar().setTitle(R.string.title_activity_todo);
         }
 
-        ArrayList<Assignment> assignments = AssignmentUtils.getAssignments(this, getApplication());
-        if (mMode == DISPLAY_TODO) {
-            mAssignments = new ArrayList<>();
-            for (Assignment assignment : assignments) {
-                if (!assignment.isComplete()) mAssignments.add(assignment);
-            }
-        } else {
-            mAssignments = assignments;
-        }
-
         mHeaders = new ArrayList<>();
         mAssignments = AssignmentUtils.getAssignments(this, getApplication());
         sortList();
