@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -125,7 +127,19 @@ public class ScheduleActivity extends BaseActivity {
 
                         Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
                         intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);
-                        startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
+
+                        Bundle bundle = null;
+                        if (ThemeUtils.isApi21()) {
+                            ActivityOptionsCompat options =
+                                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                            ScheduleActivity.this,
+                                            view,
+                                            getString(R.string.transition_1));
+                            bundle = options.toBundle();
+                        }
+
+                        ActivityCompat.startActivityForResult(
+                                ScheduleActivity.this, intent, REQUEST_CODE_CLASS_DETAIL, bundle);
                     }
                 });
 
