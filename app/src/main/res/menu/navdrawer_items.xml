@@ -34,7 +34,7 @@
     <group android:id="@+id/navigation_group_3" android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_manage_timetables"
-            android:title="@string/action_manage_timetables"
+            android:title="@string/title_activity_timetables"
             android:icon="@drawable/ic_more_horiz_black_24dp"/>
         <item
             android:id="@+id/navigation_item_settings"

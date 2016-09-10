@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_manage_subjects"
-        android:title="@string/action_manage_subjects"
+        android:title="@string/title_activity_subjects"
         android:icon="@drawable/ic_list_black_24dp"
         app:showAsAction="ifRoom" />
 

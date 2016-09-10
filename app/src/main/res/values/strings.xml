@@ -16,10 +16,10 @@
     <string name="title_activity_exams">Exams</string>
     <string name="title_activity_exam_new">New Exam</string>
     <string name="title_activity_exam_edit">Edit Exam</string>
-    <string name="title_activity_subjects">Subjects</string>
+    <string name="title_activity_subjects">Manage subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
-    <string name="title_activity_timetables">Timetables</string>
+    <string name="title_activity_timetables">Manage timetables</string>
     <string name="title_activity_timetable_new">New Timetable</string>
     <string name="title_activity_timetable_edit">Edit Timetable</string>
     <string name="title_activity_term_new">New Term</string>
@@ -120,8 +120,6 @@
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
     <string name="action_edit">Edit</string>
-    <string name="action_manage_subjects">Manage subjects</string>
-    <string name="action_manage_timetables">Manage timetables</string>
     <string name="action_new">New</string>
     <string name="action_show_past_assignments">Show past assignments</string>
     <string name="action_show_past_exams">Show past exams</string>
