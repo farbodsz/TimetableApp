@@ -26,7 +26,6 @@ import java.util.Comparator;
 public class SubjectsActivity extends AppCompatActivity {
 
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 1;
-    protected static final int LIST_POS_INVALID = -1;
 
     private ArrayList<Subject> mSubjects;
     private SubjectsAdapter mAdapter;
