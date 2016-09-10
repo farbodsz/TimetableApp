@@ -48,7 +48,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         holder.mColorView.setBackgroundColor(ContextCompat.getColor(
                 mContext, color.getPrimaryColorResId(mContext)));
 
-        holder.mSubject.setText(subject.getName());
+        holder.mSubject.setText(Class.makeName(cls, subject));
 
         StringBuilder builder = new StringBuilder();
         if (classDetail.hasRoom()) {
