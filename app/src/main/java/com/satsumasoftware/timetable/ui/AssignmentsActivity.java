@@ -75,12 +75,43 @@ public class AssignmentsActivity extends BaseActivity {
         mAssignments = AssignmentUtils.getAssignments(this, getApplication());
         sortList();
 
+        setupRecyclerView();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
+            }
+        });
+
+        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
+        refreshPlaceholderStatus();
+    }
+
+    private void determineDisplayMode() {
+        if (mMode != 0) {
+            return;
+        }
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mMode = extras.getInt(EXTRA_MODE);
+        } else {
+            mMode = DISPLAY_ALL_UPCOMING;
+        }
+    }
+
+    private void setupRecyclerView() {
         mAdapter = new AssignmentsAdapter(this, mHeaders, mAssignments);
         mAdapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
-                intent.putExtra(AssignmentDetailActivity.EXTRA_ASSIGNMENT, mAssignments.get(position));
+                Intent intent = new Intent(
+                        AssignmentsActivity.this, AssignmentDetailActivity.class);
+                intent.putExtra(
+                        AssignmentDetailActivity.EXTRA_ASSIGNMENT, mAssignments.get(position));
 
                 Bundle bundle = null;
                 if (ThemeUtils.isApi21()) {
@@ -102,11 +133,18 @@ public class AssignmentsActivity extends BaseActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(
+                this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        if (mMode == DISPLAY_TODO) {
+            makeItemTouchHelper().attachToRecyclerView(mRecyclerView);
+        }
+    }
+
+    private ItemTouchHelper makeItemTouchHelper() {
+        return new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView,
                                         RecyclerView.ViewHolder viewHolder) {
@@ -185,37 +223,10 @@ public class AssignmentsActivity extends BaseActivity {
 
                 c.drawBitmap(icon, left, top, null);
 
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                super.onChildDraw(c, recyclerView, viewHolder,
+                        dX, dY, actionState, isCurrentlyActive);
             }
         });
-        if (mMode == DISPLAY_TODO) {
-            itemTouchHelper.attachToRecyclerView(mRecyclerView);
-        }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
-            }
-        });
-
-        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
-        refreshPlaceholderStatus();
-    }
-
-    private void determineDisplayMode() {
-        if (mMode != 0) {
-            return;
-        }
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mMode = extras.getInt(EXTRA_MODE);
-        } else {
-            mMode = DISPLAY_ALL_UPCOMING;
-        }
     }
 
     private void refreshList() {
