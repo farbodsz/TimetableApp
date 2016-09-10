@@ -346,38 +346,38 @@ public class AssignmentsActivity extends BaseActivity {
     }
 
     private void refreshPlaceholderStatus() {
-        if (mAssignments.isEmpty()) {
-            mRecyclerView.setVisibility(View.GONE);
-            mPlaceholderLayout.setVisibility(View.VISIBLE);
-
-            int titleRes = mShowPast ? R.string.placeholder_assignments_past_title :
-                    R.string.placeholder_assignments_title;
-
-            int subtitleRes;
-            if (mMode == DISPLAY_TODO) {
-                subtitleRes = R.string.placeholder_assignments_todo_subtitle;
-            } else {
-                subtitleRes = mShowPast ? R.string.placeholder_assignments_past_subtitle :
-                        R.string.placeholder_assignments_upcoming_subtitle;
-            }
-
-            int drawableRes = mShowPast ? R.drawable.ic_assignment_black_24dp :
-                    R.drawable.ic_assignment_turned_in_black_24dp;
-
-            mPlaceholderLayout.removeAllViews();
-            mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
-                    drawableRes,
-                    titleRes,
-                    R.color.mdu_blue_400,
-                    R.color.mdu_white,
-                    R.color.mdu_white,
-                    true,
-                    subtitleRes));
-
-        } else {
+        if (!mAssignments.isEmpty()) {
             mRecyclerView.setVisibility(View.VISIBLE);
             mPlaceholderLayout.setVisibility(View.GONE);
+            return;
         }
+
+        mRecyclerView.setVisibility(View.GONE);
+        mPlaceholderLayout.setVisibility(View.VISIBLE);
+
+        int titleRes = mShowPast ? R.string.placeholder_assignments_past_title :
+                R.string.placeholder_assignments_title;
+
+        int subtitleRes;
+        if (mMode == DISPLAY_TODO) {
+            subtitleRes = R.string.placeholder_assignments_todo_subtitle;
+        } else {
+            subtitleRes = mShowPast ? R.string.placeholder_assignments_past_subtitle :
+                    R.string.placeholder_assignments_upcoming_subtitle;
+        }
+
+        int drawableRes = mShowPast ? R.drawable.ic_assignment_black_24dp :
+                R.drawable.ic_assignment_turned_in_black_24dp;
+
+        mPlaceholderLayout.removeAllViews();
+        mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
+                drawableRes,
+                titleRes,
+                R.color.mdu_blue_400,
+                R.color.mdu_white,
+                R.color.mdu_white,
+                true,
+                subtitleRes));
     }
 
     @Override
