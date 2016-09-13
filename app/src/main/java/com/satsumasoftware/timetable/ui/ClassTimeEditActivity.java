@@ -22,6 +22,7 @@ import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
+import com.satsumasoftware.timetable.util.PrefUtils;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
 
 import org.threeten.bp.DayOfWeek;
@@ -245,7 +246,13 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 if (mEndTime != null) {
                     initialHour = mEndTime.getHour();
                     initialMinute = mEndTime.getMinute();
+                } else if (mStartTime != null) {
+                    int defaultDuration = PrefUtils.getDefaultLessonDuration(getBaseContext());
+                    LocalTime endTime = mStartTime.plusMinutes(defaultDuration);
+                    initialHour = endTime.getHour();
+                    initialMinute = endTime.getMinute();
                 }
+
                 new TimePickerDialog(ClassTimeEditActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {

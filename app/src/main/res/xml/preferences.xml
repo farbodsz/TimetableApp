@@ -12,4 +12,15 @@
             android:defaultValue="false" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/prefCategory_lessons">
+
+        <EditTextPreference
+            android:key="pref_default_lesson_duration"
+            android:inputType="number"
+            android:title="@string/pref_defaultLessonDuration"
+            android:dialogMessage="@string/pref_defaultLessonDuration_dialogMessage"
+            android:defaultValue="60" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

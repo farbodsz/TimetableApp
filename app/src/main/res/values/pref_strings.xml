@@ -7,4 +7,9 @@
     <string name="pref_weeksAsLetters_summaryOn">Showing weeks as \"Week A\", \"Week B\", etc.</string>
     <string name="pref_weeksAsLetters_summaryOff">Showing weeks as \"Week 1\", \"Week 2\", etc.</string>
 
+    <string name="prefCategory_lessons">Lessons</string>
+
+    <string name="pref_defaultLessonDuration">Default lesson duration</string>
+    <string name="pref_defaultLessonDuration_dialogMessage">Enter the default lesson duration (in minutes)</string>
+
 </resources>

@@ -38,5 +38,15 @@ class PrefUtils {
             sp.edit().putBoolean(PREF_DISPLAY_WEEKS_AS_LETTERS, boolean).apply()
         }
 
+
+        const val PREF_DEFAULT_LESSON_DURATION = "pref_default_lesson_duration"
+
+        @JvmStatic
+        fun getDefaultLessonDuration(context: Context): Int {
+            val sp = PreferenceManager.getDefaultSharedPreferences(context)
+            val strDuration = sp.getString(PREF_DEFAULT_LESSON_DURATION, "60")
+            return strDuration.toInt()
+        }
+
     }
 }
