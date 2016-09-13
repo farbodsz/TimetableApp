@@ -10,7 +10,7 @@ import org.threeten.bp.Period
 import org.threeten.bp.temporal.WeekFields
 import java.util.*
 
-class DateUtils {
+class DateUtils private constructor() {
 
     companion object {
 

@@ -19,7 +19,7 @@ import android.widget.TextView
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.framework.Color
 
-class ThemeUtils {
+class ThemeUtils private constructor() {
 
     companion object {
 

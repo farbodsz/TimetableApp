@@ -4,7 +4,7 @@ import android.content.Context
 import android.preference.PreferenceManager
 import com.satsumasoftware.timetable.framework.Timetable
 
-class PrefUtils {
+class PrefUtils private constructor() {
 
     companion object {
 
