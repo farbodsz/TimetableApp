@@ -69,8 +69,7 @@
             android:id="@+id/tabLayout"
             android:background="?colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/mdu_keyline_1" />
+            android:layout_height="wrap_content" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
