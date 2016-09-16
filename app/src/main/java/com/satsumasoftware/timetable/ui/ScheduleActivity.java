@@ -127,6 +127,8 @@ public class ScheduleActivity extends BaseActivity {
 
                         Intent intent = new Intent(ScheduleActivity.this, ClassEditActivity.class);
                         intent.putExtra(ClassEditActivity.EXTRA_CLASS, cls);
+                        intent.putExtra(ClassEditActivity.EXTRA_CLASS_DETAIL_ID,
+                                classDetail.getId());
 
                         Bundle bundle = null;
                         if (ThemeUtils.isApi21()) {

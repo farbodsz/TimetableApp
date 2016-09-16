@@ -50,6 +50,7 @@ public class ClassEditActivity extends AppCompatActivity {
     private static final String LOG_TAG = "ClassDetailActivity";
 
     protected static final String EXTRA_CLASS = "extra_class";
+    protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
 
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
     protected static final int REQUEST_CODE_CLASS_TIME_DETAIL = 3;
@@ -87,9 +88,12 @@ public class ClassEditActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         assert getSupportActionBar() != null;
 
+        int displayedDetailId = -1;
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mClass = extras.getParcelable(EXTRA_CLASS);
+            displayedDetailId = extras.getInt(EXTRA_CLASS_DETAIL_ID, -1);
         }
         mIsNew = mClass == null;
 
@@ -187,6 +191,24 @@ public class ClassEditActivity extends AppCompatActivity {
             addDetailTab(null, false);  // first tab for adding detail
         }
         addDetailTab(null, true);
+
+        // Go to the tab sent via the intent with displayedDetailId
+        goToTab(displayedDetailId, viewPager);
+    }
+
+    private void goToTab(int displayedDetailId, ViewPager viewPager) {
+        if (displayedDetailId == -1) {
+            return;
+        }
+
+        int tabCount = 0;
+        for (int classDetailId : mClassDetailIds) {
+            if (classDetailId == displayedDetailId) {
+                break;
+            }
+            tabCount++;
+        }
+        viewPager.setCurrentItem(tabCount);
     }
 
     private void updateLinkedSubject() {
