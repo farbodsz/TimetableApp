@@ -41,6 +41,8 @@ import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ExamEditActivity extends AppCompatActivity {
 
@@ -126,6 +128,13 @@ public class ExamEditActivity extends AppCompatActivity {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
                 final ArrayList<Subject> subjects = SubjectUtils.getSubjects(ExamEditActivity.this);
+
+                Collections.sort(subjects, new Comparator<Subject>() {
+                    @Override
+                    public int compare(Subject o1, Subject o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
 
                 SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
                 adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
