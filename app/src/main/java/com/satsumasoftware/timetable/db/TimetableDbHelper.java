@@ -14,6 +14,8 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "Timetable.db";
 
+    private static final String LOG_TAG = "TimetableDbHelper";
+
     public static synchronized TimetableDbHelper getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new TimetableDbHelper(context.getApplicationContext());
@@ -27,6 +29,8 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.i(LOG_TAG, "onCreate() called");
+
         db.execSQL(AssignmentsSchema.SQL_CREATE);
         db.execSQL(ClassDetailsSchema.SQL_CREATE);
         db.execSQL(ClassesSchema.SQL_CREATE);
@@ -39,8 +43,8 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.i("TimetableDbHelper", "onUpgrade() called with oldVersion " + oldVersion +
-                " and new version " + newVersion);
+        Log.i(LOG_TAG, "onUpgrade() called with oldVersion " + oldVersion +
+                " and newVersion " + newVersion);
 
         /*
          * Note that there are no breaks in the switch statement below (except for the last case).
