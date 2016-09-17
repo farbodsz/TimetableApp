@@ -162,12 +162,18 @@ public class SubjectEditActivity extends AppCompatActivity {
         }
         newName = TextUtilsKt.title(newName);
 
+        String newAbbreviation = ""; // TODO: this is temporary
+
         if (mIsNewSubject) {
             Timetable currentTimetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
             assert currentTimetable != null;
 
             mSubject = new Subject(SubjectUtils.getHighestSubjectId(this) + 1,
-                    currentTimetable.getId(), newName, mColor.getId());
+                    currentTimetable.getId(),
+                    newName,
+                    newAbbreviation,
+                    mColor.getId());
+
             SubjectUtils.addSubject(this, mSubject);
 
         } else {
