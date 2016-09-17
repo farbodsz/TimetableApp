@@ -67,7 +67,7 @@ public class SubjectEditActivity extends AppCompatActivity {
             }
         });
 
-        mEditText = (EditText) findViewById(R.id.editText);
+        mEditText = (EditText) findViewById(R.id.editText_name);
         if (!mIsNewSubject) {
             mEditText.setText(mSubject.getName());
         }
