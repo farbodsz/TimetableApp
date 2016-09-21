@@ -6,7 +6,7 @@
 
     <dimen name="drawer_width">@dimen/match_parent</dimen>
 
-    <dimen name="fab_padding">76dp</dimen> <!-- TODO: check MD guidelines if this is the correct amount -->
+    <dimen name="fab_padding">88dp</dimen>
 
     <dimen name="subject_color_strip_width">4dp</dimen>
 
