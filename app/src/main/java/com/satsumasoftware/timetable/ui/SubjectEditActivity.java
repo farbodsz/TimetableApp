@@ -189,6 +189,7 @@ public class SubjectEditActivity extends AppCompatActivity {
 
         } else {
             mSubject.setName(newName);
+            mSubject.setAbbreviation(newAbbreviation);
             mSubject.setColorId(mColor.getId());
             SubjectUtils.replaceSubject(this, mSubject.getId(), mSubject);
         }
