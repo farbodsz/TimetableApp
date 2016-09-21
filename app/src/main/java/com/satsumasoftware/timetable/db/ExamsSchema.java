@@ -20,7 +20,7 @@ public final class ExamsSchema implements BaseColumns {
     public static final String COL_ROOM = "room";
     public static final String COL_IS_RESIT = "is_resit";
 
-    protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
+    static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_SUBJECT_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
@@ -36,6 +36,4 @@ public final class ExamsSchema implements BaseColumns {
             COL_IS_RESIT + SchemaUtilsKt.INTEGER_TYPE +
             " )";
 
-    protected static final String SQL_DELETE =
-            "DROP TABLE IF EXISTS " + TABLE_NAME;
 }

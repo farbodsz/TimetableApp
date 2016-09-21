@@ -16,7 +16,7 @@ public final class ClassTimesSchema implements BaseColumns {
     public static final String COL_END_TIME_HRS = "end_time_hrs";
     public static final String COL_END_TIME_MINS = "end_time_mins";
 
-    protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
+    static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_CLASS_DETAIL_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
@@ -27,8 +27,5 @@ public final class ClassTimesSchema implements BaseColumns {
             COL_END_TIME_HRS + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_END_TIME_MINS + SchemaUtilsKt.INTEGER_TYPE +
             " )";
-
-    protected static final String SQL_DELETE =
-            "DROP TABLE IF EXISTS " + TABLE_NAME;
 
 }

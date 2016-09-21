@@ -16,7 +16,7 @@ public final class TermsSchema implements BaseColumns {
     public static final String COL_END_DATE_MONTH = "end_date_month";
     public static final String COL_END_DATE_YEAR = "end_date_year";
 
-    protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
+    static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_NAME + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +
@@ -28,6 +28,4 @@ public final class TermsSchema implements BaseColumns {
             COL_END_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE +
             " )";
 
-    protected static final String SQL_DELETE =
-            "DROP TABLE IF EXISTS " + TABLE_NAME;
 }

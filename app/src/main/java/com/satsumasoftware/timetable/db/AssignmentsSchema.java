@@ -16,7 +16,7 @@ public final class AssignmentsSchema implements BaseColumns {
     public static final String COL_DUE_DATE_YEAR = "due_date_year";
     public static final String COL_COMPLETION_PROGRESS = "completion_progress";
 
-    protected static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
+    static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
             COL_CLASS_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
@@ -28,6 +28,4 @@ public final class AssignmentsSchema implements BaseColumns {
             COL_COMPLETION_PROGRESS + SchemaUtilsKt.INTEGER_TYPE +
             " )";
 
-    protected static final String SQL_DELETE =
-            "DROP TABLE IF EXISTS " + TABLE_NAME;
 }
