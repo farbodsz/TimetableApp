@@ -35,7 +35,8 @@ public class SubjectEditActivity extends AppCompatActivity {
     private Subject mSubject;
     private boolean mIsNewSubject;
 
-    private EditText mEditText;
+    private EditText mEditTextName;
+    private EditText mEditTextAbbreviation;
 
     private AlertDialog mColorDialog;
     private Color mColor;
@@ -67,9 +68,14 @@ public class SubjectEditActivity extends AppCompatActivity {
             }
         });
 
-        mEditText = (EditText) findViewById(R.id.editText);
+        mEditTextName = (EditText) findViewById(R.id.editText_name);
         if (!mIsNewSubject) {
-            mEditText.setText(mSubject.getName());
+            mEditTextName.setText(mSubject.getName());
+        }
+
+        mEditTextAbbreviation = (EditText) findViewById(R.id.editText_abbreviation);
+        if (!mIsNewSubject) {
+            mEditTextAbbreviation.setText(mSubject.getAbbreviation());
         }
 
         final ImageView imageView = (ImageView) findViewById(R.id.imageView);
@@ -154,7 +160,7 @@ public class SubjectEditActivity extends AppCompatActivity {
     }
 
     private void handleDoneAction() {
-        String newName = mEditText.getText().toString();
+        String newName = mEditTextName.getText().toString();
         if (newName.length() == 0) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_invalid_name,
                     Snackbar.LENGTH_SHORT).show();
@@ -162,12 +168,23 @@ public class SubjectEditActivity extends AppCompatActivity {
         }
         newName = TextUtilsKt.title(newName);
 
+        String newAbbreviation = mEditTextAbbreviation.getText().toString();
+        if (newAbbreviation.length() == 0) {
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_invalid_name,
+                    Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
         if (mIsNewSubject) {
             Timetable currentTimetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
             assert currentTimetable != null;
 
             mSubject = new Subject(SubjectUtils.getHighestSubjectId(this) + 1,
-                    currentTimetable.getId(), newName, mColor.getId());
+                    currentTimetable.getId(),
+                    newName,
+                    newAbbreviation,
+                    mColor.getId());
+
             SubjectUtils.addSubject(this, mSubject);
 
         } else {

@@ -43,6 +43,7 @@ class SubjectUtils {
                 put(SubjectsSchema._ID, subject.id)
                 put(SubjectsSchema.COL_TIMETABLE_ID, subject.timetableId)
                 put(SubjectsSchema.COL_NAME, subject.name)
+                put(SubjectsSchema.COL_ABBREVIATION, subject.name)
                 put(SubjectsSchema.COL_COLOR_ID, subject.colorId)
             }
 

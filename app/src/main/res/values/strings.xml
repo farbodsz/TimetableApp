@@ -42,6 +42,7 @@
     <string name="due_this_month">This month</string>
     <string name="due_later">Later</string>
 
+    <string name="property_abbreviation">Abbreviation (optional)</string>
     <string name="property_name">Name</string>
     <string name="message_invalid_name">This name is invalid</string>
 
