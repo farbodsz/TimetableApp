@@ -6,23 +6,45 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.ClassesSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
+import org.threeten.bp.LocalDate
 
 class Class(val id: Int, val timetableId: Int, val subjectId: Int,
-            val moduleName: String) : Parcelable {
+            val moduleName: String, val startDate: LocalDate,
+            val endDate: LocalDate) : Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(ClassesSchema._ID)),
             cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_TIMETABLE_ID)),
             cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_SUBJECT_ID)),
-            cursor.getString(cursor.getColumnIndex(ClassesSchema.COL_MODULE_NAME)))
+            cursor.getString(cursor.getColumnIndex(ClassesSchema.COL_MODULE_NAME)),
+            LocalDate.of(
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_START_DATE_YEAR)),
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_START_DATE_MONTH)),
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_START_DATE_DAY_OF_MONTH))),
+            LocalDate.of(
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_END_DATE_YEAR)),
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_END_DATE_MONTH)),
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_END_DATE_DAY_OF_MONTH))))
 
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readInt(),
-            source.readString())
+            source.readString(),
+            source.readSerializable() as LocalDate,
+            source.readSerializable() as LocalDate)
+
+    init {
+        if ((startDate.equals(NO_DATE) && !endDate.equals(NO_DATE)) ||
+                (endDate.equals(NO_DATE) && !startDate.equals(NO_DATE))) {
+            throw IllegalStateException("either startDate or endDate has values [0,0,0] but the " +
+                    "other doesn't - startDate and endDate must both be the same state")
+        }
+    }
 
     fun hasModuleName() = moduleName.trim().length != 0
+
+    fun hasStartEndDates() = !startDate.equals(NO_DATE) && !endDate.equals(NO_DATE)
 
     override fun describeContents() = 0
 
@@ -31,6 +53,8 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
         dest?.writeInt(timetableId)
         dest?.writeInt(subjectId)
         dest?.writeString(moduleName)
+        dest?.writeSerializable(startDate)
+        dest?.writeSerializable(endDate)
     }
 
     companion object {
@@ -39,6 +63,8 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             override fun createFromParcel(source: Parcel): Class = Class(source)
             override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
         }
+
+        @JvmField val NO_DATE: LocalDate = LocalDate.MIN
 
         @JvmStatic fun create(context: Context, classId: Int): Class? {
             val dbHelper = TimetableDbHelper.getInstance(context)

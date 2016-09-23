@@ -133,6 +133,12 @@ class ClassUtils {
                 put(ClassesSchema.COL_TIMETABLE_ID, cls.timetableId)
                 put(ClassesSchema.COL_SUBJECT_ID, cls.subjectId)
                 put(ClassesSchema.COL_MODULE_NAME, cls.moduleName)
+                put(ClassesSchema.COL_START_DATE_DAY_OF_MONTH, cls.startDate.dayOfMonth)
+                put(ClassesSchema.COL_START_DATE_MONTH, cls.startDate.monthValue)
+                put(ClassesSchema.COL_START_DATE_YEAR, cls.startDate.year)
+                put(ClassesSchema.COL_END_DATE_DAY_OF_MONTH, cls.endDate.dayOfMonth)
+                put(ClassesSchema.COL_END_DATE_MONTH, cls.endDate.monthValue)
+                put(ClassesSchema.COL_END_DATE_YEAR, cls.endDate.year)
             }
 
             val db = TimetableDbHelper.getInstance(context).writableDatabase

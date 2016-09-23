@@ -41,6 +41,8 @@ import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
 import com.satsumasoftware.timetable.util.ThemeUtils;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -553,7 +555,15 @@ public class ClassEditActivity extends AppCompatActivity {
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mClass = new Class(classId, timetable.getId(), mSubject.getId(), moduleName);
+        // TODO: Actually use start and end dates
+        LocalDate nullDate = Class.NO_DATE;
+
+        mClass = new Class(classId,
+                timetable.getId(),
+                mSubject.getId(),
+                moduleName,
+                nullDate,
+                nullDate);
 
         if (mIsNew) {
             ClassUtils.addClass(this, mClass);
