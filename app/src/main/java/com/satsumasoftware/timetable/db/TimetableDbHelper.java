@@ -70,7 +70,7 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
                         " DEFAULT " + defaultDate.getDayOfMonth());
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
                         ClassesSchema.COL_START_DATE_MONTH + SchemaUtilsKt.INTEGER_TYPE +
-                        " DEFAULT " + defaultDate.getMonth());
+                        " DEFAULT " + defaultDate.getMonthValue());
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
                         ClassesSchema.COL_START_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getYear());
@@ -80,7 +80,7 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
                         " DEFAULT " + defaultDate.getDayOfMonth());
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
                         ClassesSchema.COL_END_DATE_MONTH + SchemaUtilsKt.INTEGER_TYPE +
-                        " DEFAULT " + defaultDate.getMonth());
+                        " DEFAULT " + defaultDate.getMonthValue());
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
                         ClassesSchema.COL_END_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getYear());
