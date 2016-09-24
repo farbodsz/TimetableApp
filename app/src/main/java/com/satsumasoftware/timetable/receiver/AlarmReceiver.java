@@ -104,6 +104,10 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                     }
                 }
 
+                if (count == 0) {
+                    return;
+                }
+
                 intent = new Intent(context, AssignmentsActivity.class);
                 intent.putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO);
 
