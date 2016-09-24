@@ -23,4 +23,13 @@
             android:defaultValue="60" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/prefCategory_notifications">
+
+        <Preference
+            android:key="pref_assignment_notification_time"
+            android:title="@string/pref_assignmentNotificationTime"
+            android:summary="@string/pref_assignmentNotificationTime_summary" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

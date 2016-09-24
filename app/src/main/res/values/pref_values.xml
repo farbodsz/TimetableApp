@@ -12,4 +12,9 @@
     <string name="pref_defaultLessonDuration">Default lesson duration</string>
     <string name="pref_defaultLessonDuration_dialogMessage">Enter the default lesson duration (in minutes)</string>
 
+    <string name="prefCategory_notifications">Notifications</string>
+
+    <string name="pref_assignmentNotificationTime">Incomplete assignments</string>
+    <string name="pref_assignmentNotificationTime_summary">You\'ll be notified of incomplete assignments the day before it\'s due at %1$s</string>
+
 </resources>

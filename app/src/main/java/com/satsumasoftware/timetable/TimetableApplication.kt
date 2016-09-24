@@ -59,7 +59,8 @@ class TimetableApplication : Application() {
             ExamUtils.addAlarmForExam(context, exam)
         }
 
-        AssignmentUtils.setAssignmentAlarmTime(context, PrefUtils.getAssignmentNotificationTime())
+        AssignmentUtils.setAssignmentAlarmTime(
+                context, PrefUtils.getAssignmentNotificationTime(context))
     }
 
 }
