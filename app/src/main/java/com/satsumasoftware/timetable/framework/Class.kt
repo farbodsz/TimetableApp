@@ -35,8 +35,8 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             source.readSerializable() as LocalDate)
 
     init {
-        if ((startDate.equals(NO_DATE) && !endDate.equals(NO_DATE)) ||
-                (endDate.equals(NO_DATE) && !startDate.equals(NO_DATE))) {
+        if (startDate == NO_DATE && endDate != NO_DATE ||
+                endDate == NO_DATE && startDate != NO_DATE) {
             throw IllegalStateException("either startDate or endDate has values [0,0,0] but the " +
                     "other doesn't - startDate and endDate must both be the same state")
         }
@@ -44,7 +44,7 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
 
     fun hasModuleName() = moduleName.trim().length != 0
 
-    fun hasStartEndDates() = !startDate.equals(NO_DATE) && !endDate.equals(NO_DATE)
+    fun hasStartEndDates() = startDate != NO_DATE && endDate != NO_DATE
 
     override fun describeContents() = 0
 
