@@ -135,7 +135,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setColor(colorArgb)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setTicker(tickerText);
 
         NotificationManager manager =
