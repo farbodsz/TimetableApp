@@ -238,8 +238,10 @@ class ClassUtils {
             return classTimes
         }
 
-        @JvmStatic fun getClassTimesForDay(activity: Activity, dayOfWeek: DayOfWeek,
-                                           weekNumber: Int): ArrayList<ClassTime> {
+        @JvmOverloads
+        @JvmStatic
+        fun getClassTimesForDay(activity: Activity, dayOfWeek: DayOfWeek, weekNumber: Int,
+                                date: LocalDate? = null): ArrayList<ClassTime> {
             val classTimes = ArrayList<ClassTime>()
 
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
@@ -252,9 +254,20 @@ class ClassUtils {
                             "AND ${ClassTimesSchema.COL_WEEK_NUMBER}=?",
                     arrayOf(timetable.id.toString(), dayOfWeek.value.toString(), weekNumber.toString()),
                     null, null, null)
+
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                classTimes.add(ClassTime(cursor))
+                val classTime = ClassTime(cursor)
+                val classDetail = ClassDetail.create(activity, classTime.classDetailId)
+                val cls = Class.create(activity, classDetail.classId)!!
+
+                if (!cls.hasStartEndDates() || date == null) {
+                    classTimes.add(classTime)
+
+                } else if (!cls.startDate.isAfter(date) && !cls.endDate.isBefore(date)) {
+                    classTimes.add(classTime)
+                }
+
                 cursor.moveToNext()
             }
             cursor.close()
