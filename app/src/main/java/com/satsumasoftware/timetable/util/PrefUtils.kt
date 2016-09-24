@@ -3,6 +3,7 @@ package com.satsumasoftware.timetable.util
 import android.content.Context
 import android.preference.PreferenceManager
 import com.satsumasoftware.timetable.framework.Timetable
+import org.threeten.bp.LocalTime
 
 class PrefUtils private constructor() {
 
@@ -45,6 +46,13 @@ class PrefUtils private constructor() {
             val strDuration = sp.getString(PREF_DEFAULT_LESSON_DURATION, "60")
             return strDuration.toInt()
         }
+
+
+        const val PREF_ASSIGNMENT_NOTIFICATION_TIME = "pref_assignment_notification_time"
+
+        @JvmStatic
+        fun getAssignmentNotificationTime(): LocalTime =
+                LocalTime.of(17, 0)  // TODO add implementation
 
     }
 }

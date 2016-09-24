@@ -10,6 +10,9 @@ import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.framework.Assignment
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.DateUtils
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 import java.util.*
 
 class AssignmentUtils {
@@ -88,18 +91,27 @@ class AssignmentUtils {
             val db = TimetableDbHelper.getInstance(context).writableDatabase
             db.insert(AssignmentsSchema.TABLE_NAME, null, values)
 
-            addAlarmForAssignment(context, assignment)
-
             Log.i(LOG_TAG, "Added Assignment with id ${assignment.id}")
         }
 
-        @JvmStatic fun addAlarmForAssignment(context: Context, assignment: Assignment) {
-            // Remind the day before at 17:00
-            val reminderTime = assignment.dueDate.minusDays(1).atTime(17, 0)
-            AlarmReceiver().setAlarm(context,
+        @JvmStatic
+        fun setAssignmentAlarmTime(context: Context, time: LocalTime) {
+            // Cancel the current time
+            AlarmReceiver().cancelAlarm(
+                    context,
                     AlarmReceiver.Type.ASSIGNMENT,
-                    DateUtils.asCalendar(reminderTime),
-                    assignment.id)
+                    AlarmReceiver.ASSIGNMENTS_NOTIFICATION_ID)
+
+            // Repeat every day
+            val repeatInterval: Long = 86400000
+
+            // Remind every day at the specified time
+            val reminderStartTime = LocalDateTime.of(LocalDate.now(), time)
+            AlarmReceiver().setRepeatingAlarm(context,
+                    AlarmReceiver.Type.ASSIGNMENT,
+                    DateUtils.asCalendar(reminderStartTime),
+                    AlarmReceiver.ASSIGNMENTS_NOTIFICATION_ID,
+                    repeatInterval)
         }
 
         @JvmStatic fun deleteAssignment(context: Context, assignmentId: Int) {
@@ -107,8 +119,6 @@ class AssignmentUtils {
             db.delete(AssignmentsSchema.TABLE_NAME,
                     "${AssignmentsSchema._ID}=?",
                     arrayOf(assignmentId.toString()))
-
-            AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.ASSIGNMENT, assignmentId)
 
             Log.i(LOG_TAG, "Deleted Assignment with id $assignmentId")
         }

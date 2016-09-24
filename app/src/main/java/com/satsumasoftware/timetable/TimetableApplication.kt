@@ -47,9 +47,6 @@ class TimetableApplication : Application() {
         for (classTime in ClassUtils.getAllClassTimes(context)) {
             alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.CLASS, classTime.id)
         }
-        for (assignment in AssignmentUtils.getAllAssignments(context)) {
-            alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.ASSIGNMENT, assignment.id)
-        }
         for (exam in ExamUtils.getAllExams(context)) {
             alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.EXAM, exam.id)
         }
@@ -58,12 +55,11 @@ class TimetableApplication : Application() {
         for (classTime in ClassUtils.getAllClassTimes(context, currentTimetable!!)) {
             ClassUtils.addAlarmsForClassTime(context, this, classTime)
         }
-        for (assignment in AssignmentUtils.getAssignments(context, this)) {
-            AssignmentUtils.addAlarmForAssignment(context, assignment)
-        }
         for (exam in ExamUtils.getExams(context, this)) {
             ExamUtils.addAlarmForExam(context, exam)
         }
+
+        AssignmentUtils.setAssignmentAlarmTime(context, PrefUtils.getAssignmentNotificationTime())
     }
 
 }
