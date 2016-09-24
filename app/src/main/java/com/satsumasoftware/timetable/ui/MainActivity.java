@@ -53,7 +53,8 @@ public class MainActivity extends BaseActivity {
         TextView infoBar = (TextView) findViewById(R.id.text_infoBar);
         infoBar.setVisibility(View.VISIBLE);
 
-        String todayText = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMMM yyyy"));
+        String todayText = LocalDate.now().format(
+                DateTimeFormatter.ofPattern("EEEE d MMMM yyyy"));
         infoBar.setText(todayText);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
