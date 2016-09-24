@@ -97,13 +97,23 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
                 int count = 0;
                 for (Assignment assignment : assignments) {
-                    if (!assignment.isComplete()
-                            && assignment.getDueDate().minusDays(1).equals(LocalDate.now())) {
-                        // Add incomplete assignments due tomorrow
+                    if (assignment.isOverdue()) {
                         count++;
                     }
                 }
 
+                // Go through incomplete assignments if none are overdue
+                if (count == 0) {
+                    for (Assignment assignment : assignments) {
+                        if (!assignment.isComplete()
+                                && assignment.getDueDate().minusDays(1).equals(LocalDate.now())) {
+                            // Add incomplete assignments due tomorrow
+                            count++;
+                        }
+                    }
+                }
+
+                // Don't show a notification if there aren't overdue or incomplete assignments
                 if (count == 0) {
                     return;
                 }
