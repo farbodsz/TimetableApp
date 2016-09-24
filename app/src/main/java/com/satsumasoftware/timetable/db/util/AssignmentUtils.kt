@@ -96,6 +96,8 @@ class AssignmentUtils {
 
         @JvmStatic
         fun setAssignmentAlarmTime(context: Context, time: LocalTime) {
+            Log.d(LOG_TAG, "Setting the alarm notification time to $time")
+
             // Cancel the current time
             AlarmReceiver().cancelAlarm(
                     context,
