@@ -10,10 +10,6 @@
             android:summaryOn="@string/pref_weeksAsLetters_summaryOn"
             android:summaryOff="@string/pref_weeksAsLetters_summaryOff"
             android:defaultValue="false" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/prefCategory_lessons">
 
         <EditTextPreference
             android:key="pref_default_lesson_duration"
