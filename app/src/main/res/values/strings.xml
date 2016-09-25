@@ -134,6 +134,16 @@
     <string name="showing_past_assignments">Showing past assignments</string>
     <string name="showing_past_exams">Showing past exams</string>
 
+    <plurals name="notification_overdue_assignments">
+        <item quantity="one">%1$d assignment is overdue</item>
+        <item quantity="other">%1$d assignments are overdue</item>
+    </plurals>
+
+    <plurals name="notification_incomplete_assignments">
+        <item quantity="one">%1$d incomplete assignment due tomorrow</item>
+        <item quantity="other">%1$d incomplete assignments due tomorrow</item>
+    </plurals>
+
     <string name="placeholder_subjects">You haven\'t added any subjects yet</string>
     <string name="placeholder_classes">You haven\'t added any classes yet</string>
     <string name="placeholder_assignments_title">All done!</string>

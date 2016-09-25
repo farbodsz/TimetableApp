@@ -101,9 +101,10 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                         count++;
                     }
                 }
+                boolean hasOverdue = count != 0;
 
                 // Go through incomplete assignments if none are overdue
-                if (count == 0) {
+                if (!hasOverdue) {
                     for (Assignment assignment : assignments) {
                         if (!assignment.isComplete()
                                 && assignment.getDueDate().minusDays(1).equals(LocalDate.now())) {
@@ -121,7 +122,11 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 intent = new Intent(context, AssignmentsActivity.class);
                 intent.putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO);
 
-                contentTitle = count + " incomplete assignments due tomorrow";
+                int pluralRes = hasOverdue ?
+                        R.plurals.notification_overdue_assignments :
+                        R.plurals.notification_incomplete_assignments;
+
+                contentTitle = context.getResources().getQuantityString(pluralRes, count, count);
                 drawableRes = R.drawable.ic_assignment_white_24dp;
                 contentText = "";
                 tickerText = contentTitle;
