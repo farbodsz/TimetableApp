@@ -1,11 +1,15 @@
 package com.satsumasoftware.timetable.ui
 
+import android.app.TimePickerDialog
 import android.os.Bundle
+import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.util.PrefUtils
+import org.threeten.bp.LocalTime
 
 class SettingsActivity : BaseActivity() {
 
@@ -26,6 +30,40 @@ class SettingsActivity : BaseActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.preferences)
+
+            setupAssignmentNotificationPref()
+        }
+
+        private fun setupAssignmentNotificationPref() {
+            val assignmentNotificationPref =
+                    findPreference(PrefUtils.PREF_ASSIGNMENT_NOTIFICATION_TIME)
+
+            assignmentNotificationPref.summary = getString(
+                    R.string.pref_assignmentNotificationTime_summary,
+                    PrefUtils.getAssignmentNotificationTime(activity).toString())
+
+            fun displayAssignmentTimePicker(preference: Preference) {
+                val time = PrefUtils.getAssignmentNotificationTime(activity)
+
+                val initialHour = time.hour
+                val initialMinute = time.minute
+
+                TimePickerDialog(activity, TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+                    val newTime = LocalTime.of(hour, minute)
+
+                    preference.summary = getString(
+                            R.string.pref_assignmentNotificationTime_summary,
+                            newTime.toString())
+
+                    PrefUtils.setAssignmentNotificationTime(activity, newTime)
+
+                }, initialHour, initialMinute, true).show()
+            }
+
+            assignmentNotificationPref.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference ->
+                displayAssignmentTimePicker(preference!!)
+                true
+            }
         }
 
     }

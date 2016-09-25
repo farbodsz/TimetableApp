@@ -17,6 +17,8 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -28,8 +30,11 @@ import com.satsumasoftware.timetable.ui.AssignmentsActivity;
 import com.satsumasoftware.timetable.ui.ExamsActivity;
 import com.satsumasoftware.timetable.ui.MainActivity;
 
+import org.threeten.bp.LocalDate;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AlarmReceiver extends WakefulBroadcastReceiver {
@@ -39,6 +44,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     private static final String EXTRA_ITEM_ID = "extra_item_id";
     private static final String EXTRA_NOTIFICATION_TYPE = "extra_notification_type";
+
+    public static final int ASSIGNMENTS_NOTIFICATION_ID = 1;
 
     @IntDef({Type.CLASS, Type.ASSIGNMENT, Type.EXAM})
     @Retention(RetentionPolicy.SOURCE)
@@ -59,7 +66,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         int notificationId = makeNotificationId(notificationType, id);
 
-        Subject subject;
+        Color color = new Color(7); // default color is light blue
         Intent intent;
 
         String contentTitle, contentText, tickerText;
@@ -72,30 +79,54 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 Class cls = Class.create(context, classDetail.getClassId());
                 assert cls != null;
 
-                subject = Subject.create(context, cls.getSubjectId());
-                assert subject != null;
+                Subject classSubject = Subject.create(context, cls.getSubjectId());
+                assert classSubject != null;
 
+                color = new Color(classSubject.getColorId());
                 intent = new Intent(context, MainActivity.class);
 
-                contentTitle = subject.getName();
+                contentTitle = classSubject.getName();
                 drawableRes = R.drawable.ic_class_white_24dp;
                 contentText = makeClassText(classDetail, classTime);
-                tickerText = subject.getName() + " class starting in 5 minutes";
+                tickerText = classSubject.getName() + " class starting in 5 minutes";
                 break;
 
             case Type.ASSIGNMENT:
-                Assignment assignment = Assignment.create(context, id);
-                assert assignment != null;
+                ArrayList<Assignment> assignments = AssignmentUtils.getAssignments(context,
+                        (TimetableApplication) context.getApplicationContext());
 
-                Class c = Class.create(context, assignment.getClassId());
-                assert c != null;
+                int count = 0;
+                for (Assignment assignment : assignments) {
+                    if (assignment.isOverdue()) {
+                        count++;
+                    }
+                }
+                boolean hasOverdue = count != 0;
 
-                subject = Subject.create(context, c.getSubjectId());
-                assert subject != null;
+                // Go through incomplete assignments if none are overdue
+                if (!hasOverdue) {
+                    for (Assignment assignment : assignments) {
+                        if (!assignment.isComplete()
+                                && assignment.getDueDate().minusDays(1).equals(LocalDate.now())) {
+                            // Add incomplete assignments due tomorrow
+                            count++;
+                        }
+                    }
+                }
+
+                // Don't show a notification if there aren't overdue or incomplete assignments
+                if (count == 0) {
+                    return;
+                }
 
                 intent = new Intent(context, AssignmentsActivity.class);
+                intent.putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO);
 
-                contentTitle = subject.getName() + " assignment";
+                int pluralRes = hasOverdue ?
+                        R.plurals.notification_overdue_assignments :
+                        R.plurals.notification_incomplete_assignments;
+
+                contentTitle = context.getResources().getQuantityString(pluralRes, count, count);
                 drawableRes = R.drawable.ic_assignment_white_24dp;
                 contentText = "";
                 tickerText = contentTitle;
@@ -105,15 +136,16 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 Exam exam = Exam.create(context, id);
                 assert exam != null;
 
-                subject = Subject.create(context, exam.getSubjectId());
-                assert subject != null;
+                Subject examSubject = Subject.create(context, exam.getSubjectId());
+                assert examSubject != null;
 
+                color = new Color(examSubject.getColorId());
                 intent = new Intent(context, ExamsActivity.class);
 
-                contentTitle = subject.getName() + exam.getModuleName() + " exam";
+                contentTitle = examSubject.getName() + exam.getModuleName() + " exam";
                 drawableRes = R.drawable.ic_assessment_white_24dp;
                 contentText = makeExamText(exam);
-                tickerText = subject.getName() + " exam starting in 30 minutes";
+                tickerText = examSubject.getName() + " exam starting in 30 minutes";
                 break;
 
             default:
@@ -123,7 +155,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Color color = new Color(subject.getColorId());
         String hexString = Integer.toHexString(
                 ContextCompat.getColor(context, color.getPrimaryColorResId(context)));
         int colorArgb = android.graphics.Color.parseColor("#" + hexString);
@@ -135,7 +166,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setColor(colorArgb)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setTicker(tickerText);
 
         NotificationManager manager =

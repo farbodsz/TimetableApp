@@ -42,9 +42,9 @@ public class AssignmentsActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
 
-    protected static final String EXTRA_MODE = "extra_mode";
-    protected static final int DISPLAY_TODO = 1;
-    protected static final int DISPLAY_ALL_UPCOMING = 2;
+    public static final String EXTRA_MODE = "extra_mode";
+    public static final int DISPLAY_TODO = 1;
+    public static final int DISPLAY_ALL_UPCOMING = 2;
 
     private int mMode;
 

@@ -2,7 +2,9 @@ package com.satsumasoftware.timetable.util
 
 import android.content.Context
 import android.preference.PreferenceManager
+import com.satsumasoftware.timetable.db.util.AssignmentUtils
 import com.satsumasoftware.timetable.framework.Timetable
+import org.threeten.bp.LocalTime
 
 class PrefUtils private constructor() {
 
@@ -44,6 +46,23 @@ class PrefUtils private constructor() {
             val sp = PreferenceManager.getDefaultSharedPreferences(context)
             val strDuration = sp.getString(PREF_DEFAULT_LESSON_DURATION, "60")
             return strDuration.toInt()
+        }
+
+
+        const val PREF_ASSIGNMENT_NOTIFICATION_TIME = "pref_assignment_notification_time"
+
+        @JvmStatic
+        fun getAssignmentNotificationTime(context: Context): LocalTime {
+            val sp = PreferenceManager.getDefaultSharedPreferences(context)
+            val strTime = sp.getString(PREF_ASSIGNMENT_NOTIFICATION_TIME, "17:00")
+            return LocalTime.parse(strTime)
+        }
+
+        @JvmStatic
+        fun setAssignmentNotificationTime(context: Context, time: LocalTime) {
+            val sp = PreferenceManager.getDefaultSharedPreferences(context)
+            sp.edit().putString(PREF_ASSIGNMENT_NOTIFICATION_TIME, time.toString()).apply()
+            AssignmentUtils.setAssignmentAlarmTime(context, time)
         }
 
     }
