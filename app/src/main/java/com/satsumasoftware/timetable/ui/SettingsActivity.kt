@@ -31,7 +31,26 @@ class SettingsActivity : BaseActivity() {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.preferences)
 
+            setupDefaultLessonDurationPref()
             setupAssignmentNotificationPref()
+        }
+
+        private fun setupDefaultLessonDurationPref() {
+            val lessonDurationPref = findPreference(PrefUtils.PREF_DEFAULT_LESSON_DURATION);
+
+            fun updateSummary(defaultDuration: Int) {
+                lessonDurationPref.summary = getString(
+                        R.string.pref_defaultLessonDuration_summary,
+                        defaultDuration)
+            }
+
+            updateSummary(PrefUtils.getDefaultLessonDuration(activity))
+
+            lessonDurationPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+                val strNewVal = newValue as String
+                updateSummary(strNewVal.toInt())
+                true
+            }
         }
 
         private fun setupAssignmentNotificationPref() {

@@ -11,6 +11,7 @@
 
     <string name="pref_defaultLessonDuration">Default lesson duration</string>
     <string name="pref_defaultLessonDuration_dialogMessage">Enter the default lesson duration (in minutes)</string>
+    <string name="pref_defaultLessonDuration_summary">The default lesson duration is %1$d minutes</string>
 
     <string name="prefCategory_notifications">Notifications</string>
 
