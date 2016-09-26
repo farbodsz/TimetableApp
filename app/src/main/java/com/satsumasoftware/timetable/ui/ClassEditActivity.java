@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
@@ -174,6 +175,36 @@ public class ClassEditActivity extends AppCompatActivity {
         if (!mIsNew) {
             mEditTextModule.setText(mClass.getModuleName());
         }
+
+        final View detailSection = findViewById(R.id.linearLayout_details);
+
+        View expandToggle = findViewById(R.id.expand_toggle);
+        final ImageView expandIcon = (ImageView) findViewById(R.id.expand_icon);
+
+        expandToggle.setOnClickListener(new View.OnClickListener() {
+            boolean mIsExpanded = false;
+
+            @Override
+            public void onClick(View v) {
+                int drawableResId;
+                int sectionVisibility;
+
+                if (mIsExpanded) {
+                    // We should condense the detail section
+                    drawableResId = R.drawable.ic_expand_more_black_24dp;
+                    sectionVisibility = View.GONE;
+                } else {
+                    // We should expand the detail section
+                    drawableResId = R.drawable.ic_expand_less_black_24dp;
+                    sectionVisibility = View.VISIBLE;
+                }
+
+                detailSection.setVisibility(sectionVisibility);
+                expandIcon.setImageResource(drawableResId);
+
+                mIsExpanded = !mIsExpanded;
+            }
+        });
 
         mClassDetailIds = new ArrayList<>();
 

@@ -21,7 +21,6 @@
             android:layout_height="wrap_content" />
 
         <include layout="@layout/activity_class_edit_card"
-            android:transitionName="@string/transition_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/mdu_padding_normal"
