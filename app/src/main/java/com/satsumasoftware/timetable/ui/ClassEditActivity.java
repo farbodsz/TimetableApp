@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +23,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
@@ -40,6 +43,9 @@ import com.satsumasoftware.timetable.ui.adapter.ClassTimesAdapter;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
 import com.satsumasoftware.timetable.util.ThemeUtils;
+
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +78,9 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private TextView mSubjectText;
     private AlertDialog mSubjectDialog;
+
+    private TextView mStartDateText, mEndDateText;
+    private LocalDate mStartDate, mEndDate;
 
     private DynamicPagerAdapter mPagerAdapter;
 
@@ -173,6 +182,93 @@ public class ClassEditActivity extends AppCompatActivity {
             mEditTextModule.setText(mClass.getModuleName());
         }
 
+        mStartDateText = (TextView) findViewById(R.id.textView_start_date);
+        mEndDateText = (TextView) findViewById(R.id.textView_end_date);
+
+        if (!mIsNew && mClass.hasStartEndDates()) {
+            mStartDate = mClass.getStartDate();
+            mEndDate = mClass.getEndDate();
+            updateDateTexts();
+        }
+
+        mStartDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // note: -1 and +1s in code because Android month values are from 0-11 (to
+                // correspond with java.util.Calendar) but LocalDate month values are from 1-12
+
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                        mStartDate = LocalDate.of(year, month + 1, dayOfMonth);
+                        updateDateTexts();
+                    }
+                };
+
+                boolean useNowTime = mIsNew || !mClass.hasStartEndDates();
+
+                new DatePickerDialog(
+                        ClassEditActivity.this,
+                        listener,
+                        useNowTime ? LocalDate.now().getYear() : mStartDate.getYear(),
+                        useNowTime ? LocalDate.now().getMonthValue() - 1 : mStartDate.getMonthValue() - 1,
+                        useNowTime ? LocalDate.now().getDayOfMonth() : mStartDate.getDayOfMonth()
+                ).show();
+            }
+        });
+        mEndDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                        mEndDate = LocalDate.of(year, month + 1, dayOfMonth);
+                        updateDateTexts();
+                    }
+                };
+
+                boolean useNowTime = mIsNew || !mClass.hasStartEndDates();
+
+                new DatePickerDialog(
+                        ClassEditActivity.this,
+                        listener,
+                        useNowTime ? LocalDate.now().getYear() : mEndDate.getYear(),
+                        useNowTime ? LocalDate.now().getMonthValue() - 1 : mEndDate.getMonthValue() - 1,
+                        useNowTime ? LocalDate.now().getDayOfMonth() : mEndDate.getDayOfMonth()
+                ).show();
+            }
+        });
+
+        final View detailSection = findViewById(R.id.linearLayout_details);
+
+        View expandToggle = findViewById(R.id.expand_toggle);
+        final ImageView expandIcon = (ImageView) findViewById(R.id.expand_icon);
+
+        expandToggle.setOnClickListener(new View.OnClickListener() {
+            boolean mIsExpanded = false;
+
+            @Override
+            public void onClick(View v) {
+                int drawableResId;
+                int sectionVisibility;
+
+                if (mIsExpanded) {
+                    // We should condense the detail section
+                    drawableResId = R.drawable.ic_expand_more_black_24dp;
+                    sectionVisibility = View.GONE;
+                } else {
+                    // We should expand the detail section
+                    drawableResId = R.drawable.ic_expand_less_black_24dp;
+                    sectionVisibility = View.VISIBLE;
+                }
+
+                detailSection.setVisibility(sectionVisibility);
+                expandIcon.setImageResource(drawableResId);
+
+                mIsExpanded = !mIsExpanded;
+            }
+        });
+
         mClassDetailIds = new ArrayList<>();
 
         mAllClassTimeGroups = new ArrayList<>();
@@ -218,6 +314,21 @@ public class ClassEditActivity extends AppCompatActivity {
 
         Color color = new Color(mSubject.getColorId());
         ThemeUtils.setBarColors(color, this, mAppBarLayout, mToolbar, mTabLayout);
+    }
+
+    private void updateDateTexts() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+
+        if (mStartDate != null) {
+            mStartDateText.setText(mStartDate.format(formatter));
+            mStartDateText.setTextColor(ContextCompat.getColor(
+                    getBaseContext(), R.color.mdu_text_black));
+        }
+        if (mEndDate != null) {
+            mEndDateText.setText(mEndDate.format(formatter));
+            mEndDateText.setTextColor(ContextCompat.getColor(
+                    getBaseContext(), R.color.mdu_text_black));
+        }
     }
 
     private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {
@@ -464,9 +575,20 @@ public class ClassEditActivity extends AppCompatActivity {
     }
 
     private void handleDoneAction() {
-        // validate subject
+        // Validate subject and start/end dates
         if (mSubject == null) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_subject_required,
+                    Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if ((mStartDate == null && mEndDate != null)
+                || (mStartDate != null && mEndDate == null)) {
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_both_dates_required,
+                    Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (mStartDate != null && mStartDate.isAfter(mEndDate)) {
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_start_date_after_end_date,
                     Snackbar.LENGTH_SHORT).show();
             return;
         }
@@ -553,7 +675,21 @@ public class ClassEditActivity extends AppCompatActivity {
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mClass = new Class(classId, timetable.getId(), mSubject.getId(), moduleName);
+        LocalDate dbStartDate = mStartDate;
+        LocalDate dbEndDate = mEndDate;
+        if (mStartDate == null) {
+            dbStartDate = Class.NO_DATE;
+        }
+        if (mEndDate == null) {
+            dbEndDate = Class.NO_DATE;
+        }
+
+        mClass = new Class(classId,
+                timetable.getId(),
+                mSubject.getId(),
+                moduleName,
+                dbStartDate,
+                dbEndDate);
 
         if (mIsNew) {
             ClassUtils.addClass(this, mClass);

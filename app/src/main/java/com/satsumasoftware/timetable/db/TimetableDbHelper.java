@@ -6,12 +6,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
+import com.satsumasoftware.timetable.framework.Class;
+
+import org.threeten.bp.LocalDate;
 
 public final class TimetableDbHelper extends SQLiteOpenHelper {
 
     private static TimetableDbHelper sInstance;
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "Timetable.db";
 
     private static final String LOG_TAG = "TimetableDbHelper";
@@ -58,6 +61,29 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
             case 1:
                 db.execSQL("ALTER TABLE " + SubjectsSchema.TABLE_NAME + " ADD COLUMN " +
                         SubjectsSchema.COL_ABBREVIATION + SchemaUtilsKt.TEXT_TYPE + " DEFAULT ''");
+
+            case 2:
+                LocalDate defaultDate = Class.NO_DATE;
+
+                db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
+                        ClassesSchema.COL_START_DATE_DAY_OF_MONTH + SchemaUtilsKt.INTEGER_TYPE +
+                        " DEFAULT " + defaultDate.getDayOfMonth());
+                db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
+                        ClassesSchema.COL_START_DATE_MONTH + SchemaUtilsKt.INTEGER_TYPE +
+                        " DEFAULT " + defaultDate.getMonthValue());
+                db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
+                        ClassesSchema.COL_START_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE +
+                        " DEFAULT " + defaultDate.getYear());
+
+                db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
+                        ClassesSchema.COL_END_DATE_DAY_OF_MONTH + SchemaUtilsKt.INTEGER_TYPE +
+                        " DEFAULT " + defaultDate.getDayOfMonth());
+                db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
+                        ClassesSchema.COL_END_DATE_MONTH + SchemaUtilsKt.INTEGER_TYPE +
+                        " DEFAULT " + defaultDate.getMonthValue());
+                db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
+                        ClassesSchema.COL_END_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE +
+                        " DEFAULT " + defaultDate.getYear());
                 break;
 
             default:
