@@ -575,9 +575,20 @@ public class ClassEditActivity extends AppCompatActivity {
     }
 
     private void handleDoneAction() {
-        // validate subject
+        // Validate subject and start/end dates
         if (mSubject == null) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_subject_required,
+                    Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if ((mStartDate == null && mEndDate != null)
+                || (mStartDate != null && mEndDate == null)) {
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_both_dates_required,
+                    Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (mStartDate != null && mStartDate.isAfter(mEndDate)) {
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_start_date_after_end_date,
                     Snackbar.LENGTH_SHORT).show();
             return;
         }
