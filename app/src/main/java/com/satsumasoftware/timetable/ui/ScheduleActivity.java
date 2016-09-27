@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +38,8 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class ScheduleActivity extends BaseActivity {
+
+    private static final String LOG_TAG = "ScheduleActivity";
 
     protected static final int REQUEST_CODE_CLASS_DETAIL = 1;
 
@@ -84,8 +87,28 @@ public class ScheduleActivity extends BaseActivity {
             return;
         }
 
+        LocalDate today = LocalDate.now();
+        int indexOfToday = getIndexOfTodayTab();
+
+        int daysCount = 0;
+
         for (int weekNumber = 1; weekNumber <= timetable.getWeekRotations(); weekNumber++) {
             for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
+
+                LocalDate thisDay;
+                if (indexOfToday > daysCount) {
+                    // This day is before today
+                    thisDay = today.minusDays(indexOfToday - daysCount);
+
+                } else if (indexOfToday == daysCount) {
+                    // This day is today
+                    thisDay = today;
+
+                } else {
+                    // This day is after today
+                    thisDay = today.plusDays(daysCount - indexOfToday);
+                }
+                Log.i(LOG_TAG, "Finding lessons for " + thisDay.toString());
 
                 StringBuilder titleBuilder = new StringBuilder();
                 titleBuilder.append(dayOfWeek.toString());
@@ -96,12 +119,13 @@ public class ScheduleActivity extends BaseActivity {
                 String tabTitle = titleBuilder.toString();
 
                 final ArrayList<ClassTime> classTimes =
-                        ClassUtils.getClassTimesForDay(this, dayOfWeek, weekNumber);
+                        ClassUtils.getClassTimesForDay(this, dayOfWeek, weekNumber, thisDay);
 
                 if (classTimes.isEmpty()) {
                     View placeholder = ThemeUtils.makePlaceholderView(this,
                             R.drawable.ic_today_black_24dp, R.string.home_card_classes_placeholder);
                     mPagerAdapter.addViewWithTitle(placeholder, tabTitle);
+                    daysCount++;
                     continue;
                 }
 
@@ -153,16 +177,20 @@ public class ScheduleActivity extends BaseActivity {
                 recyclerView.setAdapter(adapter);
 
                 mPagerAdapter.addViewWithTitle(recyclerView, tabTitle);
+
+                daysCount++;
             }
         }
     }
 
-    private void goToNow() {
+    private int getIndexOfTodayTab() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
         int nthWeek = DateUtils.findWeekNumber(getApplication());
+        return today.getValue() + ((nthWeek - 1) * 7) - 1;
+    }
 
-        int index = today.getValue() + ((nthWeek - 1) * 7) - 1;
-        mViewPager.setCurrentItem(index);
+    private void goToNow() {
+        mViewPager.setCurrentItem(getIndexOfTodayTab());
     }
 
     @Override
