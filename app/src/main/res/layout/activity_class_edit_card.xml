@@ -85,6 +85,7 @@
             <ImageView
                 android:id="@+id/expand_icon"
                 app:srcCompat="@drawable/ic_expand_more_black_24dp"
+                android:background="?selectableItemBackgroundBorderless"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center" />
