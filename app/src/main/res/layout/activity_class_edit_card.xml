@@ -59,19 +59,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/mdu_keyline_2">
-                    <TextView
-                        android:id="@+id/textView_start_date"
-                        android:text="@string/property_start_date"
-                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                    <FrameLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                    <include layout="@layout/divider" />
-                    <TextView
-                        android:id="@+id/textView_end_date"
-                        android:text="@string/property_end_date"
-                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="@string/add_class_dates"
+                            style="@style/Widget.Timetable.TextView.Item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <Switch
+                            android:id="@+id/dates_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|end" />
+                    </FrameLayout>
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/dates_section"
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
+                        <include layout="@layout/divider" />
+                        <TextView
+                            android:id="@+id/textView_start_date"
+                            android:text="@string/property_start_date"
+                            style="@style/Widget.Timetable.TextView.Item.Selectable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <include layout="@layout/divider" />
+                        <TextView
+                            android:id="@+id/textView_end_date"
+                            android:text="@string/property_end_date"
+                            style="@style/Widget.Timetable.TextView.Item.Selectable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>

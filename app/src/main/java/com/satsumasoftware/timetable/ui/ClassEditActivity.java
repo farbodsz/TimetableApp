@@ -23,9 +23,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
@@ -236,6 +238,35 @@ public class ClassEditActivity extends AppCompatActivity {
                         useNowTime ? LocalDate.now().getMonthValue() - 1 : mEndDate.getMonthValue() - 1,
                         useNowTime ? LocalDate.now().getDayOfMonth() : mEndDate.getDayOfMonth()
                 ).show();
+            }
+        });
+
+        Switch datesSwitch = (Switch) findViewById(R.id.dates_switch);
+        final View datesSection = findViewById(R.id.dates_section);
+
+        if (!mIsNew && mClass.hasStartEndDates()) {
+            datesSwitch.setChecked(true);
+        }
+
+        datesSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    datesSection.setVisibility(View.VISIBLE);
+                    if (!mIsNew && mClass.hasStartEndDates()) {
+                        mStartDate = mClass.getStartDate();
+                        mEndDate = mClass.getEndDate();
+                    } else {
+                        LocalDate today = LocalDate.now();
+                        mStartDate = today;
+                        mEndDate = today.plusMonths(1);
+                    }
+                    updateDateTexts();
+                } else {
+                    datesSection.setVisibility(View.GONE);
+                    mStartDate = null;
+                    mEndDate = null;
+                }
             }
         });
 
