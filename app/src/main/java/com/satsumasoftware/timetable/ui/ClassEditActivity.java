@@ -244,10 +244,6 @@ public class ClassEditActivity extends AppCompatActivity {
         Switch datesSwitch = (Switch) findViewById(R.id.dates_switch);
         final View datesSection = findViewById(R.id.dates_section);
 
-        if (!mIsNew && mClass.hasStartEndDates()) {
-            datesSwitch.setChecked(true);
-        }
-
         datesSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -269,6 +265,10 @@ public class ClassEditActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (!mIsNew && mClass.hasStartEndDates()) {
+            datesSwitch.setChecked(true);
+        }
 
         final View detailSection = findViewById(R.id.linearLayout_details);
 
