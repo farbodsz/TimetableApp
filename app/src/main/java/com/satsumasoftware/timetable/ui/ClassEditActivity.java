@@ -733,9 +733,19 @@ public class ClassEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        ClassUtils.completelyDeleteClass(this, mClass);
-        setResult(Activity.RESULT_OK);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_class)
+                .setMessage(R.string.delete_confirmation_class)
+                .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ClassUtils.completelyDeleteClass(getBaseContext(), mClass);
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
 
 }

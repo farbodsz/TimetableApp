@@ -2,6 +2,7 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -281,9 +282,19 @@ public class AssignmentEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        AssignmentUtils.deleteAssignment(this, mAssignment.getId());
-        setResult(Activity.RESULT_OK);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_assignment)
+                .setMessage(R.string.delete_confirmation)
+                .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AssignmentUtils.deleteAssignment(getBaseContext(), mAssignment.getId());
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
 
 }

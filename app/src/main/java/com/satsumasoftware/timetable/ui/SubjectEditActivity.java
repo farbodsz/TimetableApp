@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -201,9 +202,19 @@ public class SubjectEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        SubjectUtils.completelyDeleteSubject(this, mSubject);
-        setResult(Activity.RESULT_OK);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_subject)
+                .setMessage(R.string.delete_confirmation_subject)
+                .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SubjectUtils.completelyDeleteSubject(getBaseContext(), mSubject);
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
 
 }

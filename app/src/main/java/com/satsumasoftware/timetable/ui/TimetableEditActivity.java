@@ -2,6 +2,7 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -407,15 +409,29 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             return;
         }
 
-        TimetableUtils.completelyDeleteTimetable(this, mTimetable.getId());
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_timetable)
+                .setMessage(R.string.delete_confirmation_timetable)
+                .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        TimetableUtils.completelyDeleteTimetable(
+                                getBaseContext(), mTimetable.getId());
 
-        int highestId = TimetableUtils.getHighestTimetableId(this);
-        Timetable newCurrentTimetable = Timetable.create(this, highestId);
+                        // After the timetable has been deleted, change the current timetable
+                        int highestId = TimetableUtils.getHighestTimetableId(getBaseContext());
+                        Timetable newCurrentTimetable =
+                                Timetable.create(getBaseContext(), highestId);
 
-        TimetableApplication application = (TimetableApplication) getApplication();
-        application.setCurrentTimetable(this, newCurrentTimetable);
+                        TimetableApplication application = (TimetableApplication) getApplication();
+                        application.setCurrentTimetable(getBaseContext(), newCurrentTimetable);
 
-        setResult(Activity.RESULT_OK);
-        finish();
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
+
 }

@@ -407,9 +407,19 @@ public class ExamEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        ExamUtils.deleteExam(this, mExam.getId());
-        setResult(Activity.RESULT_OK);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_exam)
+                .setMessage(R.string.delete_confirmation)
+                .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ExamUtils.deleteExam(getBaseContext(), mExam.getId());
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
 
 }
