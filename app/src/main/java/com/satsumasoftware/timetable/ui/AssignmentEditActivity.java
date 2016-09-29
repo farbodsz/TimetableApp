@@ -2,6 +2,7 @@ package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -29,7 +30,7 @@ import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -76,7 +77,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 R.string.title_activity_assignment_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        mToolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        mToolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,7 +183,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 getBaseContext(), R.color.mdu_text_black));
 
         Color color = new Color(subject.getColorId());
-        ThemeUtils.setBarColors(color, this, mToolbar);
+        UiUtils.setBarColors(color, this, mToolbar);
     }
 
 
@@ -197,7 +198,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 
@@ -281,9 +282,19 @@ public class AssignmentEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        AssignmentUtils.deleteAssignment(this, mAssignment.getId());
-        setResult(Activity.RESULT_OK);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_assignment)
+                .setMessage(R.string.delete_confirmation)
+                .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AssignmentUtils.deleteAssignment(getBaseContext(), mAssignment.getId());
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
 
 }

@@ -19,7 +19,7 @@ import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -55,7 +55,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        toolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,7 +73,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle(subject.getName());
 
         Color color = new Color(subject.getColorId());
-        ThemeUtils.setBarColors(color, this, toolbar);
+        UiUtils.setBarColors(color, this, toolbar);
 
         TextView dateText = (TextView) findViewById(R.id.textView_date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
@@ -145,7 +145,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_detail, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_edit);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_edit);
         return true;
     }
 

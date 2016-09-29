@@ -44,7 +44,7 @@ import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ClassTimesAdapter;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -112,7 +112,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 R.string.title_activity_class_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        mToolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        mToolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -344,7 +344,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 ClassEditActivity.this, R.color.mdu_text_black));
 
         Color color = new Color(mSubject.getColorId());
-        ThemeUtils.setBarColors(color, this, mAppBarLayout, mToolbar, mTabLayout);
+        UiUtils.setBarColors(color, this, mAppBarLayout, mToolbar, mTabLayout);
     }
 
     private void updateDateTexts() {
@@ -407,7 +407,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
 
                 Bundle bundle = null;
-                if (ThemeUtils.isApi21()) {
+                if (UiUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     ClassEditActivity.this,
@@ -441,7 +441,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
 
                 Bundle bundle = null;
-                if (ThemeUtils.isApi21()) {
+                if (UiUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     ClassEditActivity.this,
@@ -569,7 +569,7 @@ public class ClassEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 
@@ -733,9 +733,19 @@ public class ClassEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        ClassUtils.completelyDeleteClass(this, mClass);
-        setResult(Activity.RESULT_OK);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_class)
+                .setMessage(R.string.delete_confirmation_class)
+                .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ClassUtils.completelyDeleteClass(getBaseContext(), mClass);
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
 
 }

@@ -34,7 +34,7 @@ import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -94,7 +94,7 @@ public class ExamEditActivity extends AppCompatActivity {
                 R.string.title_activity_exam_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        mToolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        mToolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,7 +280,7 @@ public class ExamEditActivity extends AppCompatActivity {
         mSubjectText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
 
         Color color = new Color(mSubject.getColorId());
-        ThemeUtils.setBarColors(color, this, mToolbar);
+        UiUtils.setBarColors(color, this, mToolbar);
     }
 
     private void updateDateText() {
@@ -314,7 +314,7 @@ public class ExamEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 
@@ -407,9 +407,19 @@ public class ExamEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        ExamUtils.deleteExam(this, mExam.getId());
-        setResult(Activity.RESULT_OK);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_exam)
+                .setMessage(R.string.delete_confirmation)
+                .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ExamUtils.deleteExam(getBaseContext(), mExam.getId());
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
 
 }

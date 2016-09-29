@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -24,7 +25,7 @@ import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ColorsAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import java.util.ArrayList;
 
@@ -60,7 +61,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                 R.string.title_activity_subject_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        toolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        toolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +83,7 @@ public class SubjectEditActivity extends AppCompatActivity {
 
         mColor = new Color(mIsNewSubject ? 6 : mSubject.getColorId());
         imageView.setImageResource(mColor.getPrimaryColorResId(this));
-        ThemeUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
+        UiUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +98,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                     public void onEntryClick(View view, int position) {
                         mColor = colors.get(position);
                         imageView.setImageResource(mColor.getPrimaryColorResId(getBaseContext()));
-                        ThemeUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
+                        UiUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
                         mColorDialog.dismiss();
                     }
                 });
@@ -123,7 +124,7 @@ public class SubjectEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 
@@ -201,9 +202,19 @@ public class SubjectEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        SubjectUtils.completelyDeleteSubject(this, mSubject);
-        setResult(Activity.RESULT_OK);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_subject)
+                .setMessage(R.string.delete_confirmation_subject)
+                .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SubjectUtils.completelyDeleteSubject(getBaseContext(), mSubject);
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
 
 }

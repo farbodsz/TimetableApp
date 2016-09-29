@@ -22,7 +22,7 @@ import com.satsumasoftware.timetable.db.util.ExamUtils;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.ui.adapter.ExamsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
@@ -65,7 +65,7 @@ public class ExamsActivity extends BaseActivity {
                 intent.putExtra(ExamEditActivity.EXTRA_EXAM, mExams.get(position));
 
                 Bundle bundle = null;
-                if (ThemeUtils.isApi21()) {
+                if (UiUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     ExamsActivity.this,
@@ -181,7 +181,7 @@ public class ExamsActivity extends BaseActivity {
                     R.string.placeholder_exams;
 
             mPlaceholderLayout.removeAllViews();
-            mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
+            mPlaceholderLayout.addView(UiUtils.makePlaceholderView(this,
                     R.drawable.ic_assessment_black_24dp,
                     stringRes,
                     R.color.mdu_blue_400,
