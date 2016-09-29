@@ -40,7 +40,10 @@ import java.util.Calendar;
 public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     private static final String LOG_TAG = "AlarmReceiver";
+
     private static final long NO_REPEAT_INTERVAL = -1;
+
+    private static final long[] VIBRATION_PATTERN = {1000, 1000, 1000, 1000, 1000};
 
     private static final String EXTRA_ITEM_ID = "extra_item_id";
     private static final String EXTRA_NOTIFICATION_TYPE = "extra_notification_type";
@@ -167,7 +170,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 .setAutoCancel(true)
                 .setColor(colorArgb)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setTicker(tickerText);
+                .setTicker(tickerText)
+                .setVibrate(VIBRATION_PATTERN);
 
         NotificationManager manager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
