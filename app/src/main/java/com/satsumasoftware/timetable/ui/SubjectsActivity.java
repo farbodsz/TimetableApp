@@ -17,7 +17,7 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +41,7 @@ public class SubjectsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        toolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +60,7 @@ public class SubjectsActivity extends AppCompatActivity {
                 intent.putExtra(SubjectEditActivity.EXTRA_SUBJECT, mSubjects.get(position));
 
                 Bundle bundle = null;
-                if (ThemeUtils.isApi21()) {
+                if (UiUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     SubjectsActivity.this,
@@ -117,7 +117,7 @@ public class SubjectsActivity extends AppCompatActivity {
             mPlaceholderLayout.setVisibility(View.VISIBLE);
 
             mPlaceholderLayout.removeAllViews();
-            mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
+            mPlaceholderLayout.addView(UiUtils.makePlaceholderView(this,
                     R.drawable.ic_list_black_24dp,
                     R.string.placeholder_subjects,
                     R.color.mdu_blue_400,

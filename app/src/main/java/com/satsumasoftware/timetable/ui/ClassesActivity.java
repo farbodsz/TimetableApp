@@ -21,7 +21,7 @@ import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +56,7 @@ public class ClassesActivity extends BaseActivity {
                 intent.putExtra(ClassEditActivity.EXTRA_CLASS, mClasses.get(position));
 
                 Bundle bundle = null;
-                if (ThemeUtils.isApi21()) {
+                if (UiUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     ClassesActivity.this,
@@ -115,7 +115,7 @@ public class ClassesActivity extends BaseActivity {
             mPlaceholderLayout.setVisibility(View.VISIBLE);
 
             mPlaceholderLayout.removeAllViews();
-            mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
+            mPlaceholderLayout.addView(UiUtils.makePlaceholderView(this,
                     R.drawable.ic_class_black_24dp,
                     R.string.placeholder_classes,
                     R.color.mdu_blue_400,
@@ -143,7 +143,7 @@ public class ClassesActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_classes, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_manage_subjects);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_manage_subjects);
         return true;
     }
 

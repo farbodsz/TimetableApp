@@ -29,7 +29,7 @@ import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -115,7 +115,7 @@ public class AssignmentsActivity extends BaseActivity {
                         AssignmentDetailActivity.EXTRA_ASSIGNMENT, mAssignments.get(position));
 
                 Bundle bundle = null;
-                if (ThemeUtils.isApi21()) {
+                if (UiUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     AssignmentsActivity.this,
@@ -260,8 +260,8 @@ public class AssignmentsActivity extends BaseActivity {
                         BitmapFactory.decodeResource(getResources(), R.drawable.ic_done_white_24dp);
 
                 float left = dX > 0 ?
-                        itemView.getLeft() + ThemeUtils.dpToPixels(getBaseContext(), 16) :
-                        itemView.getRight() - ThemeUtils.dpToPixels(getBaseContext(), 16)
+                        itemView.getLeft() + UiUtils.dpToPixels(getBaseContext(), 16) :
+                        itemView.getRight() - UiUtils.dpToPixels(getBaseContext(), 16)
                                 - icon.getWidth();
 
                 float top = itemView.getTop() +
@@ -370,7 +370,7 @@ public class AssignmentsActivity extends BaseActivity {
                 R.drawable.ic_assignment_turned_in_black_24dp;
 
         mPlaceholderLayout.removeAllViews();
-        mPlaceholderLayout.addView(ThemeUtils.makePlaceholderView(this,
+        mPlaceholderLayout.addView(UiUtils.makePlaceholderView(this,
                 drawableRes,
                 titleRes,
                 R.color.mdu_blue_400,

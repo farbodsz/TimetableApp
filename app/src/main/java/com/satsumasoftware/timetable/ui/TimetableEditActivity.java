@@ -34,7 +34,7 @@ import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TermsAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 import com.satsuware.usefulviews.LabelledSpinner;
 
 import org.threeten.bp.LocalDate;
@@ -173,7 +173,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                 intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
 
                 Bundle bundle = null;
-                if (ThemeUtils.isApi21()) {
+                if (UiUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     TimetableEditActivity.this,
@@ -205,7 +205,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                 intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
 
                 Bundle bundle = null;
-                if (ThemeUtils.isApi21()) {
+                if (UiUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     TimetableEditActivity.this,

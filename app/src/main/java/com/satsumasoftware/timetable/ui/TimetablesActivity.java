@@ -17,7 +17,7 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +49,7 @@ public class TimetablesActivity extends BaseActivity {
                 intent.putExtra(TimetableEditActivity.EXTRA_TIMETABLE, mTimetables.get(position));
 
                 Bundle bundle = null;
-                if (ThemeUtils.isApi21()) {
+                if (UiUtils.isApi21()) {
                     ActivityOptionsCompat options =
                             ActivityOptionsCompat.makeSceneTransitionAnimation(
                                     TimetablesActivity.this,

@@ -29,7 +29,7 @@ import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -76,7 +76,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 R.string.title_activity_assignment_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
-        mToolbar.setNavigationIcon(ThemeUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
+        mToolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -182,7 +182,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 getBaseContext(), R.color.mdu_text_black));
 
         Color color = new Color(subject.getColorId());
-        ThemeUtils.setBarColors(color, this, mToolbar);
+        UiUtils.setBarColors(color, this, mToolbar);
     }
 
 
@@ -197,7 +197,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_done);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_done);
         return true;
     }
 

@@ -28,7 +28,7 @@ import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.ScheduleAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
-import com.satsumasoftware.timetable.util.ThemeUtils;
+import com.satsumasoftware.timetable.util.UiUtils;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
@@ -80,7 +80,7 @@ public class ScheduleActivity extends BaseActivity {
         assert timetable != null;
 
         if (!timetable.isValidToday()) {
-            View placeholder = ThemeUtils.makePlaceholderView(this,
+            View placeholder = UiUtils.makePlaceholderView(this,
                     R.drawable.ic_today_black_24dp, R.string.home_card_classes_placeholder);
             mPagerAdapter.addViewWithTitle(
                     placeholder, getString(R.string.title_activity_schedule));
@@ -122,7 +122,7 @@ public class ScheduleActivity extends BaseActivity {
                         ClassUtils.getClassTimesForDay(this, dayOfWeek, weekNumber, thisDay);
 
                 if (classTimes.isEmpty()) {
-                    View placeholder = ThemeUtils.makePlaceholderView(this,
+                    View placeholder = UiUtils.makePlaceholderView(this,
                             R.drawable.ic_today_black_24dp, R.string.home_card_classes_placeholder);
                     mPagerAdapter.addViewWithTitle(placeholder, tabTitle);
                     daysCount++;
@@ -155,7 +155,7 @@ public class ScheduleActivity extends BaseActivity {
                                 classDetail.getId());
 
                         Bundle bundle = null;
-                        if (ThemeUtils.isApi21()) {
+                        if (UiUtils.isApi21()) {
                             ActivityOptionsCompat options =
                                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                                             ScheduleActivity.this,
@@ -208,7 +208,7 @@ public class ScheduleActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_schedule, menu);
-        ThemeUtils.tintMenuIcons(this, menu, R.id.action_today, R.id.action_view_week);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_today, R.id.action_view_week);
         return true;
     }
 
