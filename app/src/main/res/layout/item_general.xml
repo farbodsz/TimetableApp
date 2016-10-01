@@ -4,7 +4,8 @@
     android:background="@color/mdu_white"
     android:transitionName="@string/transition_1"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:layout_height="wrap_content"
+    android:minHeight="72dp">
 
     <View
         android:id="@+id/color"
