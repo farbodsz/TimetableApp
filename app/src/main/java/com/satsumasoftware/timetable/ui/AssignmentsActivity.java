@@ -139,9 +139,7 @@ public class AssignmentsActivity extends BaseActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
 
-        if (mMode == DISPLAY_TODO) {
-            makeItemTouchHelper().attachToRecyclerView(mRecyclerView);
-        }
+        makeItemTouchHelper().attachToRecyclerView(mRecyclerView);
     }
 
     private ItemTouchHelper makeItemTouchHelper() {
@@ -183,6 +181,39 @@ public class AssignmentsActivity extends BaseActivity {
 
                 assignment.setCompletionProgress(100);
                 AssignmentUtils.replaceAssignment(getBaseContext(), assignment.getId(), assignment);
+
+                // Do not completely remove the item if we're not in DISPLAY_TODO mode
+                if (mMode != DISPLAY_TODO) {
+                    // We should remove and add back the item so the 'done' background goes away
+                    // and the item gets updated
+                    mAssignments.remove(position);
+                    mAdapter.notifyItemRemoved(position);
+                    mAssignments.add(position, mRemovedAssignment);
+                    mAdapter.notifyItemInserted(position);
+
+                    final int finalPos = position;
+
+                    Snackbar.make(findViewById(R.id.coordinatorLayout),
+                            R.string.message_assignment_completed,
+                            Snackbar.LENGTH_SHORT)
+                            .setAction(R.string.action_undo, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Assignment assignment = mRemovedAssignment;
+                                    assignment.setCompletionProgress(mRemovedCompletionProgress);
+
+                                    AssignmentUtils.replaceAssignment(
+                                            getBaseContext(),
+                                            assignment.getId(),
+                                            assignment);
+
+                                    mAssignments.set(finalPos, assignment);
+                                    mAdapter.notifyItemChanged(finalPos);
+                                }
+                            })
+                            .show();
+                    return;
+                }
 
                 // Check if assignment is only one in date group
                 if (mAssignments.get(position - 1) == null
