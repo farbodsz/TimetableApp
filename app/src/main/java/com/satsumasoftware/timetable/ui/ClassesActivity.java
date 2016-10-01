@@ -32,6 +32,7 @@ public class ClassesActivity extends BaseActivity {
     protected static final int REQUEST_CODE_CLASS_DETAIL = 1;
 
     private ArrayList<Class> mClasses;
+
     private ClassesAdapter mAdapter;
 
     private RecyclerView mRecyclerView;
@@ -45,6 +46,26 @@ public class ClassesActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setupLayout();
+    }
+
+    private void setupLayout() {
+        setupList();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ClassesActivity.this, ClassEditActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
+            }
+        });
+
+        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
+        refreshPlaceholderStatus();
+    }
+
+    private void setupList() {
         mClasses = ClassUtils.getClasses(this);
         sortList();
 
@@ -72,28 +93,9 @@ public class ClassesActivity extends BaseActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setAdapter(mAdapter);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ClassesActivity.this, ClassEditActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL);
-            }
-        });
-
-        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
-        refreshPlaceholderStatus();
-    }
-
-    private void refreshList() {
-        mClasses.clear();
-        mClasses.addAll(ClassUtils.getClasses(this));
-        sortList();
-        mAdapter.notifyDataSetChanged();
-        refreshPlaceholderStatus();
     }
 
     private void sortList() {
@@ -107,6 +109,14 @@ public class ClassesActivity extends BaseActivity {
                 return s1.getName().compareTo(s2.getName());
             }
         });
+    }
+
+    private void refreshList() {
+        mClasses.clear();
+        mClasses.addAll(ClassUtils.getClasses(this));
+        sortList();
+        mAdapter.notifyDataSetChanged();
+        refreshPlaceholderStatus();
     }
 
     private void refreshPlaceholderStatus() {

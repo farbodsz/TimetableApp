@@ -38,6 +38,7 @@ public class ExamsActivity extends BaseActivity {
 
     private ArrayList<String> mHeaders;
     private ArrayList<Exam> mExams;
+
     private ExamsAdapter mAdapter;
 
     private RecyclerView mRecyclerView;
@@ -53,6 +54,26 @@ public class ExamsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setupLayout();
+    }
+
+    private void setupLayout() {
+        setupList();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT);
+            }
+        });
+
+        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
+        refreshPlaceholderStatus();
+    }
+
+    private void setupList() {
         mHeaders = new ArrayList<>();
         mExams = ExamUtils.getExams(this, getApplication());
         sortList();
@@ -81,29 +102,10 @@ public class ExamsActivity extends BaseActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT);
-            }
-        });
-
-        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
-        refreshPlaceholderStatus();
-    }
-
-    private void refreshList() {
-        mExams.clear();
-        mExams.addAll(ExamUtils.getExams(this, getApplication()));
-        sortList();
-        mAdapter.notifyDataSetChanged();
-        refreshPlaceholderStatus();
     }
 
     private void sortList() {
@@ -170,6 +172,14 @@ public class ExamsActivity extends BaseActivity {
 
         mExams.clear();
         mExams.addAll(exams);
+    }
+
+    private void refreshList() {
+        mExams.clear();
+        mExams.addAll(ExamUtils.getExams(this, getApplication()));
+        sortList();
+        mAdapter.notifyDataSetChanged();
+        refreshPlaceholderStatus();
     }
 
     private void refreshPlaceholderStatus() {

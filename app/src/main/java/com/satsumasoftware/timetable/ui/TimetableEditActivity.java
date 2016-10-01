@@ -52,21 +52,21 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
 
     private static final int REQUEST_CODE_TERM_EDIT = 1;
 
-    private boolean mIsFirst;
-
     private Timetable mTimetable;
+
+    private boolean mIsFirst;
     private boolean mIsNew;
 
     private EditText mEditTextName;
 
-    private TextView mStartDateText, mEndDateText;
     private LocalDate mStartDate, mEndDate;
+    private TextView mStartDateText, mEndDateText;
 
-    private LabelledSpinner mSpinnerScheduling, mSpinnerWeekRotations;
     private int mWeekRotations;
+    private LabelledSpinner mSpinnerScheduling, mSpinnerWeekRotations;
 
-    private TermsAdapter mAdapter;
     private ArrayList<Term> mTerms;
+    private TermsAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +97,32 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             }
         });
 
+        setupLayout();
+    }
+
+    private void setupLayout() {
         mEditTextName = (EditText) findViewById(R.id.editText_name);
         if (!mIsNew) {
             mEditTextName.setText(mTimetable.getName());
         }
+
+        setupDateTexts();
+
+        mSpinnerScheduling = (LabelledSpinner) findViewById(R.id.spinner_scheduling_type);
+        mSpinnerWeekRotations = (LabelledSpinner) findViewById(R.id.spinner_scheduling_detail);
+
+        mSpinnerScheduling.setOnItemChosenListener(this);
+        mSpinnerWeekRotations.setOnItemChosenListener(this);
+
+        mWeekRotations = mIsNew ? 1 : mTimetable.getWeekRotations();
+        updateSchedulingSpinners();
+
+        setupTermsList();
+
+        setupAddTermButton();
+    }
+
+    private void setupDateTexts() {
         mStartDateText = (TextView) findViewById(R.id.textView_start_date);
         mEndDateText = (TextView) findViewById(R.id.textView_end_date);
 
@@ -133,6 +155,7 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                 ).show();
             }
         });
+
         mEndDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,16 +176,33 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                 ).show();
             }
         });
+    }
 
-        mSpinnerScheduling = (LabelledSpinner) findViewById(R.id.spinner_scheduling_type);
-        mSpinnerWeekRotations = (LabelledSpinner) findViewById(R.id.spinner_scheduling_detail);
+    private void updateDateTexts() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu");
+        if (mStartDate != null) {
+            mStartDateText.setText(mStartDate.format(formatter));
+            mStartDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+        }
+        if (mEndDate != null) {
+            mEndDateText.setText(mEndDate.format(formatter));
+            mEndDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+        }
+    }
 
-        mSpinnerScheduling.setOnItemChosenListener(this);
-        mSpinnerWeekRotations.setOnItemChosenListener(this);
+    private void updateSchedulingSpinners() {
+        if (mWeekRotations == 1) {
+            mSpinnerScheduling.setSelection(0);
+            mSpinnerWeekRotations.setVisibility(View.GONE);
+        } else {
+            mSpinnerScheduling.setSelection(1);
+            mSpinnerWeekRotations.setVisibility(View.VISIBLE);
+            // e.g. weekRotations of 2 will be position 0 as in the string-array
+            mSpinnerWeekRotations.setSelection(mWeekRotations - 2);
+        }
+    }
 
-        mWeekRotations = mIsNew ? 1 : mTimetable.getWeekRotations();
-        updateSchedulingSpinners();
-
+    private void setupTermsList() {
         mTerms = TermUtils.getTerms(this, findTimetableId());
         sortList();
 
@@ -198,7 +238,9 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
             }
         });
         recyclerView.setAdapter(mAdapter);
+    }
 
+    private void setupAddTermButton() {
         Button btnAddTerm = (Button) findViewById(R.id.button_add_term);
         btnAddTerm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,30 +262,6 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                         TimetableEditActivity.this, intent, REQUEST_CODE_TERM_EDIT, bundle);
             }
         });
-    }
-
-    private void updateDateTexts() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu");
-        if (mStartDate != null) {
-            mStartDateText.setText(mStartDate.format(formatter));
-            mStartDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
-        }
-        if (mEndDate != null) {
-            mEndDateText.setText(mEndDate.format(formatter));
-            mEndDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
-        }
-    }
-
-    private void updateSchedulingSpinners() {
-        if (mWeekRotations == 1) {
-            mSpinnerScheduling.setSelection(0);
-            mSpinnerWeekRotations.setVisibility(View.GONE);
-        } else {
-            mSpinnerScheduling.setSelection(1);
-            mSpinnerWeekRotations.setVisibility(View.VISIBLE);
-            // e.g. weekRotations of 2 will be position 0 as in the string-array
-            mSpinnerWeekRotations.setSelection(mWeekRotations - 2);
-        }
     }
 
     @Override
@@ -269,13 +287,6 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
         }
     }
 
-    private void refreshList() {
-        mTerms.clear();
-        mTerms.addAll(TermUtils.getTerms(this, findTimetableId()));
-        sortList();
-        mAdapter.notifyDataSetChanged();
-    }
-
     private void sortList() {
         Collections.sort(mTerms, new Comparator<Term>() {
             @Override
@@ -283,6 +294,13 @@ public class TimetableEditActivity extends AppCompatActivity implements Labelled
                 return t1.getStartDate().compareTo(t2.getStartDate());
             }
         });
+    }
+
+    private void refreshList() {
+        mTerms.clear();
+        mTerms.addAll(TermUtils.getTerms(this, findTimetableId()));
+        sortList();
+        mAdapter.notifyDataSetChanged();
     }
 
     private int findTimetableId() {

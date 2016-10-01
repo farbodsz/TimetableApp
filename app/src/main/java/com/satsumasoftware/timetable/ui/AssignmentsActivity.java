@@ -72,23 +72,7 @@ public class AssignmentsActivity extends BaseActivity {
             getSupportActionBar().setTitle(R.string.title_activity_todo);
         }
 
-        mHeaders = new ArrayList<>();
-        mAssignments = AssignmentUtils.getAssignments(this, getApplication());
-        sortList();
-
-        setupRecyclerView();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
-            }
-        });
-
-        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
-        refreshPlaceholderStatus();
+        setupLayout();
     }
 
     private void determineDisplayMode() {
@@ -104,7 +88,27 @@ public class AssignmentsActivity extends BaseActivity {
         }
     }
 
-    private void setupRecyclerView() {
+    private void setupLayout() {
+        setupList();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
+            }
+        });
+
+        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
+        refreshPlaceholderStatus();
+    }
+
+    private void setupList() {
+        mHeaders = new ArrayList<>();
+        mAssignments = AssignmentUtils.getAssignments(this, getApplication());
+        sortList();
+
         mAdapter = new AssignmentsAdapter(this, mHeaders, mAssignments);
         mAdapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
             @Override

@@ -30,6 +30,7 @@ import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 
+// TODO: Organize this so it's clear what's going on
 public class ClassTimeEditActivity extends AppCompatActivity {
 
     protected static final String EXTRA_CLASS_TIME = "extra_class_time";

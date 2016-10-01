@@ -28,14 +28,15 @@ public class TermEditActivity extends AppCompatActivity {
     protected static final String EXTRA_TIMETABLE_ID = "extra_timetable_id";
     protected static final String EXTRA_TERM = "extra_term";
 
-    private int mTimetableId;
     private Term mTerm;
+    private int mTimetableId;
+
     private boolean mIsNew;
 
     private EditText mEditText;
 
-    private TextView mStartDateText, mEndDateText;
     private LocalDate mStartDate, mEndDate;
+    private TextView mStartDateText, mEndDateText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +72,19 @@ public class TermEditActivity extends AppCompatActivity {
             }
         });
 
+        setupLayout();
+    }
+
+    private void setupLayout() {
         mEditText = (EditText) findViewById(R.id.editText);
         if (!mIsNew) {
             mEditText.setText(mTerm.getName());
         }
 
+        setupDateTexts();
+    }
+
+    private void setupDateTexts() {
         mStartDateText = (TextView) findViewById(R.id.textView_start_date);
         mEndDateText = (TextView) findViewById(R.id.textView_end_date);
 
@@ -108,6 +117,7 @@ public class TermEditActivity extends AppCompatActivity {
                 ).show();
             }
         });
+
         mEndDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

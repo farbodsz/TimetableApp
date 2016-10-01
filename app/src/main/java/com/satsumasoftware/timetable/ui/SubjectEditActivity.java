@@ -34,13 +34,14 @@ public class SubjectEditActivity extends AppCompatActivity {
     protected static final String EXTRA_SUBJECT = "extra_subject";
 
     private Subject mSubject;
-    private boolean mIsNewSubject;
+
+    private boolean mIsNew;
 
     private EditText mEditTextName;
     private EditText mEditTextAbbreviation;
 
-    private AlertDialog mColorDialog;
     private Color mColor;
+    private AlertDialog mColorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +56,9 @@ public class SubjectEditActivity extends AppCompatActivity {
         if (extras != null) {
             mSubject = extras.getParcelable(EXTRA_SUBJECT);
         }
-        mIsNewSubject = mSubject == null;
+        mIsNew = mSubject == null;
 
-        int titleResId = mIsNewSubject ? R.string.title_activity_subject_new :
+        int titleResId = mIsNew ? R.string.title_activity_subject_new :
                 R.string.title_activity_subject_edit;
         getSupportActionBar().setTitle(getResources().getString(titleResId));
 
@@ -69,21 +70,30 @@ public class SubjectEditActivity extends AppCompatActivity {
             }
         });
 
+        setupLayout(toolbar);
+    }
+
+    private void setupLayout(Toolbar toolbar) {
         mEditTextName = (EditText) findViewById(R.id.editText_name);
-        if (!mIsNewSubject) {
+        if (!mIsNew) {
             mEditTextName.setText(mSubject.getName());
         }
 
         mEditTextAbbreviation = (EditText) findViewById(R.id.editText_abbreviation);
-        if (!mIsNewSubject) {
+        if (!mIsNew) {
             mEditTextAbbreviation.setText(mSubject.getAbbreviation());
         }
 
-        final ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        setupColorPicker(toolbar);
+    }
 
-        mColor = new Color(mIsNewSubject ? 6 : mSubject.getColorId());
-        imageView.setImageResource(mColor.getPrimaryColorResId(this));
+    private void setupColorPicker(final Toolbar toolbar) {
+        mColor = new Color(mIsNew ? 6 : mSubject.getColorId());
+
         UiUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
+
+        final ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        imageView.setImageResource(mColor.getPrimaryColorResId(this));
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +119,8 @@ public class SubjectEditActivity extends AppCompatActivity {
                         getResources().getInteger(R.integer.subject_color_dialog_columns)));
                 recyclerView.setAdapter(adapter);
 
-                View titleView = getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
+                View titleView =
+                        getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
                 ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_color);
 
                 builder.setView(recyclerView)
@@ -131,7 +142,7 @@ public class SubjectEditActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (mIsNewSubject) {
+        if (mIsNew) {
             menu.findItem(R.id.action_delete).setVisible(false);
         }
         return true;
@@ -171,8 +182,9 @@ public class SubjectEditActivity extends AppCompatActivity {
 
         String newAbbreviation = mEditTextAbbreviation.getText().toString();
 
-        if (mIsNewSubject) {
-            Timetable currentTimetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        if (mIsNew) {
+            Timetable currentTimetable =
+                    ((TimetableApplication) getApplication()).getCurrentTimetable();
             assert currentTimetable != null;
 
             mSubject = new Subject(SubjectUtils.getHighestSubjectId(this) + 1,

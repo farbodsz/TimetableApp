@@ -85,6 +85,10 @@ public class AssignmentEditActivity extends AppCompatActivity {
             }
         });
 
+        setupLayout();
+    }
+
+    private void setupLayout() {
         mEditTextTitle = (EditText) findViewById(R.id.editText_title);
         if (!mIsNew) {
             mEditTextTitle.setText(mAssignment.getTitle());
@@ -95,11 +99,19 @@ public class AssignmentEditActivity extends AppCompatActivity {
             mEditTextDetail.setText(mAssignment.getDetail());
         }
 
+        setupClassText();
+
+        setupDateText();
+    }
+
+    private void setupClassText() {
         mClassText = (TextView) findViewById(R.id.textView_class);
+
         if (!mIsNew) {
             mClass = Class.create(this, mAssignment.getClassId());
             updateLinkedClass();
         }
+
         mClassText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,12 +155,16 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 mClassDialog.show();
             }
         });
+    }
 
+    private void setupDateText() {
         mDateText = (TextView) findViewById(R.id.textView_date);
+
         if (!mIsNew) {
             mDueDate = mAssignment.getDueDate();
             updateDateText();
         }
+
         mDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,7 +201,6 @@ public class AssignmentEditActivity extends AppCompatActivity {
         Color color = new Color(subject.getColorId());
         UiUtils.setBarColors(color, this, mToolbar);
     }
-
 
     private void updateDateText() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");

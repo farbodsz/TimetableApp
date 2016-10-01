@@ -38,6 +38,23 @@ public class TimetablesActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setupLayout();
+    }
+
+    private void setupLayout() {
+        setupList();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TimetablesActivity.this, TimetableEditActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT);
+            }
+        });
+    }
+
+    private void setupList() {
         mTimetables = TimetableUtils.getTimetables(this);
         sortList();
 
@@ -68,22 +85,6 @@ public class TimetablesActivity extends BaseActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(TimetablesActivity.this, TimetableEditActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT);
-            }
-        });
-    }
-
-    private void refreshList() {
-        mTimetables.clear();
-        mTimetables.addAll(TimetableUtils.getTimetables(this));
-        sortList();
-        mAdapter.notifyDataSetChanged();
     }
 
     private void sortList() {
@@ -93,6 +94,13 @@ public class TimetablesActivity extends BaseActivity {
                 return t1.getStartDate().compareTo(t2.getStartDate());
             }
         });
+    }
+
+    private void refreshList() {
+        mTimetables.clear();
+        mTimetables.addAll(TimetableUtils.getTimetables(this));
+        sortList();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -51,6 +51,7 @@ public class ExamEditActivity extends AppCompatActivity {
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
 
     private Exam mExam;
+
     private boolean mIsNew;
 
     private Toolbar mToolbar;
@@ -63,14 +64,14 @@ public class ExamEditActivity extends AppCompatActivity {
     private TextView mSubjectText;
     private AlertDialog mSubjectDialog;
 
-    private TextView mDateText;
     private LocalDate mExamDate;
+    private TextView mDateText;
 
-    private TextView mTimeText;
     private LocalTime mExamTime;
+    private TextView mTimeText;
 
-    private TextView mDurationText;
     private int mExamDuration = -1;
+    private TextView mDurationText;
     private AlertDialog mDurationDialog;
 
     private boolean mExamIsResit;
@@ -102,6 +103,10 @@ public class ExamEditActivity extends AppCompatActivity {
             }
         });
 
+        setupLayout();
+    }
+
+    private void setupLayout() {
         mEditTextModule = (EditText) findViewById(R.id.editText_module);
         if (!mIsNew) {
             mEditTextModule.setText(mExam.getModuleName());
@@ -117,11 +122,23 @@ public class ExamEditActivity extends AppCompatActivity {
             mEditTextRoom.setText(mExam.getRoom());
         }
 
+        setupSubjectText();
+
+        setupDateText();
+        setupTimeText();
+        setupDurationText();
+
+        setupResitCheckbox();
+    }
+
+    private void setupSubjectText() {
         mSubjectText = (TextView) findViewById(R.id.textView_subject);
+
         if (!mIsNew) {
             mSubject = Subject.create(this, mExam.getSubjectId());
             updateLinkedSubject();
         }
+
         mSubjectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,7 +168,8 @@ public class ExamEditActivity extends AppCompatActivity {
                 recyclerView.setLayoutManager(new LinearLayoutManager(ExamEditActivity.this));
                 recyclerView.setAdapter(adapter);
 
-                View titleView = getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
+                View titleView =
+                        getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
                 ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_subject);
 
                 builder.setView(recyclerView)
@@ -159,7 +177,8 @@ public class ExamEditActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.action_new, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(ExamEditActivity.this, SubjectEditActivity.class);
+                                Intent intent = new Intent(
+                                        ExamEditActivity.this, SubjectEditActivity.class);
                                 startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
                             }
                         });
@@ -168,12 +187,24 @@ public class ExamEditActivity extends AppCompatActivity {
                 mSubjectDialog.show();
             }
         });
+    }
 
+    private void updateLinkedSubject() {
+        mSubjectText.setText(mSubject.getName());
+        mSubjectText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+
+        Color color = new Color(mSubject.getColorId());
+        UiUtils.setBarColors(color, this, mToolbar);
+    }
+
+    private void setupDateText() {
         mDateText = (TextView) findViewById(R.id.textView_date);
+
         if (!mIsNew) {
             mExamDate = mExam.getDate();
             updateDateText();
         }
+
         mDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,12 +228,21 @@ public class ExamEditActivity extends AppCompatActivity {
                 ).show();
             }
         });
+    }
 
+    private void updateDateText() {
+        mDateText.setText(mExamDate.format(DateTimeFormatter.ofPattern("d MMMM uuuu")));
+        mDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+    }
+
+    private void setupTimeText() {
         mTimeText = (TextView) findViewById(R.id.textView_start_time);
+
         if (!mIsNew) {
             mExamTime = mExam.getStartTime();
             updateTimeText();
         }
+
         mTimeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,12 +262,21 @@ public class ExamEditActivity extends AppCompatActivity {
                 }, initialHour, initialMinute, true).show();
             }
         });
+    }
 
+    private void updateTimeText() {
+        mTimeText.setText(mExamTime.toString());
+        mTimeText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+    }
+
+    private void setupDurationText() {
         mDurationText = (TextView) findViewById(R.id.textView_duration);
+
         if (!mIsNew) {
             mExamDuration = mExam.getDuration();
             updateDurationText();
         }
+
         mDurationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -247,7 +296,8 @@ public class ExamEditActivity extends AppCompatActivity {
                     }
                 });
 
-                View titleView = getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
+                View titleView =
+                        getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
                 ((TextView) titleView.findViewById(R.id.title)).setText(R.string.property_duration);
 
                 builder.setView(numberPicker)
@@ -263,9 +313,17 @@ public class ExamEditActivity extends AppCompatActivity {
                 mDurationDialog.show();
             }
         });
+    }
+
+    private void updateDurationText() {
+        mDurationText.setText(mExamDuration + " mins");
+        mDurationText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+    }
+
+    private void setupResitCheckbox() {
+        mExamIsResit = !mIsNew && mExam.getResit();
 
         CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox_resit);
-        mExamIsResit = !mIsNew && mExam.getResit();
         checkBox.setChecked(mExamIsResit);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -273,29 +331,6 @@ public class ExamEditActivity extends AppCompatActivity {
                 mExamIsResit = isChecked;
             }
         });
-    }
-
-    private void updateLinkedSubject() {
-        mSubjectText.setText(mSubject.getName());
-        mSubjectText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
-
-        Color color = new Color(mSubject.getColorId());
-        UiUtils.setBarColors(color, this, mToolbar);
-    }
-
-    private void updateDateText() {
-        mDateText.setText(mExamDate.format(DateTimeFormatter.ofPattern("d MMMM uuuu")));
-        mDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
-    }
-
-    private void updateTimeText() {
-        mTimeText.setText(mExamTime.toString());
-        mTimeText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
-    }
-
-    private void updateDurationText() {
-        mDurationText.setText(mExamDuration + " mins");
-        mDurationText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
     }
 
     @Override

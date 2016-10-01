@@ -70,19 +70,18 @@ public class ClassEditActivity extends AppCompatActivity {
     private Class mClass;
     private ArrayList<Integer> mClassDetailIds;
 
-    private Subject mSubject;
-
-    private EditText mEditTextModule;
-
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
 
+    private Subject mSubject;
     private TextView mSubjectText;
     private AlertDialog mSubjectDialog;
 
-    private TextView mStartDateText, mEndDateText;
+    private EditText mEditTextModule;
+
     private LocalDate mStartDate, mEndDate;
+    private TextView mStartDateText, mEndDateText;
 
     private DynamicPagerAdapter mPagerAdapter;
 
@@ -120,186 +119,46 @@ public class ClassEditActivity extends AppCompatActivity {
             }
         });
 
-        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        mPagerAdapter = new DynamicPagerAdapter();
-        viewPager.setAdapter(mPagerAdapter);
+        setupLayout(displayedDetailId);
+    }
 
-        mTabLayout.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        mTabLayout.setTabTextColors(
-                ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
-                ContextCompat.getColor(this, R.color.mdu_text_white));
-
-        mSubjectText = (TextView) findViewById(R.id.textView_subject);
-        mSubjectText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
-
-                final ArrayList<Subject> subjects = SubjectUtils.getSubjects(ClassEditActivity.this);
-                Collections.sort(subjects, new Comparator<Subject>() {
-                    @Override
-                    public int compare(Subject subject, Subject t1) {
-                        return subject.getName().compareTo(t1.getName());
-                    }
-                });
-
-                SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
-                adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
-                    @Override
-                    public void onEntryClick(View view, int position) {
-                        mSubject = subjects.get(position);
-                        mSubjectDialog.dismiss();
-                        updateLinkedSubject();
-                    }
-                });
-
-                RecyclerView recyclerView = new RecyclerView(getBaseContext());
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(ClassEditActivity.this));
-                recyclerView.setAdapter(adapter);
-
-                View titleView = getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
-                ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_subject);
-
-                builder.setView(recyclerView)
-                        .setCustomTitle(titleView)
-                        .setPositiveButton(R.string.action_new, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(ClassEditActivity.this, SubjectEditActivity.class);
-                                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
-                            }
-                        });
-
-                mSubjectDialog = builder.create();
-                mSubjectDialog.show();
-            }
-        });
+    private void setupLayout(int displayedDetailId) {
+        setupSubjectText();
 
         mEditTextModule = (EditText) findViewById(R.id.editText_module);
         if (!mIsNew) {
             mEditTextModule.setText(mClass.getModuleName());
         }
 
-        mStartDateText = (TextView) findViewById(R.id.textView_start_date);
-        mEndDateText = (TextView) findViewById(R.id.textView_end_date);
+        setupDateTexts();
+        setupDateSwitch();
 
-        if (!mIsNew && mClass.hasStartEndDates()) {
-            mStartDate = mClass.getStartDate();
-            mEndDate = mClass.getEndDate();
-            updateDateTexts();
-        }
+        setupExpandToggle();
 
-        mStartDateText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // note: -1 and +1s in code because Android month values are from 0-11 (to
-                // correspond with java.util.Calendar) but LocalDate month values are from 1-12
+        setupTabs(displayedDetailId);
+    }
 
-                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                        mStartDate = LocalDate.of(year, month + 1, dayOfMonth);
-                        updateDateTexts();
-                    }
-                };
+    private void setupTabs(int displayedDetailId) {
+        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-                boolean useNowTime = mIsNew || !mClass.hasStartEndDates();
+        mPagerAdapter = new DynamicPagerAdapter();
 
-                new DatePickerDialog(
-                        ClassEditActivity.this,
-                        listener,
-                        useNowTime ? LocalDate.now().getYear() : mStartDate.getYear(),
-                        useNowTime ? LocalDate.now().getMonthValue() - 1 : mStartDate.getMonthValue() - 1,
-                        useNowTime ? LocalDate.now().getDayOfMonth() : mStartDate.getDayOfMonth()
-                ).show();
-            }
-        });
-        mEndDateText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                        mEndDate = LocalDate.of(year, month + 1, dayOfMonth);
-                        updateDateTexts();
-                    }
-                };
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setAdapter(mPagerAdapter);
 
-                boolean useNowTime = mIsNew || !mClass.hasStartEndDates();
+        mTabLayout.setupWithViewPager(viewPager);
 
-                new DatePickerDialog(
-                        ClassEditActivity.this,
-                        listener,
-                        useNowTime ? LocalDate.now().getYear() : mEndDate.getYear(),
-                        useNowTime ? LocalDate.now().getMonthValue() - 1 : mEndDate.getMonthValue() - 1,
-                        useNowTime ? LocalDate.now().getDayOfMonth() : mEndDate.getDayOfMonth()
-                ).show();
-            }
-        });
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
-        Switch datesSwitch = (Switch) findViewById(R.id.dates_switch);
-        final View datesSection = findViewById(R.id.dates_section);
+        mTabLayout.setTabTextColors(
+                ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
+                ContextCompat.getColor(this, R.color.mdu_text_white));
 
-        datesSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    datesSection.setVisibility(View.VISIBLE);
-                    if (!mIsNew && mClass.hasStartEndDates()) {
-                        mStartDate = mClass.getStartDate();
-                        mEndDate = mClass.getEndDate();
-                    } else {
-                        LocalDate today = LocalDate.now();
-                        mStartDate = today;
-                        mEndDate = today.plusMonths(1);
-                    }
-                    updateDateTexts();
-                } else {
-                    datesSection.setVisibility(View.GONE);
-                    mStartDate = null;
-                    mEndDate = null;
-                }
-            }
-        });
+        populateTabs(viewPager, displayedDetailId);
+    }
 
-        if (!mIsNew && mClass.hasStartEndDates()) {
-            datesSwitch.setChecked(true);
-        }
-
-        final View detailSection = findViewById(R.id.linearLayout_details);
-
-        View expandToggle = findViewById(R.id.expand_toggle);
-        final ImageView expandIcon = (ImageView) findViewById(R.id.expand_icon);
-
-        expandToggle.setOnClickListener(new View.OnClickListener() {
-            boolean mIsExpanded = false;
-
-            @Override
-            public void onClick(View v) {
-                int drawableResId;
-                int sectionVisibility;
-
-                if (mIsExpanded) {
-                    // We should condense the detail section
-                    drawableResId = R.drawable.ic_expand_more_black_24dp;
-                    sectionVisibility = View.GONE;
-                } else {
-                    // We should expand the detail section
-                    drawableResId = R.drawable.ic_expand_less_black_24dp;
-                    sectionVisibility = View.VISIBLE;
-                }
-
-                detailSection.setVisibility(sectionVisibility);
-                expandIcon.setImageResource(drawableResId);
-
-                mIsExpanded = !mIsExpanded;
-            }
-        });
-
+    private void populateTabs(ViewPager viewPager, int displayedDetailId) {
         mClassDetailIds = new ArrayList<>();
 
         mAllClassTimeGroups = new ArrayList<>();
@@ -338,6 +197,59 @@ public class ClassEditActivity extends AppCompatActivity {
         viewPager.setCurrentItem(tabCount);
     }
 
+    private void setupSubjectText() {
+        mSubjectText = (TextView) findViewById(R.id.textView_subject);
+
+        mSubjectText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
+
+                final ArrayList<Subject> subjects =
+                        SubjectUtils.getSubjects(ClassEditActivity.this);
+                Collections.sort(subjects, new Comparator<Subject>() {
+                    @Override
+                    public int compare(Subject subject, Subject t1) {
+                        return subject.getName().compareTo(t1.getName());
+                    }
+                });
+
+                SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
+                adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
+                    @Override
+                    public void onEntryClick(View view, int position) {
+                        mSubject = subjects.get(position);
+                        mSubjectDialog.dismiss();
+                        updateLinkedSubject();
+                    }
+                });
+
+                RecyclerView recyclerView = new RecyclerView(getBaseContext());
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(ClassEditActivity.this));
+                recyclerView.setAdapter(adapter);
+
+                View titleView =
+                        getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
+                ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_subject);
+
+                builder.setView(recyclerView)
+                        .setCustomTitle(titleView)
+                        .setPositiveButton(R.string.action_new, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(
+                                        ClassEditActivity.this, SubjectEditActivity.class);
+                                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
+                            }
+                        });
+
+                mSubjectDialog = builder.create();
+                mSubjectDialog.show();
+            }
+        });
+    }
+
     private void updateLinkedSubject() {
         mSubjectText.setText(mSubject.getName());
         mSubjectText.setTextColor(ContextCompat.getColor(
@@ -345,6 +257,66 @@ public class ClassEditActivity extends AppCompatActivity {
 
         Color color = new Color(mSubject.getColorId());
         UiUtils.setBarColors(color, this, mAppBarLayout, mToolbar, mTabLayout);
+    }
+
+    private void setupDateTexts() {
+        mStartDateText = (TextView) findViewById(R.id.textView_start_date);
+        mEndDateText = (TextView) findViewById(R.id.textView_end_date);
+
+        if (!mIsNew && mClass.hasStartEndDates()) {
+            mStartDate = mClass.getStartDate();
+            mEndDate = mClass.getEndDate();
+            updateDateTexts();
+        }
+
+        mStartDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // note: -1 and +1s in code because Android month values are from 0-11 (to
+                // correspond with java.util.Calendar) but LocalDate month values are from 1-12
+
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                        mStartDate = LocalDate.of(year, month + 1, dayOfMonth);
+                        updateDateTexts();
+                    }
+                };
+
+                boolean useNowTime = mIsNew || !mClass.hasStartEndDates();
+
+                new DatePickerDialog(
+                        ClassEditActivity.this,
+                        listener,
+                        useNowTime ? LocalDate.now().getYear() : mStartDate.getYear(),
+                        useNowTime ? LocalDate.now().getMonthValue() - 1 : mStartDate.getMonthValue() - 1,
+                        useNowTime ? LocalDate.now().getDayOfMonth() : mStartDate.getDayOfMonth()
+                ).show();
+            }
+        });
+
+        mEndDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                        mEndDate = LocalDate.of(year, month + 1, dayOfMonth);
+                        updateDateTexts();
+                    }
+                };
+
+                boolean useNowTime = mIsNew || !mClass.hasStartEndDates();
+
+                new DatePickerDialog(
+                        ClassEditActivity.this,
+                        listener,
+                        useNowTime ? LocalDate.now().getYear() : mEndDate.getYear(),
+                        useNowTime ? LocalDate.now().getMonthValue() - 1 : mEndDate.getMonthValue() - 1,
+                        useNowTime ? LocalDate.now().getDayOfMonth() : mEndDate.getDayOfMonth()
+                ).show();
+            }
+        });
     }
 
     private void updateDateTexts() {
@@ -360,6 +332,69 @@ public class ClassEditActivity extends AppCompatActivity {
             mEndDateText.setTextColor(ContextCompat.getColor(
                     getBaseContext(), R.color.mdu_text_black));
         }
+    }
+
+    private void setupDateSwitch() {
+        Switch datesSwitch = (Switch) findViewById(R.id.dates_switch);
+        final View datesSection = findViewById(R.id.dates_section);
+
+        datesSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    datesSection.setVisibility(View.VISIBLE);
+                    if (!mIsNew && mClass.hasStartEndDates()) {
+                        mStartDate = mClass.getStartDate();
+                        mEndDate = mClass.getEndDate();
+                    } else {
+                        LocalDate today = LocalDate.now();
+                        mStartDate = today;
+                        mEndDate = today.plusMonths(1);
+                    }
+                    updateDateTexts();
+                } else {
+                    datesSection.setVisibility(View.GONE);
+                    mStartDate = null;
+                    mEndDate = null;
+                }
+            }
+        });
+
+        if (!mIsNew && mClass.hasStartEndDates()) {
+            datesSwitch.setChecked(true);
+        }
+    }
+
+    private void setupExpandToggle() {
+        final View detailSection = findViewById(R.id.linearLayout_details);
+
+        View expandToggle = findViewById(R.id.expand_toggle);
+        final ImageView expandIcon = (ImageView) findViewById(R.id.expand_icon);
+
+        expandToggle.setOnClickListener(new View.OnClickListener() {
+            boolean mIsExpanded = false;
+
+            @Override
+            public void onClick(View v) {
+                int drawableResId;
+                int sectionVisibility;
+
+                if (mIsExpanded) {
+                    // We should condense the detail section
+                    drawableResId = R.drawable.ic_expand_more_black_24dp;
+                    sectionVisibility = View.GONE;
+                } else {
+                    // We should expand the detail section
+                    drawableResId = R.drawable.ic_expand_less_black_24dp;
+                    sectionVisibility = View.VISIBLE;
+                }
+
+                detailSection.setVisibility(sectionVisibility);
+                expandIcon.setImageResource(drawableResId);
+
+                mIsExpanded = !mIsExpanded;
+            }
+        });
     }
 
     private void addDetailTab(ClassDetail classDetail, boolean placeHolder) {

@@ -28,6 +28,7 @@ public class SubjectsActivity extends AppCompatActivity {
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 1;
 
     private ArrayList<Subject> mSubjects;
+
     private SubjectsAdapter mAdapter;
 
     private RecyclerView mRecyclerView;
@@ -49,6 +50,26 @@ public class SubjectsActivity extends AppCompatActivity {
             }
         });
 
+        setupLayout();
+    }
+
+    private void setupLayout() {
+        setupList();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SubjectsActivity.this, SubjectEditActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
+            }
+        });
+
+        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
+        refreshPlaceholderStatus();
+    }
+
+    private void setupList() {
         mSubjects = SubjectUtils.getSubjects(this);
         sortList();
 
@@ -76,30 +97,10 @@ public class SubjectsActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SubjectsActivity.this, SubjectEditActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
-            }
-        });
-
-        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
-        refreshPlaceholderStatus();
-    }
-
-    private void refreshList() {
-        // change the list itself instead of reassigning so we can do notifyDataSetChanged()
-        mSubjects.clear();
-        mSubjects.addAll(SubjectUtils.getSubjects(this));
-        sortList();
-        mAdapter.notifyDataSetChanged();
-        refreshPlaceholderStatus();
     }
 
     private void sortList() {
@@ -109,6 +110,15 @@ public class SubjectsActivity extends AppCompatActivity {
                 return subject.getName().compareTo(t1.getName());
             }
         });
+    }
+
+    private void refreshList() {
+        // change the list itself instead of reassigning so we can do notifyDataSetChanged()
+        mSubjects.clear();
+        mSubjects.addAll(SubjectUtils.getSubjects(this));
+        sortList();
+        mAdapter.notifyDataSetChanged();
+        refreshPlaceholderStatus();
     }
 
     private void refreshPlaceholderStatus() {

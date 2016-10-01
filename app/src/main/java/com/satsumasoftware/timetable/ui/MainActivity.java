@@ -50,6 +50,10 @@ public class MainActivity extends BaseActivity {
         assert getSupportActionBar() != null;
         getSupportActionBar().setSubtitle(currentTimetable.getDisplayedName());
 
+        setupLayout();
+    }
+
+    private void setupLayout() {
         TextView infoBar = (TextView) findViewById(R.id.text_infoBar);
         infoBar.setVisibility(View.VISIBLE);
 
