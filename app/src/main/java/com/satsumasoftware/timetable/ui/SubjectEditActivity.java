@@ -170,11 +170,6 @@ public class SubjectEditActivity extends AppCompatActivity {
         newName = TextUtilsKt.title(newName);
 
         String newAbbreviation = mEditTextAbbreviation.getText().toString();
-        if (newAbbreviation.length() == 0) {
-            Snackbar.make(findViewById(R.id.rootView), R.string.message_invalid_name,
-                    Snackbar.LENGTH_SHORT).show();
-            return;
-        }
 
         if (mIsNewSubject) {
             Timetable currentTimetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
