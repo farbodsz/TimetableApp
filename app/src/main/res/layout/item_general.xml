@@ -26,8 +26,9 @@
             android:text="Title"
             android:textColor="@color/mdu_text_black"
             android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/text3" />
 
         <TextView
             android:id="@+id/text2"
