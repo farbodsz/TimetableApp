@@ -16,7 +16,7 @@ class ExamUtils {
 
     companion object {
 
-        const val LOG_TAG = "ExamUtils"
+        private const val LOG_TAG = "ExamUtils"
 
         @JvmStatic
         fun getExams(context: Context, application: Application): ArrayList<Exam> {

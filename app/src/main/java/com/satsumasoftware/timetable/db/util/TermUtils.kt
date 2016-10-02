@@ -13,7 +13,7 @@ class TermUtils {
 
     companion object {
 
-        const val LOG_TAG = "TermUtils"
+        private const val LOG_TAG = "TermUtils"
 
         @JvmStatic
         fun getTerms(context: Context, timetableId: Int): ArrayList<Term> {

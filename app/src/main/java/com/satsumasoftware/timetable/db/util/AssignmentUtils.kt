@@ -19,7 +19,7 @@ class AssignmentUtils {
 
     companion object {
 
-        const val LOG_TAG = "AssignmentUtils"
+        private const val LOG_TAG = "AssignmentUtils"
 
         @JvmStatic
         fun getAssignments(context: Context, application: Application): ArrayList<Assignment> {

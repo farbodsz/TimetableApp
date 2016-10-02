@@ -27,9 +27,9 @@ class ClassUtils {
 
     companion object {
 
-        const val LOG_TAG = "ClassUtils"
+        private const val LOG_TAG = "ClassUtils"
 
-        const val WEEK_AS_MILLISECONDS = 604800000L
+        private const val WEEK_AS_MILLISECONDS = 604800000L
 
         @JvmStatic
         fun getClasses(activity: Activity): ArrayList<Class> {

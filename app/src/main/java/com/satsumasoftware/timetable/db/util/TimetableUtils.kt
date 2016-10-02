@@ -16,7 +16,7 @@ class TimetableUtils {
 
     companion object {
 
-        const val LOG_TAG = "TimetableUtils"
+        private const val LOG_TAG = "TimetableUtils"
 
         @JvmStatic
         fun getTimetables(context: Context): ArrayList<Timetable> {

@@ -14,7 +14,7 @@ class SubjectUtils {
 
     companion object {
 
-        const val LOG_TAG = "SubjectUtils"
+        private const val LOG_TAG = "SubjectUtils"
 
         @JvmStatic
         fun getSubjects(activity: Activity): ArrayList<Subject> {
