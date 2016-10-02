@@ -18,7 +18,8 @@ class TimetableUtils {
 
         const val LOG_TAG = "TimetableUtils"
 
-        @JvmStatic fun getTimetables(context: Context): ArrayList<Timetable> {
+        @JvmStatic
+        fun getTimetables(context: Context): ArrayList<Timetable> {
             val timetables = ArrayList<Timetable>()
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
@@ -32,7 +33,8 @@ class TimetableUtils {
             return timetables
         }
 
-        @JvmStatic fun addTimetable(context: Context, timetable: Timetable) {
+        @JvmStatic
+        fun addTimetable(context: Context, timetable: Timetable) {
             val values = ContentValues()
             with(values) {
                 put(TimetablesSchema._ID, timetable.id)
@@ -59,7 +61,8 @@ class TimetableUtils {
             Log.i(LOG_TAG, "Deleted Timetable with id $timetableId")
         }
 
-        @JvmStatic fun replaceTimetable(activity: Activity, oldTimetableId: Int, newTimetable: Timetable) {
+        @JvmStatic
+        fun replaceTimetable(activity: Activity, oldTimetableId: Int, newTimetable: Timetable) {
             Log.i(LOG_TAG, "Replacing Timetable...")
 
             deleteTimetable(activity, oldTimetableId)
@@ -69,7 +72,8 @@ class TimetableUtils {
             (activity.application as TimetableApplication).refreshAlarms(activity)
         }
 
-        @JvmStatic fun getHighestTimetableId(context: Context): Int {
+        @JvmStatic
+        fun getHighestTimetableId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     TimetablesSchema.TABLE_NAME,
@@ -88,7 +92,8 @@ class TimetableUtils {
             return highestId
         }
 
-        @JvmStatic fun completelyDeleteTimetable(context: Context, timetableId: Int) {
+        @JvmStatic
+        fun completelyDeleteTimetable(context: Context, timetableId: Int) {
             Log.i(LOG_TAG, "Deleting everything related to Timetable of id $timetableId")
 
             deleteTimetable(context, timetableId)

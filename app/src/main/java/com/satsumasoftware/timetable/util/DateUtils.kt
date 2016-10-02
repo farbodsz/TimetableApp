@@ -22,7 +22,8 @@ class DateUtils private constructor() {
         private const val ID_THIS_MONTH = 5
         private const val ID_LATER = 6
 
-        @JvmStatic fun getDatePeriodId(dueDate: LocalDate): Int {
+        @JvmStatic
+        fun getDatePeriodId(dueDate: LocalDate): Int {
             val now = LocalDate.now()
             val woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear()  // to get week of year
             return when {
@@ -36,7 +37,8 @@ class DateUtils private constructor() {
             }
         }
 
-        @JvmStatic fun makeHeaderName(context: Context, timePeriodId: Int): String {
+        @JvmStatic
+        fun makeHeaderName(context: Context, timePeriodId: Int): String {
             val stringRes = when (timePeriodId) {
                 ID_OVERDUE -> R.string.due_overdue
                 ID_TODAY -> R.string.due_today
@@ -51,7 +53,8 @@ class DateUtils private constructor() {
         }
 
         @JvmOverloads
-        @JvmStatic fun findWeekNumber(application: Application,
+        @JvmStatic
+        fun findWeekNumber(application: Application,
                                       localDate: LocalDate = LocalDate.now()): Int {
             val timetable = (application as TimetableApplication).currentTimetable!!
 
@@ -62,7 +65,8 @@ class DateUtils private constructor() {
             return weekNo
         }
 
-        @JvmStatic fun asCalendar(localDateTime: LocalDateTime) = GregorianCalendar(
+        @JvmStatic
+        fun asCalendar(localDateTime: LocalDateTime) = GregorianCalendar(
                 localDateTime.year,
                 localDateTime.monthValue - 1,
                 localDateTime.dayOfMonth,

@@ -21,7 +21,8 @@ class AssignmentUtils {
 
         const val LOG_TAG = "AssignmentUtils"
 
-        @JvmStatic fun getAssignments(context: Context, application: Application): ArrayList<Assignment> {
+        @JvmStatic
+        fun getAssignments(context: Context, application: Application): ArrayList<Assignment> {
             val assignments = ArrayList<Assignment>()
 
             val timetable = (application as TimetableApplication).currentTimetable!!
@@ -42,7 +43,8 @@ class AssignmentUtils {
             return assignments
         }
 
-        @JvmStatic fun getAllAssignments(context: Context): ArrayList<Assignment> {
+        @JvmStatic
+        fun getAllAssignments(context: Context): ArrayList<Assignment> {
             val assignments = ArrayList<Assignment>()
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
@@ -56,7 +58,8 @@ class AssignmentUtils {
             return assignments
         }
 
-        @JvmStatic fun getAssignmentsForClass(context: Context, classId: Int): ArrayList<Assignment> {
+        @JvmStatic
+        fun getAssignmentsForClass(context: Context, classId: Int): ArrayList<Assignment> {
             val assignments = ArrayList<Assignment>()
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
@@ -74,7 +77,8 @@ class AssignmentUtils {
             return assignments
         }
 
-        @JvmStatic fun addAssignment(context: Context, assignment: Assignment) {
+        @JvmStatic
+        fun addAssignment(context: Context, assignment: Assignment) {
             val values = ContentValues()
             with(values) {
                 put(AssignmentsSchema._ID, assignment.id)
@@ -116,7 +120,8 @@ class AssignmentUtils {
                     repeatInterval)
         }
 
-        @JvmStatic fun deleteAssignment(context: Context, assignmentId: Int) {
+        @JvmStatic
+        fun deleteAssignment(context: Context, assignmentId: Int) {
             val db = TimetableDbHelper.getInstance(context).writableDatabase
             db.delete(AssignmentsSchema.TABLE_NAME,
                     "${AssignmentsSchema._ID}=?",
@@ -125,13 +130,15 @@ class AssignmentUtils {
             Log.i(LOG_TAG, "Deleted Assignment with id $assignmentId")
         }
 
-        @JvmStatic fun replaceAssignment(context: Context, oldAssignmentId: Int, newAssignment: Assignment) {
+        @JvmStatic
+        fun replaceAssignment(context: Context, oldAssignmentId: Int, newAssignment: Assignment) {
             Log.i(LOG_TAG, "Replacing Assignment...")
             deleteAssignment(context, oldAssignmentId)
             addAssignment(context, newAssignment)
         }
 
-        @JvmStatic fun getHighestAssignmentId(context: Context): Int {
+        @JvmStatic
+        fun getHighestAssignmentId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     AssignmentsSchema.TABLE_NAME,

@@ -31,7 +31,8 @@ class ClassUtils {
 
         const val WEEK_AS_MILLISECONDS = 604800000L
 
-        @JvmStatic fun getClasses(activity: Activity): ArrayList<Class> {
+        @JvmStatic
+        fun getClasses(activity: Activity): ArrayList<Class> {
             val classes = ArrayList<Class>()
 
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
@@ -53,7 +54,8 @@ class ClassUtils {
             return classes
         }
 
-        @JvmStatic fun getClassesForSubject(context: Context, subjectId: Int): ArrayList<Class> {
+        @JvmStatic
+        fun getClassesForSubject(context: Context, subjectId: Int): ArrayList<Class> {
             val classes = ArrayList<Class>()
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
@@ -71,7 +73,8 @@ class ClassUtils {
             return classes
         }
 
-        @JvmStatic fun getClassDetailsForClass(context: Context, classId: Int): ArrayList<ClassDetail> {
+        @JvmStatic
+        fun getClassDetailsForClass(context: Context, classId: Int): ArrayList<ClassDetail> {
             val classDetails = ArrayList<ClassDetail>()
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
@@ -89,7 +92,8 @@ class ClassUtils {
             return classDetails
         }
 
-        @JvmStatic fun getClassTimesForDetail(context: Context, classDetailId: Int): ArrayList<ClassTime> {
+        @JvmStatic
+        fun getClassTimesForDetail(context: Context, classDetailId: Int): ArrayList<ClassTime> {
             val classTimes = ArrayList<ClassTime>()
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
@@ -107,7 +111,8 @@ class ClassUtils {
             return classTimes
         }
 
-        @JvmStatic fun getHighestClassId(context: Context): Int {
+        @JvmStatic
+        fun getHighestClassId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ClassesSchema.TABLE_NAME,
@@ -126,7 +131,8 @@ class ClassUtils {
             return highestId
         }
 
-        @JvmStatic fun addClass(context: Context, cls: Class) {
+        @JvmStatic
+        fun addClass(context: Context, cls: Class) {
             val values = ContentValues()
             with(values) {
                 put(ClassesSchema._ID, cls.id)
@@ -154,13 +160,15 @@ class ClassUtils {
             Log.i(LOG_TAG, "Deleted Class with id $classId")
         }
 
-        @JvmStatic fun replaceClass(context: Context, oldClassId: Int, newClass: Class) {
+        @JvmStatic
+        fun replaceClass(context: Context, oldClassId: Int, newClass: Class) {
             Log.i(LOG_TAG, "Replacing Class...")
             deleteClass(context, oldClassId)
             addClass(context, newClass)
         }
 
-        @JvmStatic fun getHighestClassDetailId(context: Context): Int {
+        @JvmStatic
+        fun getHighestClassDetailId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ClassDetailsSchema.TABLE_NAME,
@@ -179,7 +187,8 @@ class ClassUtils {
             return highestId
         }
 
-        @JvmStatic fun addClassDetail(context: Context, classDetail: ClassDetail) {
+        @JvmStatic
+        fun addClassDetail(context: Context, classDetail: ClassDetail) {
             val values = ContentValues()
             with(values) {
                 put(ClassDetailsSchema._ID, classDetail.id)
@@ -202,18 +211,21 @@ class ClassUtils {
             Log.i(LOG_TAG, "Deleted ClassDetail with id $classDetailId")
         }
 
-        @JvmStatic fun replaceClassDetail(context: Context, oldClassDetailId: Int,
+        @JvmStatic
+        fun replaceClassDetail(context: Context, oldClassDetailId: Int,
                                           newClassDetail: ClassDetail) {
             Log.i(LOG_TAG, "Replacing ClassDetail...")
             deleteClassDetail(context, oldClassDetailId)
             addClassDetail(context, newClassDetail)
         }
 
-        @JvmStatic fun getAllClassTimes(context: Context): ArrayList<ClassTime> {
+        @JvmStatic
+        fun getAllClassTimes(context: Context): ArrayList<ClassTime> {
             return getAllClassTimes(context, null, null)
         }
 
-        @JvmStatic fun getAllClassTimes(context: Context, timetable: Timetable): ArrayList<ClassTime> {
+        @JvmStatic
+        fun getAllClassTimes(context: Context, timetable: Timetable): ArrayList<ClassTime> {
             return getAllClassTimes(context,
                     ClassTimesSchema.COL_TIMETABLE_ID + "=?",
                     arrayOf(timetable.id.toString()))
@@ -252,7 +264,8 @@ class ClassUtils {
                     null,
                     "${ClassTimesSchema.COL_TIMETABLE_ID}=? AND ${ClassTimesSchema.COL_DAY}=? " +
                             "AND ${ClassTimesSchema.COL_WEEK_NUMBER}=?",
-                    arrayOf(timetable.id.toString(), dayOfWeek.value.toString(), weekNumber.toString()),
+                    arrayOf(timetable.id.toString(), dayOfWeek.value.toString(),
+                            weekNumber.toString()),
                     null, null, null)
 
             cursor.moveToFirst()
@@ -275,7 +288,8 @@ class ClassUtils {
             return classTimes
         }
 
-        @JvmStatic fun getHighestClassTimeId(context: Context): Int {
+        @JvmStatic
+        fun getHighestClassTimeId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ClassTimesSchema.TABLE_NAME,
@@ -294,7 +308,8 @@ class ClassUtils {
             return highestId
         }
 
-        @JvmStatic fun addClassTime(activity: Activity, classTime: ClassTime) {
+        @JvmStatic
+        fun addClassTime(activity: Activity, classTime: ClassTime) {
             val values = ContentValues()
             with(values) {
                 put(ClassTimesSchema._ID, classTime.id)
@@ -316,10 +331,13 @@ class ClassUtils {
             Log.i(LOG_TAG, "Added ClassTime with id ${classTime.id}")
         }
 
-        @JvmStatic fun addAlarmsForClassTime(activity: Activity, classTime: ClassTime) =
+        @JvmStatic
+        fun addAlarmsForClassTime(activity: Activity, classTime: ClassTime) =
                 addAlarmsForClassTime(activity, activity.application, classTime)
 
-        @JvmStatic fun addAlarmsForClassTime(context: Context, application: Application, classTime: ClassTime) {
+        @JvmStatic
+        fun addAlarmsForClassTime(context: Context, application: Application,
+                                  classTime: ClassTime) {
             // First, try to find a suitable start date for the alarms
 
             var possibleDate = if (classTime.day != LocalDate.now().dayOfWeek ||
@@ -367,13 +385,8 @@ class ClassUtils {
             Log.i(LOG_TAG, "Deleted ClassTime with id $classTimeId")
         }
 
-        @JvmStatic fun replaceClassTime(activity: Activity, oldClassTimeId: Int, newClassTime: ClassTime) {
-            Log.i(LOG_TAG, "Replacing ClassTime...")
-            deleteClassTime(activity, oldClassTimeId)
-            addClassTime(activity, newClassTime)
-        }
-
-        @JvmStatic fun completelyDeleteClass(context: Context, cls: Class) {
+        @JvmStatic
+        fun completelyDeleteClass(context: Context, cls: Class) {
             Log.i(LOG_TAG, "Deleting everything related to Class of id ${cls.id}")
 
             deleteClass(context, cls.id)
@@ -387,7 +400,8 @@ class ClassUtils {
             }
         }
 
-        @JvmStatic fun completelyDeleteClassDetail(context: Context, classDetailId: Int) {
+        @JvmStatic
+        fun completelyDeleteClassDetail(context: Context, classDetailId: Int) {
             Log.i(LOG_TAG, "Deleting everything related to ClassDetail of id $classDetailId")
 
             deleteClassDetail(context, classDetailId)
@@ -397,7 +411,8 @@ class ClassUtils {
             }
         }
 
-        @JvmStatic fun completelyDeleteClassTime(context: Context, classTimeId: Int) {
+        @JvmStatic
+        fun completelyDeleteClassTime(context: Context, classTimeId: Int) {
             Log.i(LOG_TAG, "Deleting everything related to ClassTime of id $classTimeId")
 
             deleteClassTime(context, classTimeId)

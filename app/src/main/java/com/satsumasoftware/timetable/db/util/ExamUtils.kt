@@ -18,7 +18,8 @@ class ExamUtils {
 
         const val LOG_TAG = "ExamUtils"
 
-        @JvmStatic fun getExams(context: Context, application: Application): ArrayList<Exam> {
+        @JvmStatic
+        fun getExams(context: Context, application: Application): ArrayList<Exam> {
             val exams = ArrayList<Exam>()
 
             val timetable = (application as TimetableApplication).currentTimetable!!
@@ -39,7 +40,8 @@ class ExamUtils {
             return exams
         }
 
-        @JvmStatic fun getAllExams(context: Context): ArrayList<Exam> {
+        @JvmStatic
+        fun getAllExams(context: Context): ArrayList<Exam> {
             val exams = ArrayList<Exam>()
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
@@ -53,7 +55,8 @@ class ExamUtils {
             return exams
         }
 
-        @JvmStatic fun getExamsForSubject(context: Context, subjectId: Int): ArrayList<Exam> {
+        @JvmStatic
+        fun getExamsForSubject(context: Context, subjectId: Int): ArrayList<Exam> {
             val exams = ArrayList<Exam>()
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
@@ -71,7 +74,8 @@ class ExamUtils {
             return exams
         }
 
-        @JvmStatic fun addExam(context: Context, exam: Exam) {
+        @JvmStatic
+        fun addExam(context: Context, exam: Exam) {
             val values = ContentValues()
             with(values) {
                 put(ExamsSchema._ID, exam.id)
@@ -97,7 +101,8 @@ class ExamUtils {
             Log.i(LOG_TAG, "Added Exam with id ${exam.id}")
         }
 
-        @JvmStatic fun addAlarmForExam(context: Context, exam: Exam) {
+        @JvmStatic
+        fun addAlarmForExam(context: Context, exam: Exam) {
             val remindDate = exam.makeDateTimeObject().minusMinutes(30)
             AlarmReceiver().setAlarm(context,
                     AlarmReceiver.Type.EXAM,
@@ -105,7 +110,8 @@ class ExamUtils {
                     exam.id)
         }
 
-        @JvmStatic fun deleteExam(context: Context, examId: Int) {
+        @JvmStatic
+        fun deleteExam(context: Context, examId: Int) {
             val db = TimetableDbHelper.getInstance(context).writableDatabase
             db.delete(ExamsSchema.TABLE_NAME,
                     "${ExamsSchema._ID}=?",
@@ -116,13 +122,15 @@ class ExamUtils {
             Log.i(LOG_TAG, "Deleted Exam with id $examId")
         }
 
-        @JvmStatic fun replaceExam(context: Context, oldExamId: Int, newExam: Exam) {
+        @JvmStatic
+        fun replaceExam(context: Context, oldExamId: Int, newExam: Exam) {
             Log.i(LOG_TAG, "Replacing Exam...")
             deleteExam(context, oldExamId)
             addExam(context, newExam)
         }
 
-        @JvmStatic fun getHighestExamId(context: Context): Int {
+        @JvmStatic
+        fun getHighestExamId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ExamsSchema.TABLE_NAME,

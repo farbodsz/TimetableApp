@@ -36,7 +36,8 @@ class UiUtils private constructor() {
 
         @JvmOverloads
         @JvmStatic
-        fun tintDrawable(context: Context, @DrawableRes drawableRes: Int, @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
+        fun tintDrawable(context: Context, @DrawableRes drawableRes: Int,
+                         @ColorRes colorRes: Int = R.color.mdu_white): Drawable {
             val vectorDrawableCompat = VectorDrawableCompat.create(context.resources, drawableRes, null)
             val drawable = DrawableCompat.wrap(vectorDrawableCompat!!.current)
             DrawableCompat.setTint(drawable, ContextCompat.getColor(context, colorRes))

@@ -16,7 +16,8 @@ class SubjectUtils {
 
         const val LOG_TAG = "SubjectUtils"
 
-        @JvmStatic fun getSubjects(activity: Activity): ArrayList<Subject> {
+        @JvmStatic
+        fun getSubjects(activity: Activity): ArrayList<Subject> {
             val subjects = ArrayList<Subject>()
 
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
@@ -37,7 +38,8 @@ class SubjectUtils {
             return subjects
         }
 
-        @JvmStatic fun addSubject(context: Context, subject: Subject) {
+        @JvmStatic
+        fun addSubject(context: Context, subject: Subject) {
             val values = ContentValues()
             with(values) {
                 put(SubjectsSchema._ID, subject.id)
@@ -60,7 +62,8 @@ class SubjectUtils {
             Log.i(LOG_TAG, "Deleted Subject with id $subjectId")
         }
 
-        @JvmStatic fun completelyDeleteSubject(context: Context, subject: Subject) {
+        @JvmStatic
+        fun completelyDeleteSubject(context: Context, subject: Subject) {
             Log.i(LOG_TAG, "Deleting everything related to Subject with id ${subject.id}")
 
             deleteSubject(context, subject.id)
@@ -74,13 +77,15 @@ class SubjectUtils {
             }
         }
 
-        @JvmStatic fun replaceSubject(context: Context, oldSubjectId: Int, newSubject: Subject) {
+        @JvmStatic
+        fun replaceSubject(context: Context, oldSubjectId: Int, newSubject: Subject) {
             Log.i(LOG_TAG, "Replacing Subject...")
             deleteSubject(context, oldSubjectId)
             addSubject(context, newSubject)
         }
 
-        @JvmStatic fun getHighestSubjectId(context: Context): Int {
+        @JvmStatic
+        fun getHighestSubjectId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     SubjectsSchema.TABLE_NAME,

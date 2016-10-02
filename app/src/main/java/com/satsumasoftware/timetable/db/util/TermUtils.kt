@@ -15,7 +15,8 @@ class TermUtils {
 
         const val LOG_TAG = "TermUtils"
 
-        @JvmStatic fun getTerms(context: Context, timetableId: Int): ArrayList<Term> {
+        @JvmStatic
+        fun getTerms(context: Context, timetableId: Int): ArrayList<Term> {
             val terms = ArrayList<Term>()
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
@@ -33,7 +34,8 @@ class TermUtils {
             return terms
         }
 
-        @JvmStatic fun addTerm(context: Context, term: Term) {
+        @JvmStatic
+        fun addTerm(context: Context, term: Term) {
             val values = ContentValues()
             with(values) {
                 put(TermsSchema._ID, term.id)
@@ -52,7 +54,8 @@ class TermUtils {
             Log.i(LOG_TAG, "Added Term with id ${term.id}")
         }
 
-        @JvmStatic fun deleteTerm(context: Context, termId: Int) {
+        @JvmStatic
+        fun deleteTerm(context: Context, termId: Int) {
             val db = TimetableDbHelper.getInstance(context).writableDatabase
             db.delete(TermsSchema.TABLE_NAME,
                     "${TermsSchema._ID}=?",
@@ -60,14 +63,16 @@ class TermUtils {
             Log.i(LOG_TAG, "Deleted Term with id $termId")
         }
 
-        @JvmStatic fun replaceTerm(activity: Activity, oldTermId: Int, newTerm: Term) {
+        @JvmStatic
+        fun replaceTerm(activity: Activity, oldTermId: Int, newTerm: Term) {
             Log.i(LOG_TAG, "Replacing Term...")
 
             deleteTerm(activity, oldTermId)
             addTerm(activity, newTerm)
         }
 
-        @JvmStatic fun getHighestTermId(context: Context): Int {
+        @JvmStatic
+        fun getHighestTermId(context: Context): Int {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     TermsSchema.TABLE_NAME,
