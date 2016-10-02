@@ -30,21 +30,20 @@ import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 
-// TODO: Organize this so it's clear what's going on
 public class ClassTimeEditActivity extends AppCompatActivity {
 
     protected static final String EXTRA_CLASS_TIME = "extra_class_time";
     protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
     protected static final String EXTRA_TAB_POSITION = "extra_tab_position";
 
+    private int mClassDetailId;
+    private ArrayList<ClassTime> mClassTimes;
     private int mTabPos;
+
     private boolean mIsNewTime;
 
-    private ArrayList<ClassTime> mClassTimes;
-    private int mClassDetailId;
-
-    private TextView mStartTimeText, mEndTimeText;
     private LocalTime mStartTime, mEndTime;
+    private TextView mStartTimeText, mEndTimeText;
 
     private TextView mDayText;
     private AlertDialog mDayDialog;
@@ -72,25 +71,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         }
         mIsNewTime = mClassTimes == null;
 
-        // validation
-        if (!mIsNewTime) {
-            LocalTime startTime = null;
-            LocalTime endTime = null;
-            for (ClassTime classTime : mClassTimes) {
-                if (startTime == null) {
-                    // set values in first iteration
-                    startTime = classTime.getStartTime();
-                    endTime = classTime.getEndTime();
-                    continue;
-                }
-
-                if (!classTime.getStartTime().equals(startTime) ||
-                        !classTime.getEndTime().equals(endTime)) {
-                    throw new IllegalArgumentException("invalid time - all start and end times " +
-                            "must be the same");
-                }
-            }
-        }
+        validateClassTimes();
 
         mDaysOfWeek = new SparseArray<>();
         mWeekNumbers = new SparseArray<>();
@@ -107,7 +88,47 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             }
         });
 
+        setupLayout();
+    }
+
+    private void validateClassTimes() {
+        // Here we make sure that all class times have the same start and end date.
+        // This is necessary because of how class times are presented and grouped in this
+        // edit page.
+
+        if (mIsNewTime) {
+            // We won't have any class times to validate if it's new
+            return;
+        }
+
+        LocalTime baseStartTime = null;
+        LocalTime baseEndTime = null;
+
+        for (ClassTime classTime : mClassTimes) {
+            if (baseStartTime == null) {
+                // We need values to compare/validate against, so set these first
+                baseStartTime = classTime.getStartTime();
+                baseEndTime = classTime.getEndTime();
+                continue;
+            }
+
+            if (!classTime.getStartTime().equals(baseStartTime) ||
+                    !classTime.getEndTime().equals(baseEndTime)) {
+                throw new IllegalArgumentException("invalid time - all start and end times " +
+                        "must be the same");
+            }
+        }
+    }
+
+    private void setupLayout() {
+        setupDayText();
+        setupWeekText();
+        setupTimeTexts();
+    }
+
+    private void setupDayText() {
         mDayText = (TextView) findViewById(R.id.textView_day);
+
         if (!mIsNewTime) {
             for (ClassTime classTime : mClassTimes) {
                 DayOfWeek dayOfWeek = classTime.getDay();
@@ -115,10 +136,12 @@ public class ClassTimeEditActivity extends AppCompatActivity {
             }
             updateDayText();
         }
+
         mDayText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(ClassTimeEditActivity.this);
+                final AlertDialog.Builder builder =
+                        new AlertDialog.Builder(ClassTimeEditActivity.this);
 
                 boolean[] checkedItems = new boolean[7];
                 for (int i = 0; i < 7; i++) {
@@ -128,7 +151,8 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 builder.setTitle(R.string.property_days)
                         .setMultiChoiceItems(R.array.days, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            public void onClick(DialogInterface dialog, int which,
+                                                boolean isChecked) {
                                 if (isChecked) {
                                     mDaysOfWeek.put(which, DayOfWeek.of(which + 1));
                                 } else {
@@ -146,121 +170,6 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
                 mDayDialog = builder.create();
                 mDayDialog.show();
-            }
-        });
-
-        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
-        assert timetable != null;
-        final int weekRotations = timetable.getWeekRotations();
-
-        mWeekText = (TextView) findViewById(R.id.textView_week);
-
-        if (timetable.hasFixedScheduling()) {
-            mWeekText.setVisibility(View.GONE);
-            findViewById(R.id.divider).setVisibility(View.GONE);
-            mWeekNumbers.put(0, 1);
-
-        } else {
-            if (!mIsNewTime) {
-                for (ClassTime classTime : mClassTimes) {
-                    int weekNumber = classTime.getWeekNumber();
-                    mWeekNumbers.put(weekNumber - 1, weekNumber);
-                }
-                updateWeekText();
-            }
-
-            mWeekText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(ClassTimeEditActivity.this);
-
-                    ArrayList<String> weekItemsList = new ArrayList<>();
-                    for (int i = 1; i <= weekRotations; i++) {
-                        String item = ClassTime.getWeekText(ClassTimeEditActivity.this, i);
-                        weekItemsList.add(item);
-                    }
-                    final String[] weekItems = weekItemsList.toArray(new String[weekItemsList.size()]);
-
-                    boolean[] checkedItems = new boolean[weekRotations];
-                    for (int i = 0; i < weekRotations; i++) {
-                        checkedItems[i] = mWeekNumbers.get(i) != null;
-                    }
-
-                    builder.setTitle(R.string.property_weeks)
-                            .setMultiChoiceItems(weekItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                    if (isChecked) {
-                                        mWeekNumbers.put(which, which + 1);
-                                    } else {
-                                        mWeekNumbers.remove(which);
-                                    }
-                                }
-                            })
-                            .setPositiveButton(R.string.action_done, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    updateWeekText();
-                                    mWeekDialog.dismiss();
-                                }
-                            });
-
-                    mWeekDialog = builder.create();
-                    mWeekDialog.show();
-                }
-            });
-        }
-
-        mStartTimeText = (TextView) findViewById(R.id.textView_start_time);
-        mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
-
-        if (!mIsNewTime) {
-            mStartTime = mClassTimes.get(0).getStartTime();
-            mEndTime = mClassTimes.get(0).getEndTime();
-            updateTimeTexts();
-        }
-
-        mStartTimeText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int initialHour = 9;
-                int initialMinute = 0;
-                if (mStartTime != null) {
-                    initialHour = mStartTime.getHour();
-                    initialMinute = mStartTime.getMinute();
-                }
-
-                new TimePickerDialog(ClassTimeEditActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        mStartTime = LocalTime.of(hour, minute);
-                        updateTimeTexts();
-                    }
-                }, initialHour, initialMinute, true).show();
-            }
-        });
-        mEndTimeText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int initialHour = 9;
-                int initialMinute = 0;
-                if (mEndTime != null) {
-                    initialHour = mEndTime.getHour();
-                    initialMinute = mEndTime.getMinute();
-                } else if (mStartTime != null) {
-                    int defaultDuration = PrefUtils.getDefaultLessonDuration(getBaseContext());
-                    LocalTime endTime = mStartTime.plusMinutes(defaultDuration);
-                    initialHour = endTime.getHour();
-                    initialMinute = endTime.getMinute();
-                }
-
-                new TimePickerDialog(ClassTimeEditActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        mEndTime = LocalTime.of(hour, minute);
-                        updateTimeTexts();
-                    }
-                }, initialHour, initialMinute, true).show();
             }
         });
     }
@@ -286,6 +195,73 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         mDayText.setText(displayed);
         mDayText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+    }
+
+    private void setupWeekText() {
+        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        assert timetable != null;
+        final int weekRotations = timetable.getWeekRotations();
+
+        mWeekText = (TextView) findViewById(R.id.textView_week);
+
+        if (timetable.hasFixedScheduling()) {
+            mWeekText.setVisibility(View.GONE);
+            findViewById(R.id.divider).setVisibility(View.GONE);
+            mWeekNumbers.put(0, 1);
+
+        } else {
+            if (!mIsNewTime) {
+                for (ClassTime classTime : mClassTimes) {
+                    int weekNumber = classTime.getWeekNumber();
+                    mWeekNumbers.put(weekNumber - 1, weekNumber);
+                }
+                updateWeekText();
+            }
+
+            mWeekText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final AlertDialog.Builder builder =
+                            new AlertDialog.Builder(ClassTimeEditActivity.this);
+
+                    ArrayList<String> weekItemsList = new ArrayList<>();
+                    for (int i = 1; i <= weekRotations; i++) {
+                        String item = ClassTime.getWeekText(ClassTimeEditActivity.this, i);
+                        weekItemsList.add(item);
+                    }
+                    final String[] weekItems =
+                            weekItemsList.toArray(new String[weekItemsList.size()]);
+
+                    boolean[] checkedItems = new boolean[weekRotations];
+                    for (int i = 0; i < weekRotations; i++) {
+                        checkedItems[i] = mWeekNumbers.get(i) != null;
+                    }
+
+                    builder.setTitle(R.string.property_weeks)
+                            .setMultiChoiceItems(weekItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which,
+                                                    boolean isChecked) {
+                                    if (isChecked) {
+                                        mWeekNumbers.put(which, which + 1);
+                                    } else {
+                                        mWeekNumbers.remove(which);
+                                    }
+                                }
+                            })
+                            .setPositiveButton(R.string.action_done, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    updateWeekText();
+                                    mWeekDialog.dismiss();
+                                }
+                            });
+
+                    mWeekDialog = builder.create();
+                    mWeekDialog.show();
+                }
+            });
+        }
     }
 
     private void updateWeekText() {
@@ -314,14 +290,72 @@ public class ClassTimeEditActivity extends AppCompatActivity {
         mWeekText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
     }
 
+    private void setupTimeTexts() {
+        mStartTimeText = (TextView) findViewById(R.id.textView_start_time);
+        mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
+
+        if (!mIsNewTime) {
+            mStartTime = mClassTimes.get(0).getStartTime();
+            mEndTime = mClassTimes.get(0).getEndTime();
+            updateTimeTexts();
+        }
+
+        mStartTimeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int initialHour = 9;
+                int initialMinute = 0;
+                if (mStartTime != null) {
+                    initialHour = mStartTime.getHour();
+                    initialMinute = mStartTime.getMinute();
+                }
+
+                new TimePickerDialog(ClassTimeEditActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                        mStartTime = LocalTime.of(hour, minute);
+                        updateTimeTexts();
+                    }
+                }, initialHour, initialMinute, true).show();
+            }
+        });
+
+        mEndTimeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int initialHour = 9;
+                int initialMinute = 0;
+                if (mEndTime != null) {
+                    initialHour = mEndTime.getHour();
+                    initialMinute = mEndTime.getMinute();
+                } else if (mStartTime != null) {
+                    int defaultDuration = PrefUtils.getDefaultLessonDuration(getBaseContext());
+                    LocalTime endTime = mStartTime.plusMinutes(defaultDuration);
+                    initialHour = endTime.getHour();
+                    initialMinute = endTime.getMinute();
+                }
+
+                new TimePickerDialog(ClassTimeEditActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                        mEndTime = LocalTime.of(hour, minute);
+                        updateTimeTexts();
+                    }
+                }, initialHour, initialMinute, true).show();
+            }
+        });
+    }
+
     private void updateTimeTexts() {
         if (mStartTime != null) {
             mStartTimeText.setText(mStartTime.toString());
-            mStartTimeText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+            mStartTimeText.setTextColor(
+                    ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
         }
         if (mEndTime != null) {
             mEndTimeText.setText(mEndTime.toString());
-            mEndTimeText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+            mEndTimeText.setTextColor(
+                    ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
         }
     }
 
