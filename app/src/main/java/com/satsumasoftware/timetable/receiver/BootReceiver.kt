@@ -13,7 +13,7 @@ class BootReceiver() : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent!!.action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+        if (intent!!.action == Intent.ACTION_BOOT_COMPLETED) {
             Log.i(LOG_TAG, "@onReceive() - ACTION_BOOT_COMPLETED - now refreshing alarms...")
 
             val application = context!!.applicationContext as TimetableApplication
