@@ -102,10 +102,9 @@ public class MainActivity extends BaseActivity {
         for (Assignment assignment : AssignmentUtils.getAssignments(this, getApplication())) {
             LocalDate dueDate = assignment.getDueDate();
 
-            boolean isOverdue = dueDate.isBefore(now) && assignment.getCompletionProgress() != 100;
             boolean dueInNextThreeDays = dueDate.isAfter(now) && dueDate.isBefore(now.plusDays(4));
 
-            if (isOverdue || dueDate.isEqual(now) || dueInNextThreeDays) {
+            if (assignment.isOverdue() || dueDate.isEqual(now) || dueInNextThreeDays) {
                 assignments.add(assignment);  // overdue (incomplete) assignment
             }
         }
