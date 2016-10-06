@@ -7,6 +7,7 @@ import android.preference.PreferenceFragment
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
+import com.satsumasoftware.timetable.BuildConfig
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.LocalTime
@@ -33,6 +34,8 @@ class SettingsActivity : BaseActivity() {
 
             setupDefaultLessonDurationPref()
             setupAssignmentNotificationPref()
+
+            setupAboutPrefs()
         }
 
         private fun setupDefaultLessonDurationPref() {
@@ -83,6 +86,11 @@ class SettingsActivity : BaseActivity() {
                 displayAssignmentTimePicker(preference!!)
                 true
             }
+        }
+
+        private fun setupAboutPrefs() {
+            val versionPref = findPreference("pref_about_app_version")
+            versionPref.summary = BuildConfig.VERSION_NAME
         }
 
     }

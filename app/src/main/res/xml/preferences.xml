@@ -28,4 +28,12 @@
             android:summary="@string/pref_assignmentNotificationTime_summary" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/prefCategory_about">
+
+        <Preference
+            android:key="pref_about_app_version"
+            android:title="@string/pref_appVersion" />
+    </PreferenceCategory>
+
 </PreferenceScreen>
