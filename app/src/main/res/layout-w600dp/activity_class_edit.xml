@@ -20,12 +20,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <include layout="@layout/activity_class_edit_card"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/mdu_padding_normal"
-            android:layout_marginLeft="@dimen/mdu_keyline_1"
-            android:layout_marginRight="@dimen/mdu_keyline_1" />
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/mdu_keyline_2_minus_16dp"
+            android:clipToPadding="false">
+            <include layout="@layout/activity_class_edit_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/mdu_padding_normal"
+                android:layout_marginLeft="@dimen/mdu_padding_normal"
+                android:layout_marginRight="@dimen/mdu_padding_normal" />
+        </ScrollView>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
