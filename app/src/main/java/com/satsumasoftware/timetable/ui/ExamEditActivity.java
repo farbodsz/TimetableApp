@@ -50,6 +50,8 @@ public class ExamEditActivity extends AppCompatActivity {
 
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
 
+    private static final int NO_DURATION = -1;
+
     private Exam mExam;
 
     private boolean mIsNew;
@@ -70,7 +72,7 @@ public class ExamEditActivity extends AppCompatActivity {
     private LocalTime mExamTime;
     private TextView mTimeText;
 
-    private int mExamDuration = -1;
+    private int mExamDuration = NO_DURATION;
     private TextView mDurationText;
     private AlertDialog mDurationDialog;
 
@@ -282,19 +284,10 @@ public class ExamEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
-                NumberPicker numberPicker = new NumberPicker(getBaseContext());
+                final NumberPicker numberPicker = new NumberPicker(getBaseContext());
                 numberPicker.setMinValue(10);
                 numberPicker.setMaxValue(360);
-
-                numberPicker.setValue(mIsNew ? 60 : mExamDuration);
-
-                numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-                    @Override
-                    public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
-                        mExamDuration = newVal;
-                        updateDurationText();
-                    }
-                });
+                numberPicker.setValue(mExamDuration == NO_DURATION ? 60 : mExamDuration);
 
                 View titleView =
                         getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
@@ -305,6 +298,9 @@ public class ExamEditActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.action_done, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int which) {
+                                mExamDuration = numberPicker.getValue();
+                                updateDurationText();
+
                                 mDurationDialog.dismiss();
                             }
                         });
