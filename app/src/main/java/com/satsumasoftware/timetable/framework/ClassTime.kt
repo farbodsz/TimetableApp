@@ -59,7 +59,8 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
             override fun newArray(size: Int): Array<ClassTime?> = arrayOfNulls(size)
         }
 
-        @JvmStatic fun create(context: Context, classTimeId: Int): ClassTime {
+        @JvmStatic
+        fun create(context: Context, classTimeId: Int): ClassTime {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ClassTimesSchema.TABLE_NAME,
@@ -74,7 +75,8 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
         }
 
         @JvmOverloads
-        @JvmStatic fun getWeekText(activity: Activity, weekNumber: Int,
+        @JvmStatic
+        fun getWeekText(activity: Activity, weekNumber: Int,
                                    fullText: Boolean = true): String {
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
             if (timetable.hasFixedScheduling()) {

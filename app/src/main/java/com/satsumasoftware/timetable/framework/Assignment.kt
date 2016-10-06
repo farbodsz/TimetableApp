@@ -59,7 +59,8 @@ class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title:
             override fun newArray(size: Int): Array<Assignment?> = arrayOfNulls(size)
         }
 
-        @JvmStatic fun create(context: Context, assignmentId: Int): Assignment? {
+        @JvmStatic
+        fun create(context: Context, assignmentId: Int): Assignment? {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     AssignmentsSchema.TABLE_NAME,

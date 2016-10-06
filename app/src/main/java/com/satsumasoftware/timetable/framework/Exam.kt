@@ -73,7 +73,8 @@ class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName
             override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
         }
 
-        @JvmStatic fun create(context: Context, examId: Int): Exam? {
+        @JvmStatic
+        fun create(context: Context, examId: Int): Exam? {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ExamsSchema.TABLE_NAME,
@@ -91,7 +92,8 @@ class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName
             return exam
         }
 
-        @JvmStatic fun makeName(exam: Exam, subject: Subject) = if (exam.hasModuleName()) {
+        @JvmStatic
+        fun makeName(exam: Exam, subject: Subject) = if (exam.hasModuleName()) {
             "${subject.name}: ${exam.moduleName}"
         } else {
             subject.name

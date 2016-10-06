@@ -16,7 +16,9 @@ class ClassDetail(val id: Int, val classId: Int, val room: String, val building:
             cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_TEACHER)))
 
     companion object {
-        @JvmStatic fun create(context: Context, classDetailId: Int): ClassDetail {
+
+        @JvmStatic
+        fun create(context: Context, classDetailId: Int): ClassDetail {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ClassDetailsSchema.TABLE_NAME,

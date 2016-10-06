@@ -65,7 +65,8 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate, val end
             override fun newArray(size: Int): Array<Timetable?> = arrayOfNulls(size)
         }
 
-        @JvmStatic fun create(context: Context, timetableId: Int): Timetable? {
+        @JvmStatic
+        fun create(context: Context, timetableId: Int): Timetable? {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     TimetablesSchema.TABLE_NAME,

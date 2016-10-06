@@ -66,7 +66,8 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
 
         @JvmField val NO_DATE: LocalDate = LocalDate.MIN
 
-        @JvmStatic fun create(context: Context, classId: Int): Class? {
+        @JvmStatic
+        fun create(context: Context, classId: Int): Class? {
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     ClassesSchema.TABLE_NAME,
@@ -84,7 +85,8 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             return cls
         }
 
-        @JvmStatic fun makeName(cls: Class, subject: Subject) = if (cls.hasModuleName()) {
+        @JvmStatic
+        fun makeName(cls: Class, subject: Subject) = if (cls.hasModuleName()) {
             "${subject.name}: ${cls.moduleName}"
         } else {
             subject.name

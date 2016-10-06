@@ -41,7 +41,8 @@ class Subject(val id: Int, val timetableId: Int, var name: String, var abbreviat
             override fun newArray(size: Int): Array<Subject?> = arrayOfNulls(size)
         }
 
-        @JvmStatic fun create(context: Context, subjectId: Int): Subject? {
+        @JvmStatic
+        fun create(context: Context, subjectId: Int): Subject? {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     SubjectsSchema.TABLE_NAME,
