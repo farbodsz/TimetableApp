@@ -88,6 +88,8 @@ public class MainActivity extends BaseActivity implements
 
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
+        // Note that enableAutoManage() automatically connects and disconnects the GoogleApiClient
+        // in onStart() and onStop() respectively.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
