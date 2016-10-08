@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 
@@ -103,6 +104,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
         mNavigationView.getMenu().findItem(getSelfNavDrawerItem()).setChecked(true);
+
+        // TODO: Use actual values
+        View headerView = mNavigationView.getHeaderView(0);
+        TextView headerTitle = (TextView) headerView.findViewById(R.id.navdrawer_header_title);
+        TextView headerSubtitle = (TextView) headerView.findViewById(R.id.navdrawer_header_subtitle);
+        headerTitle.setText("Someone");
+        headerSubtitle.setText("someone@example.com");
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -20,14 +20,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <TextView
-            android:text="@string/app_name"
-            android:textColor="@color/mdu_text_white"
-            android:textSize="18sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_gravity="bottom|start"
-            android:layout_margin="@dimen/mdu_padding_normal" />
+            android:layout_margin="@dimen/mdu_padding_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/navdrawer_header_title"
+                android:text="@string/app_name"
+                android:textColor="@color/mdu_text_white"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/navdrawer_header_subtitle"
+                android:text="someone@example.com"
+                android:textColor="@color/mdu_text_white_secondary"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp" />
+        </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>
