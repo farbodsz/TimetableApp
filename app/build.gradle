@@ -23,12 +23,19 @@ android {
 }
 
 dependencies {
+    // Include libraries put in the libs directory
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin standard library
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // Android support libraries
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
+
+    // Other libraries
     compile 'com.jakewharton.threetenabp:threetenabp:1.0.4'
     compile 'com.satsuware.lib:usefulviews:2.3.6'
     compile 'com.satsuware.lib:mdutils:1.2.1'
