@@ -87,12 +87,12 @@
                         app:srcCompat="@drawable/ic_event_note_black_24dp"
                         style="@style/Widget.Timetable.ItemIcon" />
                     <TextView
-                        android:text="test"
                         android:id="@+id/textView_detail"
                         style="@style/Widget.Timetable.TextView.Item"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/mdu_keyline_2"/>
+                        android:layout_marginLeft="@dimen/mdu_keyline_2"
+                        android:layout_marginRight="@dimen/mdu_keyline_1_minus_8dp" />
                 </FrameLayout>
 
             </LinearLayout>
