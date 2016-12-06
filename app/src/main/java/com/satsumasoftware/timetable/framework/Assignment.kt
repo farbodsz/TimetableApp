@@ -32,7 +32,7 @@ class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title:
             source.readSerializable() as LocalDate,
             source.readInt())
 
-    fun hasDetail() = detail.trim().length != 0
+    fun hasDetail() = detail.trim().isNotEmpty()
 
     fun isComplete() = completionProgress == 100
 

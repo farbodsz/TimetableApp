@@ -43,11 +43,11 @@ class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName
             source.readString(),
             source.readInt() == 1)
 
-    fun hasModuleName() = moduleName.trim().length != 0
+    fun hasModuleName() = moduleName.trim().isNotEmpty()
 
-    fun hasSeat() = seat.trim().length != 0
+    fun hasSeat() = seat.trim().isNotEmpty()
 
-    fun hasRoom() = room.trim().length != 0
+    fun hasRoom() = room.trim().isNotEmpty()
 
     fun makeDateTimeObject() = LocalDateTime.of(date, startTime)!!
 

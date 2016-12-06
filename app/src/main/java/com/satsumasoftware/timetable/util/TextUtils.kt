@@ -1,7 +1,7 @@
 package com.satsumasoftware.timetable.util
 
 fun String.title(): String {
-    if (this.trim().length == 0) {
+    if (this.trim().isEmpty()) {
         return this
     }
 

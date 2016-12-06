@@ -35,7 +35,7 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate, val end
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH))),
             cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_WEEK_ROTATIONS)))
 
-    fun hasName() = name.trim().length != 0
+    fun hasName() = name.trim().isNotEmpty()
 
     fun hasFixedScheduling() = weekRotations == 1
 
