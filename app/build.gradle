@@ -9,8 +9,8 @@ android {
         applicationId "com.satsumasoftware.timetable"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 92
-        versionName "0.9.2-beta"
+        versionCode 93
+        versionName "0.9.3-beta"
 
         vectorDrawables.useSupportLibrary = true
     }
