@@ -30,10 +30,10 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Android support libraries
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:design:25.0.1'
-    compile 'com.android.support:cardview-v7:25.0.1'
-    compile 'com.android.support:recyclerview-v7:25.0.1'
+    compile "com.android.support:appcompat-v7:$android_support_lib_version"
+    compile "com.android.support:design:$android_support_lib_version"
+    compile "com.android.support:cardview-v7:$android_support_lib_version"
+    compile "com.android.support:recyclerview-v7:$android_support_lib_version"
 
     // Other libraries
     compile 'com.jakewharton.threetenabp:threetenabp:1.0.4'
