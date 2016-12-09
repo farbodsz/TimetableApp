@@ -145,7 +145,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 color = new Color(examSubject.getColorId());
                 intent = new Intent(context, ExamsActivity.class);
 
-                contentTitle = examSubject.getName() + exam.getModuleName() + " exam";
+                contentTitle = examSubject.getName() + ": " + exam.getModuleName() + " exam";
                 drawableRes = R.drawable.ic_assessment_white_24dp;
                 contentText = makeExamText(exam);
                 tickerText = examSubject.getName() + " exam starting in 30 minutes";
