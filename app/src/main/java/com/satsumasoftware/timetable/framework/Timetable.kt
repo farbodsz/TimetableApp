@@ -9,6 +9,17 @@ import com.satsumasoftware.timetable.db.TimetablesSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
+/**
+ * A timetable should be used by the user to represent an academic year.
+ *
+ * A Timetable stores an integer identifier (id), a name, start and end dates, and the number of
+ * week rotations it uses (whether classes are the same each week, or vary depending on the week).
+ *
+ * Other components of this app such as classes, exams and assignments store a timetable id which
+ * is used by the database to link them to their timetable. It can be considered that a timetable
+ * has (i.e. is linked to) classes, exams, and assignments, exactly like how one would have
+ * different classes, exams, and assignments for each academic year.
+ */
 class Timetable(val id: Int, val name: String, val startDate: LocalDate, val endDate: LocalDate,
                 val weekRotations: Int) : Parcelable {
 
