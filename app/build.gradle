@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 25
@@ -45,3 +44,6 @@ dependencies {
     compile 'com.satsuware.lib:mdutils:1.2.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
 }
+
+// This apply plugin line must be at the bottom of this file so there are no dependency collisions
+apply plugin: 'com.google.gms.google-services'
