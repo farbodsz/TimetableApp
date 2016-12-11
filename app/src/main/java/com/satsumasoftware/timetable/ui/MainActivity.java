@@ -315,6 +315,7 @@ public class MainActivity extends BaseActivity implements
         } else {
             // Signed out, show unauthenticated UI
             updateSignInUI(false);
+            Toast.makeText(this, "Sign-in unsuccessful", Toast.LENGTH_SHORT).show();
         }
     }
 
