@@ -18,6 +18,39 @@ import com.satsumasoftware.timetable.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+    protected static final int NAVDRAWER_ITEM_HOME = R.id.navigation_item_home;
+    protected static final int NAVDRAWER_ITEM_SCHEDULE = R.id.navigation_item_schedule;
+    protected static final int NAVDRAWER_ITEM_CLASSES = R.id.navigation_item_classes;
+    protected static final int NAVDRAWER_ITEM_TODO = R.id.navigation_item_todo;
+    protected static final int NAVDRAWER_ITEM_ASSIGNMENTS = R.id.navigation_item_assignments;
+    protected static final int NAVDRAWER_ITEM_EXAMS = R.id.navigation_item_exams;
+    protected static final int NAVDRAWER_ITEM_MANAGE_TIMETABLES = R.id.navigation_item_manage_timetables;
+    protected static final int NAVDRAWER_ITEM_SETTINGS = R.id.navigation_item_settings;
+    protected static final int NAVDRAWER_ITEM_INVALID = -1;
+
+    private static final int NAVDRAWER_LAUNCH_DELAY = 250;
+
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private NavigationView mNavigationView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        mDrawerLayout = getSelfDrawerLayout();
+        if (mDrawerLayout == null) {
+            return;
+        }
+
+        setupLayout();
+    }
+
     /**
      * This method should be overridden in subclasses of BaseActivity to use the Toolbar
      * Return null if there is no Toolbar
@@ -50,47 +83,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected NavigationView getSelfNavigationView() {
         return null;
-    }
-
-    /*
-     * This is a list of all items in the nav drawer and their corresponding menu ids
-     */
-    protected static final int NAVDRAWER_ITEM_HOME = R.id.navigation_item_home;
-    protected static final int NAVDRAWER_ITEM_SCHEDULE = R.id.navigation_item_schedule;
-    protected static final int NAVDRAWER_ITEM_CLASSES = R.id.navigation_item_classes;
-    protected static final int NAVDRAWER_ITEM_TODO = R.id.navigation_item_todo;
-    protected static final int NAVDRAWER_ITEM_ASSIGNMENTS = R.id.navigation_item_assignments;
-    protected static final int NAVDRAWER_ITEM_EXAMS = R.id.navigation_item_exams;
-    protected static final int NAVDRAWER_ITEM_MANAGE_TIMETABLES = R.id.navigation_item_manage_timetables;
-    protected static final int NAVDRAWER_ITEM_SETTINGS = R.id.navigation_item_settings;
-    protected static final int NAVDRAWER_ITEM_INVALID = -1;
-
-    private static final int NAVDRAWER_LAUNCH_DELAY = 250;
-
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private NavigationView mNavigationView;
-
-
-    /*
-     * Methods
-     */
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        mDrawerLayout = getSelfDrawerLayout();
-        if (mDrawerLayout == null) {
-            return;
-        }
-
-        setupLayout();
     }
 
     private void setupLayout() {
@@ -143,7 +135,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        // launch the target Activity after a short delay, to allow the close animation to play
+        // Launch the target Activity after a short delay, to allow the close animation to play
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -161,65 +153,49 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void goToNavDrawerItem(int menuItem) {
-        Intent intent;
+        Intent intent = null;
         switch (menuItem) {
             case NAVDRAWER_ITEM_HOME:
                 intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
                 break;
             case NAVDRAWER_ITEM_SCHEDULE:
                 intent = new Intent(this, ScheduleActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
                 break;
             case NAVDRAWER_ITEM_CLASSES:
                 intent = new Intent(this, ClassesActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
                 break;
             case NAVDRAWER_ITEM_TODO:
                 intent = new Intent(this, AssignmentsActivity.class);
                 intent.putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
                 break;
             case NAVDRAWER_ITEM_ASSIGNMENTS:
                 intent = new Intent(this, AssignmentsActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
                 break;
             case NAVDRAWER_ITEM_EXAMS:
                 intent = new Intent(this, ExamsActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
                 break;
             case NAVDRAWER_ITEM_MANAGE_TIMETABLES:
                 intent = new Intent(this, TimetablesActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
                 break;
             case NAVDRAWER_ITEM_SETTINGS:
                 intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
                 break;
         }
+
+        if (intent == null) {
+            return;
+        }
+
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        // pass any configuration change to the drawer toggle
+        // Pass any configuration change to the drawer toggle
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 

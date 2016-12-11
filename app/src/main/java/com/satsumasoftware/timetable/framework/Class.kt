@@ -42,7 +42,7 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
         }
     }
 
-    fun hasModuleName() = moduleName.trim().length != 0
+    fun hasModuleName() = moduleName.trim().isNotEmpty()
 
     fun hasStartEndDates() = startDate != NO_DATE && endDate != NO_DATE
 

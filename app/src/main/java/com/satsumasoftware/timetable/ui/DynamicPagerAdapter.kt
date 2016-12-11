@@ -27,7 +27,7 @@ class DynamicPagerAdapter : PagerAdapter() {
     }
 
     override fun getPageTitle(position: Int): CharSequence {
-        val l = Locale.getDefault();
+        val l = Locale.getDefault()
         return titles[position].toUpperCase(l)
     }
 

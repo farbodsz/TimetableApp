@@ -10,6 +10,8 @@ import com.satsumasoftware.timetable.db.util.ExamUtils
 import com.satsumasoftware.timetable.framework.Timetable
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.PrefUtils
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
 
 class TimetableApplication : Application() {
 
@@ -56,7 +58,10 @@ class TimetableApplication : Application() {
             ClassUtils.addAlarmsForClassTime(context, this, classTime)
         }
         for (exam in ExamUtils.getExams(context, this)) {
-            ExamUtils.addAlarmForExam(context, exam)
+            if (exam.date.isAfter(LocalDate.now()) ||
+                    (exam.date.isEqual(LocalDate.now()) && exam.startTime.isAfter(LocalTime.now()))) {
+                ExamUtils.addAlarmForExam(context, exam)
+            }
         }
 
         AssignmentUtils.setAssignmentAlarmTime(

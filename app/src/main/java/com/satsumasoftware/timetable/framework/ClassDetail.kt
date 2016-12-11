@@ -33,10 +33,10 @@ class ClassDetail(val id: Int, val classId: Int, val room: String, val building:
         }
     }
 
-    fun hasRoom() = room.trim().length != 0
+    fun hasRoom() = room.trim().isNotEmpty()
 
-    fun hasBuilding() = building.trim().length != 0
+    fun hasBuilding() = building.trim().isNotEmpty()
 
-    fun hasTeacher() = teacher.trim().length != 0
+    fun hasTeacher() = teacher.trim().isNotEmpty()
 
 }

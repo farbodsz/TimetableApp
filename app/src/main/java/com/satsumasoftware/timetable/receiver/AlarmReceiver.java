@@ -43,7 +43,15 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     private static final long NO_REPEAT_INTERVAL = -1;
 
-    private static final long[] VIBRATION_PATTERN = {1000, 1000, 1000, 1000, 1000};
+    /**
+     * The vibration pattern used for all notifications.
+     *
+     * The first value (0) indicates 0 ms delay before the start of the vibration. The vibration
+     * itself will be a single 'buzz' lasting 200 ms.
+     *
+     * @see android.os.Vibrator#vibrate(long[], int)
+     */
+    private static final long[] VIBRATION_PATTERN = {0, 200};
 
     private static final String EXTRA_ITEM_ID = "extra_item_id";
     private static final String EXTRA_NOTIFICATION_TYPE = "extra_notification_type";
@@ -145,7 +153,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 color = new Color(examSubject.getColorId());
                 intent = new Intent(context, ExamsActivity.class);
 
-                contentTitle = examSubject.getName() + exam.getModuleName() + " exam";
+                contentTitle = examSubject.getName() + ": " + exam.getModuleName() + " exam";
                 drawableRes = R.drawable.ic_assessment_white_24dp;
                 contentText = makeExamText(exam);
                 tickerText = examSubject.getName() + " exam starting in 30 minutes";
