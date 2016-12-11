@@ -36,7 +36,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$android_support_lib_version"
 
     // Google Play services library for authentication features
-    compile 'com.google.android.gms:play-services-auth:9.6.1'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
 
     // Other libraries
     compile 'com.jakewharton.threetenabp:threetenabp:1.0.4'
