@@ -13,9 +13,13 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:3.0.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
+        //E9:9C:9D:BF:49:A9:D5:7C:1E:E7:14:72:BD:16:5E:5C:B5:E5:93:9B
+        //3F:C2:57:70:3D:FD:E1:E7:2A:D6:C9:97:53:FB:78:D7:70:36:0A:B8
     }
 }
 
