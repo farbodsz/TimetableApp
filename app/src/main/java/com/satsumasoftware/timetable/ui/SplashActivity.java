@@ -1,17 +1,17 @@
 package com.satsumasoftware.timetable.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.framework.Timetable;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_TIMETABLE_EDIT = 1;
+    private static final String LOG_TAG = "SplashActivity";
 
     private static final int SLEEP_TIME = 1000;
 
@@ -27,14 +27,16 @@ public class SplashActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    Timetable currentTimetable =
-                            ((TimetableApplication) getApplication()).getCurrentTimetable();
+                    GoogleSignInAccount account =
+                            ((TimetableApplication) getApplication()).getSignInAccount();
 
                     Intent intent;
-                    if (currentTimetable == null) {
-                        intent = new Intent(getBaseContext(), TimetableEditActivity.class);
-                        startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT);
+                    if (account == null) {
+                        Log.d(LOG_TAG, "No account found - proceeding to SignInActivity");
+                        intent = new Intent(getBaseContext(), SignInActivity.class);
+                        startActivity(intent);
                     } else {
+                        Log.d(LOG_TAG, "Account found - proceeding to MainActivity");
                         intent = new Intent(getBaseContext(), MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -43,18 +45,5 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
         timer.start();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE_TIMETABLE_EDIT) {
-            if (resultCode == Activity.RESULT_OK) {
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }
     }
 }

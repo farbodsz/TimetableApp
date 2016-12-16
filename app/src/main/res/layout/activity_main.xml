@@ -22,26 +22,6 @@
                 style="@style/Widget.Timetable.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <LinearLayout
-                android:paddingTop="@dimen/mdu_spacing_normal"
-                android:paddingBottom="@dimen/mdu_spacing_normal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/btn_sign_in"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <Button
-                    android:id="@+id/btn_sign_out"
-                    android:text="@string/sign_out"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <Button
-                    android:id="@+id/btn_revoke_access"
-                    android:text="@string/sign_out_revoke_access"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
             <include layout="@layout/info_bar" />
         </android.support.design.widget.AppBarLayout>
 

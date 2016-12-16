@@ -3,6 +3,7 @@ package com.satsumasoftware.timetable
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.satsumasoftware.timetable.db.util.AssignmentUtils
 import com.satsumasoftware.timetable.db.util.ClassUtils
@@ -16,6 +17,12 @@ import org.threeten.bp.LocalTime
 class TimetableApplication : Application() {
 
     private val LOG_TAG = "TimetableApplication"
+
+    var signInAccount: GoogleSignInAccount? = null
+        private set(value) {
+            field = value
+            Log.i(LOG_TAG, "Signed into account ${field!!.displayName}")
+        }
 
     var currentTimetable: Timetable? = null
         private set(value) {

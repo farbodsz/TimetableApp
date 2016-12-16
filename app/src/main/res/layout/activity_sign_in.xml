@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_sign_in"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.satsumasoftware.timetable.ui.SignInActivity">
+
+    <ImageView
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="96dp" />
+
+    <TextView
+        android:text="@string/app_name"
+        android:textColor="@color/mdu_text_black"
+        android:textSize="28sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp" />
+
+    <TextView
+        android:text="@string/sign_in_prompt"
+        android:textColor="@color/mdu_text_black_secondary"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/btn_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp" />
+
+    <Button
+        android:id="@+id/btn_sign_out"
+        android:text="@string/sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp" />
+    <Button
+        android:id="@+id/btn_revoke_access"
+        android:text="@string/sign_out_revoke_access"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
