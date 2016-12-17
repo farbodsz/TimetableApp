@@ -99,6 +99,7 @@ public class SignInActivity extends AppCompatActivity implements
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
+                        ((TimetableApplication) getApplication()).setSignInAccount(null);
                         Toast.makeText(SignInActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -110,6 +111,7 @@ public class SignInActivity extends AppCompatActivity implements
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
+                        ((TimetableApplication) getApplication()).setSignInAccount(null);
                         Toast.makeText(SignInActivity.this, "Revoking access...", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -188,6 +190,7 @@ public class SignInActivity extends AppCompatActivity implements
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
+            ((TimetableApplication) getApplication()).setSignInAccount(account);
             Toast.makeText(this, "Successfully signed in: " + account.getDisplayName(),
                     Toast.LENGTH_SHORT).show();
             continueToTimetable();

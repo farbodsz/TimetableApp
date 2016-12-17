@@ -19,7 +19,7 @@ class TimetableApplication : Application() {
     private val LOG_TAG = "TimetableApplication"
 
     var signInAccount: GoogleSignInAccount? = null
-        private set(value) {
+        set(value) {
             field = value
             Log.i(LOG_TAG, "Signed into account ${field!!.displayName}")
         }
