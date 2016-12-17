@@ -14,7 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TimetableApplication;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -97,12 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         mNavigationView.getMenu().findItem(getSelfNavDrawerItem()).setChecked(true);
 
-        // TODO: Use actual values
-        View headerView = mNavigationView.getHeaderView(0);
-        TextView headerTitle = (TextView) headerView.findViewById(R.id.navdrawer_header_title);
-        TextView headerSubtitle = (TextView) headerView.findViewById(R.id.navdrawer_header_subtitle);
-        headerTitle.setText("Someone");
-        headerSubtitle.setText("someone@example.com");
+        displayAccountDetails();
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -127,6 +124,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mDrawerToggle.syncState();
+    }
+
+    private void displayAccountDetails() {
+        GoogleSignInAccount account = ((TimetableApplication) getApplication()).getSignInAccount();
+
+        View headerView = mNavigationView.getHeaderView(0);
+
+        TextView headerTitle = (TextView) headerView.findViewById(R.id.navdrawer_header_title);
+        TextView headerSubtitle = (TextView) headerView.findViewById(R.id.navdrawer_header_subtitle);
+
+        headerTitle.setText(account.getDisplayName());
+        headerSubtitle.setText(account.getEmail());
     }
 
     private void handleNavigationSelection(final MenuItem menuItem) {

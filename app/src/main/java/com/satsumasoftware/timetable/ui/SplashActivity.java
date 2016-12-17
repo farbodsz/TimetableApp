@@ -31,7 +31,8 @@ public class SplashActivity extends AppCompatActivity {
                             ((TimetableApplication) getApplication()).getSignInAccount();
 
                     Intent intent;
-                    if (account == null) {
+                    //if (account == null) {
+                    if (true) {
                         Log.d(LOG_TAG, "No account found - proceeding to SignInActivity");
                         intent = new Intent(getBaseContext(), SignInActivity.class);
                         startActivity(intent);
