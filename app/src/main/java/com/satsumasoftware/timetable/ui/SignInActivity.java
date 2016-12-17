@@ -22,6 +22,8 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.framework.Timetable;
 
 public class SignInActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener {
@@ -97,7 +99,7 @@ public class SignInActivity extends AppCompatActivity implements
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        updateSignInUI(false);
+                        Toast.makeText(SignInActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -108,7 +110,7 @@ public class SignInActivity extends AppCompatActivity implements
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        updateSignInUI(false);
+                        Toast.makeText(SignInActivity.this, "Revoking access...", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -185,30 +187,24 @@ public class SignInActivity extends AppCompatActivity implements
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI
             GoogleSignInAccount account = result.getSignInAccount();
-            Toast.makeText(this, "Account " + account.getDisplayName(), Toast.LENGTH_SHORT).show();
-            updateSignInUI(true);
+            Toast.makeText(this, "Successfully signed in: " + account.getDisplayName(),
+                    Toast.LENGTH_SHORT).show();
+            continueToTimetable();
         } else {
-            // Signed out, show unauthenticated UI
             Toast.makeText(this, "Sign-in unsuccessful", Toast.LENGTH_SHORT).show();
-            updateSignInUI(false);
-        }
-    }
-
-    private void updateSignInUI(boolean signedIn) {
-        if (signedIn) {
-            findViewById(R.id.btn_sign_in).setVisibility(View.GONE);
-            findViewById(R.id.btn_sign_out).setVisibility(View.VISIBLE);
-        } else {
-            findViewById(R.id.btn_sign_in).setVisibility(View.VISIBLE);
-            findViewById(R.id.btn_sign_out).setVisibility(View.GONE);
         }
     }
 
     private void continueToTimetable() {
-        Intent intent = new Intent(getBaseContext(), TimetableEditActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT);
+        Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
+        if (timetable == null) {
+            // A new timetable needs to be created
+            Intent intent = new Intent(this, TimetableEditActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT);
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
+        }
     }
 
 }
