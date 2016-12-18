@@ -10,7 +10,7 @@ import android.support.annotation.ColorRes
  * See the material design
  * [color palette](https://material.google.com/style/color.html#color-color-palette) for details.
  *
- * @param id An identifier used to represent one of 19 material design colors.
+ * @property id An identifier used to represent one of 19 material design colors.
  */
 class Color(val id: Int) {
 

@@ -11,18 +11,15 @@ import org.threeten.bp.LocalDate
 /**
  * Represents an assignment the user may have been given.
  *
- * Assignments have an id, title and due date. They also store a detail string which the user can
- * use to add notes about his/her assignment. Users can mark how much of an assignment they have
- * completed as a percentage, which changes the `completionProgress` property. So to mark it as
- * "Done", the `completionProgress` will be shown as 100.
- *
- * Since assignments are given for different classes, there is a `classId` property to provide a
- * link between it and the class.
- *
- * Similarly, a `timetableId` is used to identify which academic year (`Timetable`) it is linked to.
- *
- * It is important to remember that this class is only used to represent the data from the SQLite
- * database - it does not store any permanent data itself.
+ * @property id An identifier for the assignment
+ * @property timetableId Used to identifier which academic year (`Timetable`) this assignment is
+ *      linked to
+ * @property classId The identifier of the class this assignment is for
+ * @property title The name of the assignment
+ * @property detail Optional, additional notes the user may enter for the assignment
+ * @property dueDate The date the assignment must be handed in
+ * @property completionProgress An integer from 0-100 (like a percentage) indicating how complete
+ *      the assignment is (100 indicating fully complete)
  */
 class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title: String,
                  val detail: String, val dueDate: LocalDate, var completionProgress: Int) : Parcelable {
