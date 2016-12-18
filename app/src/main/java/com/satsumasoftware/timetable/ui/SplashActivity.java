@@ -8,6 +8,7 @@ import android.util.Log;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.ui.login.SignInActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.ui;
+package com.satsumasoftware.timetable.ui.login;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.SignInAccount;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -22,7 +21,7 @@ public class SignOutActivity extends Activity implements GoogleApiClient.Connect
 
     private static final String LOG_TAG = "SignOutActivity";
 
-    protected static final String EXTRA_REVOKE_ACCESS = "extra_revoke_access";
+    public static final String EXTRA_REVOKE_ACCESS = "extra_revoke_access";
 
     private GoogleApiClient mGoogleApiClient;
 

@@ -8,13 +8,9 @@ import android.preference.PreferenceFragment
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
-import android.util.Log
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
 import com.satsumasoftware.timetable.BuildConfig
 import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.ui.login.SignOutActivity
 import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.LocalTime
 

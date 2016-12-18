@@ -29,7 +29,7 @@
         </activity>
 
         <activity
-            android:name=".ui.SignInActivity"
+            android:name=".ui.login.SignInActivity"
             android:label="@string/sign_in"
             android:screenOrientation="portrait" />
 
@@ -106,7 +106,7 @@
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.SignOutActivity"
+            android:name=".ui.login.SignOutActivity"
             android:label="@string/sign_out"
             android:screenOrientation="portrait" />
 
