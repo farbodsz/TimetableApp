@@ -13,7 +13,7 @@
         android:src="@mipmap/ic_launcher"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:layout_marginTop="96dp" />
+        android:layout_marginTop="120dp" />
 
     <TextView
         android:text="@string/app_name"
@@ -37,17 +37,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp" />
-
-    <Button
-        android:id="@+id/btn_sign_out"
-        android:text="@string/sign_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp" />
-    <Button
-        android:id="@+id/btn_revoke_access"
-        android:text="@string/sign_out_revoke_access"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 </LinearLayout>

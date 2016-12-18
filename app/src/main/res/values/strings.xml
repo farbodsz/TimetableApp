@@ -182,7 +182,7 @@
     <string name="sign_in">Sign in</string>
     <string name="sign_in_prompt">Welcome to your new timetable app! \nTo get started, just sign-in…</string>
     <string name="sign_out">Sign out</string>
-    <string name="sign_out_revoke_access">Revoke access</string>
+    <string name="revoke_access">Revoke access</string>
     <string name="loading">Loading</string>
 
     <string name="drawer_open" translatable="false">Open drawer</string>

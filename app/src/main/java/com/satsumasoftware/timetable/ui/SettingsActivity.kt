@@ -1,12 +1,18 @@
 package com.satsumasoftware.timetable.ui
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
+import android.util.Log
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
 import com.satsumasoftware.timetable.BuildConfig
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.util.PrefUtils
@@ -34,6 +40,8 @@ class SettingsActivity : BaseActivity() {
 
             setupDefaultLessonDurationPref()
             setupAssignmentNotificationPref()
+
+            setupAccountPrefs()
 
             setupAboutPrefs()
         }
@@ -84,6 +92,22 @@ class SettingsActivity : BaseActivity() {
 
             assignmentNotificationPref.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference ->
                 displayAssignmentTimePicker(preference!!)
+                true
+            }
+        }
+
+        private fun setupAccountPrefs() {
+            findPreference("pref_sign_out").setOnPreferenceClickListener {
+                startActivity(Intent(activity, SignOutActivity::class.java))
+                activity.finish()
+                true
+            }
+
+            findPreference("pref_revoke_access").setOnPreferenceClickListener {
+                val intent = Intent(activity, SignOutActivity::class.java)
+                intent.putExtra(SignOutActivity.EXTRA_REVOKE_ACCESS, true)
+                startActivity(intent)
+                activity.finish()
                 true
             }
         }

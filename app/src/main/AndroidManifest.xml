@@ -105,6 +105,11 @@
             android:label="@string/action_settings"
             android:theme="@style/Timetable"/>
 
+        <activity
+            android:name=".ui.SignOutActivity"
+            android:label="@string/sign_out"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".receiver.AlarmReceiver" />
 
         <receiver android:name=".receiver.BootReceiver">

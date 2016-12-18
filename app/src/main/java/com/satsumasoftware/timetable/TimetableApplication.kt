@@ -21,7 +21,7 @@ class TimetableApplication : Application() {
     var signInAccount: GoogleSignInAccount? = null
         set(value) {
             field = value
-            Log.i(LOG_TAG, "Signed into account ${field!!.displayName}")
+            Log.i(LOG_TAG, "Signed into account ${field?.displayName ?: "NULL"}")
         }
 
     var currentTimetable: Timetable? = null

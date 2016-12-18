@@ -70,52 +70,11 @@ public class SignInActivity extends AppCompatActivity implements
                 signIn();
             }
         });
-
-        // Setup the other buttons
-        Button signOutButton = (Button) findViewById(R.id.btn_sign_out);
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();
-            }
-        });
-
-        Button revokeAccessButton = (Button) findViewById(R.id.btn_revoke_access);
-        revokeAccessButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                revokeAccess();
-            }
-        });
     }
 
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN);
-    }
-
-    private void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        ((TimetableApplication) getApplication()).setSignInAccount(null);
-                        Toast.makeText(SignInActivity.this, "Signed out", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-    }
-
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        ((TimetableApplication) getApplication()).setSignInAccount(null);
-                        Toast.makeText(SignInActivity.this, "Revoking access...", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
     }
 
     /*
@@ -191,7 +150,7 @@ public class SignInActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
             ((TimetableApplication) getApplication()).setSignInAccount(account);
-            Toast.makeText(this, "Successfully signed in: " + account.getDisplayName(),
+            Toast.makeText(this, "Successfully signed in as " + account.getDisplayName(),
                     Toast.LENGTH_SHORT).show();
             continueToTimetable();
         } else {

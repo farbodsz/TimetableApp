@@ -29,6 +29,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/prefCategory_account">
+
+        <Preference
+            android:key="pref_sign_out"
+            android:title="@string/sign_out" />
+
+        <Preference
+            android:key="pref_revoke_access"
+            android:title="@string/revoke_access" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/prefCategory_about">
 
         <Preference
