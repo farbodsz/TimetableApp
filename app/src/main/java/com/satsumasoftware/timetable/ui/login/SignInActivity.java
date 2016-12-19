@@ -16,8 +16,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.DriveDbHandler;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.MainActivity;
 import com.satsumasoftware.timetable.ui.TimetableEditActivity;
@@ -46,6 +48,7 @@ public class SignInActivity extends AppCompatActivity implements
         // ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestScopes(Drive.SCOPE_APPFOLDER)
                 .build();
 
         // Build a GoogleApiClient with access to the Google Sign-In API and the
@@ -55,6 +58,7 @@ public class SignInActivity extends AppCompatActivity implements
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Drive.API)
                 .build();
 
         // Setup the button
@@ -102,9 +106,13 @@ public class SignInActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
             ((TimetableApplication) getApplication()).setSignInAccount(account);
+
             Toast.makeText(this, "Successfully signed in as " + account.getDisplayName(),
                     Toast.LENGTH_SHORT).show();
+
+            DriveDbHandler.handleDataSync(mGoogleApiClient);
             continueToTimetable();
+
         } else {
             Toast.makeText(this, "Sign-in unsuccessful", Toast.LENGTH_SHORT).show();
         }
