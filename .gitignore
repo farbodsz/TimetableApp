@@ -8,3 +8,6 @@ local.properties
 # IntelliJ
 *.iml
 /.idea/
+
+# JSON file for Google Play Services
+app/google-services.json
