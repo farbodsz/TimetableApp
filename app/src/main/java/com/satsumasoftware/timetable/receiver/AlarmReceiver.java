@@ -37,6 +37,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * This class will be invoked for receiving an alarm - i.e. when a notification needs to be
+ * displayed.
+ */
 public class AlarmReceiver extends WakefulBroadcastReceiver {
 
     private static final String LOG_TAG = "AlarmReceiver";
@@ -56,8 +60,20 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     private static final String EXTRA_ITEM_ID = "extra_item_id";
     private static final String EXTRA_NOTIFICATION_TYPE = "extra_notification_type";
 
+    /**
+     * The identifier used for showing the notification for assignments.
+     *
+     * There is only one identifier because the user gets one (repeated) notification for all
+     * assignments.
+     */
     public static final int ASSIGNMENTS_NOTIFICATION_ID = 1;
 
+    /**
+     * Represents the three different possible categories of notification in this app: notifications
+     * for a class, assignment, or exam.
+     *
+     * This is because notifications are displayed differently for each of the three categories.
+     */
     @IntDef({Type.CLASS, Type.ASSIGNMENT, Type.EXAM})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {
