@@ -10,6 +10,9 @@ import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.query.Filters;
+import com.google.android.gms.drive.query.Query;
+import com.google.android.gms.drive.query.SearchableField;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,8 +35,44 @@ public final class DriveDbHandler {
     private DriveDbHandler() {
     }
 
-    public static void handleDataSync(GoogleApiClient googleApiClient) {
-        saveToDrive(googleApiClient);
+    public static void tryCreatingDbOnDrive(final GoogleApiClient googleApiClient) {
+        // We need to check if the database already exists on Google Drive. If so, we won't create
+        // it again.
+
+        Query query = new Query.Builder()
+                .addFilter(Filters.and(
+                        Filters.eq(SearchableField.TITLE, FILE_NAME),
+                        Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE)))
+                .build();
+        DriveFolder appFolder = Drive.DriveApi.getAppFolder(googleApiClient);
+
+        appFolder.queryChildren(googleApiClient, query).setResultCallback(
+                new ResultCallback<DriveApi.MetadataBufferResult>() {
+                    @Override
+                    public void onResult(@NonNull DriveApi.MetadataBufferResult metadataBufferResult) {
+                        if (!metadataBufferResult.getStatus().isSuccess()) {
+                            Log.e(LOG_TAG, "Query for " + FILE_NAME + " unsuccessful!");
+                            return;
+                        }
+
+                        int count = metadataBufferResult.getMetadataBuffer().getCount();
+
+                        Log.d(LOG_TAG, "Successfully ran query for " + FILE_NAME + " and found " +
+                                count + " results");
+
+                        if (count > 1) {
+                            Log.e(LOG_TAG, "App folder contains more than one database file! " +
+                                    "Found " + count + " matching results.");
+                            return;
+                        }
+
+                        // Create the database on Google Drive if it doesn't exist already
+                        if (count == 0) {
+                            Log.d(LOG_TAG, "No existing database found on Google Drive");
+                            saveToDrive(googleApiClient);
+                        }
+                    }
+                });
     }
 
     private static void saveToDrive(final GoogleApiClient googleApiClient) {
