@@ -4,6 +4,10 @@ import android.provider.BaseColumns;
 
 import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
 
+/**
+ * The schema for the 'assignments' table, containing constants for the column names and the SQLite
+ * create statement.
+ */
 public final class AssignmentsSchema implements BaseColumns {
 
     public static final String TABLE_NAME = "assignments";
@@ -16,6 +20,9 @@ public final class AssignmentsSchema implements BaseColumns {
     public static final String COL_DUE_DATE_YEAR = "due_date_year";
     public static final String COL_COMPLETION_PROGRESS = "completion_progress";
 
+    /**
+     * The SQLite statement which creates the 'assignments' table upon execution
+     */
     static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
