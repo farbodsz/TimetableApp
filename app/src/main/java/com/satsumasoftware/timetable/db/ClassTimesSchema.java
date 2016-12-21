@@ -4,6 +4,12 @@ import android.provider.BaseColumns;
 
 import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
 
+/**
+ * The schema for the 'class_times' table, containing constants for the column names and an SQLite
+ * create statement.
+ *
+ * @see com.satsumasoftware.timetable.framework.ClassTime
+ */
 public final class ClassTimesSchema implements BaseColumns {
 
     public static final String TABLE_NAME = "class_times";
@@ -16,6 +22,11 @@ public final class ClassTimesSchema implements BaseColumns {
     public static final String COL_END_TIME_HRS = "end_time_hrs";
     public static final String COL_END_TIME_MINS = "end_time_mins";
 
+    /**
+     * An SQLite statement which creates the 'class_times' table upon execution.
+     *
+     * @see TimetableDbHelper
+     */
     static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +
