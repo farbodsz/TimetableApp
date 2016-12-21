@@ -16,8 +16,8 @@ import org.threeten.bp.LocalDate
  * and there could be different classes for the Statistics module and the Mechanics module.
  *
  * @property id An identifier for the class
- * @property timetableId The identifier of the timetable this class is a part of
- * @property subjectId The identifier of the subject this class is a part of
+ * @property timetableId The identifier of the [Timetable] this class is a part of
+ * @property subjectId The identifier of the [Subject] this class is a part of
  * @property moduleName An optional name for the class' module
  * @property startDate The class' start date (optional)
  * @property endDate The class' end date (optional)

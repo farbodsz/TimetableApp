@@ -23,14 +23,14 @@ import org.threeten.bp.LocalTime
  * So each `ClassTime` only includes data for one occurrence of the class (e.g. 12:00 to 13:00 on
  * Mondays on Week 2s).
  *
- * Note that a `ClassTime` is linked to a `ClassDetail` and not a `Class` so that we know the times
+ * Note that a `ClassTime` is linked to a [ClassDetail] and not a [Class] so that we know the times
  * for each different class detail (e.g. when the student gets taught by teacher A and when they
  * get taught by teacher B).
  *
  * @property id An identifier for the class time
- * @property timetableId The identifier of the associated timetable. We include this in our
+ * @property timetableId The identifier of the associated [Timetable]. We include this in our
  *      `ClassTime` for when we want to find a list of times in one particular timetable.
- * @property classDetailId The identifier of the associated `ClassDetail`
+ * @property classDetailId The identifier of the associated [ClassDetail]
  * @property day A day of the week (Monday to Sunday) that the class takes place
  * @property weekNumber The number of a week rotation where the class takes place
  * @property startTime A start time of the class

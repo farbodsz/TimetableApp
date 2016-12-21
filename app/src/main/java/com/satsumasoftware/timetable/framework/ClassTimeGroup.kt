@@ -4,7 +4,7 @@ import org.threeten.bp.LocalTime
 import java.util.*
 
 /**
- * A data structure merely to group `ClassTime` objects with the same start and end dates as each
+ * A data structure merely to group [ClassTime] objects with the same start and end dates as each
  * other.
  *
  * @property startTime The start time all `ClassTime`s in this group will have

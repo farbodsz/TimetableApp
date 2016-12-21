@@ -14,8 +14,8 @@ import org.threeten.bp.LocalTime
  * Represents an exam.
  *
  * @property id An integer identifier
- * @property timetableId The identifier of the associated timetable
- * @property subjectId The identifier of the subject the exam is linked with
+ * @property timetableId The identifier of the associated [Timetable]
+ * @property subjectId The identifier of the [Subject] the exam is linked with
  * @property moduleName An optional name for the module of the exam
  * @property date The date the exam takes place
  * @property startTime The start time of the exam

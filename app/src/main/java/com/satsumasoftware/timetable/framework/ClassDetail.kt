@@ -15,7 +15,7 @@ import com.satsumasoftware.timetable.db.TimetableDbHelper
  * multiple `ClassDetail`s; this is why our `ClassDetail` contains a `classId` property.
  *
  * @property id An integer used to identify this class detail
- * @property classId The identifier of the associated class
+ * @property classId The identifier of the associated [Class]
  * @property room An optional name of the room where the class takes place
  * @property building An optional name of the building where the class takes place
  * @property teacher The name of the teacher for the class (also optional)

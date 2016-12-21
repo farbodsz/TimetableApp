@@ -12,9 +12,9 @@ import org.threeten.bp.LocalDate
  * Represents an assignment the user may have been given.
  *
  * @property id An identifier for the assignment
- * @property timetableId Used to identifier which academic year (`Timetable`) this assignment is
+ * @property timetableId Used to identifier which academic year ([Timetable]) this assignment is
  *      linked to
- * @property classId The identifier of the class this assignment is for
+ * @property classId The identifier of the [Class] this assignment is for
  * @property title The name of the assignment
  * @property detail Optional, additional notes the user may enter for the assignment
  * @property dueDate The date the assignment must be handed in
