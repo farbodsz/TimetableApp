@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * The main screen showing an overview of the user's classes, assignments and exams.
+ */
 public class MainActivity extends BaseActivity {
 
     @Override
