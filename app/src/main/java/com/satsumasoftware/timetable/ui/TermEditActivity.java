@@ -25,8 +25,8 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 public class TermEditActivity extends AppCompatActivity {
 
-    protected static final String EXTRA_TIMETABLE_ID = "extra_timetable_id";
-    protected static final String EXTRA_TERM = "extra_term";
+    static final String EXTRA_TIMETABLE_ID = "extra_timetable_id";
+    static final String EXTRA_TERM = "extra_term";
 
     private Term mTerm;
     private int mTimetableId;

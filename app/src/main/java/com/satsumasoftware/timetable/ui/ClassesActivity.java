@@ -29,7 +29,7 @@ import java.util.Comparator;
 
 public class ClassesActivity extends BaseActivity {
 
-    protected static final int REQUEST_CODE_CLASS_DETAIL = 1;
+    private static final int REQUEST_CODE_CLASS_DETAIL = 1;
 
     private ArrayList<Class> mClasses;
 

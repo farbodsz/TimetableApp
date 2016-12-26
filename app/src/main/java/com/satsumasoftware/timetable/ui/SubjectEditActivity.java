@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class SubjectEditActivity extends AppCompatActivity {
 
-    protected static final String EXTRA_SUBJECT = "extra_subject";
+    static final String EXTRA_SUBJECT = "extra_subject";
 
     private Subject mSubject;
 

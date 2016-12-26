@@ -32,9 +32,9 @@ import java.util.ArrayList;
 
 public class ClassTimeEditActivity extends AppCompatActivity {
 
-    protected static final String EXTRA_CLASS_TIME = "extra_class_time";
-    protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
-    protected static final String EXTRA_TAB_POSITION = "extra_tab_position";
+    static final String EXTRA_CLASS_TIME = "extra_class_time";
+    static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
+    static final String EXTRA_TAB_POSITION = "extra_tab_position";
 
     private int mClassDetailId;
     private ArrayList<ClassTime> mClassTimes;

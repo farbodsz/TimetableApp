@@ -48,7 +48,7 @@ import java.util.Comparator;
 
 public class TimetableEditActivity extends AppCompatActivity implements LabelledSpinner.OnItemChosenListener {
 
-    protected static final String EXTRA_TIMETABLE = "extra_timetable";
+    static final String EXTRA_TIMETABLE = "extra_timetable";
 
     private static final int REQUEST_CODE_TERM_EDIT = 1;
 

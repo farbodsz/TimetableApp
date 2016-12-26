@@ -25,9 +25,9 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 public class AssignmentDetailActivity extends AppCompatActivity {
 
-    protected static final String EXTRA_ASSIGNMENT = "extra_assignment";
+    static final String EXTRA_ASSIGNMENT = "extra_assignment";
 
-    protected static final int REQUEST_CODE_ASSIGNMENT_EDIT = 1;
+    private static final int REQUEST_CODE_ASSIGNMENT_EDIT = 1;
 
     private Assignment mAssignment;
     private boolean mIsNew;

@@ -46,9 +46,9 @@ import java.util.Comparator;
 
 public class ExamEditActivity extends AppCompatActivity {
 
-    protected static final String EXTRA_EXAM = "extra_exam";
+    static final String EXTRA_EXAM = "extra_exam";
 
-    protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
+    private static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
 
     private static final int NO_DURATION = -1;
 
