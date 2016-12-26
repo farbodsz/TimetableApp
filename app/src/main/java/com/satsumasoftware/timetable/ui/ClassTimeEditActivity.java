@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.util.PrefUtils;
@@ -30,10 +31,45 @@ import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 
+/**
+ * This activity is started and displayed to allow the user to change a class time.
+ *
+ * It should only be started by {@link ClassEditActivity} after the user has clicked on a class
+ * time. It can also be started if the user wants to create a new class time. After the user has
+ * finished, the result from this activity (whether there were changes made or not) would be passed
+ * back to {@link ClassEditActivity}, where the changes are displayed.
+ *
+ * @see ClassEditActivity
+ * @see ClassTime
+ */
 public class ClassTimeEditActivity extends AppCompatActivity {
 
+    /**
+     * The key for the {@link ClassTime} passed through an intent extra.
+     *
+     * It should be null if we're adding a new class time.
+     */
     protected static final String EXTRA_CLASS_TIME = "extra_class_time";
+
+    /**
+     * The key for the integer identifier of the {@link ClassDetail} passed through an intent extra.
+     *
+     * This is used in {@link #handleDoneAction()} when creating {@link ClassDetail}s and adding
+     * the new data to the database.
+     *
+     * @see ClassTime#getClassDetailId()
+     * @see ClassDetail#getId()
+     */
     protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
+
+    /**
+     * The key passed through an intent extra for the index of the tab where this class time is
+     * displayed in {@link ClassEditActivity}.
+     *
+     * It is used in {@link #handleDoneAction()} and {@link #handleCloseAction()} to pass back this
+     * value to {@link ClassEditActivity} so that only the class time values for the relevant tab
+     * can be updated.
+     */
     protected static final String EXTRA_TAB_POSITION = "extra_tab_position";
 
     private int mClassDetailId;
