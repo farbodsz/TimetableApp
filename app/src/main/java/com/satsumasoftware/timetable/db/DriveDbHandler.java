@@ -8,7 +8,10 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
@@ -35,7 +38,7 @@ public final class DriveDbHandler {
     private DriveDbHandler() {
     }
 
-    public static void tryCreatingDbOnDrive(final GoogleApiClient googleApiClient) {
+    public static void saveToDrive(final GoogleApiClient googleApiClient) {
         // We need to check if the database already exists on Google Drive. If so, we won't create
         // it again.
 
@@ -57,26 +60,37 @@ public final class DriveDbHandler {
 
                         int count = metadataBufferResult.getMetadataBuffer().getCount();
 
-                        Log.d(LOG_TAG, "Successfully ran query for " + FILE_NAME + " and found " +
+                        Log.v(LOG_TAG, "Successfully ran query for " + FILE_NAME + " and found " +
                                 count + " results");
 
-                        if (count > 1) {
-                            Log.e(LOG_TAG, "App folder contains more than one database file! " +
-                                    "Found " + count + " matching results.");
-                            return;
-                        }
+                        switch (count) {
+                            case 0:
+                                // Create the database on Google Drive if it doesn't exist already
+                                Log.d(LOG_TAG, "No existing database found on Google Drive");
+                                createDatabaseOnDrive(googleApiClient);
+                                break;
 
-                        // Create the database on Google Drive if it doesn't exist already
-                        if (count == 0) {
-                            Log.d(LOG_TAG, "No existing database found on Google Drive");
-                            saveToDrive(googleApiClient);
+                            case 1:
+                                // Update the database if it exists on Drive
+                                Log.d(LOG_TAG, "Found database on Google Drive");
+
+                                Metadata metadata = metadataBufferResult.getMetadataBuffer().get(0);
+                                DriveId driveId = metadata.getDriveId();
+
+                                updateDatabase(googleApiClient, driveId.asDriveFile());
+                                break;
+
+                            default:
+                                Log.e(LOG_TAG, "App folder contains more than one database file! " +
+                                        "Found " + count + " matching results.");
+                                break;
                         }
                     }
                 });
     }
 
-    private static void saveToDrive(final GoogleApiClient googleApiClient) {
-        Log.d(LOG_TAG, "Starting to save to drive...");
+    private static void createDatabaseOnDrive(final GoogleApiClient googleApiClient) {
+        Log.d(LOG_TAG, "Creating the database on Google Drive...");
 
         // Create content from file
         Drive.DriveApi.newDriveContents(googleApiClient).setResultCallback(
@@ -96,22 +110,8 @@ public final class DriveDbHandler {
     }
 
     private static void createNewFile(GoogleApiClient googleApiClient, DriveContents driveContents) {
-        // Write file to contents (see http://stackoverflow.com/a/33610727/4230345)
-        File file = new File(DATABASE_PATH);
-        OutputStream outputStream = driveContents.getOutputStream();
-        try {
-            InputStream inputStream = new FileInputStream(file);
-            byte[] buf = new byte[4096];
-            int c;
-            while ((c = inputStream.read(buf, 0, buf.length)) > 0) {
-                outputStream.write(buf, 0, c);
-                outputStream.flush();
-            }
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Log.d(LOG_TAG, "Written file to output stream of drive contents");
+        // Write file to contents
+        driveContents = writeDatabaseContents(driveContents);
 
         // Create metadata
         MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
@@ -133,6 +133,49 @@ public final class DriveDbHandler {
                 Log.i(LOG_TAG, "Successfully created file in Google Drive");
             }
         });
+    }
+
+    private static void updateDatabase(final GoogleApiClient googleApiClient, DriveFile file) {
+        Log.d(LOG_TAG, "Updating Google Drive database...");
+
+        file.open(googleApiClient, DriveFile.MODE_WRITE_ONLY, null).setResultCallback(
+                new ResultCallback<DriveApi.DriveContentsResult>() {
+            @Override
+            public void onResult(@NonNull DriveApi.DriveContentsResult result) {
+                if (!result.getStatus().isSuccess()) {
+                    Log.e(LOG_TAG, "Couldn't open file");
+                    return;
+                }
+
+                DriveContents driveContents = result.getDriveContents();
+                writeDatabaseContents(driveContents);
+                driveContents.commit(googleApiClient, null);
+
+                Log.i(LOG_TAG, "Updated database on Drive");
+            }
+        });
+    }
+
+    private static DriveContents writeDatabaseContents(DriveContents driveContents) {
+        // See http://stackoverflow.com/a/33610727/4230345
+        File file = new File(DATABASE_PATH);
+        OutputStream outputStream = driveContents.getOutputStream();
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            byte[] buf = new byte[4096];
+            int c;
+            while ((c = inputStream.read(buf, 0, buf.length)) > 0) {
+                outputStream.write(buf, 0, c);
+                outputStream.flush();
+            }
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(LOG_TAG, "Written file to output stream of drive contents");
+
+        return driveContents;
     }
 
 }
