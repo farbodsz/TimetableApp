@@ -3,7 +3,7 @@
 buildscript {
     ext {
         android_support_lib_version = '25.1.0'
-        kotlin_version = '1.0.5-2'
+        kotlin_version = '1.0.6'
     }
 
     repositories {
