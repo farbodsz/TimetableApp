@@ -6,7 +6,7 @@ import android.content.Intent
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
 
-class BootReceiver() : BroadcastReceiver() {
+class BootReceiver : BroadcastReceiver() {
 
     companion object {
         private const val LOG_TAG = "BootReceiver"
