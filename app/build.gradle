@@ -39,6 +39,9 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.google.android.gms:play-services-drive:10.0.1'
 
+    // Apache commons library (for writing/reading SQLite db with Drive binary contents)
+    compile 'org.apache.commons:commons-io:1.3.2'
+
     // Other libraries
     compile 'com.jakewharton.threetenabp:threetenabp:1.0.4'
     compile 'com.satsuware.lib:usefulviews:2.3.6'

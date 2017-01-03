@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.db;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -16,9 +17,13 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
+import com.satsumasoftware.timetable.util.DriveDbUtils;
+
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -35,18 +40,11 @@ public final class DriveDbHandler {
     private static final String FILE_NAME = TimetableDbHelper.DATABASE_NAME;
     private static final String MIME_TYPE = "application/x-sqlite-3";
 
-    private DriveDbHandler() {
-    }
-
-    public static void saveToDrive(final GoogleApiClient googleApiClient) {
+    public static void saveToDrive(final Context context, final GoogleApiClient googleApiClient) {
         // We need to check if the database already exists on Google Drive. If so, we won't create
         // it again.
 
-        Query query = new Query.Builder()
-                .addFilter(Filters.and(
-                        Filters.eq(SearchableField.TITLE, FILE_NAME),
-                        Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE)))
-                .build();
+        Query query = getDatabaseFileQuery();
         DriveFolder appFolder = Drive.DriveApi.getAppFolder(googleApiClient);
 
         appFolder.queryChildren(googleApiClient, query).setResultCallback(
@@ -67,7 +65,7 @@ public final class DriveDbHandler {
                             case 0:
                                 // Create the database on Google Drive if it doesn't exist already
                                 Log.d(LOG_TAG, "No existing database found on Google Drive");
-                                createDatabaseOnDrive(googleApiClient);
+                                createDatabaseOnDrive(context, googleApiClient);
                                 break;
 
                             case 1:
@@ -89,7 +87,57 @@ public final class DriveDbHandler {
                 });
     }
 
-    private static void createDatabaseOnDrive(final GoogleApiClient googleApiClient) {
+    public static void readFromDrive(final GoogleApiClient googleApiClient) {
+        Log.d(LOG_TAG, "Reading database contents from Google Drive");
+
+        if (googleApiClient == null || !googleApiClient.isConnected()) {
+            Log.e(LOG_TAG, "Unable to update local data - googleApiClient must be connected");
+            return;
+        }
+
+        Query query = getDatabaseFileQuery();
+        DriveFolder appFolder = Drive.DriveApi.getAppFolder(googleApiClient);
+
+        appFolder.queryChildren(googleApiClient, query).setResultCallback(
+                new ResultCallback<DriveApi.MetadataBufferResult>() {
+            @Override
+            public void onResult(@NonNull DriveApi.MetadataBufferResult metadataBufferResult) {
+                if (!metadataBufferResult.getStatus().isSuccess()) {
+                    Log.e(LOG_TAG, "Unable to find database file on Drive");
+                    return;
+                }
+
+                int count = metadataBufferResult.getMetadataBuffer().getCount();
+                if (count != 1) {
+                    Log.e(LOG_TAG, count + " files found in the app folder - cannot proceed with" +
+                            " reading Drive file");
+                    return;
+                }
+
+                Log.v(LOG_TAG, "Found database file successfully");
+
+                Metadata metadata = metadataBufferResult.getMetadataBuffer().get(0);
+                DriveId driveId = metadata.getDriveId();
+
+                DriveFile file = driveId.asDriveFile();
+
+                Log.v(LOG_TAG, "Preparing to read and write to local data...");
+
+                storeDatabaseContents(googleApiClient, file);
+            }
+        });
+    }
+
+    private static Query getDatabaseFileQuery() {
+        return new Query.Builder()
+                .addFilter(Filters.and(
+                        Filters.eq(SearchableField.TITLE, FILE_NAME),
+                        Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE)))
+                .build();
+    }
+
+    private static void createDatabaseOnDrive(final Context context,
+                                              final GoogleApiClient googleApiClient) {
         Log.d(LOG_TAG, "Creating the database on Google Drive...");
 
         // Create content from file
@@ -104,12 +152,15 @@ public final class DriveDbHandler {
                         }
 
                         Log.d(LOG_TAG, "Created drive contents for file");
-                        createNewFile(googleApiClient, driveContentsResult.getDriveContents());
+                        createNewFile(context,
+                                googleApiClient,
+                                driveContentsResult.getDriveContents());
                     }
                 });
     }
 
-    private static void createNewFile(GoogleApiClient googleApiClient, DriveContents driveContents) {
+    private static void createNewFile(final Context context, GoogleApiClient googleApiClient,
+                                      DriveContents driveContents) {
         // Write file to contents
         driveContents = writeDatabaseContents(driveContents);
 
@@ -126,9 +177,12 @@ public final class DriveDbHandler {
             @Override
             public void onResult(@NonNull DriveFolder.DriveFileResult driveFileResult) {
                 if (!driveFileResult.getStatus().isSuccess()) {
-                    Log.w(LOG_TAG, "File did not get created in Google Drive!");
+                    Log.e(LOG_TAG, "File did not get created in Google Drive!");
                     return;
                 }
+
+                DriveId driveId = driveFileResult.getDriveFile().getDriveId();
+                DriveDbUtils.storeDatabaseDriveId(context, driveId);
 
                 Log.i(LOG_TAG, "Successfully created file in Google Drive");
             }
@@ -176,6 +230,36 @@ public final class DriveDbHandler {
         Log.d(LOG_TAG, "Written file to output stream of drive contents");
 
         return driveContents;
+    }
+
+    private static void storeDatabaseContents(GoogleApiClient googleApiClient, DriveFile file) {
+        Log.d(LOG_TAG, "Opening Drive file to store data locally");
+        file.open(googleApiClient, DriveFile.MODE_READ_ONLY, null).setResultCallback(
+                new ResultCallback<DriveApi.DriveContentsResult>() {
+                    @Override
+                    public void onResult(@NonNull DriveApi.DriveContentsResult driveContentsResult) {
+                        if (!driveContentsResult.getStatus().isSuccess()) {
+                            Log.e(LOG_TAG, "Can't open the Drive file");
+                            return;
+                        }
+
+                        Log.v(LOG_TAG, "Successfully opened Drive file");
+
+                        DriveContents driveContents = driveContentsResult.getDriveContents();
+                        InputStream inputStream = driveContents.getInputStream();
+
+                        File file = new File(DATABASE_PATH);
+                        try {
+                            OutputStream outputStream = new FileOutputStream(file);
+                            IOUtils.copy(inputStream, outputStream);
+                            outputStream.close();
+                            Log.i(LOG_TAG, "Written to local data from database on Drive");
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
 }

@@ -110,7 +110,7 @@ public class SignInActivity extends AppCompatActivity implements
             Toast.makeText(this, "Successfully signed in as " + account.getDisplayName(),
                     Toast.LENGTH_SHORT).show();
 
-            DriveDbHandler.saveToDrive(mGoogleApiClient);
+            DriveDbHandler.readFromDrive(mGoogleApiClient); // TODO I don't think this actually works
             continueToTimetable();
 
         } else {
