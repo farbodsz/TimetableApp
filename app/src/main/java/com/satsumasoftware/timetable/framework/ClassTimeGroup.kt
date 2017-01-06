@@ -14,6 +14,14 @@ class ClassTimeGroup(val startTime: LocalTime, val endTime: LocalTime) {
 
     val classTimes = ArrayList<ClassTime>()
 
+    /**
+     * Adds a [ClassTime] to this group.
+     *
+     * @param classTime The [ClassTime] to be added to this group. It must have the same start and
+     *          end times as the ones specified in this class.
+     * @see startTime
+     * @see endTime
+     */
     fun addClassTime(classTime: ClassTime) {
         if (!classTime.startTime.equals(startTime) || !classTime.endTime.equals(endTime)) {
             throw IllegalArgumentException("invalid class time - the start and end times must" +
