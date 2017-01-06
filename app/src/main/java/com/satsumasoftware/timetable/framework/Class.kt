@@ -46,6 +46,12 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
 
     fun hasStartEndDates() = startDate != NO_DATE && endDate != NO_DATE
 
+    fun isCurrent() = if (hasStartEndDates()) {
+        !startDate.isAfter(LocalDate.now()) && !endDate.isBefore(LocalDate.now())
+    } else {
+        true
+    }
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {

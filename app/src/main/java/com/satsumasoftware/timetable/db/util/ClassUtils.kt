@@ -32,7 +32,8 @@ class ClassUtils {
         private const val WEEK_AS_MILLISECONDS = 604800000L
 
         @JvmStatic
-        fun getClasses(activity: Activity): ArrayList<Class> {
+        @JvmOverloads
+        fun getClasses(activity: Activity, currentOnly: Boolean = true): ArrayList<Class> {
             val classes = ArrayList<Class>()
 
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
@@ -46,7 +47,10 @@ class ClassUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                classes.add(Class(cursor))
+                val cls = Class(cursor)
+                if (!currentOnly || (currentOnly && cls.isCurrent())) {
+                    classes.add(Class(cursor))
+                }
                 cursor.moveToNext()
             }
             cursor.close()

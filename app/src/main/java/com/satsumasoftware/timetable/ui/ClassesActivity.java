@@ -33,6 +33,8 @@ public class ClassesActivity extends BaseActivity {
 
     private ArrayList<Class> mClasses;
 
+    private boolean mHideCurrent = false;
+
     private ClassesAdapter mAdapter;
 
     private RecyclerView mRecyclerView;
@@ -66,7 +68,7 @@ public class ClassesActivity extends BaseActivity {
     }
 
     private void setupList() {
-        mClasses = ClassUtils.getClasses(this);
+        mClasses = ClassUtils.getClasses(this, mHideCurrent);
         sortList();
 
         mAdapter = new ClassesAdapter(this, mClasses);
@@ -113,7 +115,7 @@ public class ClassesActivity extends BaseActivity {
 
     private void refreshList() {
         mClasses.clear();
-        mClasses.addAll(ClassUtils.getClasses(this));
+        mClasses.addAll(ClassUtils.getClasses(this, mHideCurrent));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();
