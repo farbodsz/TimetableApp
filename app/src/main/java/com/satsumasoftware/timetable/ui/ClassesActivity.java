@@ -33,7 +33,7 @@ public class ClassesActivity extends BaseActivity {
 
     private ArrayList<Class> mClasses;
 
-    private boolean mHideCurrent = false;
+    private boolean mShowAll = false;
 
     private ClassesAdapter mAdapter;
 
@@ -68,7 +68,7 @@ public class ClassesActivity extends BaseActivity {
     }
 
     private void setupList() {
-        mClasses = ClassUtils.getClasses(this, mHideCurrent);
+        mClasses = ClassUtils.getClasses(this, !mShowAll);
         sortList();
 
         mAdapter = new ClassesAdapter(this, mClasses);
@@ -115,7 +115,7 @@ public class ClassesActivity extends BaseActivity {
 
     private void refreshList() {
         mClasses.clear();
-        mClasses.addAll(ClassUtils.getClasses(this, mHideCurrent));
+        mClasses.addAll(ClassUtils.getClasses(this, !mShowAll));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();
