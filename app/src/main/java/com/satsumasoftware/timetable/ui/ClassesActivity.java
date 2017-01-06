@@ -165,6 +165,17 @@ public class ClassesActivity extends BaseActivity {
             case R.id.action_manage_subjects:
                 startActivity(new Intent(this, SubjectsActivity.class));
                 break;
+
+            case R.id.action_show_all:
+                if (mShowAll) {
+                    item.setChecked(false);
+                    mShowAll = false;
+                } else {
+                    item.setChecked(true);
+                    mShowAll = true;
+                }
+                refreshList();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
