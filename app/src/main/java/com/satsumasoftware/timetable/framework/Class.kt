@@ -46,6 +46,14 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
 
     fun hasStartEndDates() = startDate != NO_DATE && endDate != NO_DATE
 
+    /**
+     * @return false if the class' start and end dates are in the past or the future. This would be
+     * used when displaying a list of classes - most of the time, the user would only want to see
+     * their current classes.
+     *
+     * @see startDate
+     * @see endDate
+     */
     fun isCurrent() = if (hasStartEndDates()) {
         !startDate.isAfter(LocalDate.now()) && !endDate.isBefore(LocalDate.now())
     } else {
