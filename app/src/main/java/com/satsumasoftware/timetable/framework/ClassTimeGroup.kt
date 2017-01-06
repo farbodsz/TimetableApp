@@ -9,6 +9,8 @@ import java.util.*
  *
  * @property startTime The start time all `ClassTime`s in this group will have
  * @property endTime The end time all `ClassTime`s in this group will have
+ *
+ * @see ClassTime
  */
 class ClassTimeGroup(val startTime: LocalTime, val endTime: LocalTime) {
 
