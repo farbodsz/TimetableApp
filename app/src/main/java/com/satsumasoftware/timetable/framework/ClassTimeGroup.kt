@@ -8,7 +8,7 @@ class ClassTimeGroup(val startTime: LocalTime, val endTime: LocalTime) {
     val classTimes = ArrayList<ClassTime>()
 
     fun addClassTime(classTime: ClassTime) {
-        if (!classTime.startTime.equals(startTime) || !classTime.endTime.equals(endTime)) {
+        if (!canAdd(classTime)) {
             throw IllegalArgumentException("invalid class time - the start and end times must" +
                     "match the ones specified from this object's constructor")
         }
