@@ -54,7 +54,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * This is invoked and displayed to the user to edit the details of a class.
+ * Invoked and displayed to the user to edit the details of a class.
  *
  * Currently, it is also responsible for showing the details, since there is no activity dedicated
  * to merely displaying the details (like in {@link AssignmentDetailActivity}).

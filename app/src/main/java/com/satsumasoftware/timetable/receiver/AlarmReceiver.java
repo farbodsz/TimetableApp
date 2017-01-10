@@ -38,8 +38,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * This class will be invoked for receiving an alarm - i.e. when a notification needs to be
- * displayed.
+ * Invoked when receiving an alarm - i.e. when a notification needs to be displayed.
  */
 public class AlarmReceiver extends WakefulBroadcastReceiver {
 

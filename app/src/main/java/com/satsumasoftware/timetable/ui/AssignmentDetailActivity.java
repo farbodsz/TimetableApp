@@ -32,8 +32,8 @@ import org.threeten.bp.format.DateTimeFormatter;
  * Additionally, this activity should be invoked to create a new assignment, passing no intent
  * data so that {@link #EXTRA_ASSIGNMENT} is null.
  *
- * @see AssignmentEditActivity
  * @see Assignment
+ * @see AssignmentEditActivity
  */
 public class AssignmentDetailActivity extends AppCompatActivity {
 

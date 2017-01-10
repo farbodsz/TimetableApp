@@ -39,7 +39,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * This is used to display a list of assignments to the user.
+ * An activity for displaying a list of assignments to the user.
  *
  * Assignments can be displayed in two formats: {@link #DISPLAY_TODO} and
  * {@link #DISPLAY_ALL_UPCOMING}. In the former, only incomplete assignments will be displayed; in
@@ -52,9 +52,9 @@ import java.util.Comparator;
  * {@link AssignmentDetailActivity}. The user can also choose to create a new assignment in which
  * case {@link AssignmentDetailActivity} will also be invoked but with no intent extra data.
  *
+ * @see Assignment
  * @see AssignmentDetailActivity
  * @see AssignmentEditActivity
- * @see Assignment
  */
 public class AssignmentsActivity extends BaseActivity {
 

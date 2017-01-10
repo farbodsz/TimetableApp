@@ -16,7 +16,7 @@ import android.view.View;
 import com.satsumasoftware.timetable.R;
 
 /**
- * An activity which is used for the navigation drawer implementation.
+ * An activity used for the navigation drawer implementation.
  *
  * This should be implemented by activities which contain a navigation drawer.
  */

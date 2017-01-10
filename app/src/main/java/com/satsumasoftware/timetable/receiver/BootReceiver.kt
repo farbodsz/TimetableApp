@@ -7,8 +7,7 @@ import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
 
 /**
- * This class can receive broadcasts. In this case, it will be used when the device has finished
- * being booted.
+ * Receives broadcasts - specifically, when the device has finished being booted.
  */
 class BootReceiver() : BroadcastReceiver() {
 

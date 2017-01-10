@@ -40,14 +40,14 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * This is invoked and displayed to the user to edit the details of an assignment.
+ * Invoked and displayed to the user to edit the details of an assignment.
  *
  * It can also be called to create a new assignment. If so, it will be started by
  * {@link AssignmentDetailActivity} and no data will be passed to this activity (i.e.
  * {@link #EXTRA_ASSIGNMENT} will be null).
  *
- * @see AssignmentDetailActivity
  * @see Assignment
+ * @see AssignmentDetailActivity
  */
 public class AssignmentEditActivity extends AppCompatActivity {
 
