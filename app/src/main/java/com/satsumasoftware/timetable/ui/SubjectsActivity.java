@@ -23,6 +23,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * An activity for displaying a list of subjects to the user.
+ *
+ * If there are no subjects to display, a placeholder background will be shown instead.
+ *
+ * Clicking on a subject to view or edit, or choosing to create a new subject will direct the user
+ * to {@link SubjectEditActivity}.
+ *
+ * @see Subject
+ * @see SubjectEditActivity
+ */
 public class SubjectsActivity extends AppCompatActivity {
 
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 1;
