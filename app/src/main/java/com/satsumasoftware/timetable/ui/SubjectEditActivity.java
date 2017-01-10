@@ -36,6 +36,7 @@ import java.util.ArrayList;
  * subject.
  *
  * @see Subject
+ * @see SubjectsActivity
  */
 public class SubjectEditActivity extends AppCompatActivity {
 

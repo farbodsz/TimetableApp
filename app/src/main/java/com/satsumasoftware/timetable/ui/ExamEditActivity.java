@@ -54,6 +54,7 @@ import java.util.Comparator;
  * to this activity (i.e. {@link #EXTRA_EXAM} will be null).
  *
  * @see Exam
+ * @see ExamsActivity
  */
 public class ExamEditActivity extends AppCompatActivity {
 

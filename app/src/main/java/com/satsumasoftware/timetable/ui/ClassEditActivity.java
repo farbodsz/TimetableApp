@@ -63,6 +63,7 @@ import java.util.Comparator;
  * to this activity (i.e. {@link #EXTRA_CLASS} will be null).
  *
  * @see Class
+ * @see ClassesActivity
  */
 public class ClassEditActivity extends AppCompatActivity {
 

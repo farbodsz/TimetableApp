@@ -33,6 +33,7 @@ import org.threeten.bp.format.DateTimeFormatter;
  * data so that {@link #EXTRA_ASSIGNMENT} is null.
  *
  * @see Assignment
+ * @see AssignmentDetailActivity
  * @see AssignmentEditActivity
  */
 public class AssignmentDetailActivity extends AppCompatActivity {
