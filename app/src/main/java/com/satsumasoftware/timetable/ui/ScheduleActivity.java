@@ -37,6 +37,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * An activity for displaying a weekly schedule.
+ *
+ * Each day is a tab in the layout, and each tab will display a list of classes for that day.
+ */
 public class ScheduleActivity extends BaseActivity {
 
     private static final String LOG_TAG = "ScheduleActivity";
