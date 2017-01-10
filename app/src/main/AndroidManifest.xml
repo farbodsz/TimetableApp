@@ -97,6 +97,11 @@
             android:label="@string/action_settings"
             android:theme="@style/Timetable"/>
 
+        <activity
+            android:name=".ui.LicensesActivity"
+            android:label="@string/title_licenses"
+            android:theme="@style/Timetable" />
+
         <receiver android:name=".receiver.AlarmReceiver" />
 
         <receiver android:name=".receiver.BootReceiver">

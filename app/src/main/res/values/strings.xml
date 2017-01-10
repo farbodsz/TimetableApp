@@ -24,6 +24,8 @@
     <string name="title_activity_timetable_edit">Edit Timetable</string>
     <string name="title_activity_term_new">New Term</string>
     <string name="title_activity_term_edit">Edit Term</string>
+    
+    <string name="title_licenses">Licenses</string>
 
     <string name="home_card_classes_title">Agenda</string>
     <string name="home_card_classes_action">Open schedule</string>
