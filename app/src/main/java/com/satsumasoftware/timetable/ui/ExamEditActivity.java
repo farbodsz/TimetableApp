@@ -60,7 +60,7 @@ public class ExamEditActivity extends AppCompatActivity {
     /**
      * The key for the {@link Exam} passed through an intent extra.
      *
-     * It should be null if we're creating a new class.
+     * It should be null if we're creating a new exam.
      */
     protected static final String EXTRA_EXAM = "extra_exam";
 
