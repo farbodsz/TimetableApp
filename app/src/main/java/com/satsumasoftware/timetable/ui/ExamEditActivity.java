@@ -44,8 +44,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Invoked and displayed to the user for editing the details of an exam.
+ *
+ * Currently, it is also responsible for showing the details, since there is no activity dedicated
+ * to merely displaying the details (like in {@link AssignmentDetailActivity}).
+ *
+ * It can also be called to create a new exam. If so, there will be no intent extra data supplied
+ * to this activity (i.e. {@link #EXTRA_EXAM} will be null).
+ *
+ * @see Exam
+ */
 public class ExamEditActivity extends AppCompatActivity {
 
+    /**
+     * The key for the {@link Exam} passed through an intent extra.
+     *
+     * It should be null if we're creating a new class.
+     */
     protected static final String EXTRA_EXAM = "extra_exam";
 
     protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
