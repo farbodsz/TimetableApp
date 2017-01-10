@@ -11,14 +11,13 @@ import org.threeten.bp.LocalDate
 /**
  * Represents an assignment the user may have been given.
  *
- * @property id An identifier for the assignment
- * @property timetableId Used to identifier which academic year ([Timetable]) this assignment is
- *      linked to
- * @property classId The identifier of the [Class] this assignment is for
- * @property title The name of the assignment
- * @property detail Optional, additional notes the user may enter for the assignment
- * @property dueDate The date the assignment must be handed in
- * @property completionProgress An integer from 0-100 (like a percentage) indicating how complete
+ * @property id the identifier for this assignment
+ * @property timetableId the identifier for the ([Timetable]) this assignment is linked to
+ * @property classId the identifier of the [Class] this assignment is associated with
+ * @property title the name of the assignment
+ * @property detail optional, additional notes the user may enter for the assignment
+ * @property dueDate the date the assignment must be handed in
+ * @property completionProgress an integer from 0-100 (like a percentage) indicating how complete
  *      the assignment is (100 indicating fully complete)
  */
 class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title: String,

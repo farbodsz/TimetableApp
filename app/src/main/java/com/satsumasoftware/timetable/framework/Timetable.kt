@@ -21,12 +21,12 @@ import org.threeten.bp.format.DateTimeFormatter
  * and assignments, exactly like how one would have different classes, exams, and assignments for
  * each academic year.
  *
- * @property id An integer identifier
- * @property name The name of the timetable. This could be the name of the academic year (e.g.
+ * @property id an integer identifier for this timetable
+ * @property name the name of the timetable. This could be the name of the academic year (e.g.
  *      "Year 11", "9th Grade", "2016") or something else (e.g. "Friend's Timetable", "Evening
  *      classes").
- * @property startDate The first day this timetable is applicable for
- * @property endDate The last day of the timetable is applicable for
+ * @property startDate the first day this timetable is applicable for
+ * @property endDate the last day this timetable is applicable for
  */
 class Timetable(val id: Int, val name: String, val startDate: LocalDate, val endDate: LocalDate,
                 val weekRotations: Int) : Parcelable {

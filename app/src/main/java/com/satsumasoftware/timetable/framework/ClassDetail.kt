@@ -14,11 +14,11 @@ import com.satsumasoftware.timetable.db.TimetableDbHelper
  * location, or be taught by more than one different teacher. Therefore, a `Class` can be linked to
  * multiple `ClassDetail`s; this is why our `ClassDetail` contains a `classId` property.
  *
- * @property id An integer used to identify this class detail
- * @property classId The identifier of the associated [Class]
- * @property room An optional name of the room where the class takes place
- * @property building An optional name of the building where the class takes place
- * @property teacher The name of the teacher for the class (also optional)
+ * @property id the identifier for this class detail
+ * @property classId the identifier of the associated [Class]
+ * @property room an optional name of the room where the class takes place
+ * @property building an optional name of the building where the class takes place
+ * @property teacher an optional name of the teacher for the class
  */
 class ClassDetail(val id: Int, val classId: Int, val room: String, val building: String,
                   val teacher: String) {

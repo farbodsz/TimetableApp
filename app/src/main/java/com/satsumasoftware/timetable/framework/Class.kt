@@ -9,18 +9,18 @@ import com.satsumasoftware.timetable.db.TimetableDbHelper
 import org.threeten.bp.LocalDate
 
 /**
- * Used to represent a class the user would attend.
+ * Represents a class the user would attend.
  *
  * Every class is part of a subject, which is why it includes a `subjectId`; in other words, a
  * subject is related to one or more classes. For example, the subject could be Mathematics,
  * and there could be different classes for the Statistics module and the Mechanics module.
  *
- * @property id An identifier for the class
- * @property timetableId The identifier of the [Timetable] this class is a part of
- * @property subjectId The identifier of the [Subject] this class is a part of
- * @property moduleName An optional name for the class' module
- * @property startDate The class' start date (optional)
- * @property endDate The class' end date (optional)
+ * @property id the identifier for this class
+ * @property timetableId the identifier of the [Timetable] this class is a part of
+ * @property subjectId the identifier of the [Subject] this class is a part of
+ * @property moduleName an optional name for the class' module
+ * @property startDate the class' start date (optional)
+ * @property endDate the class' end date (optional)
  */
 class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             val moduleName: String, val startDate: LocalDate,
@@ -103,7 +103,7 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
         }
 
         /**
-         * @return the displayed name of the class - including the module name if it has one
+         * @return the displayed name of the class, including the module name if it has one
          */
         @JvmStatic
         fun makeName(cls: Class, subject: Subject) = if (cls.hasModuleName()) {

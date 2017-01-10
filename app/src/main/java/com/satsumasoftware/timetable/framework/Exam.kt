@@ -13,16 +13,16 @@ import org.threeten.bp.LocalTime
 /**
  * Represents an exam.
  *
- * @property id An integer identifier
- * @property timetableId The identifier of the associated [Timetable]
- * @property subjectId The identifier of the [Subject] the exam is linked with
- * @property moduleName An optional name for the module of the exam
- * @property date The date the exam takes place
- * @property startTime The start time of the exam
- * @property duration An integer storing how long the exam would last (in minutes)
- * @property seat An optional string value denoting the seat the candidate would be in for the exam
- * @property room An optional string value denoting the room the candidate would be in for the exam
- * @property resit A boolean value indicating whether or not the exam is a resit
+ * @property id an integer identifier for this exam
+ * @property timetableId the identifier of the associated [Timetable]
+ * @property subjectId the identifier of the [Subject] this exam is linked with
+ * @property moduleName an optional name for the module of this exam
+ * @property date the date of this exam
+ * @property startTime the start time of this exam
+ * @property duration an integer storing how long this exam would last (in minutes)
+ * @property seat an optional string value denoting the seat the candidate would be in for this exam
+ * @property room an optional string value denoting the room the candidate would be in for this exam
+ * @property resit a boolean value indicating whether or not the exam is a resit
  */
 class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName: String,
            val date: LocalDate, val startTime: LocalTime, val duration: Int, val seat: String,

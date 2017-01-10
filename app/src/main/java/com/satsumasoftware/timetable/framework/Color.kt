@@ -5,7 +5,7 @@ import android.content.res.Resources
 import android.support.annotation.ColorRes
 
 /**
- * Used to represent a color from the material design spec.
+ * Represents a color from the material design spec.
  *
  * See the material design
  * [color palette](https://material.google.com/style/color.html#color-color-palette) for details.
