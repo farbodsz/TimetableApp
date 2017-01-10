@@ -39,8 +39,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Invoked and displayed to the user to edit the details of an assignment.
+ *
+ * It can also be called to create a new assignment. If so, it will be started by
+ * {@link AssignmentDetailActivity} and no data will be passed to this activity (i.e.
+ * {@link #EXTRA_ASSIGNMENT} will be null).
+ *
+ * @see Assignment
+ * @see AssignmentDetailActivity
+ */
 public class AssignmentEditActivity extends AppCompatActivity {
 
+    /**
+     * The key for the {@link Assignment} passed through an intent extra.
+     *
+     * It should be null if we're creating a new assignment.
+     */
     protected static final String EXTRA_ASSIGNMENT = "extra_assignment";
 
     private Assignment mAssignment;

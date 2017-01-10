@@ -4,6 +4,12 @@ import android.provider.BaseColumns;
 
 import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
 
+/**
+ * The schema for the 'terms' table, containing constants for the column names and an SQLite create
+ * statement.
+ *
+ * @see com.satsumasoftware.timetable.framework.Term
+ */
 public final class TermsSchema implements BaseColumns {
 
     public static final String TABLE_NAME = "terms";
@@ -16,6 +22,11 @@ public final class TermsSchema implements BaseColumns {
     public static final String COL_END_DATE_MONTH = "end_date_month";
     public static final String COL_END_DATE_YEAR = "end_date_year";
 
+    /**
+     * An SQLite statement which creates the 'terms' table upon execution.
+     *
+     * @see TimetableDbHelper
+     */
     static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_TIMETABLE_ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.COMMA_SEP +

@@ -4,6 +4,12 @@ import android.provider.BaseColumns;
 
 import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
 
+/**
+ * The schema for the 'timetables' table, containing constants for the column names and an SQLite
+ * create statement.
+ *
+ * @see com.satsumasoftware.timetable.framework.Timetable
+ */
 public final class TimetablesSchema implements BaseColumns {
 
     public static final String TABLE_NAME = "timetables";
@@ -16,6 +22,11 @@ public final class TimetablesSchema implements BaseColumns {
     public static final String COL_END_DATE_YEAR = "end_date_year";
     public static final String COL_WEEK_ROTATIONS = "week_rotations";
 
+    /**
+     * An SQLite statement which creates the 'timetables' table upon execution.
+     *
+     * @see TimetableDbHelper
+     */
     static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             _ID + SchemaUtilsKt.INTEGER_TYPE + SchemaUtilsKt.PRIMARY_KEY_AUTOINCREMENT + SchemaUtilsKt.COMMA_SEP +
             COL_NAME + SchemaUtilsKt.TEXT_TYPE + SchemaUtilsKt.COMMA_SEP +

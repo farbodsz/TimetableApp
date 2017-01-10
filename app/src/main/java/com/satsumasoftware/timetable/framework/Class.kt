@@ -8,6 +8,20 @@ import com.satsumasoftware.timetable.db.ClassesSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import org.threeten.bp.LocalDate
 
+/**
+ * Represents a class the user would attend.
+ *
+ * Every class is part of a subject, which is why it includes a `subjectId`; in other words, a
+ * subject is related to one or more classes. For example, the subject could be Mathematics,
+ * and there could be different classes for the Statistics module and the Mechanics module.
+ *
+ * @property id the identifier for this class
+ * @property timetableId the identifier of the [Timetable] this class is a part of
+ * @property subjectId the identifier of the [Subject] this class is a part of
+ * @property moduleName an optional name for the class' module
+ * @property startDate the class' start date (optional)
+ * @property endDate the class' end date (optional)
+ */
 class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             val moduleName: String, val startDate: LocalDate,
             val endDate: LocalDate) : Parcelable {
@@ -64,6 +78,9 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
         }
 
+        /**
+         * The field used if the class has no start/end dates
+         */
         @JvmField val NO_DATE: LocalDate = LocalDate.MIN
 
         @JvmStatic
@@ -85,6 +102,9 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             return cls
         }
 
+        /**
+         * @return the displayed name of the class, including the module name if it has one
+         */
         @JvmStatic
         fun makeName(cls: Class, subject: Subject) = if (cls.hasModuleName()) {
             "${subject.name}: ${cls.moduleName}"

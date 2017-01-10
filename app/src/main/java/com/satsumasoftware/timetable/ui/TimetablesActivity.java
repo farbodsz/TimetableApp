@@ -23,6 +23,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * An activity for displaying a list of timetables to the user.
+ *
+ * Note that unlike other activities, there cannot be a placeholder background since there is always
+ * at least one existing timetable in the app's database.
+ *
+ * Clicking on a timetable to view or edit, or choosing to create a new class will direct the user
+ * to {@link TimetableEditActivity}.
+ *
+ * @see Timetable
+ * @see TimetableEditActivity
+ */
 public class TimetablesActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_TIMETABLE_EDIT = 1;

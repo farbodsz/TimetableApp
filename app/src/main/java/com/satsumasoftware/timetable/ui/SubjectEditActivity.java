@@ -29,8 +29,22 @@ import com.satsumasoftware.timetable.util.UiUtils;
 
 import java.util.ArrayList;
 
+/**
+ * Invoked and displayed to the user for editing the details of a subject, or creating a new one.
+ *
+ * The user can choose to modify the name, abbreviation, or the {@link Color} associated with the
+ * subject.
+ *
+ * @see Subject
+ * @see SubjectsActivity
+ */
 public class SubjectEditActivity extends AppCompatActivity {
 
+    /**
+     * The key for the {@link Subject} passed through an intent extra.
+     *
+     * It should be null if we're creating a new subject.
+     */
     protected static final String EXTRA_SUBJECT = "extra_subject";
 
     private Subject mSubject;

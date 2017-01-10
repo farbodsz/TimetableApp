@@ -27,6 +27,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * An activity for displaying a list of classes to the user.
+ *
+ * If there are no classes to display, a placeholder background will be shown instead.
+ *
+ * Clicking on a class to view or edit, or choosing to create a new class will direct the user to
+ * {@link ClassEditActivity}.
+ *
+ * @see Class
+ * @see ClassEditActivity
+ */
 public class ClassesActivity extends BaseActivity {
 
     protected static final int REQUEST_CODE_CLASS_DETAIL = 1;

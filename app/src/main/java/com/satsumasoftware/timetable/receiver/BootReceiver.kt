@@ -6,6 +6,9 @@ import android.content.Intent
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
 
+/**
+ * Receives broadcasts - specifically, when the device has finished being booted.
+ */
 class BootReceiver() : BroadcastReceiver() {
 
     companion object {

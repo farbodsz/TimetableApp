@@ -18,15 +18,35 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.util.TermUtils;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.Term;
+import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
+/**
+ * Invoked and displayed to the user to edit the details of a term, or to create a new one.
+ *
+ * @see Term
+ */
 public class TermEditActivity extends AppCompatActivity {
 
-    protected static final String EXTRA_TIMETABLE_ID = "extra_timetable_id";
+    /**
+     * The key for the {@link Term} passed through an intent extra.
+     *
+     * It should be null if we're creating a new term.
+     */
     protected static final String EXTRA_TERM = "extra_term";
+
+    /**
+     * The key for the integer identifier of the {@link Timetable} this {@link Term} belongs to.
+     *
+     * This is passed to this activity since the timetable identifier is a required attribute of a
+     * term, so if we modify of create a term, we need this attribute.
+     *
+     * @see Timetable#getId()
+     */
+    protected static final String EXTRA_TIMETABLE_ID = "extra_timetable_id";
 
     private Term mTerm;
     private int mTimetableId;
