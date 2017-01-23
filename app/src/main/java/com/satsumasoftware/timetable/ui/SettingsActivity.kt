@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
@@ -92,6 +93,12 @@ class SettingsActivity : BaseActivity() {
         }
 
         private fun setupAboutPrefs() {
+            val licensePref = findPreference("pref_about_licenses")
+            licensePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                startActivity(Intent(activity, LicensesActivity::class.java))
+                true
+            }
+
             val versionPref = findPreference("pref_about_app_version")
             versionPref.summary = BuildConfig.VERSION_NAME
         }

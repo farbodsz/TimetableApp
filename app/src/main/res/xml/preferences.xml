@@ -32,6 +32,9 @@
         android:title="@string/prefCategory_about">
 
         <Preference
+            android:key="pref_about_licenses"
+            android:title="@string/pref_licenses" />
+        <Preference
             android:key="pref_about_app_version"
             android:title="@string/pref_appVersion" />
     </PreferenceCategory>
