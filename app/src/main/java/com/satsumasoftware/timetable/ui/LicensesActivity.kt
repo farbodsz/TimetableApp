@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.licenses.ApacheLicense
 import com.satsumasoftware.timetable.licenses.Library
+import com.satsumasoftware.timetable.util.UiUtils
 import java.util.*
 
 class LicensesActivity : AppCompatActivity() {
@@ -21,6 +22,9 @@ class LicensesActivity : AppCompatActivity() {
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
+
+        toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener { finish() }
 
         addLicenses()
 
