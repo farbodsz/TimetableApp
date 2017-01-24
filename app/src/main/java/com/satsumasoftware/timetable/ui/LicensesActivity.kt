@@ -68,6 +68,8 @@ class LicensesActivity : AppCompatActivity() {
     private fun displayCards() {
         val container = findViewById(R.id.container) as LinearLayout
 
+        Collections.sort(mLibraries)
+
         for (library in mLibraries) {
             container.addView(makeCard(library, container))
         }
