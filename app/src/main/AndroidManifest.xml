@@ -98,12 +98,12 @@
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.LicensesActivity"
+            android:name=".licenses.LicensesActivity"
             android:label="@string/title_licenses"
             android:theme="@style/Timetable" />
 
         <activity
-            android:name=".ui.LibraryDetailActivity"
+            android:name=".licenses.LibraryDetailActivity"
             android:theme="@style/Timetable" />
 
         <receiver android:name=".receiver.AlarmReceiver" />

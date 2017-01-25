@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.ui
+package com.satsumasoftware.timetable.licenses
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.satsumasoftware.timetable.R
-import com.satsumasoftware.timetable.licenses.Library
 import com.satsumasoftware.timetable.util.UiUtils
 
 class LibraryDetailActivity : AppCompatActivity() {

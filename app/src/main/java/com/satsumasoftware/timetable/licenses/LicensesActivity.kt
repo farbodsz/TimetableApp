@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.ui
+package com.satsumasoftware.timetable.licenses
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,8 +8,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.satsumasoftware.timetable.R
-import com.satsumasoftware.timetable.licenses.ApacheLicense
-import com.satsumasoftware.timetable.licenses.Library
 import com.satsumasoftware.timetable.util.UiUtils
 import java.util.*
 

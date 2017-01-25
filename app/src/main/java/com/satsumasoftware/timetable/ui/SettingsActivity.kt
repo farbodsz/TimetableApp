@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import com.satsumasoftware.timetable.BuildConfig
 import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.licenses.LicensesActivity
 import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.LocalTime
 
