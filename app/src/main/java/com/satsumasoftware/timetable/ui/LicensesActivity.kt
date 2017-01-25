@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -18,7 +19,7 @@ class LicensesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_licenses)
+        setContentView(R.layout.activity_container)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -76,12 +77,20 @@ class LicensesActivity : AppCompatActivity() {
     }
 
     private fun makeCard(library: Library, container: LinearLayout): View {
-        val card = layoutInflater.inflate(R.layout.card_license, container, false)
+        val card = layoutInflater.inflate(R.layout.card_general, container, false)
 
-        (card.findViewById(R.id.title) as TextView).text = library.name
-        (card.findViewById(R.id.subtitle) as TextView).text = library.author
+        with(card) {
+            (findViewById(R.id.title) as TextView).text = library.name
+            (findViewById(R.id.subtitle) as TextView).text = library.author
 
-        (card.findViewById(R.id.notice) as TextView).text = library.license.getNotice(this)
+            (findViewById(R.id.content_text) as TextView).text = library.license.getNotice(context)
+
+            setOnClickListener {
+                val intent = Intent(context, LibraryDetailActivity::class.java)
+                intent.putExtra(LibraryDetailActivity.EXTRA_LIBRARY, library)
+                startActivity(intent)
+            }
+        }
 
         return card
     }

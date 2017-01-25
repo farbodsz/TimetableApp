@@ -33,7 +33,7 @@
             android:paddingBottom="@dimen/card_padding" />
 
         <TextView
-            android:id="@+id/notice"
+            android:id="@+id/content_text"
             android:text="@string/license_apache_2.0"
             android:textColor="@color/mdu_text_black_secondary"
             android:layout_width="wrap_content"
