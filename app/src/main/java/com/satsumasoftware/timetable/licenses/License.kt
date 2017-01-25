@@ -1,9 +1,10 @@
 package com.satsumasoftware.timetable.licenses
 
 import android.content.Context
+import android.os.Parcelable
 import com.satsumasoftware.timetable.R
 
-interface License : Comparable<License> {
+interface License : Comparable<License>, Parcelable {
 
     val name: String
 
