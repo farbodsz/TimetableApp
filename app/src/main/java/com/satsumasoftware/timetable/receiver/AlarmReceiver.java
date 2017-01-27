@@ -24,6 +24,7 @@ import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Color;
+import com.satsumasoftware.timetable.framework.Event;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.AssignmentsActivity;
@@ -73,12 +74,13 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
      *
      * This is because notifications are displayed differently for each of the three categories.
      */
-    @IntDef({Type.CLASS, Type.ASSIGNMENT, Type.EXAM})
+    @IntDef({Type.CLASS, Type.ASSIGNMENT, Type.EXAM, Type.EVENT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {
         int CLASS = 1;
         int ASSIGNMENT = 2;
         int EXAM = 3;
+        int EVENT = 4;
     }
 
     private AlarmManager mAlarmManager;
@@ -172,6 +174,20 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 drawableRes = R.drawable.ic_assessment_white_24dp;
                 contentText = makeExamText(exam);
                 tickerText = examSubject.getName() + " exam starting in 30 minutes";
+                break;
+
+            case Type.EVENT:
+                Event event = Event.create(context, id);
+
+                color = new Color(19);
+                intent = new Intent(context, MainActivity.class); // TODO open an ExamsActivity once created
+
+                contentTitle = event.getTitle();
+                drawableRes = R.drawable.ic_assignment_white_24dp; // TODO add an event icon and use that
+                contentText = event.getStartTime().toLocalTime() + " - " +
+                        event.getEndTime().toLocalTime();
+                tickerText = event.getTitle() + " starting in 30 minutes";
+                // TODO create string resource for this depending on customizable reminder time
                 break;
 
             default:
