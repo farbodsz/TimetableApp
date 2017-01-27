@@ -1,9 +1,11 @@
 package com.satsumasoftware.timetable.framework
 
+import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.EventsSchema
+import com.satsumasoftware.timetable.db.TimetableDbHelper
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -55,6 +57,21 @@ class Event(val id: Int, val timetableId: Int, val title: String, val detail: St
                     cursor.getString(cursor.getColumnIndex(EventsSchema.COL_DETAIL)),
                     LocalDateTime.of(startDate, startTime),
                     LocalDateTime.of(endDate, endTime))
+        }
+
+        @JvmStatic
+        fun create(context: Context, eventId: Int): Event {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    EventsSchema.TABLE_NAME,
+                    null,
+                    "${EventsSchema._ID}=?",
+                    arrayOf(eventId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            val event = Event.from(cursor)
+            cursor.close()
+            return event
         }
 
         @JvmField val CREATOR: Parcelable.Creator<Event> = object : Parcelable.Creator<Event> {
