@@ -33,7 +33,7 @@ class ExamUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                exams.add(Exam(cursor))
+                exams.add(Exam.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()
@@ -48,7 +48,7 @@ class ExamUtils {
                     ExamsSchema.TABLE_NAME, null, null, null, null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                exams.add(Exam(cursor))
+                exams.add(Exam.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()
@@ -67,7 +67,7 @@ class ExamUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                exams.add(Exam(cursor))
+                exams.add(Exam.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()

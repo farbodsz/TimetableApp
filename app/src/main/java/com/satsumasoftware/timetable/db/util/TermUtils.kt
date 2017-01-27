@@ -27,7 +27,7 @@ class TermUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                terms.add(Term(cursor))
+                terms.add(Term.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()

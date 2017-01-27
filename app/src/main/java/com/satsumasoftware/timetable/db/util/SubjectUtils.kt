@@ -31,7 +31,7 @@ class SubjectUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                subjects.add(Subject(cursor))
+                subjects.add(Subject.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()

@@ -36,7 +36,7 @@ class AssignmentUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                assignments.add(Assignment(cursor))
+                assignments.add(Assignment.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()
@@ -51,7 +51,7 @@ class AssignmentUtils {
                     AssignmentsSchema.TABLE_NAME, null, null, null, null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                assignments.add(Assignment(cursor))
+                assignments.add(Assignment.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()
@@ -70,7 +70,7 @@ class AssignmentUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                assignments.add(Assignment(cursor))
+                assignments.add(Assignment.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()

@@ -26,7 +26,7 @@ class TimetableUtils {
                     TimetablesSchema.TABLE_NAME, null, null, null, null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                timetables.add(Timetable(cursor))
+                timetables.add(Timetable.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()
@@ -114,7 +114,7 @@ class TimetableUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                subjects.add(Subject(cursor))
+                subjects.add(Subject.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()

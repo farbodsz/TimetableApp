@@ -41,18 +41,57 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate, val end
             }
         }
 
-    constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(TimetablesSchema._ID)),
-            cursor.getString(cursor.getColumnIndex(TimetablesSchema.COL_NAME)),
-            LocalDate.of(
+    companion object {
+
+        /**
+         * Constructs a [Timetable] using column values from the cursor provided
+         *
+         * @param cursor a query of the timetables table
+         * @see [TimetablesSchema]
+         */
+        @JvmStatic
+        fun from(cursor: Cursor): Timetable {
+            val startDate = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_DAY_OF_MONTH))),
-            LocalDate.of(
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_DAY_OF_MONTH)))
+            val endDate = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH))),
-            cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_WEEK_ROTATIONS)))
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH)))
+
+            return Timetable(
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema._ID)),
+                    cursor.getString(cursor.getColumnIndex(TimetablesSchema.COL_NAME)),
+                    startDate,
+                    endDate,
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_WEEK_ROTATIONS)))
+        }
+
+        @JvmStatic
+        fun create(context: Context, timetableId: Int): Timetable? {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    TimetablesSchema.TABLE_NAME,
+                    null,
+                    "${TimetablesSchema._ID}=?",
+                    arrayOf(timetableId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val timetable = Timetable.from(cursor)
+            cursor.close()
+            return timetable
+        }
+
+        @JvmField val CREATOR: Parcelable.Creator<Timetable> = object : Parcelable.Creator<Timetable> {
+            override fun createFromParcel(source: Parcel): Timetable = Timetable(source)
+            override fun newArray(size: Int): Array<Timetable?> = arrayOfNulls(size)
+        }
+    }
 
     fun hasName() = name.trim().isNotEmpty()
 
@@ -77,31 +116,4 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate, val end
         dest?.writeInt(weekRotations)
     }
 
-    companion object {
-
-        @JvmField val CREATOR: Parcelable.Creator<Timetable> = object : Parcelable.Creator<Timetable> {
-            override fun createFromParcel(source: Parcel): Timetable = Timetable(source)
-            override fun newArray(size: Int): Array<Timetable?> = arrayOfNulls(size)
-        }
-
-        @JvmStatic
-        fun create(context: Context, timetableId: Int): Timetable? {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    TimetablesSchema.TABLE_NAME,
-                    null,
-                    "${TimetablesSchema._ID}=?",
-                    arrayOf(timetableId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            if (cursor.count == 0) {
-                cursor.close()
-                return null
-            }
-            val timetable = Timetable(cursor)
-            cursor.close()
-            return timetable
-        }
-
-    }
 }

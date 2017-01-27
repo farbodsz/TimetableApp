@@ -46,7 +46,7 @@ class ClassUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                classes.add(Class(cursor))
+                classes.add(Class.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()
@@ -66,7 +66,7 @@ class ClassUtils {
                     null, null, null)
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
-                classes.add(Class(cursor))
+                classes.add(Class.from(cursor))
                 cursor.moveToNext()
             }
             cursor.close()
