@@ -46,8 +46,8 @@ class UiUtils private constructor() {
 
         @JvmStatic
         fun tintMenuIcons(context: Context, menu: Menu, vararg @IdRes menuItems: Int) {
-            for (@IdRes menuItem in menuItems) {
-                val icon = menu.findItem(menuItem).icon
+            menuItems.forEach {
+                val icon = menu.findItem(it).icon
                 icon?.let {
                     tintMenuDrawableWhite(context, icon)
                 }
