@@ -4,6 +4,14 @@ import android.content.Context
 import android.content.res.Resources
 import android.support.annotation.ColorRes
 
+/**
+ * Represents a color from the material design spec.
+ *
+ * See the material design
+ * [color palette](https://material.google.com/style/color.html#color-color-palette) for details.
+ *
+ * @property id An identifier used to represent one of 19 material design colors.
+ */
 class Color(val id: Int) {
 
     val name: String

@@ -23,8 +23,26 @@ import com.satsumasoftware.timetable.util.UiUtils;
 
 import org.threeten.bp.format.DateTimeFormatter;
 
+/**
+ * Shows the details of an assignment.
+ *
+ * The details are displayed to the user but they cannot be edited here and must be done in
+ * {@link AssignmentEditActivity}.
+ *
+ * Additionally, this activity should be invoked to create a new assignment, passing no intent
+ * data so that {@link #EXTRA_ASSIGNMENT} is null.
+ *
+ * @see Assignment
+ * @see AssignmentDetailActivity
+ * @see AssignmentEditActivity
+ */
 public class AssignmentDetailActivity extends AppCompatActivity {
 
+    /**
+     * The key for the {@link Assignment} passed through an intent extra.
+     *
+     * It should be null if we're creating a new assignment.
+     */
     static final String EXTRA_ASSIGNMENT = "extra_assignment";
 
     private static final int REQUEST_CODE_ASSIGNMENT_EDIT = 1;
@@ -39,6 +57,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
+            // If we don't have an assignment to display, we should create new one
             mIsNew = true;
             Intent intent = new Intent(AssignmentDetailActivity.this, AssignmentEditActivity.class);
             startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_EDIT);

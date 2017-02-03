@@ -53,11 +53,38 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Invoked and displayed to the user to edit the details of a class.
+ *
+ * Currently, it is also responsible for showing the details, since there is no activity dedicated
+ * to merely displaying the details (like in {@link AssignmentDetailActivity}).
+ *
+ * It can also be called to create a new class. If so, there will be no intent extra data supplied
+ * to this activity (i.e. {@link #EXTRA_CLASS} will be null).
+ *
+ * @see Class
+ * @see ClassesActivity
+ */
 public class ClassEditActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "ClassDetailActivity";
 
+    /**
+     * The key for the {@link Class} passed through an intent extra.
+     *
+     * It should be null if we're creating a new class.
+     */
     static final String EXTRA_CLASS = "extra_class";
+
+    /**
+     * The key for the integer identifier of the {@link ClassDetail} to be displayed.
+     *
+     * Because class details in this activity are shown each as separate tabs, we use this value
+     * to determine which tab should be shown to the user. It can also be null, notably if we're
+     * creating a new class.
+     *
+     * @see ClassDetail#getId()
+     */
     static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
 
     private static final int REQUEST_CODE_SUBJECT_DETAIL = 2;

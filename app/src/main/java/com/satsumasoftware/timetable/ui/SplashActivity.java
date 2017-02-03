@@ -9,10 +9,16 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.framework.Timetable;
 
+/**
+ * A splash screen shown to the user briefly before starting {@link MainActivity}.
+ */
 public class SplashActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_TIMETABLE_EDIT = 1;
 
+    /**
+     * The duration in milliseconds that the splash screen should be displayed for
+     */
     private static final int SLEEP_TIME = 1000;
 
     @Override

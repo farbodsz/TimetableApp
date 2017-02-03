@@ -38,12 +38,53 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * An activity for displaying a list of assignments to the user.
+ *
+ * Assignments can be displayed in two formats: {@link #DISPLAY_TODO} and
+ * {@link #DISPLAY_ALL_UPCOMING}. In the former, only incomplete assignments will be displayed; in
+ * the latter, only assignments that are due in the future (regardless of completion) and overdue
+ * assignments will be shown.
+ *
+ * If there are no assignments to display, a placeholder background will be shown instead.
+ *
+ * Clicking on an assignment will allow the user to view its details in
+ * {@link AssignmentDetailActivity}. The user can also choose to create a new assignment in which
+ * case {@link AssignmentDetailActivity} will also be invoked but with no intent extra data.
+ *
+ * @see Assignment
+ * @see AssignmentDetailActivity
+ * @see AssignmentEditActivity
+ */
 public class AssignmentsActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
 
+    /**
+     * The intent extra key for the display mode of the assignments.
+     *
+     * This should be either {@link #DISPLAY_TODO} or {@link #DISPLAY_ALL_UPCOMING}. If the data
+     * passed with this key is null, {@link #DISPLAY_ALL_UPCOMING} will be used by default.
+     */
     public static final String EXTRA_MODE = "extra_mode";
+
+    /**
+     * Suggests that only incomplete assignments will be shown in the list.
+     *
+     * It is specified by passing it through an intent extra with the {@link #EXTRA_MODE} key.
+     *
+     * @see #DISPLAY_ALL_UPCOMING
+     */
     public static final int DISPLAY_TODO = 1;
+
+    /**
+     * Suggests that only assignments due in the future and overdue assignments will be shown in the
+     * list.
+     *
+     * It is specified by passing it through an intent extra with the {@link #EXTRA_MODE} key.
+     *
+     * @see #DISPLAY_TODO
+     */
     public static final int DISPLAY_ALL_UPCOMING = 2;
 
     private int mMode;

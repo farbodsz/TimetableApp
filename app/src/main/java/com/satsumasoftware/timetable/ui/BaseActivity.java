@@ -16,6 +16,11 @@ import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 
+/**
+ * An activity used for the navigation drawer implementation.
+ *
+ * This should be implemented by activities which contain a navigation drawer.
+ */
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected static final int NAVDRAWER_ITEM_HOME = R.id.navigation_item_home;

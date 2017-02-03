@@ -12,6 +12,9 @@ import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.LocalTime
 
+/**
+ * An activity to display a list of settings (preferences) that the user can modify.
+ */
 class SettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

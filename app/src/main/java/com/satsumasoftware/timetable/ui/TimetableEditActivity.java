@@ -46,8 +46,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class TimetableEditActivity extends AppCompatActivity implements LabelledSpinner.OnItemChosenListener {
+/**
+ * Invoked and displayed to the user to edit the details of a timetable.
+ *
+ * Currently, it is also responsible for showing the details, since there is no activity dedicated
+ * to merely displaying the details (like in {@link AssignmentDetailActivity}).
+ *
+ * It can also be called to create a new timetable. If so, there will be no intent extra data
+ * supplied to this activity (i.e. {@link #EXTRA_TIMETABLE} will be null).
+ *
+ * @see Timetable
+ * @see TimetablesActivity
+ */
+public class TimetableEditActivity extends AppCompatActivity
+        implements LabelledSpinner.OnItemChosenListener {
 
+    /**
+     * The key for the {@link Timetable} passed through an intent extra.
+     *
+     * It should be null if we're creating a new timetable.
+     */
     static final String EXTRA_TIMETABLE = "extra_timetable";
 
     private static final int REQUEST_CODE_TERM_EDIT = 1;

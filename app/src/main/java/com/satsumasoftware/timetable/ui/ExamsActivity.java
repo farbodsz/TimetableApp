@@ -32,6 +32,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * An activity for displaying a list of exams to the user.
+ *
+ * If there are no exams to display, a placeholder background will be shown instead.
+ *
+ * Clicking on an exam to view or edit, or choosing to create a new exam will direct the user to
+ * {@link ExamEditActivity}.
+ *
+ * @see Exam
+ * @see ExamEditActivity
+ */
 public class ExamsActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_EXAM_EDIT = 1;
