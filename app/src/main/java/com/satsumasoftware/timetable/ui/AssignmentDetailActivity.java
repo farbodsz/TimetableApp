@@ -43,9 +43,9 @@ public class AssignmentDetailActivity extends AppCompatActivity {
      *
      * It should be null if we're creating a new assignment.
      */
-    protected static final String EXTRA_ASSIGNMENT = "extra_assignment";
+    static final String EXTRA_ASSIGNMENT = "extra_assignment";
 
-    protected static final int REQUEST_CODE_ASSIGNMENT_EDIT = 1;
+    private static final int REQUEST_CODE_ASSIGNMENT_EDIT = 1;
 
     private Assignment mAssignment;
     private boolean mIsNew;

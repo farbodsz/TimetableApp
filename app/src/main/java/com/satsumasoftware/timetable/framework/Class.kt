@@ -87,10 +87,11 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
          */
         @JvmField val NO_DATE: LocalDate = LocalDate.MIN
 
-        @JvmField val CREATOR: Parcelable.Creator<Class> = object : Parcelable.Creator<Class> {
-            override fun createFromParcel(source: Parcel): Class = Class(source)
-            override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
-        }
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Class> =
+                object : Parcelable.Creator<Class> {
+                    override fun createFromParcel(source: Parcel): Class = Class(source)
+                    override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
+                }
     }
 
     constructor(source: Parcel) : this(

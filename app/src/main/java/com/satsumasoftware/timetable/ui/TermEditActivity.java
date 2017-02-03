@@ -36,7 +36,7 @@ public class TermEditActivity extends AppCompatActivity {
      *
      * It should be null if we're creating a new term.
      */
-    protected static final String EXTRA_TERM = "extra_term";
+    static final String EXTRA_TERM = "extra_term";
 
     /**
      * The key for the integer identifier of the {@link Timetable} this {@link Term} belongs to.
@@ -46,7 +46,7 @@ public class TermEditActivity extends AppCompatActivity {
      *
      * @see Timetable#getId()
      */
-    protected static final String EXTRA_TIMETABLE_ID = "extra_timetable_id";
+    static final String EXTRA_TIMETABLE_ID = "extra_timetable_id";
 
     private Term mTerm;
     private int mTimetableId;

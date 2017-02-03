@@ -49,7 +49,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
      *
      * It should be null if we're adding a new class time.
      */
-    protected static final String EXTRA_CLASS_TIME = "extra_class_time";
+    static final String EXTRA_CLASS_TIME = "extra_class_time";
 
     /**
      * The key for the integer identifier of the {@link ClassDetail} passed through an intent extra.
@@ -60,7 +60,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
      * @see ClassTime#getClassDetailId()
      * @see ClassDetail#getId()
      */
-    protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
+    static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
 
     /**
      * The key passed through an intent extra for the index of the tab where this class time is
@@ -70,7 +70,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
      * value to {@link ClassEditActivity} so that only the class time values for the relevant tab
      * can be updated.
      */
-    protected static final String EXTRA_TAB_POSITION = "extra_tab_position";
+    static final String EXTRA_TAB_POSITION = "extra_tab_position";
 
     private int mClassDetailId;
     private ArrayList<ClassTime> mClassTimes;

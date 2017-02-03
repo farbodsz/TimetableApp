@@ -36,6 +36,6 @@ class ClassTimeGroup(val startTime: LocalTime, val endTime: LocalTime) {
      * @return if the [classTime] can be added to the group (if it has the same start and end times)
      */
     fun canAdd(classTime: ClassTime) =
-            classTime.startTime.equals(startTime) && classTime.endTime.equals(endTime)
+            classTime.startTime == startTime && classTime.endTime == endTime
 
 }

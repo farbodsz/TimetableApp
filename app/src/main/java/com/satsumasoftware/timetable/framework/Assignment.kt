@@ -67,10 +67,11 @@ class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title:
             return assignment
         }
 
-        @JvmField val CREATOR: Parcelable.Creator<Assignment> = object : Parcelable.Creator<Assignment> {
-            override fun createFromParcel(source: Parcel): Assignment = Assignment(source)
-            override fun newArray(size: Int): Array<Assignment?> = arrayOfNulls(size)
-        }
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Assignment> =
+                object : Parcelable.Creator<Assignment> {
+                    override fun createFromParcel(source: Parcel): Assignment = Assignment(source)
+                    override fun newArray(size: Int): Array<Assignment?> = arrayOfNulls(size)
+                }
     }
 
     constructor(source: Parcel): this(
@@ -101,5 +102,5 @@ class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title:
         dest?.writeSerializable(dueDate)
         dest?.writeInt(completionProgress)
     }
-
+  
 }

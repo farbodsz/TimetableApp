@@ -56,7 +56,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
      *
      * It should be null if we're creating a new assignment.
      */
-    protected static final String EXTRA_ASSIGNMENT = "extra_assignment";
+    static final String EXTRA_ASSIGNMENT = "extra_assignment";
 
     private Assignment mAssignment;
     private boolean mIsNew;

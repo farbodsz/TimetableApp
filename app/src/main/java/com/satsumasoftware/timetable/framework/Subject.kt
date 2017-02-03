@@ -55,10 +55,11 @@ class Subject(val id: Int, val timetableId: Int, var name: String, var abbreviat
             return subject
         }
 
-        @JvmField val CREATOR: Parcelable.Creator<Subject> = object : Parcelable.Creator<Subject> {
-            override fun createFromParcel(source: Parcel): Subject = Subject(source)
-            override fun newArray(size: Int): Array<Subject?> = arrayOfNulls(size)
-        }
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Subject> =
+                object : Parcelable.Creator<Subject> {
+                    override fun createFromParcel(source: Parcel): Subject = Subject(source)
+                    override fun newArray(size: Int): Array<Subject?> = arrayOfNulls(size)
+                }
     }
 
     constructor(source: Parcel) : this(

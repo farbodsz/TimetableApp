@@ -33,6 +33,16 @@ object UiUtils {
         }
     }
 
+    @JvmStatic
+    fun tintMenuIcons(context: Context, menu: Menu, vararg @IdRes menuItems: Int) {
+        menuItems.forEach {
+            val icon = menu.findItem(it).icon
+            icon?.let {
+                tintMenuDrawableWhite(context, icon)
+            }
+        }
+    }
+    
     @JvmOverloads
     @JvmStatic
     fun tintDrawable(context: Context, @DrawableRes drawableRes: Int,
@@ -41,16 +51,6 @@ object UiUtils {
         val drawable = DrawableCompat.wrap(vectorDrawableCompat!!.current)
         DrawableCompat.setTint(drawable, ContextCompat.getColor(context, colorRes))
         return drawable
-    }
-
-    @JvmStatic
-    fun tintMenuIcons(context: Context, menu: Menu, vararg @IdRes menuItems: Int) {
-        for (@IdRes menuItem in menuItems) {
-            val icon = menu.findItem(menuItem).icon
-            icon?.let {
-                tintMenuDrawableWhite(context, icon)
-            }
-        }
     }
 
     private fun tintMenuDrawableWhite(context: Context, d: Drawable): Drawable {

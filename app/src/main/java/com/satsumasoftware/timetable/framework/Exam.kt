@@ -88,10 +88,11 @@ class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName
             subject.name
         }
 
-        @JvmField val CREATOR: Parcelable.Creator<Exam> = object : Parcelable.Creator<Exam> {
-            override fun createFromParcel(source: Parcel): Exam = Exam(source)
-            override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
-        }
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Exam> =
+                object : Parcelable.Creator<Exam> {
+                    override fun createFromParcel(source: Parcel): Exam = Exam(source)
+                    override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
+                }
     }
 
     constructor(source: Parcel): this(

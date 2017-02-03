@@ -66,7 +66,7 @@ public class TimetableEditActivity extends AppCompatActivity
      *
      * It should be null if we're creating a new timetable.
      */
-    protected static final String EXTRA_TIMETABLE = "extra_timetable";
+    static final String EXTRA_TIMETABLE = "extra_timetable";
 
     private static final int REQUEST_CODE_TERM_EDIT = 1;
 

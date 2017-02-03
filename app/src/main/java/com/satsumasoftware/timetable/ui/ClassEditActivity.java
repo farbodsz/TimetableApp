@@ -74,7 +74,7 @@ public class ClassEditActivity extends AppCompatActivity {
      *
      * It should be null if we're creating a new class.
      */
-    protected static final String EXTRA_CLASS = "extra_class";
+    static final String EXTRA_CLASS = "extra_class";
 
     /**
      * The key for the integer identifier of the {@link ClassDetail} to be displayed.
@@ -85,10 +85,10 @@ public class ClassEditActivity extends AppCompatActivity {
      *
      * @see ClassDetail#getId()
      */
-    protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
+    static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
 
-    protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
-    protected static final int REQUEST_CODE_CLASS_TIME_DETAIL = 3;
+    private static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
+    private static final int REQUEST_CODE_CLASS_TIME_DETAIL = 3;
 
     private boolean mIsNew;
 

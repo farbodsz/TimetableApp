@@ -58,7 +58,7 @@ import java.util.Comparator;
  */
 public class AssignmentsActivity extends BaseActivity {
 
-    protected static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
+    private static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
 
     /**
      * The intent extra key for the display mode of the assignments.

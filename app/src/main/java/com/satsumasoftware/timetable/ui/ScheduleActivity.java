@@ -46,7 +46,7 @@ public class ScheduleActivity extends BaseActivity {
 
     private static final String LOG_TAG = "ScheduleActivity";
 
-    protected static final int REQUEST_CODE_CLASS_DETAIL = 1;
+    private static final int REQUEST_CODE_CLASS_DETAIL = 1;
 
     private DynamicPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
