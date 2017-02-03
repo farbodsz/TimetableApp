@@ -15,6 +15,7 @@ import com.satsumasoftware.timetable.db.util.TEXT_TYPE
 object TimetablesSchema : BaseColumns {
 
     const val TABLE_NAME = "timetables"
+    const val _ID = BaseColumns._ID
     const val COL_NAME = "name"
     const val COL_START_DATE_DAY_OF_MONTH = "start_date_day_of_month"
     const val COL_START_DATE_MONTH = "start_date_month"

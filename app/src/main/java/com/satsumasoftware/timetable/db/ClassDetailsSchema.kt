@@ -15,6 +15,7 @@ import com.satsumasoftware.timetable.db.util.TEXT_TYPE
 object ClassDetailsSchema : BaseColumns {
 
     const val TABLE_NAME = "class_details"
+    const val _ID = BaseColumns._ID
     const val COL_CLASS_ID = "class_id"
     const val COL_ROOM = "room"
     const val COL_BUILDING = "building"

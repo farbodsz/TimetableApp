@@ -15,6 +15,7 @@ import com.satsumasoftware.timetable.db.util.TEXT_TYPE
 object AssignmentsSchema : BaseColumns {
 
     const val TABLE_NAME = "assignments"
+    const val _ID = BaseColumns._ID
     const val COL_TIMETABLE_ID = "timetable_id"
     const val COL_CLASS_ID = "class_id"
     const val COL_TITLE = "title"

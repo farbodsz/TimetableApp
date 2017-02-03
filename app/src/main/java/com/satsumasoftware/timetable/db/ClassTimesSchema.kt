@@ -14,6 +14,7 @@ import com.satsumasoftware.timetable.db.util.PRIMARY_KEY_AUTOINCREMENT
 object ClassTimesSchema : BaseColumns {
 
     const val TABLE_NAME = "class_times"
+    const val _ID = BaseColumns._ID
     const val COL_TIMETABLE_ID = "timetable_id"
     const val COL_CLASS_DETAIL_ID = "class_detail_id"
     const val COL_DAY = "day"
