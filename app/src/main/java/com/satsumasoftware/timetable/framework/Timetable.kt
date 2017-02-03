@@ -60,10 +60,11 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate, val end
 
     companion object {
 
-        @JvmField val CREATOR: Parcelable.Creator<Timetable> = object : Parcelable.Creator<Timetable> {
-            override fun createFromParcel(source: Parcel): Timetable = Timetable(source)
-            override fun newArray(size: Int): Array<Timetable?> = arrayOfNulls(size)
-        }
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Timetable> =
+                object : Parcelable.Creator<Timetable> {
+                    override fun createFromParcel(source: Parcel): Timetable = Timetable(source)
+                    override fun newArray(size: Int): Array<Timetable?> = arrayOfNulls(size)
+                }
 
         @JvmStatic
         fun create(context: Context, timetableId: Int): Timetable? {

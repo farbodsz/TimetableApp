@@ -40,9 +40,10 @@ class Term(val id: Int, val timetableId: Int, val name: String, val startDate: L
     }
 
     companion object {
-        @JvmField val CREATOR: Parcelable.Creator<Term> = object : Parcelable.Creator<Term> {
-            override fun createFromParcel(source: Parcel): Term = Term(source)
-            override fun newArray(size: Int): Array<Term?> = arrayOfNulls(size)
-        }
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Term> =
+                object : Parcelable.Creator<Term> {
+                    override fun createFromParcel(source: Parcel): Term = Term(source)
+                    override fun newArray(size: Int): Array<Term?> = arrayOfNulls(size)
+                }
     }
 }
