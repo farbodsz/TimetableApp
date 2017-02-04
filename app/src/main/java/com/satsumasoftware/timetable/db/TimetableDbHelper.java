@@ -14,7 +14,7 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
 
     private static TimetableDbHelper sInstance;
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "Timetable.db";
 
     private static final String LOG_TAG = "TimetableDbHelper";
@@ -38,6 +38,7 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
         db.execSQL(ClassDetailsSchema.SQL_CREATE);
         db.execSQL(ClassesSchema.SQL_CREATE);
         db.execSQL(ClassTimesSchema.SQL_CREATE);
+        db.execSQL(EventsSchema.SQL_CREATE);
         db.execSQL(ExamsSchema.SQL_CREATE);
         db.execSQL(SubjectsSchema.SQL_CREATE);
         db.execSQL(TermsSchema.SQL_CREATE);
@@ -84,6 +85,9 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
                         ClassesSchema.COL_END_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getYear());
+
+            case 3:
+                db.execSQL(EventsSchema.SQL_CREATE);
                 break;
 
             default:
