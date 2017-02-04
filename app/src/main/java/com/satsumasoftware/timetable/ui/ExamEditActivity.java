@@ -63,9 +63,9 @@ public class ExamEditActivity extends AppCompatActivity {
      *
      * It should be null if we're creating a new exam.
      */
-    protected static final String EXTRA_EXAM = "extra_exam";
+    static final String EXTRA_EXAM = "extra_exam";
 
-    protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
+    private static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
 
     private static final int NO_DURATION = -1;
 

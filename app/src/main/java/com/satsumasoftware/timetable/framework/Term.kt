@@ -22,18 +22,39 @@ import org.threeten.bp.LocalDate
 class Term(val id: Int, val timetableId: Int, val name: String, val startDate: LocalDate,
            val endDate: LocalDate) : Parcelable {
 
-    constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(TermsSchema._ID)),
-            cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_TIMETABLE_ID)),
-            cursor.getString(cursor.getColumnIndex(TermsSchema.COL_NAME)),
-            LocalDate.of(
+    companion object {
+
+        /**
+         * Constructs a [Term] using column values from the cursor provided
+         *
+         * @param cursor a query of the terms table
+         * @see [TermsSchema]
+         */
+        @JvmStatic
+        fun from(cursor: Cursor): Term {
+            val startDate = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_START_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_START_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_START_DATE_DAY_OF_MONTH))),
-            LocalDate.of(
+                    cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_START_DATE_DAY_OF_MONTH)))
+            val endDate = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_END_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_END_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_END_DATE_DAY_OF_MONTH))))
+                    cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_END_DATE_DAY_OF_MONTH)))
+
+            return Term(
+                    cursor.getInt(cursor.getColumnIndex(TermsSchema._ID)),
+                    cursor.getInt(cursor.getColumnIndex(TermsSchema.COL_TIMETABLE_ID)),
+                    cursor.getString(cursor.getColumnIndex(TermsSchema.COL_NAME)),
+                    startDate,
+                    endDate)
+        }
+
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Term> =
+                object : Parcelable.Creator<Term> {
+                    override fun createFromParcel(source: Parcel): Term = Term(source)
+                    override fun newArray(size: Int): Array<Term?> = arrayOfNulls(size)
+                }
+    }
 
     constructor(source: Parcel) : this(
             source.readInt(),
@@ -52,10 +73,4 @@ class Term(val id: Int, val timetableId: Int, val name: String, val startDate: L
         dest?.writeSerializable(endDate)
     }
 
-    companion object {
-        @JvmField val CREATOR: Parcelable.Creator<Term> = object : Parcelable.Creator<Term> {
-            override fun createFromParcel(source: Parcel): Term = Term(source)
-            override fun newArray(size: Int): Array<Term?> = arrayOfNulls(size)
-        }
-    }
 }

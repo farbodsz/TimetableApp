@@ -45,7 +45,7 @@ import java.util.Comparator;
  */
 public class ExamsActivity extends BaseActivity {
 
-    protected static final int REQUEST_CODE_EXAM_EDIT = 1;
+    private static final int REQUEST_CODE_EXAM_EDIT = 1;
 
     private ArrayList<String> mHeaders;
     private ArrayList<Exam> mExams;

@@ -45,7 +45,7 @@ public class SubjectEditActivity extends AppCompatActivity {
      *
      * It should be null if we're creating a new subject.
      */
-    protected static final String EXTRA_SUBJECT = "extra_subject";
+    static final String EXTRA_SUBJECT = "extra_subject";
 
     private Subject mSubject;
 

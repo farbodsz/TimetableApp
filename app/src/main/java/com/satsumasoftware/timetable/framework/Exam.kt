@@ -28,22 +28,72 @@ class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName
            val date: LocalDate, val startTime: LocalTime, val duration: Int, val seat: String,
            val room: String, val resit: Boolean) : Parcelable {
 
-    constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(ExamsSchema._ID)),
-            cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_TIMETABLE_ID)),
-            cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_SUBJECT_ID)),
-            cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_MODULE)),
-            LocalDate.of(
+    companion object {
+
+        /**
+         * Constructs an [Exam] using column values from the cursor provided
+         *
+         * @param cursor a query of the exams table
+         * @see [ExamsSchema]
+         */
+        @JvmStatic
+        fun from(cursor: Cursor): Exam {
+            val date = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DATE_DAY_OF_MONTH))),
-            LocalTime.of(
+                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DATE_DAY_OF_MONTH)))
+            val time = LocalTime.of(
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_START_TIME_HRS)),
-                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_START_TIME_MINS))),
-            cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DURATION)),
-            cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_SEAT)),
-            cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_ROOM)),
-            cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_IS_RESIT)) == 1)
+                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_START_TIME_MINS)))
+
+            return Exam(cursor.getInt(cursor.getColumnIndex(ExamsSchema._ID)),
+                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_TIMETABLE_ID)),
+                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_SUBJECT_ID)),
+                    cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_MODULE)),
+                    date,
+                    time,
+                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DURATION)),
+                    cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_SEAT)),
+                    cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_ROOM)),
+                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_IS_RESIT)) == 1)
+        }
+
+        @JvmStatic
+        fun create(context: Context, examId: Int): Exam? {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    ExamsSchema.TABLE_NAME,
+                    null,
+                    "${ExamsSchema._ID}=?",
+                    arrayOf(examId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val exam = Exam.from(cursor)
+            cursor.close()
+            return exam
+        }
+
+        /**
+         * @return the displayed name for the exam, consisting of the subject name and exam module
+         * name if it exists
+         */
+        @JvmStatic
+        fun makeName(exam: Exam, subject: Subject) = if (exam.hasModuleName()) {
+            "${subject.name}: ${exam.moduleName}"
+        } else {
+            subject.name
+        }
+
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Exam> =
+                object : Parcelable.Creator<Exam> {
+                    override fun createFromParcel(source: Parcel): Exam = Exam(source)
+                    override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
+                }
+    }
 
     constructor(source: Parcel): this(
             source.readInt(),
@@ -83,42 +133,4 @@ class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName
         dest?.writeInt(if (resit) 1 else 0)
     }
 
-    companion object {
-
-        @JvmField val CREATOR: Parcelable.Creator<Exam> = object : Parcelable.Creator<Exam> {
-            override fun createFromParcel(source: Parcel): Exam = Exam(source)
-            override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
-        }
-
-        @JvmStatic
-        fun create(context: Context, examId: Int): Exam? {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    ExamsSchema.TABLE_NAME,
-                    null,
-                    "${ExamsSchema._ID}=?",
-                    arrayOf(examId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            if (cursor.count == 0) {
-                cursor.close()
-                return null
-            }
-            val exam = Exam(cursor)
-            cursor.close()
-            return exam
-        }
-
-        /**
-         * @return the displayed name for the exam, consisting of the subject name and exam module
-         * name if it exists
-         */
-        @JvmStatic
-        fun makeName(exam: Exam, subject: Subject) = if (exam.hasModuleName()) {
-            "${subject.name}: ${exam.moduleName}"
-        } else {
-            subject.name
-        }
-
-    }
 }

@@ -9,7 +9,11 @@
 
     <string name="pref_defaultLessonDuration">Default lesson duration</string>
     <string name="pref_defaultLessonDuration_dialogMessage">Enter the default lesson duration (in minutes)</string>
-    <string name="pref_defaultLessonDuration_summary">The default lesson duration is %1$d minutes</string>
+    <!-- TODO disallow lesson durations of less than 15 minutes and remove plural -->
+    <plurals name="pref_defaultLessonDuration_summary">
+        <item quantity="one">The default lesson duration is %1$d minute</item>
+        <item quantity="other">The default lesson duration is %1$d minutes</item>
+    </plurals>
 
     <string name="prefCategory_notifications">Notifications</string>
 

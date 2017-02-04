@@ -45,8 +45,9 @@ class SettingsActivity : BaseActivity() {
             val lessonDurationPref = findPreference(PrefUtils.PREF_DEFAULT_LESSON_DURATION)
 
             fun updateSummary(defaultDuration: Int) {
-                lessonDurationPref.summary = getString(
-                        R.string.pref_defaultLessonDuration_summary,
+                lessonDurationPref.summary = resources.getQuantityString(
+                        R.plurals.pref_defaultLessonDuration_summary,
+                        defaultDuration,
                         defaultDuration)
             }
 

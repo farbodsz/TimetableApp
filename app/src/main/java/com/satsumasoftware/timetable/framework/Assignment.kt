@@ -23,17 +23,56 @@ import org.threeten.bp.LocalDate
 class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title: String,
                  val detail: String, val dueDate: LocalDate, var completionProgress: Int) : Parcelable {
 
-    constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(AssignmentsSchema._ID)),
-            cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_TIMETABLE_ID)),
-            cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_CLASS_ID)),
-            cursor.getString(cursor.getColumnIndex(AssignmentsSchema.COL_TITLE)),
-            cursor.getString(cursor.getColumnIndex(AssignmentsSchema.COL_DETAIL)),
-            LocalDate.of(
+    companion object {
+
+        /**
+         * Constructs an [Assignment] using column values from the cursor provided
+         *
+         * @param cursor a query of the assignments table
+         * @see [AssignmentsSchema]
+         */
+        @JvmStatic
+        fun from(cursor: Cursor): Assignment {
+            val dueDate = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_DUE_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_DUE_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH))),
-            cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_COMPLETION_PROGRESS)))
+                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH)))
+
+            return Assignment(
+                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema._ID)),
+                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_TIMETABLE_ID)),
+                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_CLASS_ID)),
+                    cursor.getString(cursor.getColumnIndex(AssignmentsSchema.COL_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(AssignmentsSchema.COL_DETAIL)),
+                    dueDate,
+                    cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_COMPLETION_PROGRESS)))
+        }
+
+        @JvmStatic
+        fun create(context: Context, assignmentId: Int): Assignment? {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    AssignmentsSchema.TABLE_NAME,
+                    null,
+                    "${AssignmentsSchema._ID}=?",
+                    arrayOf(assignmentId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val assignment = Assignment.from(cursor)
+            cursor.close()
+            return assignment
+        }
+
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Assignment> =
+                object : Parcelable.Creator<Assignment> {
+                    override fun createFromParcel(source: Parcel): Assignment = Assignment(source)
+                    override fun newArray(size: Int): Array<Assignment?> = arrayOfNulls(size)
+                }
+    }
 
     constructor(source: Parcel): this(
             source.readInt(),
@@ -63,32 +102,5 @@ class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title:
         dest?.writeSerializable(dueDate)
         dest?.writeInt(completionProgress)
     }
-
-    companion object {
-
-        @JvmField val CREATOR: Parcelable.Creator<Assignment> = object : Parcelable.Creator<Assignment> {
-            override fun createFromParcel(source: Parcel): Assignment = Assignment(source)
-            override fun newArray(size: Int): Array<Assignment?> = arrayOfNulls(size)
-        }
-
-        @JvmStatic
-        fun create(context: Context, assignmentId: Int): Assignment? {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    AssignmentsSchema.TABLE_NAME,
-                    null,
-                    "${AssignmentsSchema._ID}=?",
-                    arrayOf(assignmentId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            if (cursor.count == 0) {
-                cursor.close()
-                return null
-            }
-            val assignment = Assignment(cursor)
-            cursor.close()
-            return assignment
-        }
-
-    }
+  
 }

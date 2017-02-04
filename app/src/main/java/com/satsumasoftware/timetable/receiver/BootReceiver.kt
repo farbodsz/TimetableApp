@@ -9,7 +9,7 @@ import com.satsumasoftware.timetable.TimetableApplication
 /**
  * Receives broadcasts - specifically, when the device has finished being booted.
  */
-class BootReceiver() : BroadcastReceiver() {
+class BootReceiver : BroadcastReceiver() {
 
     companion object {
         private const val LOG_TAG = "BootReceiver"

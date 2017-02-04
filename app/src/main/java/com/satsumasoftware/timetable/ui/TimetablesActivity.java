@@ -37,7 +37,7 @@ import java.util.Comparator;
  */
 public class TimetablesActivity extends BaseActivity {
 
-    protected static final int REQUEST_CODE_TIMETABLE_EDIT = 1;
+    private static final int REQUEST_CODE_TIMETABLE_EDIT = 1;
 
     private ArrayList<Timetable> mTimetables;
     private TimetablesAdapter mAdapter;

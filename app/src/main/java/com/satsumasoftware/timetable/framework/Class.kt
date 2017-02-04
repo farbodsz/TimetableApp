@@ -26,19 +26,73 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             val moduleName: String, val startDate: LocalDate,
             val endDate: LocalDate) : Parcelable {
 
-    constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(ClassesSchema._ID)),
-            cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_TIMETABLE_ID)),
-            cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_SUBJECT_ID)),
-            cursor.getString(cursor.getColumnIndex(ClassesSchema.COL_MODULE_NAME)),
-            LocalDate.of(
+    companion object {
+
+        /**
+         * Constructs a [Class] using column values from the cursor provided
+         *
+         * @param cursor a query of the classes table
+         * @see [ClassesSchema]
+         */
+        @JvmStatic
+        fun from(cursor: Cursor): Class {
+            val startDate = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_START_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_START_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_START_DATE_DAY_OF_MONTH))),
-            LocalDate.of(
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_START_DATE_DAY_OF_MONTH)))
+            val endDate = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_END_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_END_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_END_DATE_DAY_OF_MONTH))))
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_END_DATE_DAY_OF_MONTH)))
+
+            return Class(cursor.getInt(cursor.getColumnIndex(ClassesSchema._ID)),
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_TIMETABLE_ID)),
+                    cursor.getInt(cursor.getColumnIndex(ClassesSchema.COL_SUBJECT_ID)),
+                    cursor.getString(cursor.getColumnIndex(ClassesSchema.COL_MODULE_NAME)),
+                    startDate,
+                    endDate)
+        }
+
+        @JvmStatic
+        fun create(context: Context, classId: Int): Class? {
+            val dbHelper = TimetableDbHelper.getInstance(context)
+            val cursor = dbHelper.readableDatabase.query(
+                    ClassesSchema.TABLE_NAME,
+                    null,
+                    "${ClassesSchema._ID}=?",
+                    arrayOf(classId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val cls = Class.from(cursor)
+            cursor.close()
+            return cls
+        }
+
+        /**
+         * @return the displayed name of the class, including the module name if it has one
+         */
+        @JvmStatic
+        fun makeName(cls: Class, subject: Subject) = if (cls.hasModuleName()) {
+            "${subject.name}: ${cls.moduleName}"
+        } else {
+            subject.name
+        }
+
+        /**
+         * The field used if the class has no start/end dates
+         */
+        @JvmField val NO_DATE: LocalDate = LocalDate.MIN
+
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Class> =
+                object : Parcelable.Creator<Class> {
+                    override fun createFromParcel(source: Parcel): Class = Class(source)
+                    override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
+                }
+    }
 
     constructor(source: Parcel) : this(
             source.readInt(),
@@ -71,46 +125,4 @@ class Class(val id: Int, val timetableId: Int, val subjectId: Int,
         dest?.writeSerializable(endDate)
     }
 
-    companion object {
-
-        @JvmField val CREATOR: Parcelable.Creator<Class> = object : Parcelable.Creator<Class> {
-            override fun createFromParcel(source: Parcel): Class = Class(source)
-            override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
-        }
-
-        /**
-         * The field used if the class has no start/end dates
-         */
-        @JvmField val NO_DATE: LocalDate = LocalDate.MIN
-
-        @JvmStatic
-        fun create(context: Context, classId: Int): Class? {
-            val dbHelper = TimetableDbHelper.getInstance(context)
-            val cursor = dbHelper.readableDatabase.query(
-                    ClassesSchema.TABLE_NAME,
-                    null,
-                    "${ClassesSchema._ID}=?",
-                    arrayOf(classId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            if (cursor.count == 0) {
-                cursor.close()
-                return null
-            }
-            val cls = Class(cursor)
-            cursor.close()
-            return cls
-        }
-
-        /**
-         * @return the displayed name of the class, including the module name if it has one
-         */
-        @JvmStatic
-        fun makeName(cls: Class, subject: Subject) = if (cls.hasModuleName()) {
-            "${subject.name}: ${cls.moduleName}"
-        } else {
-            subject.name
-        }
-
-    }
 }
