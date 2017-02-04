@@ -35,7 +35,7 @@ object EventsSchema : BaseColumns {
 
      * @see TimetableDbHelper
      */
-    internal val SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
+    internal const val SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             BaseColumns._ID + INTEGER_TYPE + PRIMARY_KEY_AUTOINCREMENT + COMMA_SEP +
             COL_TIMETABLE_ID + INTEGER_TYPE + COMMA_SEP +
             COL_TITLE + TEXT_TYPE + COMMA_SEP +
