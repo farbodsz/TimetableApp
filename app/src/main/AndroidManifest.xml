@@ -72,6 +72,15 @@
             android:theme="@style/Timetable"/>
 
         <activity
+            android:name=".ui.EventsActivity"
+            android:label="@string/title_activity_events"
+            android:theme="@style/Timetable.Home"/>
+
+        <activity
+            android:name=".ui.EventEditActivity"
+            android:theme="@style/Timetable"/>
+
+        <activity
             android:name=".ui.SubjectsActivity"
             android:label="@string/title_activity_subjects"
             android:theme="@style/Timetable.Home"/>
