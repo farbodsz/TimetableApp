@@ -46,7 +46,7 @@ class SettingsActivity : BaseActivity() {
 
             fun updateSummary(defaultDuration: Int) {
                 lessonDurationPref.summary = resources.getQuantityString(
-                        R.string.pref_defaultLessonDuration_summary,
+                        R.plurals.pref_defaultLessonDuration_summary,
                         defaultDuration,
                         defaultDuration)
             }
