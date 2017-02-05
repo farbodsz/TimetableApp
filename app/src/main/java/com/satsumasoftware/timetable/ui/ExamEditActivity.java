@@ -409,7 +409,7 @@ public class ExamEditActivity extends AppCompatActivity {
         }
 
         if (mExamDate == null) {
-            Snackbar.make(findViewById(R.id.rootView), R.string.message_exam_date_required,
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_date_required,
                     Snackbar.LENGTH_SHORT).show();
             return;
         }
