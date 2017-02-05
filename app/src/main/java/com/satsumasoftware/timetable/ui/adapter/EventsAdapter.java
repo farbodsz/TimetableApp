@@ -82,7 +82,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         String timesText = event.getStartTime().toLocalTime().toString() + " - " +
-                event.getStartTime().toLocalTime().toString();
+                event.getEndTime().toLocalTime().toString();
 
         holder.mDates.setText(dateBuilder.toString());
         holder.mTimes.setText(timesText);
