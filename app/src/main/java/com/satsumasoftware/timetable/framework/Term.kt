@@ -13,14 +13,13 @@ import org.threeten.bp.LocalDate
  * from the [Timetable] to which it belongs to. This means that [Class]es must set their own start
  * and end dates.
  *
- * @property id an integer identifier for this term
  * @property timetableId the identifier of the [Timetable] this term belongs to
  * @property name the name for this term (e.g. First Semester, Summer Term, etc.)
  * @property startDate the start date of this term
  * @property endDate the end date of this term
  */
-class Term(val id: Int, val timetableId: Int, val name: String, val startDate: LocalDate,
-           val endDate: LocalDate) : TimetableItem, Parcelable {
+class Term(override val id: Int, override val timetableId: Int, val name: String,
+           val startDate: LocalDate, val endDate: LocalDate) : TimetableItem, Parcelable {
 
     companion object {
 

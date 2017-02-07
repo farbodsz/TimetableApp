@@ -15,14 +15,12 @@ import org.threeten.bp.LocalDate
  * subject is related to one or more classes. For example, the subject could be Mathematics,
  * and there could be different classes for the Statistics module and the Mechanics module.
  *
- * @property id the identifier for this class
- * @property timetableId the identifier of the [Timetable] this class is a part of
  * @property subjectId the identifier of the [Subject] this class is a part of
  * @property moduleName an optional name for the class' module
  * @property startDate the class' start date (optional)
  * @property endDate the class' end date (optional)
  */
-class Class(val id: Int, val timetableId: Int, val subjectId: Int,
+class Class(override val id: Int, override val timetableId: Int, val subjectId: Int,
             val moduleName: String, val startDate: LocalDate,
             val endDate: LocalDate) : TimetableItem, Parcelable {
 

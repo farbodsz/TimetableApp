@@ -27,17 +27,14 @@ import org.threeten.bp.LocalTime
  * for each different class detail (e.g. when the student gets taught by teacher A and when they
  * get taught by teacher B).
  *
- * @property id the identifier for this class time
- * @property timetableId the identifier of the associated [Timetable]. We include this in our
- *      `ClassTime` for when we want to find a list of times in one particular timetable.
  * @property classDetailId the identifier of the associated [ClassDetail]
  * @property day a day of the week (Monday to Sunday) that the class takes place
  * @property weekNumber the number of a week rotation where the class takes place
  * @property startTime a start time of the class
  * @property endTime an end time of the class
  */
-class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val day: DayOfWeek,
-                val weekNumber: Int, val startTime: LocalTime,
+class ClassTime(override val id: Int, override val timetableId: Int, val classDetailId: Int,
+                val day: DayOfWeek, val weekNumber: Int, val startTime: LocalTime,
                 val endTime: LocalTime) : TimetableItem, Parcelable {
 
     constructor(cursor: Cursor) : this(

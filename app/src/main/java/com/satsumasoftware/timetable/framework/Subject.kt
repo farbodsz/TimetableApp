@@ -10,14 +10,12 @@ import com.satsumasoftware.timetable.db.schema.SubjectsSchema
 /**
  * An object representing a subject the student is studying.
  *
- * @property id an integer identifier for this subject
- * @property timetableId the identifier of the [Timetable] this subject is in
  * @property name the name of the subject (e.g. Mathematics, Computer Science, Music)
  * @property abbreviation an optional abbreviation for the subject (e.g. Ma, CS, Mus)
  * @property colorId the identifier of the [Color] used when displaying this subject
  */
-class Subject(val id: Int, val timetableId: Int, var name: String, var abbreviation: String,
-              var colorId: Int) : TimetableItem, Parcelable {
+class Subject(override val id: Int, override val timetableId: Int, var name: String,
+              var abbreviation: String, var colorId: Int) : TimetableItem, Parcelable {
 
     companion object {
 
