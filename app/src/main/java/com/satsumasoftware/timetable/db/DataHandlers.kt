@@ -6,6 +6,15 @@ import com.satsumasoftware.timetable.framework.*
 
 object DataHandlers {
 
+    @JvmField val ASSIGNMENTS = AssignmentDataHandler()
+    @JvmField val CLASSES = ClassDataHandler()
+    @JvmField val CLASS_DETAILS = ClassDetailDataHandler()
+    @JvmField val CLASS_TIMES = ClassTimeDataHandler()
+    @JvmField val EXAMS = ExamDataHandler()
+    @JvmField val SUBJECTS = SubjectDataHandler()
+    @JvmField val TERMS = TermDataHandler()
+    @JvmField val TIMETABLES = TimetableDataHandler()
+
     class AssignmentDataHandler : DataHandler<Assignment> {
 
         override val tableName = AssignmentsSchema.TABLE_NAME
