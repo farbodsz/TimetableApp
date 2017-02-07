@@ -2,8 +2,8 @@ package com.satsumasoftware.timetable.framework
 
 import android.content.Context
 import android.database.Cursor
-import com.satsumasoftware.timetable.db.ClassDetailsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
+import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema
 
 /**
  * An object to represent one set of details of a class.

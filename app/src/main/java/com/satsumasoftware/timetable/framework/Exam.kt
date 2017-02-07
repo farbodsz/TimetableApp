@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import com.satsumasoftware.timetable.db.ExamsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
+import com.satsumasoftware.timetable.db.schema.ExamsSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime

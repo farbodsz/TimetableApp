@@ -3,7 +3,7 @@ package com.satsumasoftware.timetable.framework
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import com.satsumasoftware.timetable.db.TermsSchema
+import com.satsumasoftware.timetable.db.schema.TermsSchema
 import org.threeten.bp.LocalDate
 
 /**

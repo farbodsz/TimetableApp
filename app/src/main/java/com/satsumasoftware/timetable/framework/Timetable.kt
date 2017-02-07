@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.db.TimetablesSchema
+import com.satsumasoftware.timetable.db.schema.TimetablesSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 

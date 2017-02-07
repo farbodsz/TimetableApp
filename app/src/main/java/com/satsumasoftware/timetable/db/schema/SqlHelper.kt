@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db.util
+package com.satsumasoftware.timetable.db.schema
 
 const val PRIMARY_KEY_AUTOINCREMENT = " PRIMARY KEY AUTOINCREMENT"
 const val INTEGER_TYPE = " INTEGER"

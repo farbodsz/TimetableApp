@@ -6,10 +6,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.ClassDetailsSchema
-import com.satsumasoftware.timetable.db.ClassTimesSchema
-import com.satsumasoftware.timetable.db.ClassesSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
+import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema
+import com.satsumasoftware.timetable.db.schema.ClassTimesSchema
+import com.satsumasoftware.timetable.db.schema.ClassesSchema
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime

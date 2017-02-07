@@ -5,7 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.satsumasoftware.timetable.db.util.SchemaUtilsKt;
+import com.satsumasoftware.timetable.db.schema.AssignmentsSchema;
+import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema;
+import com.satsumasoftware.timetable.db.schema.ClassTimesSchema;
+import com.satsumasoftware.timetable.db.schema.ClassesSchema;
+import com.satsumasoftware.timetable.db.schema.ExamsSchema;
+import com.satsumasoftware.timetable.db.schema.SqlHelperKt;
+import com.satsumasoftware.timetable.db.schema.SubjectsSchema;
+import com.satsumasoftware.timetable.db.schema.TermsSchema;
+import com.satsumasoftware.timetable.db.schema.TimetablesSchema;
 import com.satsumasoftware.timetable.framework.Class;
 
 import org.threeten.bp.LocalDate;
@@ -60,29 +68,29 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
         switch (oldVersion) {
             case 1:
                 db.execSQL("ALTER TABLE " + SubjectsSchema.TABLE_NAME + " ADD COLUMN " +
-                        SubjectsSchema.COL_ABBREVIATION + SchemaUtilsKt.TEXT_TYPE + " DEFAULT ''");
+                        SubjectsSchema.COL_ABBREVIATION + SqlHelperKt.TEXT_TYPE + " DEFAULT ''");
 
             case 2:
                 LocalDate defaultDate = Class.NO_DATE;
 
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
-                        ClassesSchema.COL_START_DATE_DAY_OF_MONTH + SchemaUtilsKt.INTEGER_TYPE +
+                        ClassesSchema.COL_START_DATE_DAY_OF_MONTH + SqlHelperKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getDayOfMonth());
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
-                        ClassesSchema.COL_START_DATE_MONTH + SchemaUtilsKt.INTEGER_TYPE +
+                        ClassesSchema.COL_START_DATE_MONTH + SqlHelperKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getMonthValue());
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
-                        ClassesSchema.COL_START_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE +
+                        ClassesSchema.COL_START_DATE_YEAR + SqlHelperKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getYear());
 
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
-                        ClassesSchema.COL_END_DATE_DAY_OF_MONTH + SchemaUtilsKt.INTEGER_TYPE +
+                        ClassesSchema.COL_END_DATE_DAY_OF_MONTH + SqlHelperKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getDayOfMonth());
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
-                        ClassesSchema.COL_END_DATE_MONTH + SchemaUtilsKt.INTEGER_TYPE +
+                        ClassesSchema.COL_END_DATE_MONTH + SqlHelperKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getMonthValue());
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
-                        ClassesSchema.COL_END_DATE_YEAR + SchemaUtilsKt.INTEGER_TYPE +
+                        ClassesSchema.COL_END_DATE_YEAR + SqlHelperKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getYear());
                 break;
 

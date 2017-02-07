@@ -1,15 +1,11 @@
-package com.satsumasoftware.timetable.db
+package com.satsumasoftware.timetable.db.schema
 
 import android.provider.BaseColumns
-import com.satsumasoftware.timetable.db.util.COMMA_SEP
-import com.satsumasoftware.timetable.db.util.INTEGER_TYPE
-import com.satsumasoftware.timetable.db.util.PRIMARY_KEY_AUTOINCREMENT
-import com.satsumasoftware.timetable.db.util.TEXT_TYPE
 
 /**
  * The schema for the 'exams' table, containing constants for the column names and an SQLite create
  * statement.
-
+ *
  * @see com.satsumasoftware.timetable.framework.Exam
  */
 object ExamsSchema : BaseColumns {
@@ -31,8 +27,8 @@ object ExamsSchema : BaseColumns {
 
     /**
      * An SQLite statement which creates the 'exams' table upon execution.
-
-     * @see TimetableDbHelper
+     *
+     * @see com.satsumasoftware.timetable.db.TimetableDbHelper
      */
     internal const val SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             BaseColumns._ID + INTEGER_TYPE + PRIMARY_KEY_AUTOINCREMENT + COMMA_SEP +
