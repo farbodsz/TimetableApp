@@ -1,40 +1,15 @@
 package com.satsumasoftware.timetable.db.util
 
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
-import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.schema.SubjectsSchema
 import com.satsumasoftware.timetable.framework.Subject
-import java.util.*
 
 object SubjectUtils {
 
     private const val LOG_TAG = "SubjectUtils"
-
-    @JvmStatic
-    fun getSubjects(activity: Activity): ArrayList<Subject> {
-        val subjects = ArrayList<Subject>()
-
-        val timetable = (activity.application as TimetableApplication).currentTimetable!!
-
-        val dbHelper = TimetableDbHelper.getInstance(activity)
-        val cursor = dbHelper.readableDatabase.query(
-                SubjectsSchema.TABLE_NAME,
-                null,
-                "${SubjectsSchema.COL_TIMETABLE_ID}=?",
-                arrayOf(timetable.id.toString()),
-                null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            subjects.add(Subject.from(cursor))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return subjects
-    }
 
     @JvmStatic
     fun addSubject(context: Context, subject: Subject) {
@@ -80,26 +55,6 @@ object SubjectUtils {
         Log.i(LOG_TAG, "Replacing Subject...")
         deleteSubject(context, oldSubjectId)
         addSubject(context, newSubject)
-    }
-
-    @JvmStatic
-    fun getHighestSubjectId(context: Context): Int {
-        val db = TimetableDbHelper.getInstance(context).readableDatabase
-        val cursor = db.query(
-                SubjectsSchema.TABLE_NAME,
-                arrayOf(SubjectsSchema._ID),
-                null,
-                null,
-                null,
-                null,
-                "${SubjectsSchema._ID} DESC")
-        if (cursor.count == 0) {
-            return 0
-        }
-        cursor.moveToFirst()
-        val highestId = cursor.getInt(cursor.getColumnIndex(SubjectsSchema._ID))
-        cursor.close()
-        return highestId
     }
 
 }

@@ -69,24 +69,4 @@ object TermUtils {
         addTerm(activity, newTerm)
     }
 
-    @JvmStatic
-    fun getHighestTermId(context: Context): Int {
-        val db = TimetableDbHelper.getInstance(context).readableDatabase
-        val cursor = db.query(
-                TermsSchema.TABLE_NAME,
-                arrayOf(TermsSchema._ID),
-                null,
-                null,
-                null,
-                null,
-                "${TermsSchema._ID} DESC")
-        if (cursor.count == 0) {
-            return 0
-        }
-        cursor.moveToFirst()
-        val highestId = cursor.getInt(cursor.getColumnIndex(TermsSchema._ID))
-        cursor.close()
-        return highestId
-    }
-
 }

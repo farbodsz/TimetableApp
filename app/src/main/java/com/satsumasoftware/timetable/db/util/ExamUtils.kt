@@ -1,10 +1,8 @@
 package com.satsumasoftware.timetable.db.util
 
-import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
-import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.schema.ExamsSchema
 import com.satsumasoftware.timetable.framework.Exam
@@ -15,28 +13,6 @@ import java.util.*
 object ExamUtils {
 
     private const val LOG_TAG = "ExamUtils"
-
-    @JvmStatic
-    fun getExams(context: Context, application: Application): ArrayList<Exam> {
-        val exams = ArrayList<Exam>()
-
-        val timetable = (application as TimetableApplication).currentTimetable!!
-
-        val dbHelper = TimetableDbHelper.getInstance(context)
-        val cursor = dbHelper.readableDatabase.query(
-                ExamsSchema.TABLE_NAME,
-                null,
-                "${ExamsSchema.COL_TIMETABLE_ID}=?",
-                arrayOf(timetable.id.toString()),
-                null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            exams.add(Exam.from(cursor))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return exams
-    }
 
     @JvmStatic
     fun getAllExams(context: Context): ArrayList<Exam> {
@@ -125,26 +101,6 @@ object ExamUtils {
         Log.i(LOG_TAG, "Replacing Exam...")
         deleteExam(context, oldExamId)
         addExam(context, newExam)
-    }
-
-    @JvmStatic
-    fun getHighestExamId(context: Context): Int {
-        val db = TimetableDbHelper.getInstance(context).readableDatabase
-        val cursor = db.query(
-                ExamsSchema.TABLE_NAME,
-                arrayOf(ExamsSchema._ID),
-                null,
-                null,
-                null,
-                null,
-                "${ExamsSchema._ID} DESC")
-        if (cursor.count == 0) {
-            return 0
-        }
-        cursor.moveToFirst()
-        val highestId = cursor.getInt(cursor.getColumnIndex(ExamsSchema._ID))
-        cursor.close()
-        return highestId
     }
 
 }

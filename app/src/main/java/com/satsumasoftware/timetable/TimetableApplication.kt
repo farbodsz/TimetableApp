@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.satsumasoftware.timetable.db.DataHandlers
+import com.satsumasoftware.timetable.db.DataUtils
 import com.satsumasoftware.timetable.db.util.AssignmentUtils
 import com.satsumasoftware.timetable.db.util.ClassUtils
 import com.satsumasoftware.timetable.db.util.ExamUtils
@@ -57,7 +59,7 @@ class TimetableApplication : Application() {
         ClassUtils.getAllClassTimes(context, currentTimetable!!).forEach {
             ClassUtils.addAlarmsForClassTime(context, this, it)
         }
-        ExamUtils.getExams(context, this).forEach { exam ->
+        DataUtils.getItems(DataHandlers.EXAMS, context, this).forEach { exam ->
             if (exam.date.isAfter(LocalDate.now()) ||
                     (exam.date.isEqual(LocalDate.now()) && exam.startTime.isAfter(LocalTime.now()))) {
                 ExamUtils.addAlarmForExam(context, exam)

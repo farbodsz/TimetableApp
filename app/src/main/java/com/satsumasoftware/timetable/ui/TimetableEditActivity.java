@@ -26,6 +26,8 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.DataHandlers;
+import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
@@ -323,7 +325,7 @@ public class TimetableEditActivity extends AppCompatActivity
 
     private int findTimetableId() {
         return mTimetable == null ?
-                TimetableUtils.getHighestTimetableId(this) + 1 : mTimetable.getId();
+                DataUtils.getHighestItemId(DataHandlers.TIMETABLES, this) + 1 : mTimetable.getId();
     }
 
     @Override
@@ -455,7 +457,7 @@ public class TimetableEditActivity extends AppCompatActivity
                                 getBaseContext(), mTimetable.getId());
 
                         // After the timetable has been deleted, change the current timetable
-                        int highestId = TimetableUtils.getHighestTimetableId(getBaseContext());
+                        int highestId = DataUtils.getHighestItemId(DataHandlers.TIMETABLES, getBaseContext());
                         Timetable newCurrentTimetable =
                                 Timetable.create(getBaseContext(), highestId);
 

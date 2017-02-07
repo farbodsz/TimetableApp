@@ -1,10 +1,8 @@
 package com.satsumasoftware.timetable.db.util
 
-import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
-import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.schema.AssignmentsSchema
 import com.satsumasoftware.timetable.framework.Assignment
@@ -18,43 +16,6 @@ import java.util.*
 object AssignmentUtils {
 
     private const val LOG_TAG = "AssignmentUtils"
-
-    @JvmStatic
-    fun getAssignments(context: Context, application: Application): ArrayList<Assignment> {
-        val assignments = ArrayList<Assignment>()
-
-        val timetable = (application as TimetableApplication).currentTimetable!!
-
-        val dbHelper = TimetableDbHelper.getInstance(context)
-        val cursor = dbHelper.readableDatabase.query(
-                AssignmentsSchema.TABLE_NAME,
-                null,
-                "${AssignmentsSchema.COL_TIMETABLE_ID}=?",
-                arrayOf(timetable.id.toString()),
-                null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            assignments.add(Assignment.from(cursor))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return assignments
-    }
-
-    @JvmStatic
-    fun getAllAssignments(context: Context): ArrayList<Assignment> {
-        val assignments = ArrayList<Assignment>()
-        val dbHelper = TimetableDbHelper.getInstance(context)
-        val cursor = dbHelper.readableDatabase.query(
-                AssignmentsSchema.TABLE_NAME, null, null, null, null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            assignments.add(Assignment.from(cursor))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return assignments
-    }
 
     @JvmStatic
     fun getAssignmentsForClass(context: Context, classId: Int): ArrayList<Assignment> {
@@ -133,26 +94,6 @@ object AssignmentUtils {
         Log.i(LOG_TAG, "Replacing Assignment...")
         deleteAssignment(context, oldAssignmentId)
         addAssignment(context, newAssignment)
-    }
-
-    @JvmStatic
-    fun getHighestAssignmentId(context: Context): Int {
-        val db = TimetableDbHelper.getInstance(context).readableDatabase
-        val cursor = db.query(
-                AssignmentsSchema.TABLE_NAME,
-                arrayOf(AssignmentsSchema._ID),
-                null,
-                null,
-                null,
-                null,
-                "${AssignmentsSchema._ID} DESC")
-        if (cursor.count == 0) {
-            return 0
-        }
-        cursor.moveToFirst()
-        val highestId = cursor.getInt(cursor.getColumnIndex(AssignmentsSchema._ID))
-        cursor.close()
-        return highestId
     }
 
 }

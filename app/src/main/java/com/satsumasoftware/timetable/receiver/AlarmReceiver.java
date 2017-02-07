@@ -18,7 +18,8 @@ import android.util.Log;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.AssignmentUtils;
+import com.satsumasoftware.timetable.db.DataHandlers;
+import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
@@ -118,7 +119,9 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 break;
 
             case Type.ASSIGNMENT:
-                ArrayList<Assignment> assignments = AssignmentUtils.getAssignments(context,
+                ArrayList<Assignment> assignments = DataUtils.getItems(
+                        DataHandlers.ASSIGNMENTS,
+                        context,
                         (TimetableApplication) context.getApplicationContext());
 
                 int count = 0;

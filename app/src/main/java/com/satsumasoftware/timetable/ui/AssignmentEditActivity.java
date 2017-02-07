@@ -21,8 +21,9 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.DataHandlers;
+import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -132,7 +133,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentEditActivity.this);
 
-                final ArrayList<Class> classes = ClassUtils.getClasses(AssignmentEditActivity.this);
+                final ArrayList<Class> classes = DataUtils.getItems(DataHandlers.CLASSES, AssignmentEditActivity.this);
 
                 Collections.sort(classes, new Comparator<Class>() {
                     @Override
@@ -285,7 +286,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? AssignmentUtils.getHighestAssignmentId(this) + 1 : mAssignment.getId();
+        int id = mIsNew ? DataUtils.getHighestItemId(DataHandlers.ASSIGNMENTS, this) + 1 : mAssignment.getId();
         int completionProgress = mIsNew ? 0 : mAssignment.getCompletionProgress();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();

@@ -26,8 +26,9 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.DataHandlers;
+import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.db.util.ExamUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -163,7 +164,7 @@ public class ExamEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
-                final ArrayList<Subject> subjects = SubjectUtils.getSubjects(ExamEditActivity.this);
+                final ArrayList<Subject> subjects = DataUtils.getItems(DataHandlers.SUBJECTS, ExamEditActivity.this);
 
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
@@ -426,7 +427,7 @@ public class ExamEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? ExamUtils.getHighestExamId(this) + 1 : mExam.getId();
+        int id = mIsNew ? DataUtils.getHighestItemId(DataHandlers.EXAMS, this) + 1 : mExam.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;

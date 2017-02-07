@@ -19,6 +19,8 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.DataHandlers;
+import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -482,7 +484,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                     continue;
                 }
 
-                int id = ClassUtils.getHighestClassTimeId(this) + 1;
+                int id = DataUtils.getHighestItemId(DataHandlers.CLASS_TIMES, this) + 1;
 
                 ClassTime classTime = new ClassTime(id, timetable.getId(), mClassDetailId,
                         dayOfWeek, weekNumber, mStartTime, mEndTime);

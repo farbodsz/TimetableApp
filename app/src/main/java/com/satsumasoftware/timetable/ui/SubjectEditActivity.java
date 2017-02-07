@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.DataHandlers;
+import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -201,7 +203,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                     ((TimetableApplication) getApplication()).getCurrentTimetable();
             assert currentTimetable != null;
 
-            mSubject = new Subject(SubjectUtils.getHighestSubjectId(this) + 1,
+            mSubject = new Subject(DataUtils.getHighestItemId(DataHandlers.SUBJECTS, this) + 1,
                     currentTimetable.getId(),
                     newName,
                     newAbbreviation,

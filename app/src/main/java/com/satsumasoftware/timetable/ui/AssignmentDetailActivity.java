@@ -14,6 +14,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.db.DataHandlers;
+import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
@@ -137,8 +139,10 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_ASSIGNMENT_EDIT) {
             if (resultCode == RESULT_OK) {
                 // get the edited assignment (it would have the highest id if new, same id if not)
-                mAssignment = Assignment.create(this, mIsNew ?
-                        AssignmentUtils.getHighestAssignmentId(this) : mAssignment.getId());
+                int editedAssignmentId = mIsNew
+                        ? DataUtils.getHighestItemId(DataHandlers.ASSIGNMENTS, this)
+                        : mAssignment.getId();
+                mAssignment = Assignment.create(this, editedAssignmentId);
 
                 if (mAssignment == null) {
                     Log.d("ADA!!", "Assignment is NULL");

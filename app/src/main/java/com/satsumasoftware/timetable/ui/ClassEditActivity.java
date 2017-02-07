@@ -32,8 +32,9 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.DataHandlers;
+import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -233,7 +234,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
 
                 final ArrayList<Subject> subjects =
-                        SubjectUtils.getSubjects(ClassEditActivity.this);
+                        DataUtils.getItems(DataHandlers.SUBJECTS, ClassEditActivity.this);
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
                     public int compare(Subject subject, Subject t1) {
@@ -431,7 +432,7 @@ public class ClassEditActivity extends AppCompatActivity {
         final int pagerCount = mPagerAdapter.getCount();
 
         final int classDetailId = isNewDetail ?
-                ClassUtils.getHighestClassDetailId(this) + mNewDetailIdCount :
+                DataUtils.getHighestItemId(DataHandlers.CLASS_DETAILS, this) + mNewDetailIdCount :
                 classDetail.getId();
         mClassDetailIds.add(classDetailId);
 
@@ -751,7 +752,8 @@ public class ClassEditActivity extends AppCompatActivity {
 
         // now write the data (replace class detail values)
 
-        int classId = mIsNew ? ClassUtils.getHighestClassId(this) + 1 : mClass.getId();
+        int highestClassId = DataUtils.getHighestItemId(DataHandlers.CLASSES, this);
+        int classId = mIsNew ? highestClassId + 1 : mClass.getId();
 
         for (int i = 0; i < rooms.size(); i++) {
             int classDetailId = classDetailIds.get(i);

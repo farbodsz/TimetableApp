@@ -17,7 +17,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.DataHandlers;
+import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
@@ -77,7 +78,7 @@ public class ClassesActivity extends BaseActivity {
     }
 
     private void setupList() {
-        mClasses = ClassUtils.getClasses(this);
+        mClasses = DataUtils.getItems(DataHandlers.CLASSES, this);
         sortList();
 
         mAdapter = new ClassesAdapter(this, mClasses);
@@ -124,7 +125,7 @@ public class ClassesActivity extends BaseActivity {
 
     private void refreshList() {
         mClasses.clear();
-        mClasses.addAll(ClassUtils.getClasses(this));
+        mClasses.addAll(DataUtils.getItems(DataHandlers.CLASSES, this));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();
