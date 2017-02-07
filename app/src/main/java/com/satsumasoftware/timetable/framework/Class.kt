@@ -24,7 +24,7 @@ import org.threeten.bp.LocalDate
  */
 class Class(val id: Int, val timetableId: Int, val subjectId: Int,
             val moduleName: String, val startDate: LocalDate,
-            val endDate: LocalDate) : BaseItem, Parcelable {
+            val endDate: LocalDate) : TimetableItem, Parcelable {
 
     companion object {
 
