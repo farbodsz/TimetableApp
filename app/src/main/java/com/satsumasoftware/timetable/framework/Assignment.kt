@@ -21,7 +21,8 @@ import org.threeten.bp.LocalDate
  *      the assignment is (100 indicating fully complete)
  */
 class Assignment(val id: Int, val timetableId: Int, val classId: Int, val title: String,
-                 val detail: String, val dueDate: LocalDate, var completionProgress: Int) : Parcelable {
+                 val detail: String, val dueDate: LocalDate,
+                 var completionProgress: Int) : BaseItem, Parcelable {
 
     companion object {
 

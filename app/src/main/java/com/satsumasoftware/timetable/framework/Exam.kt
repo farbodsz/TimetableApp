@@ -26,7 +26,7 @@ import org.threeten.bp.LocalTime
  */
 class Exam(val id: Int, val timetableId: Int, val subjectId: Int, val moduleName: String,
            val date: LocalDate, val startTime: LocalTime, val duration: Int, val seat: String,
-           val room: String, val resit: Boolean) : Parcelable {
+           val room: String, val resit: Boolean) : BaseItem, Parcelable {
 
     companion object {
 

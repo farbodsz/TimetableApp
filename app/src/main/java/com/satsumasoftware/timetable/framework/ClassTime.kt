@@ -37,7 +37,8 @@ import org.threeten.bp.LocalTime
  * @property endTime an end time of the class
  */
 class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val day: DayOfWeek,
-                val weekNumber: Int, val startTime: LocalTime, val endTime: LocalTime) : Parcelable {
+                val weekNumber: Int, val startTime: LocalTime,
+                val endTime: LocalTime) : BaseItem, Parcelable {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(ClassTimesSchema._ID)),

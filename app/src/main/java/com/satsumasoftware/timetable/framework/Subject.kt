@@ -17,7 +17,7 @@ import com.satsumasoftware.timetable.db.schema.SubjectsSchema
  * @property colorId the identifier of the [Color] used when displaying this subject
  */
 class Subject(val id: Int, val timetableId: Int, var name: String, var abbreviation: String,
-              var colorId: Int) : Parcelable {
+              var colorId: Int) : BaseItem, Parcelable {
 
     companion object {
 

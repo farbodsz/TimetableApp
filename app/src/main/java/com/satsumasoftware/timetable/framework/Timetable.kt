@@ -29,7 +29,7 @@ import org.threeten.bp.format.DateTimeFormatter
  * @property endDate the last day this timetable is applicable for
  */
 class Timetable(val id: Int, val name: String, val startDate: LocalDate, val endDate: LocalDate,
-                val weekRotations: Int) : Parcelable {
+                val weekRotations: Int) : BaseItem, Parcelable {
 
     val displayedName: String
         get() {

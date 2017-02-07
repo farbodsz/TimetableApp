@@ -21,7 +21,7 @@ import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema
  * @property teacher an optional name of the teacher for the class
  */
 class ClassDetail(val id: Int, val classId: Int, val room: String, val building: String,
-                  val teacher: String) {
+                  val teacher: String) : BaseItem {
 
     constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema._ID)),

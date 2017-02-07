@@ -20,7 +20,7 @@ import org.threeten.bp.LocalDate
  * @property endDate the end date of this term
  */
 class Term(val id: Int, val timetableId: Int, val name: String, val startDate: LocalDate,
-           val endDate: LocalDate) : Parcelable {
+           val endDate: LocalDate) : BaseItem, Parcelable {
 
     companion object {
 
