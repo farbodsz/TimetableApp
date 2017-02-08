@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.query
+package com.satsumasoftware.timetable.db.query
 
 /**
  * A collection of static helper functions for creating or combining filters.

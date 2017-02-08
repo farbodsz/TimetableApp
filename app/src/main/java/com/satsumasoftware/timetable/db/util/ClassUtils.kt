@@ -8,14 +8,14 @@ import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.DataHandlers
 import com.satsumasoftware.timetable.db.DataUtils
 import com.satsumasoftware.timetable.db.TimetableDbHelper
+import com.satsumasoftware.timetable.db.query.Filters
+import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.db.schema.AssignmentsSchema
 import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime
-import com.satsumasoftware.timetable.query.Filters
-import com.satsumasoftware.timetable.query.Query
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.DateUtils
 import org.threeten.bp.DayOfWeek

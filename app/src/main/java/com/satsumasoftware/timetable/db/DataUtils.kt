@@ -5,10 +5,10 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
+import com.satsumasoftware.timetable.db.query.Filters
+import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.framework.BaseItem
 import com.satsumasoftware.timetable.framework.TimetableItem
-import com.satsumasoftware.timetable.query.Filters
-import com.satsumasoftware.timetable.query.Query
 import java.util.*
 
 object DataUtils {

@@ -4,11 +4,11 @@ import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.db.DataHandlers
 import com.satsumasoftware.timetable.db.DataUtils
+import com.satsumasoftware.timetable.db.query.Filters
+import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.db.schema.ClassesSchema
 import com.satsumasoftware.timetable.db.schema.ExamsSchema
 import com.satsumasoftware.timetable.framework.Subject
-import com.satsumasoftware.timetable.query.Filters
-import com.satsumasoftware.timetable.query.Query
 
 object SubjectUtils {
 

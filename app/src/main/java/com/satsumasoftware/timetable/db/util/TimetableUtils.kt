@@ -6,11 +6,11 @@ import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.DataHandlers
 import com.satsumasoftware.timetable.db.DataUtils
+import com.satsumasoftware.timetable.db.query.Filters
+import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.db.schema.SubjectsSchema
 import com.satsumasoftware.timetable.db.schema.TermsSchema
 import com.satsumasoftware.timetable.framework.Timetable
-import com.satsumasoftware.timetable.query.Filters
-import com.satsumasoftware.timetable.query.Query
 
 object TimetableUtils {
 
