@@ -4,6 +4,7 @@ package com.satsumasoftware.timetable.query
  * Can store part of a SQL selection statement, used to filter results in database queries.
  *
  * @see Filters
+ * @see Query
  */
 data class Filter(var sqlStatement: String) {
 

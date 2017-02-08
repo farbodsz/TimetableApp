@@ -4,6 +4,7 @@ package com.satsumasoftware.timetable.query
  * A collection of static helper functions for creating or combining filters.
  *
  * @see Filter
+ * @see Query
  */
 object Filters {
 
