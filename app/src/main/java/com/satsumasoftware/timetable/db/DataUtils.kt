@@ -7,6 +7,8 @@ import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.framework.BaseItem
 import com.satsumasoftware.timetable.framework.TimetableItem
+import com.satsumasoftware.timetable.query.Filters
+import com.satsumasoftware.timetable.query.Query
 import java.util.*
 
 object DataUtils {
@@ -20,17 +22,27 @@ object DataUtils {
     @JvmStatic
     fun <T : TimetableItem> getItems(dataHandler: TimetableItemDataHandler<T>, context: Context,
                                      application: Application): ArrayList<T> {
-        val items = ArrayList<T>()
-
         val timetable = (application as TimetableApplication).currentTimetable!!
+
+        val query = Query.Builder()
+                .addFilter(Filters.equal(dataHandler.timetableIdCol, timetable.id.toString()))
+                .build()
+
+        return getAllItems(dataHandler, context, query)
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    fun <T : BaseItem> getAllItems(dataHandler: DataHandler<T>, context: Context,
+                                   query: Query? = null): ArrayList<T> {
+        val items = ArrayList<T>()
 
         val dbHelper = TimetableDbHelper.getInstance(context)
         val cursor = dbHelper.readableDatabase.query(
                 dataHandler.tableName,
                 null,
-                "${dataHandler.timetableIdCol}=?",
-                arrayOf(timetable.id.toString()),
-                null, null, null)
+                query?.filter?.sqlStatement,
+                null, null, null, null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
             items.add(dataHandler.createFromCursor(cursor))

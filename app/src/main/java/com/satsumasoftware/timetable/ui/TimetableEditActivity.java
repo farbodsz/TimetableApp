@@ -30,12 +30,14 @@ import com.satsumasoftware.timetable.db.DataHandlers;
 import com.satsumasoftware.timetable.db.DataUtils;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema;
+import com.satsumasoftware.timetable.db.schema.TermsSchema;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
-import com.satsumasoftware.timetable.db.util.TermUtils;
 import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.framework.Timetable;
+import com.satsumasoftware.timetable.query.Filters;
+import com.satsumasoftware.timetable.query.Query;
 import com.satsumasoftware.timetable.ui.adapter.TermsAdapter;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
 import com.satsumasoftware.timetable.util.UiUtils;
@@ -223,7 +225,7 @@ public class TimetableEditActivity extends AppCompatActivity
     }
 
     private void setupTermsList() {
-        mTerms = TermUtils.getTerms(this, findTimetableId());
+        mTerms = getTermsForTimetable(findTimetableId());
         sortList();
 
         mAdapter = new TermsAdapter(mTerms);
@@ -318,9 +320,16 @@ public class TimetableEditActivity extends AppCompatActivity
 
     private void refreshList() {
         mTerms.clear();
-        mTerms.addAll(TermUtils.getTerms(this, findTimetableId()));
+        mTerms.addAll(getTermsForTimetable(findTimetableId()));
         sortList();
         mAdapter.notifyDataSetChanged();
+    }
+
+    private ArrayList<Term> getTermsForTimetable(int timetableId) {
+        Query query = new Query.Builder()
+                .addFilter(Filters.equal(TermsSchema.COL_TIMETABLE_ID, String.valueOf(timetableId)))
+                .build();
+        return DataUtils.getAllItems(DataHandlers.TERMS, this, query);
     }
 
     private int findTimetableId() {
@@ -440,7 +449,7 @@ public class TimetableEditActivity extends AppCompatActivity
     }
 
     private void handleDeleteAction() {
-        if (TimetableUtils.getTimetables(this).size() == 1) {
+        if (DataUtils.getAllItems(DataHandlers.TIMETABLES, this).size() == 1) {
             // there needs to be at least one timetable for the app to work
             Snackbar.make(findViewById(R.id.rootView), R.string.message_first_timetable_required,
                     Snackbar.LENGTH_SHORT).show();

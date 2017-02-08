@@ -48,15 +48,15 @@ class TimetableApplication : Application() {
         val alarmReceiver = AlarmReceiver()
 
         Log.i(LOG_TAG, "Cancelling ALL alarms")
-        ClassUtils.getAllClassTimes(context).forEach {
+        DataUtils.getAllItems(DataHandlers.CLASS_TIMES, context).forEach {
             alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.CLASS, it.id)
         }
-        ExamUtils.getAllExams(context).forEach {
+        DataUtils.getAllItems(DataHandlers.EXAMS, context).forEach {
             alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.EXAM, it.id)
         }
 
         Log.i(LOG_TAG, "Adding alarms for the current timetable (id: ${currentTimetable!!.id})")
-        ClassUtils.getAllClassTimes(context, currentTimetable!!).forEach {
+        DataUtils.getItems(DataHandlers.CLASS_TIMES, context, this).forEach {
             ClassUtils.addAlarmsForClassTime(context, this, it)
         }
         DataUtils.getItems(DataHandlers.EXAMS, context, this).forEach { exam ->

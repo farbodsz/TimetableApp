@@ -6,39 +6,15 @@ import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.DataHandlers
 import com.satsumasoftware.timetable.db.DataUtils
-import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.schema.SubjectsSchema
-import com.satsumasoftware.timetable.db.schema.TimetablesSchema
-import com.satsumasoftware.timetable.framework.Subject
+import com.satsumasoftware.timetable.db.schema.TermsSchema
 import com.satsumasoftware.timetable.framework.Timetable
-import java.util.*
+import com.satsumasoftware.timetable.query.Filters
+import com.satsumasoftware.timetable.query.Query
 
 object TimetableUtils {
 
     private const val LOG_TAG = "TimetableUtils"
-
-    @JvmStatic
-    fun getTimetables(context: Context): ArrayList<Timetable> {
-        val timetables = ArrayList<Timetable>()
-        val dbHelper = TimetableDbHelper.getInstance(context)
-        val cursor = dbHelper.readableDatabase.query(
-                TimetablesSchema.TABLE_NAME, null, null, null, null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            timetables.add(Timetable.from(cursor))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return timetables
-    }
-
-    private fun deleteTimetable(context: Context, timetableId: Int) {
-        val db = TimetableDbHelper.getInstance(context).writableDatabase
-        db.delete(TimetablesSchema.TABLE_NAME,
-                "${TimetablesSchema._ID}=?",
-                arrayOf(timetableId.toString()))
-        Log.i(LOG_TAG, "Deleted Timetable with id $timetableId")
-    }
 
     @JvmStatic
     fun replaceTimetable(activity: Activity, oldTimetableId: Int, newTimetable: Timetable) {
@@ -57,27 +33,24 @@ object TimetableUtils {
 
         DataUtils.deleteItem(DataHandlers.TIMETABLES, context, timetableId)
 
-        for (subject in getSubjectsForTimetable(context, timetableId)) {
+        // Note that we only need to delete subjects, terms and their references since classes,
+        // assignments, exams, and everything else are linked to subjects.
+
+        val subjectsQuery = Query.Builder()
+                .addFilter(Filters.equal(SubjectsSchema.COL_TIMETABLE_ID, timetableId.toString()))
+                .build()
+
+        for (subject in DataUtils.getAllItems(DataHandlers.SUBJECTS, context, subjectsQuery)) {
             SubjectUtils.completelyDeleteSubject(context, subject)
         }
-    }
 
-    private fun getSubjectsForTimetable(context: Context, timetableId: Int): ArrayList<Subject> {
-        val subjects = ArrayList<Subject>()
-        val db = TimetableDbHelper.getInstance(context).readableDatabase
-        val cursor = db.query(
-                SubjectsSchema.TABLE_NAME,
-                null,
-                "${SubjectsSchema.COL_TIMETABLE_ID}=?",
-                arrayOf(timetableId.toString()),
-                null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            subjects.add(Subject.from(cursor))
-            cursor.moveToNext()
+        val termsQuery = Query.Builder()
+                .addFilter(Filters.equal(TermsSchema.COL_TIMETABLE_ID, timetableId.toString()))
+                .build()
+
+        DataUtils.getAllItems(DataHandlers.TERMS, context, termsQuery).forEach {
+            DataUtils.deleteItem(DataHandlers.TERMS, context, it.id)
         }
-        cursor.close()
-        return subjects
     }
 
 }

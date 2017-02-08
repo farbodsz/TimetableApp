@@ -8,13 +8,14 @@ import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.DataHandlers
 import com.satsumasoftware.timetable.db.DataUtils
 import com.satsumasoftware.timetable.db.TimetableDbHelper
+import com.satsumasoftware.timetable.db.schema.AssignmentsSchema
 import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema
-import com.satsumasoftware.timetable.db.schema.ClassesSchema
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime
-import com.satsumasoftware.timetable.framework.Timetable
+import com.satsumasoftware.timetable.query.Filters
+import com.satsumasoftware.timetable.query.Query
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.DateUtils
 import org.threeten.bp.DayOfWeek
@@ -31,91 +32,20 @@ object ClassUtils {
     private const val WEEK_AS_MILLISECONDS = 604800000L
 
     @JvmStatic
-    fun getClassesForSubject(context: Context, subjectId: Int): ArrayList<Class> {
-        val classes = ArrayList<Class>()
-        val dbHelper = TimetableDbHelper.getInstance(context)
-        val cursor = dbHelper.readableDatabase.query(
-                ClassesSchema.TABLE_NAME,
-                null,
-                "${ClassesSchema.COL_SUBJECT_ID}=?",
-                arrayOf(subjectId.toString()),
-                null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            classes.add(Class.from(cursor))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return classes
-    }
-
-    @JvmStatic
     fun getClassDetailsForClass(context: Context, classId: Int): ArrayList<ClassDetail> {
-        val classDetails = ArrayList<ClassDetail>()
-        val db = TimetableDbHelper.getInstance(context).readableDatabase
-        val cursor = db.query(
-                ClassDetailsSchema.TABLE_NAME,
-                null,
-                "${ClassDetailsSchema.COL_CLASS_ID}=?",
-                arrayOf(classId.toString()),
-                null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            classDetails.add(ClassDetail(cursor))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return classDetails
+        val query = Query.Builder()
+                .addFilter(Filters.equal(ClassDetailsSchema.COL_CLASS_ID, classId.toString()))
+                .build()
+        return DataUtils.getAllItems(DataHandlers.CLASS_DETAILS, context, query)
     }
 
     @JvmStatic
     fun getClassTimesForDetail(context: Context, classDetailId: Int): ArrayList<ClassTime> {
-        val classTimes = ArrayList<ClassTime>()
-        val db = TimetableDbHelper.getInstance(context).readableDatabase
-        val cursor = db.query(
-                ClassTimesSchema.TABLE_NAME,
-                null,
-                "${ClassTimesSchema.COL_CLASS_DETAIL_ID}=?",
-                arrayOf(classDetailId.toString()),
-                null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            classTimes.add(ClassTime(cursor))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return classTimes
-    }
-
-    @JvmStatic
-    fun getAllClassTimes(context: Context): ArrayList<ClassTime> {
-        return getAllClassTimes(context, null, null)
-    }
-
-    @JvmStatic
-    fun getAllClassTimes(context: Context, timetable: Timetable): ArrayList<ClassTime> {
-        return getAllClassTimes(context,
-                ClassTimesSchema.COL_TIMETABLE_ID + "=?",
-                arrayOf(timetable.id.toString()))
-    }
-
-    private fun getAllClassTimes(context: Context, selection: String?,
-                                 selectionArgs: Array<String>?): ArrayList<ClassTime> {
-        val classTimes = ArrayList<ClassTime>()
-        val dbHelper = TimetableDbHelper.getInstance(context)
-        val cursor = dbHelper.readableDatabase.query(
-                ClassTimesSchema.TABLE_NAME,
-                null,
-                selection,
-                selectionArgs,
-                null, null, null)
-        cursor.moveToFirst()
-        while (!cursor.isAfterLast) {
-            classTimes.add(ClassTime(cursor))
-            cursor.moveToNext()
-        }
-        cursor.close()
-        return classTimes
+        val query = Query.Builder()
+                .addFilter(Filters.equal(
+                        ClassTimesSchema.COL_CLASS_DETAIL_ID, classDetailId.toString()))
+                .build()
+        return DataUtils.getAllItems(DataHandlers.CLASS_TIMES, context, query)
     }
 
     @JvmOverloads
@@ -216,7 +146,11 @@ object ClassUtils {
 
         DataUtils.deleteItem(DataHandlers.CLASSES, context, cls.id)
 
-        for (assignment in AssignmentUtils.getAssignmentsForClass(context, cls.id)) {
+        val assignmentsQuery = Query.Builder()
+                .addFilter(Filters.equal(AssignmentsSchema.COL_CLASS_ID, cls.id.toString()))
+                .build()
+
+        for (assignment in DataUtils.getAllItems(DataHandlers.ASSIGNMENTS, context, assignmentsQuery)) {
             DataUtils.deleteItem(DataHandlers.ASSIGNMENTS, context, assignment.id)
         }
 
