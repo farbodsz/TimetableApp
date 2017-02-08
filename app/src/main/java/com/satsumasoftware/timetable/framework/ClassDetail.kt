@@ -22,14 +22,23 @@ import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema
 class ClassDetail(override val id: Int, val classId: Int, val room: String, val building: String,
                   val teacher: String) : BaseItem {
 
-    constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema._ID)),
-            cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema.COL_CLASS_ID)),
-            cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_ROOM)),
-            cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_BUILDING)),
-            cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_TEACHER)))
-
     companion object {
+
+        /**
+         * Constructs a [ClassDetail] using column values from the cursor provided
+         *
+         * @param cursor a query of the class details table
+         * @see [ClassDetailsSchema]
+         */
+        @JvmStatic
+        fun from(cursor: Cursor): ClassDetail {
+            return ClassDetail(
+                    cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema._ID)),
+                    cursor.getInt(cursor.getColumnIndex(ClassDetailsSchema.COL_CLASS_ID)),
+                    cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_ROOM)),
+                    cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_BUILDING)),
+                    cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_TEACHER)))
+        }
 
         @JvmStatic
         fun create(context: Context, classDetailId: Int): ClassDetail {
@@ -41,7 +50,7 @@ class ClassDetail(override val id: Int, val classId: Int, val room: String, val 
                     arrayOf(classDetailId.toString()),
                     null, null, null)
             cursor.moveToFirst()
-            val classDetail = ClassDetail(cursor)
+            val classDetail = ClassDetail.from(cursor)
             cursor.close()
             return classDetail
         }

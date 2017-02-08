@@ -37,18 +37,83 @@ class ClassTime(override val id: Int, override val timetableId: Int, val classDe
                 val day: DayOfWeek, val weekNumber: Int, val startTime: LocalTime,
                 val endTime: LocalTime) : TimetableItem, Parcelable {
 
-    constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(ClassTimesSchema._ID)),
-            cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_TIMETABLE_ID)),
-            cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_CLASS_DETAIL_ID)),
-            DayOfWeek.of(cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_DAY))),
-            cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_WEEK_NUMBER)),
-            LocalTime.of(
+    companion object {
+
+        /**
+         * Constructs a [ClassTime] using column values from the cursor provided
+         *
+         * @param cursor a query of the class times table
+         * @see [ClassTimesSchema]
+         */
+        @JvmStatic
+        fun from(cursor: Cursor): ClassTime {
+            val dayOfWeek =
+                    DayOfWeek.of(cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_DAY)))
+
+            val startTime = LocalTime.of(
                     cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_START_TIME_HRS)),
-                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_START_TIME_MINS))),
-            LocalTime.of(
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_START_TIME_MINS)))
+
+            val endTime = LocalTime.of(
                     cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_HRS)),
-                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_MINS))))
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_MINS)))
+
+            return ClassTime(
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema._ID)),
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_TIMETABLE_ID)),
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_CLASS_DETAIL_ID)),
+                    dayOfWeek,
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_WEEK_NUMBER)),
+                    startTime,
+                    endTime)
+        }
+
+        @JvmStatic
+        fun create(context: Context, classTimeId: Int): ClassTime {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    ClassTimesSchema.TABLE_NAME,
+                    null,
+                    "${ClassTimesSchema._ID}=?",
+                    arrayOf(classTimeId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            val classTime = ClassTime.from(cursor)
+            cursor.close()
+            return classTime
+        }
+
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<ClassTime> =
+                object : Parcelable.Creator<ClassTime> {
+                    override fun createFromParcel(source: Parcel): ClassTime = ClassTime(source)
+                    override fun newArray(size: Int): Array<ClassTime?> = arrayOfNulls(size)
+                }
+
+        /**
+         * @return the string to be displayed indicating the week rotation (e.g. Week 1, Week C).
+         */
+        @JvmOverloads
+        @JvmStatic
+        fun getWeekText(activity: Activity, weekNumber: Int, fullText: Boolean = true): String {
+            val timetable = (activity.application as TimetableApplication).currentTimetable!!
+            if (timetable.hasFixedScheduling()) {
+                return ""
+            } else {
+                val weekChar = if (PrefUtils.displayWeeksAsLetters(activity)) {
+                    when(weekNumber) {
+                        1 -> "A"
+                        2 -> "B"
+                        3 -> "C"
+                        4 -> "D"
+                        else -> throw IllegalArgumentException("invalid week number '$weekNumber'")
+                    }
+                } else {
+                    weekNumber.toString()
+                }
+                return if (fullText) activity.getString(R.string.week_item, weekChar) else weekChar
+            }
+        }
+    }
 
     /**
      * @return the string to be displayed indicating the week rotation (e.g. Week 1, Week C).
@@ -78,52 +143,4 @@ class ClassTime(override val id: Int, override val timetableId: Int, val classDe
         dest?.writeSerializable(endTime)
     }
 
-    companion object {
-
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<ClassTime> =
-                object : Parcelable.Creator<ClassTime> {
-                    override fun createFromParcel(source: Parcel): ClassTime = ClassTime(source)
-                    override fun newArray(size: Int): Array<ClassTime?> = arrayOfNulls(size)
-                }
-
-        @JvmStatic
-        fun create(context: Context, classTimeId: Int): ClassTime {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    ClassTimesSchema.TABLE_NAME,
-                    null,
-                    "${ClassTimesSchema._ID}=?",
-                    arrayOf(classTimeId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            val classTime = ClassTime(cursor)
-            cursor.close()
-            return classTime
-        }
-
-        /**
-         * @return the string to be displayed indicating the week rotation (e.g. Week 1, Week C).
-         */
-        @JvmOverloads
-        @JvmStatic
-        fun getWeekText(activity: Activity, weekNumber: Int, fullText: Boolean = true): String {
-            val timetable = (activity.application as TimetableApplication).currentTimetable!!
-            if (timetable.hasFixedScheduling()) {
-                return ""
-            } else {
-                val weekChar = if (PrefUtils.displayWeeksAsLetters(activity)) {
-                    when(weekNumber) {
-                        1 -> "A"
-                        2 -> "B"
-                        3 -> "C"
-                        4 -> "D"
-                        else -> throw IllegalArgumentException("invalid week number '$weekNumber'")
-                    }
-                } else {
-                    weekNumber.toString()
-                }
-                return if (fullText) activity.getString(R.string.week_item, weekChar) else weekChar
-            }
-        }
-    }
 }
