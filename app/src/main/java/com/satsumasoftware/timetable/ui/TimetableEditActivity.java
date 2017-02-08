@@ -425,7 +425,7 @@ public class TimetableEditActivity extends AppCompatActivity
                         null, null, null);
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    ClassTime classTime = new ClassTime(cursor);
+                    ClassTime classTime = ClassTime.from(cursor);
                     ClassUtils.completelyDeleteClassTime(this, classTime.getId());
                     cursor.moveToNext();
                 }

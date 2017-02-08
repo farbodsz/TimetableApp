@@ -68,7 +68,7 @@ object ClassUtils {
 
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
-            val classTime = ClassTime(cursor)
+            val classTime = ClassTime.from(cursor)
             val classDetail = ClassDetail.create(activity, classTime.classDetailId)
             val cls = Class.create(activity, classDetail.classId)!!
 

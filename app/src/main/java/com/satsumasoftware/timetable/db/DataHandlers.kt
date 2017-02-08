@@ -75,7 +75,7 @@ object DataHandlers {
 
         override val itemIdCol = ClassDetailsSchema._ID
 
-        override fun createFromCursor(cursor: Cursor) = ClassDetail(cursor) // TODO use static factory
+        override fun createFromCursor(cursor: Cursor) = ClassDetail.from(cursor)
 
         override fun propertiesAsContentValues(item: ClassDetail): ContentValues {
             val values = ContentValues()
@@ -97,7 +97,7 @@ object DataHandlers {
         override val itemIdCol = ClassTimesSchema._ID
         override val timetableIdCol = ClassTimesSchema.COL_TIMETABLE_ID
 
-        override fun createFromCursor(cursor: Cursor) = ClassTime(cursor) // TODO use static factory
+        override fun createFromCursor(cursor: Cursor) = ClassTime.from(cursor)
 
         override fun propertiesAsContentValues(item: ClassTime): ContentValues {
             val values = ContentValues()
