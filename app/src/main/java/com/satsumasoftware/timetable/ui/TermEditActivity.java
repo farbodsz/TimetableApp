@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.DataHandlers;
 import com.satsumasoftware.timetable.db.DataUtils;
-import com.satsumasoftware.timetable.db.util.TermUtils;
 import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
@@ -240,9 +239,9 @@ public class TermEditActivity extends AppCompatActivity {
         mTerm = new Term(id, mTimetableId, newName, mStartDate, mEndDate);
 
         if (mIsNew) {
-            TermUtils.addTerm(this, mTerm);
+            DataUtils.addItem(DataHandlers.TERMS, this, mTerm);
         } else {
-            TermUtils.replaceTerm(this, mTerm.getId(), mTerm);
+            DataUtils.replaceItem(DataHandlers.TERMS, this, mTerm.getId(), mTerm);
         }
 
         setResult(Activity.RESULT_OK);
@@ -250,7 +249,7 @@ public class TermEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        TermUtils.deleteTerm(this, mTerm.getId());
+        DataUtils.deleteItem(DataHandlers.TERMS, this, mTerm.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }

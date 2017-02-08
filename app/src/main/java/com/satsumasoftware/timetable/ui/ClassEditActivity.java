@@ -764,7 +764,7 @@ public class ClassEditActivity extends AppCompatActivity {
             ClassDetail classDetail =
                     new ClassDetail(classDetailId, classId, room, building, teacher);
 
-            ClassUtils.replaceClassDetail(this, classDetailId, classDetail);
+            DataUtils.replaceItem(DataHandlers.CLASS_DETAILS, this, classDetailId, classDetail);
         }
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
@@ -787,9 +787,9 @@ public class ClassEditActivity extends AppCompatActivity {
                 dbEndDate);
 
         if (mIsNew) {
-            ClassUtils.addClass(this, mClass);
+            DataUtils.addItem(DataHandlers.CLASSES, this, mClass);
         } else {
-            ClassUtils.replaceClass(this, mClass.getId(), mClass);
+            DataUtils.replaceItem(DataHandlers.CLASSES, this, mClass.getId(), mClass);
         }
 
         setResult(Activity.RESULT_OK);

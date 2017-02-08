@@ -6,6 +6,7 @@ import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.framework.BaseItem
+import com.satsumasoftware.timetable.framework.TimetableItem
 import java.util.*
 
 object DataUtils {
@@ -13,12 +14,12 @@ object DataUtils {
     private const val LOG_TAG = "DataUtils"
 
     @JvmStatic
-    fun <T : BaseItem> getItems(dataHandler: DataHandler<T>, activity: Activity) =
+    fun <T : TimetableItem> getItems(dataHandler: TimetableItemDataHandler<T>, activity: Activity) =
             getItems(dataHandler, activity, activity.application)
 
     @JvmStatic
-    fun <T : BaseItem> getItems(dataHandler: DataHandler<T>, context: Context,
-                                application: Application): ArrayList<T> {
+    fun <T : TimetableItem> getItems(dataHandler: TimetableItemDataHandler<T>, context: Context,
+                                     application: Application): ArrayList<T> {
         val items = ArrayList<T>()
 
         val timetable = (application as TimetableApplication).currentTimetable!!
@@ -61,12 +62,31 @@ object DataUtils {
     }
 
     @JvmStatic
-    private fun <T : BaseItem> deleteItem(dataHandler: DataHandler<T>, context: Context, itemId: Int) {
+    fun <T : BaseItem> addItem(dataHandler: DataHandler<T>, context: Context, item: T) {
+        val values = dataHandler.propertiesAsContentValues(item)
+
+        val db = TimetableDbHelper.getInstance(context).writableDatabase
+        db.insert(dataHandler.tableName, null, values)
+
+        Log.i(LOG_TAG, "Added item with id ${item.id} to ${dataHandler.tableName}")
+    }
+
+    @JvmStatic
+    fun <T : BaseItem> deleteItem(dataHandler: DataHandler<T>, context: Context,
+                                          itemId: Int) {
         val db = TimetableDbHelper.getInstance(context).writableDatabase
         db.delete(dataHandler.tableName,
                 "${dataHandler.itemIdCol}=?",
                 arrayOf(itemId.toString()))
         Log.i(LOG_TAG, "Deleted item with id $itemId from ${dataHandler.tableName}")
+    }
+
+    @JvmStatic
+    fun <T : BaseItem> replaceItem(dataHandler: DataHandler<T>, context: Context, oldItemId: Int,
+                                   newItem: T) {
+        Log.i(LOG_TAG, "Replacing item...")
+        deleteItem(dataHandler, context, oldItemId)
+        addItem(dataHandler, context, newItem)
     }
 
 }

@@ -209,13 +209,13 @@ public class SubjectEditActivity extends AppCompatActivity {
                     newAbbreviation,
                     mColor.getId());
 
-            SubjectUtils.addSubject(this, mSubject);
+            DataUtils.addItem(DataHandlers.SUBJECTS, this, mSubject);
 
         } else {
             mSubject.setName(newName);
             mSubject.setAbbreviation(newAbbreviation);
             mSubject.setColorId(mColor.getId());
-            SubjectUtils.replaceSubject(this, mSubject.getId(), mSubject);
+            DataUtils.replaceItem(DataHandlers.SUBJECTS, this, mSubject.getId(), mSubject);
         }
 
         Intent intent = new Intent();

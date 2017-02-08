@@ -1,10 +1,11 @@
 package com.satsumasoftware.timetable.db.util
 
 import android.app.Activity
-import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
+import com.satsumasoftware.timetable.db.DataHandlers
+import com.satsumasoftware.timetable.db.DataUtils
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.schema.SubjectsSchema
 import com.satsumasoftware.timetable.db.schema.TimetablesSchema
@@ -31,26 +32,6 @@ object TimetableUtils {
         return timetables
     }
 
-    @JvmStatic
-    fun addTimetable(context: Context, timetable: Timetable) {
-        val values = ContentValues()
-        with(values) {
-            put(TimetablesSchema._ID, timetable.id)
-            put(TimetablesSchema.COL_NAME, timetable.name)
-            put(TimetablesSchema.COL_START_DATE_DAY_OF_MONTH, timetable.startDate.dayOfMonth)
-            put(TimetablesSchema.COL_START_DATE_MONTH, timetable.startDate.monthValue)
-            put(TimetablesSchema.COL_START_DATE_YEAR, timetable.startDate.year)
-            put(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH, timetable.endDate.dayOfMonth)
-            put(TimetablesSchema.COL_END_DATE_MONTH, timetable.endDate.monthValue)
-            put(TimetablesSchema.COL_END_DATE_YEAR, timetable.endDate.year)
-            put(TimetablesSchema.COL_WEEK_ROTATIONS, timetable.weekRotations)
-        }
-
-        val db = TimetableDbHelper.getInstance(context).writableDatabase
-        db.insert(TimetablesSchema.TABLE_NAME, null, values)
-        Log.i(LOG_TAG, "Added Timetable with id ${timetable.id}")
-    }
-
     private fun deleteTimetable(context: Context, timetableId: Int) {
         val db = TimetableDbHelper.getInstance(context).writableDatabase
         db.delete(TimetablesSchema.TABLE_NAME,
@@ -63,8 +44,8 @@ object TimetableUtils {
     fun replaceTimetable(activity: Activity, oldTimetableId: Int, newTimetable: Timetable) {
         Log.i(LOG_TAG, "Replacing Timetable...")
 
-        deleteTimetable(activity, oldTimetableId)
-        addTimetable(activity, newTimetable)
+        DataUtils.deleteItem(DataHandlers.TIMETABLES, activity, oldTimetableId)
+        DataUtils.addItem(DataHandlers.TIMETABLES, activity, newTimetable)
 
         // Refresh alarms in case start/end dates have changed
         (activity.application as TimetableApplication).refreshAlarms(activity)
@@ -74,7 +55,7 @@ object TimetableUtils {
     fun completelyDeleteTimetable(context: Context, timetableId: Int) {
         Log.i(LOG_TAG, "Deleting everything related to Timetable of id $timetableId")
 
-        deleteTimetable(context, timetableId)
+        DataUtils.deleteItem(DataHandlers.TIMETABLES, context, timetableId)
 
         for (subject in getSubjectsForTimetable(context, timetableId)) {
             SubjectUtils.completelyDeleteSubject(context, subject)

@@ -23,7 +23,6 @@ import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.DataHandlers;
 import com.satsumasoftware.timetable.db.DataUtils;
-import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -302,9 +301,9 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 completionProgress);
 
         if (mIsNew) {
-            AssignmentUtils.addAssignment(this, mAssignment);
+            DataUtils.addItem(DataHandlers.ASSIGNMENTS, this, mAssignment);
         } else {
-            AssignmentUtils.replaceAssignment(this, mAssignment.getId(), mAssignment);
+            DataUtils.replaceItem(DataHandlers.ASSIGNMENTS, this, mAssignment.getId(), mAssignment);
         }
 
         Intent intent = new Intent();
@@ -319,7 +318,8 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        AssignmentUtils.deleteAssignment(getBaseContext(), mAssignment.getId());
+                        DataUtils.deleteItem(DataHandlers.ASSIGNMENTS,
+                                getBaseContext(), mAssignment.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

@@ -1,6 +1,5 @@
 package com.satsumasoftware.timetable.db.util
 
-import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.db.TimetableDbHelper
@@ -37,27 +36,6 @@ object AssignmentUtils {
     }
 
     @JvmStatic
-    fun addAssignment(context: Context, assignment: Assignment) {
-        val values = ContentValues()
-        with(values) {
-            put(AssignmentsSchema._ID, assignment.id)
-            put(AssignmentsSchema.COL_TIMETABLE_ID, assignment.timetableId)
-            put(AssignmentsSchema.COL_CLASS_ID, assignment.classId)
-            put(AssignmentsSchema.COL_TITLE, assignment.title)
-            put(AssignmentsSchema.COL_DETAIL, assignment.detail)
-            put(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH, assignment.dueDate.dayOfMonth)
-            put(AssignmentsSchema.COL_DUE_DATE_MONTH, assignment.dueDate.monthValue)
-            put(AssignmentsSchema.COL_DUE_DATE_YEAR, assignment.dueDate.year)
-            put(AssignmentsSchema.COL_COMPLETION_PROGRESS, assignment.completionProgress)
-        }
-
-        val db = TimetableDbHelper.getInstance(context).writableDatabase
-        db.insert(AssignmentsSchema.TABLE_NAME, null, values)
-
-        Log.i(LOG_TAG, "Added Assignment with id ${assignment.id}")
-    }
-
-    @JvmStatic
     fun setAssignmentAlarmTime(context: Context, time: LocalTime) {
         Log.d(LOG_TAG, "Setting the alarm notification time to $time")
 
@@ -77,23 +55,6 @@ object AssignmentUtils {
                 DateUtils.asCalendar(reminderStartTime),
                 AlarmReceiver.ASSIGNMENTS_NOTIFICATION_ID,
                 repeatInterval)
-    }
-
-    @JvmStatic
-    fun deleteAssignment(context: Context, assignmentId: Int) {
-        val db = TimetableDbHelper.getInstance(context).writableDatabase
-        db.delete(AssignmentsSchema.TABLE_NAME,
-                "${AssignmentsSchema._ID}=?",
-                arrayOf(assignmentId.toString()))
-
-        Log.i(LOG_TAG, "Deleted Assignment with id $assignmentId")
-    }
-
-    @JvmStatic
-    fun replaceAssignment(context: Context, oldAssignmentId: Int, newAssignment: Assignment) {
-        Log.i(LOG_TAG, "Replacing Assignment...")
-        deleteAssignment(context, oldAssignmentId)
-        addAssignment(context, newAssignment)
     }
 
 }

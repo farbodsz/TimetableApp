@@ -27,7 +27,6 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.DataHandlers;
 import com.satsumasoftware.timetable.db.DataUtils;
-import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
@@ -227,7 +226,8 @@ public class AssignmentsActivity extends BaseActivity {
                 mRemovedCompletionProgress = assignment.getCompletionProgress();
 
                 assignment.setCompletionProgress(100);
-                AssignmentUtils.replaceAssignment(getBaseContext(), assignment.getId(), assignment);
+                DataUtils.replaceItem(DataHandlers.ASSIGNMENTS, getBaseContext(),
+                        assignment.getId(), assignment);
 
                 // Do not completely remove the item if we're not in DISPLAY_TODO mode
                 if (mMode != DISPLAY_TODO) {
@@ -249,7 +249,7 @@ public class AssignmentsActivity extends BaseActivity {
                                     Assignment assignment = mRemovedAssignment;
                                     assignment.setCompletionProgress(mRemovedCompletionProgress);
 
-                                    AssignmentUtils.replaceAssignment(
+                                    DataUtils.replaceItem(DataHandlers.ASSIGNMENTS,
                                             getBaseContext(),
                                             assignment.getId(),
                                             assignment);
@@ -306,7 +306,7 @@ public class AssignmentsActivity extends BaseActivity {
                                 mAssignments.add(mRemovedAssignmentPos, assignment);
                                 mAdapter.notifyItemInserted(mRemovedAssignmentPos);
 
-                                AssignmentUtils.replaceAssignment(
+                                DataUtils.replaceItem(DataHandlers.ASSIGNMENTS,
                                         getBaseContext(),
                                         assignment.getId(),
                                         assignment);

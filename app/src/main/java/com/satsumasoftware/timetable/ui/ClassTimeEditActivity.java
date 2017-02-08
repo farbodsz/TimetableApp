@@ -492,7 +492,8 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 // Everything will be added fresh regardless of whether or not it is new.
                 // This is because there may be more or less ClassTimes than before so ids cannot
                 // be replaced exactly (delete 1, add 1).
-                ClassUtils.addClassTime(this, classTime);
+                DataUtils.addItem(DataHandlers.CLASS_TIMES, this, classTime);
+                ClassUtils.addAlarmsForClassTime(this, classTime);
             }
 
             Intent intent = new Intent();

@@ -445,9 +445,9 @@ public class ExamEditActivity extends AppCompatActivity {
                 mExamIsResit);
 
         if (mIsNew) {
-            ExamUtils.addExam(this, mExam);
+            DataUtils.addItem(DataHandlers.EXAMS, this, mExam);
         } else {
-            ExamUtils.replaceExam(this, mExam.getId(), mExam);
+            DataUtils.replaceItem(DataHandlers.EXAMS, this, mExam.getId(), mExam);
         }
 
         Intent intent = new Intent();

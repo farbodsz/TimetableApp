@@ -2,10 +2,11 @@ package com.satsumasoftware.timetable.db.util
 
 import android.app.Activity
 import android.app.Application
-import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
+import com.satsumasoftware.timetable.db.DataHandlers
+import com.satsumasoftware.timetable.db.DataUtils
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema
@@ -87,74 +88,6 @@ object ClassUtils {
     }
 
     @JvmStatic
-    fun addClass(context: Context, cls: Class) {
-        val values = ContentValues()
-        with(values) {
-            put(ClassesSchema._ID, cls.id)
-            put(ClassesSchema.COL_TIMETABLE_ID, cls.timetableId)
-            put(ClassesSchema.COL_SUBJECT_ID, cls.subjectId)
-            put(ClassesSchema.COL_MODULE_NAME, cls.moduleName)
-            put(ClassesSchema.COL_START_DATE_DAY_OF_MONTH, cls.startDate.dayOfMonth)
-            put(ClassesSchema.COL_START_DATE_MONTH, cls.startDate.monthValue)
-            put(ClassesSchema.COL_START_DATE_YEAR, cls.startDate.year)
-            put(ClassesSchema.COL_END_DATE_DAY_OF_MONTH, cls.endDate.dayOfMonth)
-            put(ClassesSchema.COL_END_DATE_MONTH, cls.endDate.monthValue)
-            put(ClassesSchema.COL_END_DATE_YEAR, cls.endDate.year)
-        }
-
-        val db = TimetableDbHelper.getInstance(context).writableDatabase
-        db.insert(ClassesSchema.TABLE_NAME, null, values)
-        Log.i(LOG_TAG, "Added Class with id ${cls.id}")
-    }
-
-    private fun deleteClass(context: Context, classId: Int) {
-        val db = TimetableDbHelper.getInstance(context).writableDatabase
-        db.delete(ClassesSchema.TABLE_NAME,
-                "${ClassesSchema._ID}=?",
-                arrayOf(classId.toString()))
-        Log.i(LOG_TAG, "Deleted Class with id $classId")
-    }
-
-    @JvmStatic
-    fun replaceClass(context: Context, oldClassId: Int, newClass: Class) {
-        Log.i(LOG_TAG, "Replacing Class...")
-        deleteClass(context, oldClassId)
-        addClass(context, newClass)
-    }
-
-    @JvmStatic
-    fun addClassDetail(context: Context, classDetail: ClassDetail) {
-        val values = ContentValues()
-        with(values) {
-            put(ClassDetailsSchema._ID, classDetail.id)
-            put(ClassDetailsSchema.COL_CLASS_ID, classDetail.classId)
-            put(ClassDetailsSchema.COL_ROOM, classDetail.room)
-            put(ClassDetailsSchema.COL_BUILDING, classDetail.building)
-            put(ClassDetailsSchema.COL_TEACHER, classDetail.teacher)
-        }
-
-        val db = TimetableDbHelper.getInstance(context).writableDatabase
-        db.insert(ClassDetailsSchema.TABLE_NAME, null, values)
-        Log.i(LOG_TAG, "Added ClassDetail with id ${classDetail.id}")
-    }
-
-    private fun deleteClassDetail(context: Context, classDetailId: Int) {
-        val db = TimetableDbHelper.getInstance(context).writableDatabase
-        db.delete(ClassDetailsSchema.TABLE_NAME,
-                "${ClassDetailsSchema._ID}=?",
-                arrayOf(classDetailId.toString()))
-        Log.i(LOG_TAG, "Deleted ClassDetail with id $classDetailId")
-    }
-
-    @JvmStatic
-    fun replaceClassDetail(context: Context, oldClassDetailId: Int,
-                                      newClassDetail: ClassDetail) {
-        Log.i(LOG_TAG, "Replacing ClassDetail...")
-        deleteClassDetail(context, oldClassDetailId)
-        addClassDetail(context, newClassDetail)
-    }
-
-    @JvmStatic
     fun getAllClassTimes(context: Context): ArrayList<ClassTime> {
         return getAllClassTimes(context, null, null)
     }
@@ -224,29 +157,6 @@ object ClassUtils {
     }
 
     @JvmStatic
-    fun addClassTime(activity: Activity, classTime: ClassTime) {
-        val values = ContentValues()
-        with(values) {
-            put(ClassTimesSchema._ID, classTime.id)
-            put(ClassTimesSchema.COL_TIMETABLE_ID, classTime.timetableId)
-            put(ClassTimesSchema.COL_CLASS_DETAIL_ID, classTime.classDetailId)
-            put(ClassTimesSchema.COL_DAY, classTime.day.value)
-            put(ClassTimesSchema.COL_WEEK_NUMBER, classTime.weekNumber)
-            put(ClassTimesSchema.COL_START_TIME_HRS, classTime.startTime.hour)
-            put(ClassTimesSchema.COL_START_TIME_MINS, classTime.startTime.minute)
-            put(ClassTimesSchema.COL_END_TIME_HRS, classTime.endTime.hour)
-            put(ClassTimesSchema.COL_END_TIME_MINS, classTime.endTime.minute)
-        }
-
-        val db = TimetableDbHelper.getInstance(activity).writableDatabase
-        db.insert(ClassTimesSchema.TABLE_NAME, null, values)
-
-        addAlarmsForClassTime(activity, classTime)
-
-        Log.i(LOG_TAG, "Added ClassTime with id ${classTime.id}")
-    }
-
-    @JvmStatic
     fun addAlarmsForClassTime(activity: Activity, classTime: ClassTime) =
             addAlarmsForClassTime(activity, activity.application, classTime)
 
@@ -304,10 +214,10 @@ object ClassUtils {
     fun completelyDeleteClass(context: Context, cls: Class) {
         Log.i(LOG_TAG, "Deleting everything related to Class of id ${cls.id}")
 
-        deleteClass(context, cls.id)
+        DataUtils.deleteItem(DataHandlers.CLASSES, context, cls.id)
 
         for (assignment in AssignmentUtils.getAssignmentsForClass(context, cls.id)) {
-            AssignmentUtils.deleteAssignment(context, assignment.id)
+            DataUtils.deleteItem(DataHandlers.ASSIGNMENTS, context, assignment.id)
         }
 
         for (classDetail in getClassDetailsForClass(context, cls.id)) {
@@ -319,7 +229,7 @@ object ClassUtils {
     fun completelyDeleteClassDetail(context: Context, classDetailId: Int) {
         Log.i(LOG_TAG, "Deleting everything related to ClassDetail of id $classDetailId")
 
-        deleteClassDetail(context, classDetailId)
+        DataUtils.deleteItem(DataHandlers.CLASS_DETAILS, context, classDetailId)
 
         for (classTime in getClassTimesForDetail(context, classDetailId)) {
             completelyDeleteClassTime(context, classTime.id)

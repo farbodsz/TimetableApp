@@ -427,7 +427,7 @@ public class TimetableEditActivity extends AppCompatActivity
         mTimetable = new Timetable(findTimetableId(), name, mStartDate, mEndDate, mWeekRotations);
 
         if (mIsNew) {
-            TimetableUtils.addTimetable(this, mTimetable);
+            DataUtils.addItem(DataHandlers.TIMETABLES, this, mTimetable);
         } else {
             TimetableUtils.replaceTimetable(this, mTimetable.getId(), mTimetable);
         }

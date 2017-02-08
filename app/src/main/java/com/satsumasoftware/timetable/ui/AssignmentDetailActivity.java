@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.DataHandlers;
 import com.satsumasoftware.timetable.db.DataUtils;
-import com.satsumasoftware.timetable.db.util.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -196,7 +195,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
     private void saveEditsAndClose() {
         // overwrite db values as completionProgress may have changed
-        AssignmentUtils.replaceAssignment(this, mAssignment.getId(), mAssignment);
+        DataUtils.replaceItem(DataHandlers.ASSIGNMENTS, this, mAssignment.getId(), mAssignment);
 
         setResult(RESULT_OK); // to reload any changes in AssignmentsActivity
         supportFinishAfterTransition();
