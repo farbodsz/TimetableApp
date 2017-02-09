@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.satsumasoftware.timetable.db.AssignmentUtils
 import com.satsumasoftware.timetable.db.ClassTimeUtils
 import com.satsumasoftware.timetable.db.ExamUtils
-import com.satsumasoftware.timetable.db.util.AssignmentUtils
 import com.satsumasoftware.timetable.framework.Timetable
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.PrefUtils
@@ -58,7 +58,7 @@ class TimetableApplication : Application() {
 
         Log.i(LOG_TAG, "Adding alarms for the current timetable (id: ${currentTimetable!!.id})")
         classTimeUtils.getItems(context, this).forEach {
-            ClassUtils.addAlarmsForClassTime(context, this, it)
+            ClassTimeUtils.addAlarmsForClassTime(context, this, it)
         }
         examUtils.getItems(context, this).forEach { exam ->
             if (exam.date.isAfter(LocalDate.now()) ||

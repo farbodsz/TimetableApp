@@ -20,7 +20,6 @@ import android.widget.TimePicker;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.ClassTimeUtils;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -467,7 +466,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         if (!mIsNewTime) {
             for (ClassTime classTime : mClassTimes) {
-                ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+                new ClassTimeUtils().deleteItemWithReferences(this, classTime.getId());
             }
         }
 
@@ -492,7 +491,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 // This is because there may be more or less ClassTimes than before so ids cannot
                 // be replaced exactly (delete 1, add 1).
                 new ClassTimeUtils().addItem(this, classTime);
-                ClassUtils.addAlarmsForClassTime(this, classTime);
+                ClassTimeUtils.addAlarmsForClassTime(this, classTime);
             }
 
             Intent intent = new Intent();
@@ -504,7 +503,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private void handleDeleteAction() {
         for (ClassTime classTime : mClassTimes) {
-            ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+            new ClassTimeUtils().deleteItemWithReferences(this, classTime.getId());
         }
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TAB_POSITION, mTabPos);

@@ -229,7 +229,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SubjectUtils.completelyDeleteSubject(getBaseContext(), mSubject);
+                        new SubjectUtils().deleteItemWithReferences(getBaseContext(), mSubject.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.ClassDetailUtils;
+import com.satsumasoftware.timetable.db.ClassTimeUtils;
 import com.satsumasoftware.timetable.db.ClassUtils;
 import com.satsumasoftware.timetable.db.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
@@ -197,7 +198,7 @@ public class ClassEditActivity extends AppCompatActivity {
             updateLinkedSubject();
 
             ArrayList<ClassDetail> classDetails =
-                    ClassUtils.getClassDetailsForClass(this, mClass.getId());
+                    ClassDetailUtils.getClassDetailsForClass(this, mClass.getId());
             for (ClassDetail classDetail : classDetails) {
                 addDetailTab(classDetail, false);
             }
@@ -454,7 +455,7 @@ public class ClassEditActivity extends AppCompatActivity {
         }
 
         ArrayList<ClassTime> classTimes = isNewDetail ? new ArrayList<ClassTime>() :
-                ClassUtils.getClassTimesForDetail(this, classDetail.getId());
+                ClassTimeUtils.getClassTimesForDetail(this, classDetail.getId());
         final ArrayList<ClassTimeGroup> classTimeGroups = sortAndGroupTimes(classTimes);
         mAllClassTimeGroups.add(classTimeGroups);
 
@@ -618,7 +619,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
                 ArrayList<ClassTimeGroup> thisTabTimeGroups = mAllClassTimeGroups.get(tabIndex);
 
-                ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDetail(
+                ArrayList<ClassTime> classTimes = ClassTimeUtils.getClassTimesForDetail(
                         this, mClassDetailIds.get(tabIndex));
 
                 thisTabTimeGroups.clear();
@@ -803,7 +804,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ClassUtils.completelyDeleteClass(getBaseContext(), mClass);
+                        new ClassUtils().deleteItemWithReferences(getBaseContext(), mClass.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

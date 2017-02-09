@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
 import com.satsumasoftware.timetable.db.AssignmentUtils;
+import com.satsumasoftware.timetable.db.ClassTimeUtils;
 import com.satsumasoftware.timetable.db.ExamUtils;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Exam;
@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity {
         int weekNumber = DateUtils.findWeekNumber(getApplication());
 
         ArrayList<ClassTime> classTimes =
-                ClassUtils.getClassTimesForDay(this, today, weekNumber, now);
+                ClassTimeUtils.getClassTimesForDay(this, today, weekNumber, now);
 
         Collections.sort(classTimes, new Comparator<ClassTime>() {
             @Override

@@ -4,6 +4,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import com.satsumasoftware.timetable.TimetableApplication
+import com.satsumasoftware.timetable.db.query.Filters
+import com.satsumasoftware.timetable.db.query.Query
+import com.satsumasoftware.timetable.db.schema.SubjectsSchema
+import com.satsumasoftware.timetable.db.schema.TermsSchema
 import com.satsumasoftware.timetable.db.schema.TimetablesSchema
 import com.satsumasoftware.timetable.framework.Timetable
 
@@ -38,4 +42,29 @@ class TimetableUtils : DataUtils<Timetable> {
         val application = context.applicationContext as TimetableApplication
         application.refreshAlarms(context)
     }
+
+    override fun deleteItemWithReferences(context: Context, itemId: Int) {
+        super.deleteItemWithReferences(context, itemId)
+
+        // Note that we only need to delete subjects, terms and their references since classes,
+        // assignments, exams, and everything else are linked to subjects.
+
+        val subjectsQuery = Query.Builder()
+                .addFilter(Filters.equal(SubjectsSchema.COL_TIMETABLE_ID, itemId.toString()))
+                .build()
+
+        for (subject in SubjectUtils().getAllItems(context, subjectsQuery)) {
+            SubjectUtils().deleteItemWithReferences(context, subject.id)
+        }
+
+        val termsQuery = Query.Builder()
+                .addFilter(Filters.equal(TermsSchema.COL_TIMETABLE_ID, itemId.toString()))
+                .build()
+
+        val termUtils = TermUtils()
+        termUtils.getAllItems(context, termsQuery).forEach {
+            termUtils.deleteItem(context, it.id)
+        }
+    }
+
 }

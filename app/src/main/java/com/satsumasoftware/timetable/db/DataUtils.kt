@@ -84,4 +84,8 @@ interface DataUtils<T : BaseItem> {
         addItem(context, newItem)
     }
 
+    fun deleteItemWithReferences(context: Context, itemId: Int) {
+        deleteItem(context, itemId)
+    }
+
 }

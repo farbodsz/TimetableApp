@@ -1,15 +1,20 @@
 package com.satsumasoftware.timetable.db
 
 import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
 import com.satsumasoftware.timetable.db.schema.ExamsSchema
 import com.satsumasoftware.timetable.framework.Exam
+import com.satsumasoftware.timetable.receiver.AlarmReceiver
+import com.satsumasoftware.timetable.util.DateUtils
 
 class ExamUtils : TimetableItemUtils<Exam> {
 
     override val tableName = ExamsSchema.TABLE_NAME
 
     override val itemIdCol = ExamsSchema._ID
+
+    override val timetableIdCol = ExamsSchema.COL_TIMETABLE_ID
 
     override fun createFromCursor(cursor: Cursor) = Exam.from(cursor)
 
@@ -33,6 +38,21 @@ class ExamUtils : TimetableItemUtils<Exam> {
         return values
     }
 
-    override val timetableIdCol = ExamsSchema.COL_TIMETABLE_ID
+    override fun deleteItem(context: Context, itemId: Int) {
+        super.deleteItem(context, itemId)
+
+        AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.EXAM, itemId)
+    }
+
+    companion object {
+        @JvmStatic
+        fun addAlarmForExam(context: Context, exam: Exam) {
+            val remindDate = exam.makeDateTimeObject().minusMinutes(30)
+            AlarmReceiver().setAlarm(context,
+                    AlarmReceiver.Type.EXAM,
+                    DateUtils.asCalendar(remindDate),
+                    exam.id)
+        }
+    }
 
 }

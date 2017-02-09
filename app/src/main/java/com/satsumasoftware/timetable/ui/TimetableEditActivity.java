@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
+import com.satsumasoftware.timetable.db.ClassTimeUtils;
 import com.satsumasoftware.timetable.db.TermUtils;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
 import com.satsumasoftware.timetable.db.TimetableUtils;
@@ -33,7 +34,6 @@ import com.satsumasoftware.timetable.db.query.Filters;
 import com.satsumasoftware.timetable.db.query.Query;
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.schema.TermsSchema;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -425,7 +425,7 @@ public class TimetableEditActivity extends AppCompatActivity
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     ClassTime classTime = ClassTime.from(cursor);
-                    ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+                    new ClassTimeUtils().deleteItemWithReferences(this, classTime.getId());
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -461,7 +461,7 @@ public class TimetableEditActivity extends AppCompatActivity
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        TimetableUtils.completelyDeleteTimetable(
+                        new TimetableUtils().deleteItemWithReferences(
                                 getBaseContext(), mTimetable.getId());
 
                         // After the timetable has been deleted, change the current timetable

@@ -2,7 +2,7 @@ package com.satsumasoftware.timetable.util
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.satsumasoftware.timetable.db.util.AssignmentUtils
+import com.satsumasoftware.timetable.db.AssignmentUtils
 import com.satsumasoftware.timetable.framework.Timetable
 import org.threeten.bp.LocalTime
 
