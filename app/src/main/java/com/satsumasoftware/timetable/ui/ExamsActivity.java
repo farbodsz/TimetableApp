@@ -50,6 +50,8 @@ public class ExamsActivity extends BaseActivity {
     private ArrayList<String> mHeaders;
     private ArrayList<Exam> mExams;
 
+    private ExamUtils mExamUtils = new ExamUtils(this);
+
     private ExamsAdapter mAdapter;
 
     private RecyclerView mRecyclerView;
@@ -86,7 +88,7 @@ public class ExamsActivity extends BaseActivity {
 
     private void setupList() {
         mHeaders = new ArrayList<>();
-        mExams = new ExamUtils().getItems(this);
+        mExams = mExamUtils.getItems(getApplication());
         sortList();
 
         mAdapter = new ExamsAdapter(this, mHeaders, mExams);
@@ -187,7 +189,7 @@ public class ExamsActivity extends BaseActivity {
 
     private void refreshList() {
         mExams.clear();
-        mExams.addAll(new ExamUtils().getItems(this));
+        mExams.addAll(mExamUtils.getItems(getApplication()));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();

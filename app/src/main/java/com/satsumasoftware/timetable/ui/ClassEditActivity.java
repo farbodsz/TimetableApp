@@ -96,6 +96,9 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private int mNewDetailIdCount = 1;
 
+    private ClassUtils mClassUtils = new ClassUtils(this);
+    private ClassDetailUtils mClassDetailUtils = new ClassDetailUtils(this);
+
     private Class mClass;
     private ArrayList<Integer> mClassDetailIds;
 
@@ -235,7 +238,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
 
                 final ArrayList<Subject> subjects =
-                        new SubjectUtils().getItems(ClassEditActivity.this);
+                        new SubjectUtils(ClassEditActivity.this).getItems(getApplication());
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
                     public int compare(Subject subject, Subject t1) {
@@ -433,7 +436,7 @@ public class ClassEditActivity extends AppCompatActivity {
         final int pagerCount = mPagerAdapter.getCount();
 
         final int classDetailId = isNewDetail ?
-                new ClassDetailUtils().getHighestItemId(this) + mNewDetailIdCount :
+                mClassDetailUtils.getHighestItemId() + mNewDetailIdCount :
                 classDetail.getId();
         mClassDetailIds.add(classDetailId);
 
@@ -753,7 +756,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
         // now write the data (replace class detail values)
 
-        int highestClassId = new ClassUtils().getHighestItemId(this);
+        int highestClassId = mClassUtils.getHighestItemId();
         int classId = mIsNew ? highestClassId + 1 : mClass.getId();
 
         for (int i = 0; i < rooms.size(); i++) {
@@ -765,7 +768,7 @@ public class ClassEditActivity extends AppCompatActivity {
             ClassDetail classDetail =
                     new ClassDetail(classDetailId, classId, room, building, teacher);
 
-            new ClassDetailUtils().replaceItem(this, classDetailId, classDetail);
+            mClassDetailUtils.replaceItem(classDetailId, classDetail);
         }
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
@@ -788,9 +791,9 @@ public class ClassEditActivity extends AppCompatActivity {
                 dbEndDate);
 
         if (mIsNew) {
-            new ClassUtils().addItem(this, mClass);
+            mClassUtils.addItem(mClass);
         } else {
-            new ClassUtils().replaceItem(this, mClass.getId(), mClass);
+            mClassUtils.replaceItem(mClass.getId(), mClass);
         }
 
         setResult(Activity.RESULT_OK);
@@ -804,7 +807,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new ClassUtils().deleteItemWithReferences(getBaseContext(), mClass.getId());
+                        mClassUtils.deleteItemWithReferences(mClass.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

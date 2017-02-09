@@ -78,6 +78,8 @@ public class TimetableEditActivity extends AppCompatActivity
     private boolean mIsFirst;
     private boolean mIsNew;
 
+    private TimetableUtils mTimetableUtils = new TimetableUtils(this);
+
     private EditText mEditTextName;
 
     private LocalDate mStartDate, mEndDate;
@@ -328,12 +330,11 @@ public class TimetableEditActivity extends AppCompatActivity
         Query query = new Query.Builder()
                 .addFilter(Filters.equal(TermsSchema.COL_TIMETABLE_ID, String.valueOf(timetableId)))
                 .build();
-        return new TermUtils().getAllItems(this, query);
+        return new TermUtils(this).getAllItems(query);
     }
 
     private int findTimetableId() {
-        return mTimetable == null ?
-                new TimetableUtils().getHighestItemId(this) + 1 : mTimetable.getId();
+        return mTimetable == null ? mTimetableUtils.getHighestItemId() + 1 : mTimetable.getId();
     }
 
     @Override
@@ -425,7 +426,7 @@ public class TimetableEditActivity extends AppCompatActivity
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     ClassTime classTime = ClassTime.from(cursor);
-                    new ClassTimeUtils().deleteItemWithReferences(this, classTime.getId());
+                    new ClassTimeUtils(this).deleteItemWithReferences(classTime.getId());
                     cursor.moveToNext();
                 }
                 cursor.close();
@@ -435,9 +436,9 @@ public class TimetableEditActivity extends AppCompatActivity
         mTimetable = new Timetable(findTimetableId(), name, mStartDate, mEndDate, mWeekRotations);
 
         if (mIsNew) {
-            new TimetableUtils().addItem(this, mTimetable);
+            mTimetableUtils.addItem(mTimetable);
         } else {
-            new TimetableUtils().replaceItem(this, mTimetable.getId(), mTimetable);
+            mTimetableUtils.replaceItem(mTimetable.getId(), mTimetable);
         }
 
         TimetableApplication application = (TimetableApplication) getApplication();
@@ -448,7 +449,7 @@ public class TimetableEditActivity extends AppCompatActivity
     }
 
     private void handleDeleteAction() {
-        if (new TimetableUtils().getAllItems(this).size() == 1) {
+        if (mTimetableUtils.getAllItems().size() == 1) {
             // there needs to be at least one timetable for the app to work
             Snackbar.make(findViewById(R.id.rootView), R.string.message_first_timetable_required,
                     Snackbar.LENGTH_SHORT).show();
@@ -461,11 +462,10 @@ public class TimetableEditActivity extends AppCompatActivity
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new TimetableUtils().deleteItemWithReferences(
-                                getBaseContext(), mTimetable.getId());
+                        mTimetableUtils.deleteItemWithReferences(mTimetable.getId());
 
                         // After the timetable has been deleted, change the current timetable
-                        int highestId = new TimetableUtils().getHighestItemId(getBaseContext());
+                        int highestId = mTimetableUtils.getHighestItemId();
                         Timetable newCurrentTimetable =
                                 Timetable.create(getBaseContext(), highestId);
 

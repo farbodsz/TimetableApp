@@ -73,6 +73,8 @@ public class ExamEditActivity extends AppCompatActivity {
 
     private boolean mIsNew;
 
+    private ExamUtils mExamUtils = new ExamUtils(this);
+
     private Toolbar mToolbar;
 
     private EditText mEditTextModule;
@@ -163,7 +165,8 @@ public class ExamEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
-                final ArrayList<Subject> subjects = new SubjectUtils().getItems(ExamEditActivity.this);
+                final ArrayList<Subject> subjects =
+                        new SubjectUtils(ExamEditActivity.this).getItems(getApplication());
 
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
@@ -426,7 +429,7 @@ public class ExamEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? new ExamUtils().getHighestItemId(this) + 1 : mExam.getId();
+        int id = mIsNew ? mExamUtils.getHighestItemId() + 1 : mExam.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
@@ -444,9 +447,9 @@ public class ExamEditActivity extends AppCompatActivity {
                 mExamIsResit);
 
         if (mIsNew) {
-            new ExamUtils().addItem(this, mExam);
+            mExamUtils.addItem(mExam);
         } else {
-            new ExamUtils().replaceItem(this, mExam.getId(), mExam);
+            mExamUtils.replaceItem(mExam.getId(), mExam);
         }
 
         Intent intent = new Intent();
@@ -461,7 +464,7 @@ public class ExamEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new ExamUtils().deleteItem(getBaseContext(), mExam.getId());
+                        mExamUtils.deleteItem(mExam.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

@@ -42,6 +42,8 @@ public class TimetablesActivity extends BaseActivity {
     private ArrayList<Timetable> mTimetables;
     private TimetablesAdapter mAdapter;
 
+    private TimetableUtils mTimetableUtils = new TimetableUtils(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,7 @@ public class TimetablesActivity extends BaseActivity {
     }
 
     private void setupList() {
-        mTimetables = new TimetableUtils().getAllItems(this);
+        mTimetables = mTimetableUtils.getAllItems();
         sortList();
 
         mAdapter = new TimetablesAdapter(this, mTimetables, findViewById(R.id.coordinatorLayout));
@@ -110,7 +112,7 @@ public class TimetablesActivity extends BaseActivity {
 
     private void refreshList() {
         mTimetables.clear();
-        mTimetables.addAll(new TimetableUtils().getAllItems(this));
+        mTimetables.addAll(mTimetableUtils.getAllItems());
         sortList();
         mAdapter.notifyDataSetChanged();
     }

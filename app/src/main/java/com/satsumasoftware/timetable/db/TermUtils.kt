@@ -1,11 +1,12 @@
 package com.satsumasoftware.timetable.db
 
 import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
 import com.satsumasoftware.timetable.db.schema.TermsSchema
 import com.satsumasoftware.timetable.framework.Term
 
-class TermUtils : TimetableItemUtils<Term> {
+class TermUtils(context: Context) : TimetableItemUtils<Term>(context) {
 
     override val tableName = TermsSchema.TABLE_NAME
 

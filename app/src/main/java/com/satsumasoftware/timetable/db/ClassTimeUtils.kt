@@ -21,7 +21,7 @@ import org.threeten.bp.LocalTime
 import org.threeten.bp.temporal.TemporalAdjusters
 import java.util.*
 
-class ClassTimeUtils : TimetableItemUtils<ClassTime> {
+class ClassTimeUtils(context: Context) : TimetableItemUtils<ClassTime>(context) {
 
     override val tableName = ClassTimesSchema.TABLE_NAME
 
@@ -47,8 +47,8 @@ class ClassTimeUtils : TimetableItemUtils<ClassTime> {
         return values
     }
 
-    override fun deleteItem(context: Context, itemId: Int) {
-        super.deleteItem(context, itemId)
+    override fun deleteItem(itemId: Int) {
+        super.deleteItem(itemId)
 
         AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.CLASS, itemId)
     }
@@ -106,7 +106,7 @@ class ClassTimeUtils : TimetableItemUtils<ClassTime> {
                     .addFilter(Filters.equal(
                             ClassTimesSchema.COL_CLASS_DETAIL_ID, classDetailId.toString()))
                     .build()
-            return ClassTimeUtils().getAllItems(context, classTimesQuery)
+            return ClassTimeUtils(context).getAllItems(classTimesQuery)
         }
 
         @JvmOverloads

@@ -10,7 +10,7 @@ import com.satsumasoftware.timetable.db.schema.ExamsSchema
 import com.satsumasoftware.timetable.db.schema.SubjectsSchema
 import com.satsumasoftware.timetable.framework.Subject
 
-class SubjectUtils : TimetableItemUtils<Subject> {
+class SubjectUtils(context: Context) : TimetableItemUtils<Subject>(context) {
 
     override val tableName = SubjectsSchema.TABLE_NAME
 
@@ -32,25 +32,25 @@ class SubjectUtils : TimetableItemUtils<Subject> {
         return values
     }
 
-    override fun deleteItemWithReferences(context: Context, itemId: Int) {
-        super.deleteItemWithReferences(context, itemId)
+    override fun deleteItemWithReferences(itemId: Int) {
+        super.deleteItemWithReferences(itemId)
 
         val classesQuery = Query.Builder()
                 .addFilter(Filters.equal(ClassesSchema.COL_SUBJECT_ID, itemId.toString()))
                 .build()
 
-        val classUtils = ClassUtils()
-        for (cls in classUtils.getAllItems(context, classesQuery)) {
-            classUtils.deleteItemWithReferences(context, cls.id)
+        val classUtils = ClassUtils(context)
+        for (cls in classUtils.getAllItems(classesQuery)) {
+            classUtils.deleteItemWithReferences(cls.id)
         }
 
         val examsQuery = Query.Builder()
                 .addFilter(Filters.equal(ExamsSchema.COL_SUBJECT_ID, itemId.toString()))
                 .build()
 
-        val examUtils = ExamUtils()
-        for (exam in examUtils.getAllItems(context, examsQuery)) {
-            examUtils.deleteItem(context, exam.id)
+        val examUtils = ExamUtils(context)
+        for (exam in examUtils.getAllItems(examsQuery)) {
+            examUtils.deleteItem(exam.id)
         }
     }
 

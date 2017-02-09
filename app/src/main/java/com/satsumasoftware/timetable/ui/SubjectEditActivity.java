@@ -51,6 +51,8 @@ public class SubjectEditActivity extends AppCompatActivity {
 
     private boolean mIsNew;
 
+    private SubjectUtils mSubjectUtils = new SubjectUtils(this);
+
     private EditText mEditTextName;
     private EditText mEditTextAbbreviation;
 
@@ -201,19 +203,19 @@ public class SubjectEditActivity extends AppCompatActivity {
                     ((TimetableApplication) getApplication()).getCurrentTimetable();
             assert currentTimetable != null;
 
-            mSubject = new Subject(new SubjectUtils().getHighestItemId(this) + 1,
+            mSubject = new Subject(mSubjectUtils.getHighestItemId() + 1,
                     currentTimetable.getId(),
                     newName,
                     newAbbreviation,
                     mColor.getId());
 
-            new SubjectUtils().addItem(this, mSubject);
+            mSubjectUtils.addItem(mSubject);
 
         } else {
             mSubject.setName(newName);
             mSubject.setAbbreviation(newAbbreviation);
             mSubject.setColorId(mColor.getId());
-            new SubjectUtils().replaceItem(this, mSubject.getId(), mSubject);
+            mSubjectUtils.replaceItem(mSubject.getId(), mSubject);
         }
 
         Intent intent = new Intent();
@@ -229,7 +231,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new SubjectUtils().deleteItemWithReferences(getBaseContext(), mSubject.getId());
+                        mSubjectUtils.deleteItemWithReferences(mSubject.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

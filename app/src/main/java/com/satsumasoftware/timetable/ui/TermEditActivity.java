@@ -53,6 +53,8 @@ public class TermEditActivity extends AppCompatActivity {
 
     private boolean mIsNew;
 
+    private TermUtils mTermUtils = new TermUtils(this);
+
     private EditText mEditText;
 
     private LocalDate mStartDate, mEndDate;
@@ -75,7 +77,7 @@ public class TermEditActivity extends AppCompatActivity {
 
             mTimetableId = extras.getInt(EXTRA_TIMETABLE_ID, -1);
             if (mTimetableId == -1) {
-                mTimetableId = new TimetableUtils().getHighestItemId(this) + 1;
+                mTimetableId = new TimetableUtils(this).getHighestItemId() + 1;
             }
         }
         mIsNew = mTerm == null;
@@ -235,13 +237,13 @@ public class TermEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? new TermUtils().getHighestItemId(this) + 1 : mTerm.getId();
+        int id = mIsNew ? mTermUtils.getHighestItemId() + 1 : mTerm.getId();
         mTerm = new Term(id, mTimetableId, newName, mStartDate, mEndDate);
 
         if (mIsNew) {
-            new TermUtils().addItem(this, mTerm);
+            mTermUtils.addItem(mTerm);
         } else {
-            new TermUtils().replaceItem(this, mTerm.getId(), mTerm);
+            mTermUtils.replaceItem(mTerm.getId(), mTerm);
         }
 
         setResult(Activity.RESULT_OK);
@@ -249,7 +251,7 @@ public class TermEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        new TermUtils().deleteItem(this, mTerm.getId());
+        mTermUtils.deleteItem(mTerm.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }

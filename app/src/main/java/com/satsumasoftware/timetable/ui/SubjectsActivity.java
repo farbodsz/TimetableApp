@@ -40,6 +40,8 @@ public class SubjectsActivity extends AppCompatActivity {
 
     private ArrayList<Subject> mSubjects;
 
+    private SubjectUtils mSubjectUtils = new SubjectUtils(this);
+
     private SubjectsAdapter mAdapter;
 
     private RecyclerView mRecyclerView;
@@ -81,7 +83,7 @@ public class SubjectsActivity extends AppCompatActivity {
     }
 
     private void setupList() {
-        mSubjects = new SubjectUtils().getItems(this);
+        mSubjects = mSubjectUtils.getItems(getApplication());
         sortList();
 
         mAdapter = new SubjectsAdapter(this, mSubjects);
@@ -126,7 +128,7 @@ public class SubjectsActivity extends AppCompatActivity {
     private void refreshList() {
         // change the list itself instead of reassigning so we can do notifyDataSetChanged()
         mSubjects.clear();
-        mSubjects.addAll(new SubjectUtils().getItems(this));
+        mSubjects.addAll(mSubjectUtils.getItems(getApplication()));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();

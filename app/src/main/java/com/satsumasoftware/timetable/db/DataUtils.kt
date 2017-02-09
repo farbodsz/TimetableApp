@@ -8,22 +8,22 @@ import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.framework.BaseItem
 import java.util.*
 
-interface DataUtils<T : BaseItem> {
+abstract class DataUtils<T : BaseItem>(val context: Context) {
 
     companion object {
         private const val LOG_TAG = "DataUtils"
     }
 
-    val tableName: String
+    abstract val tableName: String
 
-    val itemIdCol: String
+    abstract val itemIdCol: String
 
-    fun createFromCursor(cursor: Cursor): T
+    abstract fun createFromCursor(cursor: Cursor): T
 
-    fun propertiesAsContentValues(item: T): ContentValues
+    abstract fun propertiesAsContentValues(item: T): ContentValues
 
     @JvmOverloads
-    fun getAllItems(context: Context, query: Query? = null): ArrayList<T> {
+    fun getAllItems(query: Query? = null): ArrayList<T> {
         val items = ArrayList<T>()
 
         val dbHelper = TimetableDbHelper.getInstance(context)
@@ -42,7 +42,7 @@ interface DataUtils<T : BaseItem> {
         return items
     }
 
-    fun getHighestItemId(context: Context): Int {
+    fun getHighestItemId(): Int {
         val db = TimetableDbHelper.getInstance(context).readableDatabase
         val cursor = db.query(
                 tableName,
@@ -61,7 +61,7 @@ interface DataUtils<T : BaseItem> {
         return highestId
     }
 
-    fun addItem(context: Context, item: T) {
+    open fun addItem(item: T) {
         val values = propertiesAsContentValues(item)
 
         val db = TimetableDbHelper.getInstance(context).writableDatabase
@@ -70,7 +70,7 @@ interface DataUtils<T : BaseItem> {
         Log.i(LOG_TAG, "Added item with id ${item.id} to $tableName")
     }
 
-    fun deleteItem(context: Context, itemId: Int) {
+    open fun deleteItem(itemId: Int) {
         val db = TimetableDbHelper.getInstance(context).writableDatabase
         db.delete(tableName,
                 "$itemIdCol=?",
@@ -78,14 +78,14 @@ interface DataUtils<T : BaseItem> {
         Log.i(LOG_TAG, "Deleted item with id $itemId from $tableName")
     }
 
-    fun replaceItem(context: Context, oldItemId: Int, newItem: T) {
+    open fun replaceItem(oldItemId: Int, newItem: T) {
         Log.i(LOG_TAG, "Replacing item...")
-        deleteItem(context, oldItemId)
-        addItem(context, newItem)
+        deleteItem(oldItemId)
+        addItem(newItem)
     }
 
-    fun deleteItemWithReferences(context: Context, itemId: Int) {
-        deleteItem(context, itemId)
+    open fun deleteItemWithReferences(itemId: Int) {
+        deleteItem(itemId)
     }
 
 }

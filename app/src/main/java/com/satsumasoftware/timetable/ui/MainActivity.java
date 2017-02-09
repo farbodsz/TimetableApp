@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Assignment> assignments = new ArrayList<>();
         LocalDate now = LocalDate.now();
 
-        for (Assignment assignment : new AssignmentUtils().getItems(this)) {
+        for (Assignment assignment : new AssignmentUtils(this).getItems(getApplication())) {
             LocalDate dueDate = assignment.getDueDate();
 
             boolean dueInNextThreeDays = dueDate.isAfter(now) && dueDate.isBefore(now.plusDays(4));
@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Exam> exams = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
-        for (Exam exam : new ExamUtils().getItems(this)) {
+        for (Exam exam : new ExamUtils(this).getItems(getApplication())) {
             LocalDateTime examDateTime = exam.makeDateTimeObject();
 
             if (!examDateTime.isBefore(now) && examDateTime.isBefore(now.plusWeeks(6))) {

@@ -11,7 +11,7 @@ import com.satsumasoftware.timetable.db.schema.TermsSchema
 import com.satsumasoftware.timetable.db.schema.TimetablesSchema
 import com.satsumasoftware.timetable.framework.Timetable
 
-class TimetableUtils : DataUtils<Timetable> {
+class TimetableUtils(context: Context) : DataUtils<Timetable>(context) {
 
     override val tableName = TimetablesSchema.TABLE_NAME
 
@@ -35,16 +35,16 @@ class TimetableUtils : DataUtils<Timetable> {
         return values
     }
 
-    override fun replaceItem(context: Context, oldItemId: Int, newItem: Timetable) {
-        super.replaceItem(context, oldItemId, newItem)
+    override fun replaceItem(oldItemId: Int, newItem: Timetable) {
+        super.replaceItem(oldItemId, newItem)
 
         // Refresh alarms in case start/end dates have changed
         val application = context.applicationContext as TimetableApplication
         application.refreshAlarms(context)
     }
 
-    override fun deleteItemWithReferences(context: Context, itemId: Int) {
-        super.deleteItemWithReferences(context, itemId)
+    override fun deleteItemWithReferences(itemId: Int) {
+        super.deleteItemWithReferences(itemId)
 
         // Note that we only need to delete subjects, terms and their references since classes,
         // assignments, exams, and everything else are linked to subjects.
@@ -53,17 +53,18 @@ class TimetableUtils : DataUtils<Timetable> {
                 .addFilter(Filters.equal(SubjectsSchema.COL_TIMETABLE_ID, itemId.toString()))
                 .build()
 
-        for (subject in SubjectUtils().getAllItems(context, subjectsQuery)) {
-            SubjectUtils().deleteItemWithReferences(context, subject.id)
+        val subjectUtils = SubjectUtils(context)
+        for (subject in subjectUtils.getAllItems(subjectsQuery)) {
+            subjectUtils.deleteItemWithReferences(subject.id)
         }
 
         val termsQuery = Query.Builder()
                 .addFilter(Filters.equal(TermsSchema.COL_TIMETABLE_ID, itemId.toString()))
                 .build()
 
-        val termUtils = TermUtils()
-        termUtils.getAllItems(context, termsQuery).forEach {
-            termUtils.deleteItem(context, it.id)
+        val termUtils = TermUtils(context)
+        termUtils.getAllItems(termsQuery).forEach {
+            termUtils.deleteItem(it.id)
         }
     }
 

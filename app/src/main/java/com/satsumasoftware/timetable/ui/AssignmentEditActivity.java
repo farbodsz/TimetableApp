@@ -61,6 +61,8 @@ public class AssignmentEditActivity extends AppCompatActivity {
     private Assignment mAssignment;
     private boolean mIsNew;
 
+    private AssignmentUtils mAssignmentUtils = new AssignmentUtils(this);
+
     private Toolbar mToolbar;
 
     private EditText mEditTextTitle;
@@ -132,7 +134,8 @@ public class AssignmentEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentEditActivity.this);
 
-                final ArrayList<Class> classes = new ClassUtils().getItems(AssignmentEditActivity.this);
+                final ArrayList<Class> classes =
+                        new ClassUtils(AssignmentEditActivity.this).getItems(getApplication());
 
                 Collections.sort(classes, new Comparator<Class>() {
                     @Override
@@ -285,7 +288,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? new AssignmentUtils().getHighestItemId(this) + 1 : mAssignment.getId();
+        int id = mIsNew ? mAssignmentUtils.getHighestItemId() + 1 : mAssignment.getId();
         int completionProgress = mIsNew ? 0 : mAssignment.getCompletionProgress();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
@@ -301,9 +304,9 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 completionProgress);
 
         if (mIsNew) {
-            new AssignmentUtils().addItem(this, mAssignment);
+            mAssignmentUtils.addItem(mAssignment);
         } else {
-            new AssignmentUtils().replaceItem(this, mAssignment.getId(), mAssignment);
+            mAssignmentUtils.replaceItem(mAssignment.getId(), mAssignment);
         }
 
         Intent intent = new Intent();
@@ -318,8 +321,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new AssignmentUtils().deleteItem(
-                                getBaseContext(), mAssignment.getId());
+                        mAssignmentUtils.deleteItem(mAssignment.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

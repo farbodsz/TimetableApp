@@ -78,6 +78,8 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private boolean mIsNewTime;
 
+    private ClassTimeUtils mClassTimeUtils = new ClassTimeUtils(this);
+
     private LocalTime mStartTime, mEndTime;
     private TextView mStartTimeText, mEndTimeText;
 
@@ -466,7 +468,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         if (!mIsNewTime) {
             for (ClassTime classTime : mClassTimes) {
-                new ClassTimeUtils().deleteItemWithReferences(this, classTime.getId());
+                mClassTimeUtils.deleteItemWithReferences(classTime.getId());
             }
         }
 
@@ -482,7 +484,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                     continue;
                 }
 
-                int id = new ClassTimeUtils().getHighestItemId(this) + 1;
+                int id = mClassTimeUtils.getHighestItemId() + 1;
 
                 ClassTime classTime = new ClassTime(id, timetable.getId(), mClassDetailId,
                         dayOfWeek, weekNumber, mStartTime, mEndTime);
@@ -490,7 +492,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 // Everything will be added fresh regardless of whether or not it is new.
                 // This is because there may be more or less ClassTimes than before so ids cannot
                 // be replaced exactly (delete 1, add 1).
-                new ClassTimeUtils().addItem(this, classTime);
+                mClassTimeUtils.addItem(classTime);
                 ClassTimeUtils.addAlarmsForClassTime(this, classTime);
             }
 
@@ -503,7 +505,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private void handleDeleteAction() {
         for (ClassTime classTime : mClassTimes) {
-            new ClassTimeUtils().deleteItemWithReferences(this, classTime.getId());
+            mClassTimeUtils.deleteItemWithReferences(classTime.getId());
         }
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TAB_POSITION, mTabPos);

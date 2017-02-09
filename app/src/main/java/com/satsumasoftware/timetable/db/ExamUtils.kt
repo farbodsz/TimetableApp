@@ -8,7 +8,7 @@ import com.satsumasoftware.timetable.framework.Exam
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.DateUtils
 
-class ExamUtils : TimetableItemUtils<Exam> {
+class ExamUtils(context: Context) : TimetableItemUtils<Exam>(context) {
 
     override val tableName = ExamsSchema.TABLE_NAME
 
@@ -38,8 +38,8 @@ class ExamUtils : TimetableItemUtils<Exam> {
         return values
     }
 
-    override fun deleteItem(context: Context, itemId: Int) {
-        super.deleteItem(context, itemId)
+    override fun deleteItem(itemId: Int) {
+        super.deleteItem(itemId)
 
         AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.EXAM, itemId)
     }

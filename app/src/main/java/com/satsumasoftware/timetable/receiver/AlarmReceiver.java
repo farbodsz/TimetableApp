@@ -118,8 +118,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 break;
 
             case Type.ASSIGNMENT:
-                ArrayList<Assignment> assignments = new AssignmentUtils().getItems(
-                        context,
+                ArrayList<Assignment> assignments = new AssignmentUtils(context).getItems(
                         (TimetableApplication) context.getApplicationContext());
 
                 int count = 0;

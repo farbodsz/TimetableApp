@@ -93,6 +93,8 @@ public class AssignmentsActivity extends BaseActivity {
     private ArrayList<Assignment> mAssignments;
     private AssignmentsAdapter mAdapter;
 
+    private AssignmentUtils mAssignmentUtils = new AssignmentUtils(this);
+
     private RecyclerView mRecyclerView;
     private FrameLayout mPlaceholderLayout;
 
@@ -147,7 +149,7 @@ public class AssignmentsActivity extends BaseActivity {
 
     private void setupList() {
         mHeaders = new ArrayList<>();
-        mAssignments = new AssignmentUtils().getItems(this);
+        mAssignments = mAssignmentUtils.getItems(getApplication());
         sortList();
 
         mAdapter = new AssignmentsAdapter(this, mHeaders, mAssignments);
@@ -225,8 +227,7 @@ public class AssignmentsActivity extends BaseActivity {
                 mRemovedCompletionProgress = assignment.getCompletionProgress();
 
                 assignment.setCompletionProgress(100);
-                new AssignmentUtils().replaceItem(getBaseContext(),
-                        assignment.getId(), assignment);
+                mAssignmentUtils.replaceItem(assignment.getId(), assignment);
 
                 // Do not completely remove the item if we're not in DISPLAY_TODO mode
                 if (mMode != DISPLAY_TODO) {
@@ -248,10 +249,7 @@ public class AssignmentsActivity extends BaseActivity {
                                     Assignment assignment = mRemovedAssignment;
                                     assignment.setCompletionProgress(mRemovedCompletionProgress);
 
-                                    new AssignmentUtils().replaceItem(
-                                            getBaseContext(),
-                                            assignment.getId(),
-                                            assignment);
+                                    mAssignmentUtils.replaceItem(assignment.getId(), assignment);
 
                                     mAssignments.set(finalPos, assignment);
                                     mAdapter.notifyItemChanged(finalPos);
@@ -305,10 +303,7 @@ public class AssignmentsActivity extends BaseActivity {
                                 mAssignments.add(mRemovedAssignmentPos, assignment);
                                 mAdapter.notifyItemInserted(mRemovedAssignmentPos);
 
-                                new AssignmentUtils().replaceItem(
-                                        getBaseContext(),
-                                        assignment.getId(),
-                                        assignment);
+                                mAssignmentUtils.replaceItem(assignment.getId(), assignment);
 
                                 refreshPlaceholderStatus();
                             }
@@ -354,7 +349,7 @@ public class AssignmentsActivity extends BaseActivity {
 
     private void refreshList() {
         mAssignments.clear();
-        mAssignments.addAll(new AssignmentUtils().getItems(this));
+        mAssignments.addAll(mAssignmentUtils.getItems(getApplication()));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();

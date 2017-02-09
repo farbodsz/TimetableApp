@@ -12,7 +12,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 
-class AssignmentUtils : TimetableItemUtils<Assignment> {
+class AssignmentUtils(context: Context) : TimetableItemUtils<Assignment>(context) {
 
     override val tableName = AssignmentsSchema.TABLE_NAME
 

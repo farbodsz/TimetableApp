@@ -50,6 +50,8 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     private Assignment mAssignment;
     private boolean mIsNew;
 
+    private AssignmentUtils mAssignmentUtils = new AssignmentUtils(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +140,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // get the edited assignment (it would have the highest id if new, same id if not)
                 int editedAssignmentId = mIsNew
-                        ? new AssignmentUtils().getHighestItemId(this)
+                        ? mAssignmentUtils.getHighestItemId()
                         : mAssignment.getId();
                 mAssignment = Assignment.create(this, editedAssignmentId);
 
@@ -194,7 +196,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
     private void saveEditsAndClose() {
         // overwrite db values as completionProgress may have changed
-        new AssignmentUtils().replaceItem(this, mAssignment.getId(), mAssignment);
+        mAssignmentUtils.replaceItem(mAssignment.getId(), mAssignment);
 
         setResult(RESULT_OK); // to reload any changes in AssignmentsActivity
         supportFinishAfterTransition();
