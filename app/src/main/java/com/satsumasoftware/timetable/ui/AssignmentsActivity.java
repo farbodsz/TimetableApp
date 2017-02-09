@@ -25,7 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.AssignmentHandler;
+import com.satsumasoftware.timetable.db.handler.AssignmentHandler;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;

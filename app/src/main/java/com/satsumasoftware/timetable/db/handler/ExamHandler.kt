@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db
+package com.satsumasoftware.timetable.db.handler
 
 import android.content.ContentValues
 import android.content.Context

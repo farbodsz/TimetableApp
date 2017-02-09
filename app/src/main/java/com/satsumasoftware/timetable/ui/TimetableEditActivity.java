@@ -26,10 +26,10 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.ClassTimeHandler;
-import com.satsumasoftware.timetable.db.TermHandler;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
-import com.satsumasoftware.timetable.db.TimetableHandler;
+import com.satsumasoftware.timetable.db.handler.ClassTimeHandler;
+import com.satsumasoftware.timetable.db.handler.TermHandler;
+import com.satsumasoftware.timetable.db.handler.TimetableHandler;
 import com.satsumasoftware.timetable.db.query.Filters;
 import com.satsumasoftware.timetable.db.query.Query;
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema;

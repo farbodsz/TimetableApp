@@ -1,9 +1,10 @@
-package com.satsumasoftware.timetable.db
+package com.satsumasoftware.timetable.db.handler
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.util.Log
+import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.framework.BaseItem
 import java.util.*

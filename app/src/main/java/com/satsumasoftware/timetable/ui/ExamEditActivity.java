@@ -26,8 +26,8 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.ExamHandler;
-import com.satsumasoftware.timetable.db.SubjectHandler;
+import com.satsumasoftware.timetable.db.handler.ExamHandler;
+import com.satsumasoftware.timetable.db.handler.SubjectHandler;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;

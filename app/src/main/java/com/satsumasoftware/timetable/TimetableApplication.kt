@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.satsumasoftware.timetable.db.AssignmentHandler
-import com.satsumasoftware.timetable.db.ClassTimeHandler
-import com.satsumasoftware.timetable.db.ExamHandler
+import com.satsumasoftware.timetable.db.handler.AssignmentHandler
+import com.satsumasoftware.timetable.db.handler.ClassTimeHandler
+import com.satsumasoftware.timetable.db.handler.ExamHandler
 import com.satsumasoftware.timetable.framework.Timetable
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.PrefUtils

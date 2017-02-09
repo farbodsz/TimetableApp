@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.ClassHandler;
+import com.satsumasoftware.timetable.db.handler.ClassHandler;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;

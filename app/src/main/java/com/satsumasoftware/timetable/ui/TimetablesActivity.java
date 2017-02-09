@@ -14,7 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.TimetableHandler;
+import com.satsumasoftware.timetable.db.handler.TimetableHandler;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
 import com.satsumasoftware.timetable.util.UiUtils;
