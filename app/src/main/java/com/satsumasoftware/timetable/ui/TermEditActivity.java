@@ -15,8 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.TermUtils;
-import com.satsumasoftware.timetable.db.TimetableUtils;
+import com.satsumasoftware.timetable.db.TermHandler;
+import com.satsumasoftware.timetable.db.TimetableHandler;
 import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
@@ -53,7 +53,7 @@ public class TermEditActivity extends AppCompatActivity {
 
     private boolean mIsNew;
 
-    private TermUtils mTermUtils = new TermUtils(this);
+    private TermHandler mTermUtils = new TermHandler(this);
 
     private EditText mEditText;
 
@@ -77,7 +77,7 @@ public class TermEditActivity extends AppCompatActivity {
 
             mTimetableId = extras.getInt(EXTRA_TIMETABLE_ID, -1);
             if (mTimetableId == -1) {
-                mTimetableId = new TimetableUtils(this).getHighestItemId() + 1;
+                mTimetableId = new TimetableHandler(this).getHighestItemId() + 1;
             }
         }
         mIsNew = mTerm == null;

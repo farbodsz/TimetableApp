@@ -19,7 +19,7 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.ClassTimeUtils;
+import com.satsumasoftware.timetable.db.ClassTimeHandler;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -78,7 +78,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private boolean mIsNewTime;
 
-    private ClassTimeUtils mClassTimeUtils = new ClassTimeUtils(this);
+    private ClassTimeHandler mClassTimeHandler = new ClassTimeHandler(this);
 
     private LocalTime mStartTime, mEndTime;
     private TextView mStartTimeText, mEndTimeText;
@@ -468,7 +468,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         if (!mIsNewTime) {
             for (ClassTime classTime : mClassTimes) {
-                mClassTimeUtils.deleteItemWithReferences(classTime.getId());
+                mClassTimeHandler.deleteItemWithReferences(classTime.getId());
             }
         }
 
@@ -484,7 +484,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                     continue;
                 }
 
-                int id = mClassTimeUtils.getHighestItemId() + 1;
+                int id = mClassTimeHandler.getHighestItemId() + 1;
 
                 ClassTime classTime = new ClassTime(id, timetable.getId(), mClassDetailId,
                         dayOfWeek, weekNumber, mStartTime, mEndTime);
@@ -492,8 +492,8 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 // Everything will be added fresh regardless of whether or not it is new.
                 // This is because there may be more or less ClassTimes than before so ids cannot
                 // be replaced exactly (delete 1, add 1).
-                mClassTimeUtils.addItem(classTime);
-                ClassTimeUtils.addAlarmsForClassTime(this, classTime);
+                mClassTimeHandler.addItem(classTime);
+                ClassTimeHandler.addAlarmsForClassTime(this, classTime);
             }
 
             Intent intent = new Intent();
@@ -505,7 +505,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private void handleDeleteAction() {
         for (ClassTime classTime : mClassTimes) {
-            mClassTimeUtils.deleteItemWithReferences(classTime.getId());
+            mClassTimeHandler.deleteItemWithReferences(classTime.getId());
         }
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TAB_POSITION, mTabPos);

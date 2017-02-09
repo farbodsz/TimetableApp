@@ -8,7 +8,7 @@ import com.satsumasoftware.timetable.framework.Exam
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.DateUtils
 
-class ExamUtils(context: Context) : TimetableItemUtils<Exam>(context) {
+class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
 
     override val tableName = ExamsSchema.TABLE_NAME
 

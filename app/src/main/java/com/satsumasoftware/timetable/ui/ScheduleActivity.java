@@ -21,7 +21,7 @@ import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.ClassTimeUtils;
+import com.satsumasoftware.timetable.db.ClassTimeHandler;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -124,7 +124,7 @@ public class ScheduleActivity extends BaseActivity {
                 String tabTitle = titleBuilder.toString();
 
                 final ArrayList<ClassTime> classTimes =
-                        ClassTimeUtils.getClassTimesForDay(this, dayOfWeek, weekNumber, thisDay);
+                        ClassTimeHandler.getClassTimesForDay(this, dayOfWeek, weekNumber, thisDay);
 
                 if (classTimes.isEmpty()) {
                     View placeholder = UiUtils.makePlaceholderView(this,

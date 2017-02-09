@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.AssignmentUtils;
-import com.satsumasoftware.timetable.db.ClassUtils;
+import com.satsumasoftware.timetable.db.AssignmentHandler;
+import com.satsumasoftware.timetable.db.ClassHandler;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -61,7 +61,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     private Assignment mAssignment;
     private boolean mIsNew;
 
-    private AssignmentUtils mAssignmentUtils = new AssignmentUtils(this);
+    private AssignmentHandler mAssignmentHandler = new AssignmentHandler(this);
 
     private Toolbar mToolbar;
 
@@ -135,7 +135,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentEditActivity.this);
 
                 final ArrayList<Class> classes =
-                        new ClassUtils(AssignmentEditActivity.this).getItems(getApplication());
+                        new ClassHandler(AssignmentEditActivity.this).getItems(getApplication());
 
                 Collections.sort(classes, new Comparator<Class>() {
                     @Override
@@ -288,7 +288,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? mAssignmentUtils.getHighestItemId() + 1 : mAssignment.getId();
+        int id = mIsNew ? mAssignmentHandler.getHighestItemId() + 1 : mAssignment.getId();
         int completionProgress = mIsNew ? 0 : mAssignment.getCompletionProgress();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
@@ -304,9 +304,9 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 completionProgress);
 
         if (mIsNew) {
-            mAssignmentUtils.addItem(mAssignment);
+            mAssignmentHandler.addItem(mAssignment);
         } else {
-            mAssignmentUtils.replaceItem(mAssignment.getId(), mAssignment);
+            mAssignmentHandler.replaceItem(mAssignment.getId(), mAssignment);
         }
 
         Intent intent = new Intent();
@@ -321,7 +321,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mAssignmentUtils.deleteItem(mAssignment.getId());
+                        mAssignmentHandler.deleteItem(mAssignment.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

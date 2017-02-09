@@ -10,7 +10,7 @@ import com.satsumasoftware.timetable.db.schema.ExamsSchema
 import com.satsumasoftware.timetable.db.schema.SubjectsSchema
 import com.satsumasoftware.timetable.framework.Subject
 
-class SubjectUtils(context: Context) : TimetableItemUtils<Subject>(context) {
+class SubjectHandler(context: Context) : TimetableItemHandler<Subject>(context) {
 
     override val tableName = SubjectsSchema.TABLE_NAME
 
@@ -39,7 +39,7 @@ class SubjectUtils(context: Context) : TimetableItemUtils<Subject>(context) {
                 .addFilter(Filters.equal(ClassesSchema.COL_SUBJECT_ID, itemId.toString()))
                 .build()
 
-        val classUtils = ClassUtils(context)
+        val classUtils = ClassHandler(context)
         for (cls in classUtils.getAllItems(classesQuery)) {
             classUtils.deleteItemWithReferences(cls.id)
         }
@@ -48,7 +48,7 @@ class SubjectUtils(context: Context) : TimetableItemUtils<Subject>(context) {
                 .addFilter(Filters.equal(ExamsSchema.COL_SUBJECT_ID, itemId.toString()))
                 .build()
 
-        val examUtils = ExamUtils(context)
+        val examUtils = ExamHandler(context)
         for (exam in examUtils.getAllItems(examsQuery)) {
             examUtils.deleteItem(exam.id)
         }

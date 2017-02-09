@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.SubjectUtils;
+import com.satsumasoftware.timetable.db.SubjectHandler;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 import com.satsumasoftware.timetable.util.UiUtils;
@@ -40,7 +40,7 @@ public class SubjectsActivity extends AppCompatActivity {
 
     private ArrayList<Subject> mSubjects;
 
-    private SubjectUtils mSubjectUtils = new SubjectUtils(this);
+    private SubjectHandler mSubjectUtils = new SubjectHandler(this);
 
     private SubjectsAdapter mAdapter;
 

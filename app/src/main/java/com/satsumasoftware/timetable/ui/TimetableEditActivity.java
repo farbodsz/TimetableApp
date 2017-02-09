@@ -26,10 +26,10 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.ClassTimeUtils;
-import com.satsumasoftware.timetable.db.TermUtils;
+import com.satsumasoftware.timetable.db.ClassTimeHandler;
+import com.satsumasoftware.timetable.db.TermHandler;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
-import com.satsumasoftware.timetable.db.TimetableUtils;
+import com.satsumasoftware.timetable.db.TimetableHandler;
 import com.satsumasoftware.timetable.db.query.Filters;
 import com.satsumasoftware.timetable.db.query.Query;
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema;
@@ -78,7 +78,7 @@ public class TimetableEditActivity extends AppCompatActivity
     private boolean mIsFirst;
     private boolean mIsNew;
 
-    private TimetableUtils mTimetableUtils = new TimetableUtils(this);
+    private TimetableHandler mTimetableUtils = new TimetableHandler(this);
 
     private EditText mEditTextName;
 
@@ -330,7 +330,7 @@ public class TimetableEditActivity extends AppCompatActivity
         Query query = new Query.Builder()
                 .addFilter(Filters.equal(TermsSchema.COL_TIMETABLE_ID, String.valueOf(timetableId)))
                 .build();
-        return new TermUtils(this).getAllItems(query);
+        return new TermHandler(this).getAllItems(query);
     }
 
     private int findTimetableId() {
@@ -426,7 +426,7 @@ public class TimetableEditActivity extends AppCompatActivity
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     ClassTime classTime = ClassTime.from(cursor);
-                    new ClassTimeUtils(this).deleteItemWithReferences(classTime.getId());
+                    new ClassTimeHandler(this).deleteItemWithReferences(classTime.getId());
                     cursor.moveToNext();
                 }
                 cursor.close();

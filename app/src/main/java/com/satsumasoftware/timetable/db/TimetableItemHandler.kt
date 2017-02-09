@@ -8,7 +8,7 @@ import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.framework.TimetableItem
 import java.util.*
 
-abstract class TimetableItemUtils<T : TimetableItem>(context: Context) : DataUtils<T>(context) {
+abstract class TimetableItemHandler<T : TimetableItem>(context: Context) : DataHandler<T>(context) {
 
     abstract val timetableIdCol: String
 

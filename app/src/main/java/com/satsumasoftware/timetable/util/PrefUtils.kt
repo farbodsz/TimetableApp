@@ -2,7 +2,7 @@ package com.satsumasoftware.timetable.util
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.satsumasoftware.timetable.db.AssignmentUtils
+import com.satsumasoftware.timetable.db.AssignmentHandler
 import com.satsumasoftware.timetable.framework.Timetable
 import org.threeten.bp.LocalTime
 
@@ -60,7 +60,7 @@ object PrefUtils {
     fun setAssignmentNotificationTime(context: Context, time: LocalTime) {
         val sp = PreferenceManager.getDefaultSharedPreferences(context)
         sp.edit().putString(PREF_ASSIGNMENT_NOTIFICATION_TIME, time.toString()).apply()
-        AssignmentUtils.setAssignmentAlarmTime(context, time)
+        AssignmentHandler.setAssignmentAlarmTime(context, time)
     }
 
 }

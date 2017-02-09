@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.AssignmentUtils;
-import com.satsumasoftware.timetable.db.ClassTimeUtils;
-import com.satsumasoftware.timetable.db.ExamUtils;
+import com.satsumasoftware.timetable.db.AssignmentHandler;
+import com.satsumasoftware.timetable.db.ClassTimeHandler;
+import com.satsumasoftware.timetable.db.ExamHandler;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Exam;
@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity {
         int weekNumber = DateUtils.findWeekNumber(getApplication());
 
         ArrayList<ClassTime> classTimes =
-                ClassTimeUtils.getClassTimesForDay(this, today, weekNumber, now);
+                ClassTimeHandler.getClassTimesForDay(this, today, weekNumber, now);
 
         Collections.sort(classTimes, new Comparator<ClassTime>() {
             @Override
@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Assignment> assignments = new ArrayList<>();
         LocalDate now = LocalDate.now();
 
-        for (Assignment assignment : new AssignmentUtils(this).getItems(getApplication())) {
+        for (Assignment assignment : new AssignmentHandler(this).getItems(getApplication())) {
             LocalDate dueDate = assignment.getDueDate();
 
             boolean dueInNextThreeDays = dueDate.isAfter(now) && dueDate.isBefore(now.plusDays(4));
@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Exam> exams = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
-        for (Exam exam : new ExamUtils(this).getItems(getApplication())) {
+        for (Exam exam : new ExamHandler(this).getItems(getApplication())) {
             LocalDateTime examDateTime = exam.makeDateTimeObject();
 
             if (!examDateTime.isBefore(now) && examDateTime.isBefore(now.plusWeeks(6))) {

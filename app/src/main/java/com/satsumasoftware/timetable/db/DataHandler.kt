@@ -8,10 +8,10 @@ import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.framework.BaseItem
 import java.util.*
 
-abstract class DataUtils<T : BaseItem>(val context: Context) {
+abstract class DataHandler<T : BaseItem>(val context: Context) {
 
     companion object {
-        private const val LOG_TAG = "DataUtils"
+        private const val LOG_TAG = "DataHandler"
     }
 
     abstract val tableName: String

@@ -6,7 +6,7 @@ import android.database.Cursor
 import com.satsumasoftware.timetable.db.schema.TermsSchema
 import com.satsumasoftware.timetable.framework.Term
 
-class TermUtils(context: Context) : TimetableItemUtils<Term>(context) {
+class TermHandler(context: Context) : TimetableItemHandler<Term>(context) {
 
     override val tableName = TermsSchema.TABLE_NAME
 

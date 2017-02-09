@@ -21,7 +21,7 @@ import org.threeten.bp.LocalTime
 import org.threeten.bp.temporal.TemporalAdjusters
 import java.util.*
 
-class ClassTimeUtils(context: Context) : TimetableItemUtils<ClassTime>(context) {
+class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(context) {
 
     override val tableName = ClassTimesSchema.TABLE_NAME
 
@@ -106,7 +106,7 @@ class ClassTimeUtils(context: Context) : TimetableItemUtils<ClassTime>(context) 
                     .addFilter(Filters.equal(
                             ClassTimesSchema.COL_CLASS_DETAIL_ID, classDetailId.toString()))
                     .build()
-            return ClassTimeUtils(context).getAllItems(classTimesQuery)
+            return ClassTimeHandler(context).getAllItems(classTimesQuery)
         }
 
         @JvmOverloads

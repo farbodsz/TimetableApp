@@ -12,7 +12,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 
-class AssignmentUtils(context: Context) : TimetableItemUtils<Assignment>(context) {
+class AssignmentHandler(context: Context) : TimetableItemHandler<Assignment>(context) {
 
     override val tableName = AssignmentsSchema.TABLE_NAME
 
@@ -40,7 +40,7 @@ class AssignmentUtils(context: Context) : TimetableItemUtils<Assignment>(context
 
     companion object {
 
-        private const val LOG_TAG = "AssignmentUtils"
+        private const val LOG_TAG = "AssignmentHandler"
 
         @JvmStatic
         fun setAssignmentAlarmTime(context: Context, time: LocalTime) {

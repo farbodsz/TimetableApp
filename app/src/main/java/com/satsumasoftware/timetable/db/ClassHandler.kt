@@ -9,7 +9,7 @@ import com.satsumasoftware.timetable.db.schema.AssignmentsSchema
 import com.satsumasoftware.timetable.db.schema.ClassesSchema
 import com.satsumasoftware.timetable.framework.Class
 
-class ClassUtils(context: Context) : TimetableItemUtils<Class>(context) {
+class ClassHandler(context: Context) : TimetableItemHandler<Class>(context) {
 
     override val tableName = ClassesSchema.TABLE_NAME
 
@@ -43,13 +43,13 @@ class ClassUtils(context: Context) : TimetableItemUtils<Class>(context) {
                 .addFilter(Filters.equal(AssignmentsSchema.COL_CLASS_ID, itemId.toString()))
                 .build()
 
-        val assignmentUtils = AssignmentUtils(context)
+        val assignmentUtils = AssignmentHandler(context)
         for (assignment in assignmentUtils.getAllItems(assignmentsQuery)) {
             assignmentUtils.deleteItem(assignment.id)
         }
 
-        for (classDetail in ClassDetailUtils.getClassDetailsForClass(context, itemId)) {
-            ClassDetailUtils(context).deleteItemWithReferences(classDetail.id)
+        for (classDetail in ClassDetailHandler.getClassDetailsForClass(context, itemId)) {
+            ClassDetailHandler(context).deleteItemWithReferences(classDetail.id)
         }
     }
 

@@ -11,7 +11,7 @@ import com.satsumasoftware.timetable.db.schema.TermsSchema
 import com.satsumasoftware.timetable.db.schema.TimetablesSchema
 import com.satsumasoftware.timetable.framework.Timetable
 
-class TimetableUtils(context: Context) : DataUtils<Timetable>(context) {
+class TimetableHandler(context: Context) : DataHandler<Timetable>(context) {
 
     override val tableName = TimetablesSchema.TABLE_NAME
 
@@ -53,7 +53,7 @@ class TimetableUtils(context: Context) : DataUtils<Timetable>(context) {
                 .addFilter(Filters.equal(SubjectsSchema.COL_TIMETABLE_ID, itemId.toString()))
                 .build()
 
-        val subjectUtils = SubjectUtils(context)
+        val subjectUtils = SubjectHandler(context)
         for (subject in subjectUtils.getAllItems(subjectsQuery)) {
             subjectUtils.deleteItemWithReferences(subject.id)
         }
@@ -62,7 +62,7 @@ class TimetableUtils(context: Context) : DataUtils<Timetable>(context) {
                 .addFilter(Filters.equal(TermsSchema.COL_TIMETABLE_ID, itemId.toString()))
                 .build()
 
-        val termUtils = TermUtils(context)
+        val termUtils = TermHandler(context)
         termUtils.getAllItems(termsQuery).forEach {
             termUtils.deleteItem(it.id)
         }

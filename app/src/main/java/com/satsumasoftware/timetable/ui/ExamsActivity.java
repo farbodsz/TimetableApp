@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.ExamUtils;
+import com.satsumasoftware.timetable.db.ExamHandler;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.ui.adapter.ExamsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
@@ -50,7 +50,7 @@ public class ExamsActivity extends BaseActivity {
     private ArrayList<String> mHeaders;
     private ArrayList<Exam> mExams;
 
-    private ExamUtils mExamUtils = new ExamUtils(this);
+    private ExamHandler mExamUtils = new ExamHandler(this);
 
     private ExamsAdapter mAdapter;
 

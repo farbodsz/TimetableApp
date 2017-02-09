@@ -26,8 +26,8 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.ExamUtils;
-import com.satsumasoftware.timetable.db.SubjectUtils;
+import com.satsumasoftware.timetable.db.ExamHandler;
+import com.satsumasoftware.timetable.db.SubjectHandler;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -73,7 +73,7 @@ public class ExamEditActivity extends AppCompatActivity {
 
     private boolean mIsNew;
 
-    private ExamUtils mExamUtils = new ExamUtils(this);
+    private ExamHandler mExamUtils = new ExamHandler(this);
 
     private Toolbar mToolbar;
 
@@ -166,7 +166,7 @@ public class ExamEditActivity extends AppCompatActivity {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
                 final ArrayList<Subject> subjects =
-                        new SubjectUtils(ExamEditActivity.this).getItems(getApplication());
+                        new SubjectHandler(ExamEditActivity.this).getItems(getApplication());
 
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override

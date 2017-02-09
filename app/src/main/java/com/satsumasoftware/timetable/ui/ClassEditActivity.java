@@ -32,10 +32,10 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.ClassDetailUtils;
-import com.satsumasoftware.timetable.db.ClassTimeUtils;
-import com.satsumasoftware.timetable.db.ClassUtils;
-import com.satsumasoftware.timetable.db.SubjectUtils;
+import com.satsumasoftware.timetable.db.ClassDetailHandler;
+import com.satsumasoftware.timetable.db.ClassHandler;
+import com.satsumasoftware.timetable.db.ClassTimeHandler;
+import com.satsumasoftware.timetable.db.SubjectHandler;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -96,8 +96,8 @@ public class ClassEditActivity extends AppCompatActivity {
 
     private int mNewDetailIdCount = 1;
 
-    private ClassUtils mClassUtils = new ClassUtils(this);
-    private ClassDetailUtils mClassDetailUtils = new ClassDetailUtils(this);
+    private ClassHandler mClassHandler = new ClassHandler(this);
+    private ClassDetailHandler mClassDetailHandler = new ClassDetailHandler(this);
 
     private Class mClass;
     private ArrayList<Integer> mClassDetailIds;
@@ -201,7 +201,7 @@ public class ClassEditActivity extends AppCompatActivity {
             updateLinkedSubject();
 
             ArrayList<ClassDetail> classDetails =
-                    ClassDetailUtils.getClassDetailsForClass(this, mClass.getId());
+                    ClassDetailHandler.getClassDetailsForClass(this, mClass.getId());
             for (ClassDetail classDetail : classDetails) {
                 addDetailTab(classDetail, false);
             }
@@ -238,7 +238,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
 
                 final ArrayList<Subject> subjects =
-                        new SubjectUtils(ClassEditActivity.this).getItems(getApplication());
+                        new SubjectHandler(ClassEditActivity.this).getItems(getApplication());
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
                     public int compare(Subject subject, Subject t1) {
@@ -436,7 +436,7 @@ public class ClassEditActivity extends AppCompatActivity {
         final int pagerCount = mPagerAdapter.getCount();
 
         final int classDetailId = isNewDetail ?
-                mClassDetailUtils.getHighestItemId() + mNewDetailIdCount :
+                mClassDetailHandler.getHighestItemId() + mNewDetailIdCount :
                 classDetail.getId();
         mClassDetailIds.add(classDetailId);
 
@@ -458,7 +458,7 @@ public class ClassEditActivity extends AppCompatActivity {
         }
 
         ArrayList<ClassTime> classTimes = isNewDetail ? new ArrayList<ClassTime>() :
-                ClassTimeUtils.getClassTimesForDetail(this, classDetail.getId());
+                ClassTimeHandler.getClassTimesForDetail(this, classDetail.getId());
         final ArrayList<ClassTimeGroup> classTimeGroups = sortAndGroupTimes(classTimes);
         mAllClassTimeGroups.add(classTimeGroups);
 
@@ -622,7 +622,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
                 ArrayList<ClassTimeGroup> thisTabTimeGroups = mAllClassTimeGroups.get(tabIndex);
 
-                ArrayList<ClassTime> classTimes = ClassTimeUtils.getClassTimesForDetail(
+                ArrayList<ClassTime> classTimes = ClassTimeHandler.getClassTimesForDetail(
                         this, mClassDetailIds.get(tabIndex));
 
                 thisTabTimeGroups.clear();
@@ -756,7 +756,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
         // now write the data (replace class detail values)
 
-        int highestClassId = mClassUtils.getHighestItemId();
+        int highestClassId = mClassHandler.getHighestItemId();
         int classId = mIsNew ? highestClassId + 1 : mClass.getId();
 
         for (int i = 0; i < rooms.size(); i++) {
@@ -768,7 +768,7 @@ public class ClassEditActivity extends AppCompatActivity {
             ClassDetail classDetail =
                     new ClassDetail(classDetailId, classId, room, building, teacher);
 
-            mClassDetailUtils.replaceItem(classDetailId, classDetail);
+            mClassDetailHandler.replaceItem(classDetailId, classDetail);
         }
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
@@ -791,9 +791,9 @@ public class ClassEditActivity extends AppCompatActivity {
                 dbEndDate);
 
         if (mIsNew) {
-            mClassUtils.addItem(mClass);
+            mClassHandler.addItem(mClass);
         } else {
-            mClassUtils.replaceItem(mClass.getId(), mClass);
+            mClassHandler.replaceItem(mClass.getId(), mClass);
         }
 
         setResult(Activity.RESULT_OK);
@@ -807,7 +807,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mClassUtils.deleteItemWithReferences(mClass.getId());
+                        mClassHandler.deleteItemWithReferences(mClass.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
