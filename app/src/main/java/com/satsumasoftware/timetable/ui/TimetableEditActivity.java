@@ -26,15 +26,14 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
+import com.satsumasoftware.timetable.db.TermUtils;
 import com.satsumasoftware.timetable.db.TimetableDbHelper;
+import com.satsumasoftware.timetable.db.TimetableUtils;
 import com.satsumasoftware.timetable.db.query.Filters;
 import com.satsumasoftware.timetable.db.query.Query;
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema;
 import com.satsumasoftware.timetable.db.schema.TermsSchema;
 import com.satsumasoftware.timetable.db.util.ClassUtils;
-import com.satsumasoftware.timetable.db.util.TimetableUtils;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -329,12 +328,12 @@ public class TimetableEditActivity extends AppCompatActivity
         Query query = new Query.Builder()
                 .addFilter(Filters.equal(TermsSchema.COL_TIMETABLE_ID, String.valueOf(timetableId)))
                 .build();
-        return DataUtils.getAllItems(DataHandlers.TERMS, this, query);
+        return new TermUtils().getAllItems(this, query);
     }
 
     private int findTimetableId() {
         return mTimetable == null ?
-                DataUtils.getHighestItemId(DataHandlers.TIMETABLES, this) + 1 : mTimetable.getId();
+                new TimetableUtils().getHighestItemId(this) + 1 : mTimetable.getId();
     }
 
     @Override
@@ -436,9 +435,9 @@ public class TimetableEditActivity extends AppCompatActivity
         mTimetable = new Timetable(findTimetableId(), name, mStartDate, mEndDate, mWeekRotations);
 
         if (mIsNew) {
-            DataUtils.addItem(DataHandlers.TIMETABLES, this, mTimetable);
+            new TimetableUtils().addItem(this, mTimetable);
         } else {
-            TimetableUtils.replaceTimetable(this, mTimetable.getId(), mTimetable);
+            new TimetableUtils().replaceItem(this, mTimetable.getId(), mTimetable);
         }
 
         TimetableApplication application = (TimetableApplication) getApplication();
@@ -449,7 +448,7 @@ public class TimetableEditActivity extends AppCompatActivity
     }
 
     private void handleDeleteAction() {
-        if (DataUtils.getAllItems(DataHandlers.TIMETABLES, this).size() == 1) {
+        if (new TimetableUtils().getAllItems(this).size() == 1) {
             // there needs to be at least one timetable for the app to work
             Snackbar.make(findViewById(R.id.rootView), R.string.message_first_timetable_required,
                     Snackbar.LENGTH_SHORT).show();
@@ -466,7 +465,7 @@ public class TimetableEditActivity extends AppCompatActivity
                                 getBaseContext(), mTimetable.getId());
 
                         // After the timetable has been deleted, change the current timetable
-                        int highestId = DataUtils.getHighestItemId(DataHandlers.TIMETABLES, getBaseContext());
+                        int highestId = new TimetableUtils().getHighestItemId(getBaseContext());
                         Timetable newCurrentTimetable =
                                 Timetable.create(getBaseContext(), highestId);
 

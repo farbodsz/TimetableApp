@@ -2,8 +2,9 @@ package com.satsumasoftware.timetable.db.util
 
 import android.content.Context
 import android.util.Log
-import com.satsumasoftware.timetable.db.DataHandlers
-import com.satsumasoftware.timetable.db.DataUtils
+import com.satsumasoftware.timetable.db.ClassUtils
+import com.satsumasoftware.timetable.db.ExamUtils
+import com.satsumasoftware.timetable.db.SubjectUtils
 import com.satsumasoftware.timetable.db.query.Filters
 import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.db.schema.ClassesSchema
@@ -18,13 +19,13 @@ object SubjectUtils {
     fun completelyDeleteSubject(context: Context, subject: Subject) {
         Log.i(LOG_TAG, "Deleting everything related to Subject with id ${subject.id}")
 
-        DataUtils.deleteItem(DataHandlers.SUBJECTS, context, subject.id)
+        SubjectUtils().deleteItem(context, subject.id)
 
         val classesQuery = Query.Builder()
                 .addFilter(Filters.equal(ClassesSchema.COL_SUBJECT_ID, subject.id.toString()))
                 .build()
 
-        for (cls in DataUtils.getAllItems(DataHandlers.CLASSES, context, classesQuery)) {
+        for (cls in ClassUtils().getAllItems(context, classesQuery)) {
             ClassUtils.completelyDeleteClass(context, cls)
         }
 
@@ -32,8 +33,9 @@ object SubjectUtils {
                 .addFilter(Filters.equal(ExamsSchema.COL_SUBJECT_ID, subject.id.toString()))
                 .build()
 
-        for (exam in DataUtils.getAllItems(DataHandlers.EXAMS, context, examsQuery)) {
-            ExamUtils.deleteExam(context, exam.id)
+        val examUtils = ExamUtils()
+        for (exam in examUtils.getAllItems(context, examsQuery)) {
+            examUtils.deleteItem(context, exam.id)
         }
     }
 

@@ -18,8 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
+import com.satsumasoftware.timetable.db.ExamUtils;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.ui.adapter.ExamsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
@@ -87,7 +86,7 @@ public class ExamsActivity extends BaseActivity {
 
     private void setupList() {
         mHeaders = new ArrayList<>();
-        mExams = DataUtils.getItems(DataHandlers.EXAMS, this);
+        mExams = new ExamUtils().getItems(this);
         sortList();
 
         mAdapter = new ExamsAdapter(this, mHeaders, mExams);
@@ -188,7 +187,7 @@ public class ExamsActivity extends BaseActivity {
 
     private void refreshList() {
         mExams.clear();
-        mExams.addAll(DataUtils.getItems(DataHandlers.EXAMS, this));
+        mExams.addAll(new ExamUtils().getItems(this));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();

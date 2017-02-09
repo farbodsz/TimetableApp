@@ -25,8 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
+import com.satsumasoftware.timetable.db.AssignmentUtils;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
@@ -148,7 +147,7 @@ public class AssignmentsActivity extends BaseActivity {
 
     private void setupList() {
         mHeaders = new ArrayList<>();
-        mAssignments = DataUtils.getItems(DataHandlers.ASSIGNMENTS, this);
+        mAssignments = new AssignmentUtils().getItems(this);
         sortList();
 
         mAdapter = new AssignmentsAdapter(this, mHeaders, mAssignments);
@@ -226,7 +225,7 @@ public class AssignmentsActivity extends BaseActivity {
                 mRemovedCompletionProgress = assignment.getCompletionProgress();
 
                 assignment.setCompletionProgress(100);
-                DataUtils.replaceItem(DataHandlers.ASSIGNMENTS, getBaseContext(),
+                new AssignmentUtils().replaceItem(getBaseContext(),
                         assignment.getId(), assignment);
 
                 // Do not completely remove the item if we're not in DISPLAY_TODO mode
@@ -249,7 +248,7 @@ public class AssignmentsActivity extends BaseActivity {
                                     Assignment assignment = mRemovedAssignment;
                                     assignment.setCompletionProgress(mRemovedCompletionProgress);
 
-                                    DataUtils.replaceItem(DataHandlers.ASSIGNMENTS,
+                                    new AssignmentUtils().replaceItem(
                                             getBaseContext(),
                                             assignment.getId(),
                                             assignment);
@@ -306,7 +305,7 @@ public class AssignmentsActivity extends BaseActivity {
                                 mAssignments.add(mRemovedAssignmentPos, assignment);
                                 mAdapter.notifyItemInserted(mRemovedAssignmentPos);
 
-                                DataUtils.replaceItem(DataHandlers.ASSIGNMENTS,
+                                new AssignmentUtils().replaceItem(
                                         getBaseContext(),
                                         assignment.getId(),
                                         assignment);
@@ -355,7 +354,7 @@ public class AssignmentsActivity extends BaseActivity {
 
     private void refreshList() {
         mAssignments.clear();
-        mAssignments.addAll(DataUtils.getItems(DataHandlers.ASSIGNMENTS, this));
+        mAssignments.addAll(new AssignmentUtils().getItems(this));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();

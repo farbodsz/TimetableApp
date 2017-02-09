@@ -15,8 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
+import com.satsumasoftware.timetable.db.TermUtils;
+import com.satsumasoftware.timetable.db.TimetableUtils;
 import com.satsumasoftware.timetable.framework.Term;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.util.TextUtilsKt;
@@ -75,7 +75,7 @@ public class TermEditActivity extends AppCompatActivity {
 
             mTimetableId = extras.getInt(EXTRA_TIMETABLE_ID, -1);
             if (mTimetableId == -1) {
-                mTimetableId = DataUtils.getHighestItemId(DataHandlers.TIMETABLES, this) + 1;
+                mTimetableId = new TimetableUtils().getHighestItemId(this) + 1;
             }
         }
         mIsNew = mTerm == null;
@@ -235,13 +235,13 @@ public class TermEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? DataUtils.getHighestItemId(DataHandlers.TERMS, this) + 1 : mTerm.getId();
+        int id = mIsNew ? new TermUtils().getHighestItemId(this) + 1 : mTerm.getId();
         mTerm = new Term(id, mTimetableId, newName, mStartDate, mEndDate);
 
         if (mIsNew) {
-            DataUtils.addItem(DataHandlers.TERMS, this, mTerm);
+            new TermUtils().addItem(this, mTerm);
         } else {
-            DataUtils.replaceItem(DataHandlers.TERMS, this, mTerm.getId(), mTerm);
+            new TermUtils().replaceItem(this, mTerm.getId(), mTerm);
         }
 
         setResult(Activity.RESULT_OK);
@@ -249,7 +249,7 @@ public class TermEditActivity extends AppCompatActivity {
     }
 
     private void handleDeleteAction() {
-        DataUtils.deleteItem(DataHandlers.TERMS, this, mTerm.getId());
+        new TermUtils().deleteItem(this, mTerm.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }

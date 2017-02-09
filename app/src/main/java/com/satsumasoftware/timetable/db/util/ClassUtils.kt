@@ -5,9 +5,9 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.DataHandlers
-import com.satsumasoftware.timetable.db.DataUtils
-import com.satsumasoftware.timetable.db.TimetableDbHelper
+import com.satsumasoftware.timetable.db.*
+import com.satsumasoftware.timetable.db.AssignmentUtils
+import com.satsumasoftware.timetable.db.ClassUtils
 import com.satsumasoftware.timetable.db.query.Filters
 import com.satsumasoftware.timetable.db.query.Query
 import com.satsumasoftware.timetable.db.schema.AssignmentsSchema
@@ -36,7 +36,7 @@ object ClassUtils {
         val query = Query.Builder()
                 .addFilter(Filters.equal(ClassDetailsSchema.COL_CLASS_ID, classId.toString()))
                 .build()
-        return DataUtils.getAllItems(DataHandlers.CLASS_DETAILS, context, query)
+        return ClassDetailUtils().getAllItems(context, query)
     }
 
     @JvmStatic
@@ -45,7 +45,7 @@ object ClassUtils {
                 .addFilter(Filters.equal(
                         ClassTimesSchema.COL_CLASS_DETAIL_ID, classDetailId.toString()))
                 .build()
-        return DataUtils.getAllItems(DataHandlers.CLASS_TIMES, context, query)
+        return ClassTimeUtils().getAllItems(context, query)
     }
 
     @JvmOverloads
@@ -144,14 +144,15 @@ object ClassUtils {
     fun completelyDeleteClass(context: Context, cls: Class) {
         Log.i(LOG_TAG, "Deleting everything related to Class of id ${cls.id}")
 
-        DataUtils.deleteItem(DataHandlers.CLASSES, context, cls.id)
+        ClassUtils().deleteItem(context, cls.id)
 
         val assignmentsQuery = Query.Builder()
                 .addFilter(Filters.equal(AssignmentsSchema.COL_CLASS_ID, cls.id.toString()))
                 .build()
 
-        for (assignment in DataUtils.getAllItems(DataHandlers.ASSIGNMENTS, context, assignmentsQuery)) {
-            DataUtils.deleteItem(DataHandlers.ASSIGNMENTS, context, assignment.id)
+        val assignmentUtils = AssignmentUtils()
+        for (assignment in assignmentUtils.getAllItems(context, assignmentsQuery)) {
+            assignmentUtils.deleteItem(context, assignment.id)
         }
 
         for (classDetail in getClassDetailsForClass(context, cls.id)) {
@@ -163,7 +164,7 @@ object ClassUtils {
     fun completelyDeleteClassDetail(context: Context, classDetailId: Int) {
         Log.i(LOG_TAG, "Deleting everything related to ClassDetail of id $classDetailId")
 
-        DataUtils.deleteItem(DataHandlers.CLASS_DETAILS, context, classDetailId)
+        ClassDetailUtils().deleteItem(context, classDetailId)
 
         for (classTime in getClassTimesForDetail(context, classDetailId)) {
             completelyDeleteClassTime(context, classTime.id)

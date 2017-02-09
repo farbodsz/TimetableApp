@@ -32,9 +32,9 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.ClassDetailUtils;
+import com.satsumasoftware.timetable.db.ClassUtils;
+import com.satsumasoftware.timetable.db.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -234,7 +234,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
 
                 final ArrayList<Subject> subjects =
-                        DataUtils.getItems(DataHandlers.SUBJECTS, ClassEditActivity.this);
+                        new SubjectUtils().getItems(ClassEditActivity.this);
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
                     public int compare(Subject subject, Subject t1) {
@@ -432,7 +432,7 @@ public class ClassEditActivity extends AppCompatActivity {
         final int pagerCount = mPagerAdapter.getCount();
 
         final int classDetailId = isNewDetail ?
-                DataUtils.getHighestItemId(DataHandlers.CLASS_DETAILS, this) + mNewDetailIdCount :
+                new ClassDetailUtils().getHighestItemId(this) + mNewDetailIdCount :
                 classDetail.getId();
         mClassDetailIds.add(classDetailId);
 
@@ -752,7 +752,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
         // now write the data (replace class detail values)
 
-        int highestClassId = DataUtils.getHighestItemId(DataHandlers.CLASSES, this);
+        int highestClassId = new ClassUtils().getHighestItemId(this);
         int classId = mIsNew ? highestClassId + 1 : mClass.getId();
 
         for (int i = 0; i < rooms.size(); i++) {
@@ -764,7 +764,7 @@ public class ClassEditActivity extends AppCompatActivity {
             ClassDetail classDetail =
                     new ClassDetail(classDetailId, classId, room, building, teacher);
 
-            DataUtils.replaceItem(DataHandlers.CLASS_DETAILS, this, classDetailId, classDetail);
+            new ClassDetailUtils().replaceItem(this, classDetailId, classDetail);
         }
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
@@ -787,9 +787,9 @@ public class ClassEditActivity extends AppCompatActivity {
                 dbEndDate);
 
         if (mIsNew) {
-            DataUtils.addItem(DataHandlers.CLASSES, this, mClass);
+            new ClassUtils().addItem(this, mClass);
         } else {
-            DataUtils.replaceItem(DataHandlers.CLASSES, this, mClass.getId(), mClass);
+            new ClassUtils().replaceItem(this, mClass.getId(), mClass);
         }
 
         setResult(Activity.RESULT_OK);

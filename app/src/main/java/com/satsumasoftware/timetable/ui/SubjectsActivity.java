@@ -14,8 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
+import com.satsumasoftware.timetable.db.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 import com.satsumasoftware.timetable.util.UiUtils;
@@ -82,7 +81,7 @@ public class SubjectsActivity extends AppCompatActivity {
     }
 
     private void setupList() {
-        mSubjects = DataUtils.getItems(DataHandlers.SUBJECTS, this);
+        mSubjects = new SubjectUtils().getItems(this);
         sortList();
 
         mAdapter = new SubjectsAdapter(this, mSubjects);
@@ -127,7 +126,7 @@ public class SubjectsActivity extends AppCompatActivity {
     private void refreshList() {
         // change the list itself instead of reassigning so we can do notifyDataSetChanged()
         mSubjects.clear();
-        mSubjects.addAll(DataUtils.getItems(DataHandlers.SUBJECTS, this));
+        mSubjects.addAll(new SubjectUtils().getItems(this));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();

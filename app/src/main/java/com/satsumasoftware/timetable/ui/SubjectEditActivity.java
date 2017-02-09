@@ -19,9 +19,7 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtils;
+import com.satsumasoftware.timetable.db.SubjectUtils;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -203,19 +201,19 @@ public class SubjectEditActivity extends AppCompatActivity {
                     ((TimetableApplication) getApplication()).getCurrentTimetable();
             assert currentTimetable != null;
 
-            mSubject = new Subject(DataUtils.getHighestItemId(DataHandlers.SUBJECTS, this) + 1,
+            mSubject = new Subject(new SubjectUtils().getHighestItemId(this) + 1,
                     currentTimetable.getId(),
                     newName,
                     newAbbreviation,
                     mColor.getId());
 
-            DataUtils.addItem(DataHandlers.SUBJECTS, this, mSubject);
+            new SubjectUtils().addItem(this, mSubject);
 
         } else {
             mSubject.setName(newName);
             mSubject.setAbbreviation(newAbbreviation);
             mSubject.setColorId(mColor.getId());
-            DataUtils.replaceItem(DataHandlers.SUBJECTS, this, mSubject.getId(), mSubject);
+            new SubjectUtils().replaceItem(this, mSubject.getId(), mSubject);
         }
 
         Intent intent = new Intent();
