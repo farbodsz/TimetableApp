@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
+import com.satsumasoftware.timetable.db.handler.AssignmentHandler;
+import com.satsumasoftware.timetable.db.handler.ClassHandler;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -60,6 +60,8 @@ public class AssignmentEditActivity extends AppCompatActivity {
 
     private Assignment mAssignment;
     private boolean mIsNew;
+
+    private AssignmentHandler mAssignmentHandler = new AssignmentHandler(this);
 
     private Toolbar mToolbar;
 
@@ -132,7 +134,8 @@ public class AssignmentEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(AssignmentEditActivity.this);
 
-                final ArrayList<Class> classes = DataUtils.getItems(DataHandlers.CLASSES, AssignmentEditActivity.this);
+                final ArrayList<Class> classes =
+                        new ClassHandler(AssignmentEditActivity.this).getItems(getApplication());
 
                 Collections.sort(classes, new Comparator<Class>() {
                     @Override
@@ -285,7 +288,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? DataUtils.getHighestItemId(DataHandlers.ASSIGNMENTS, this) + 1 : mAssignment.getId();
+        int id = mIsNew ? mAssignmentHandler.getHighestItemId() + 1 : mAssignment.getId();
         int completionProgress = mIsNew ? 0 : mAssignment.getCompletionProgress();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
@@ -301,9 +304,9 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 completionProgress);
 
         if (mIsNew) {
-            DataUtils.addItem(DataHandlers.ASSIGNMENTS, this, mAssignment);
+            mAssignmentHandler.addItem(mAssignment);
         } else {
-            DataUtils.replaceItem(DataHandlers.ASSIGNMENTS, this, mAssignment.getId(), mAssignment);
+            mAssignmentHandler.replaceItem(mAssignment.getId(), mAssignment);
         }
 
         Intent intent = new Intent();
@@ -318,8 +321,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DataUtils.deleteItem(DataHandlers.ASSIGNMENTS,
-                                getBaseContext(), mAssignment.getId());
+                        mAssignmentHandler.deleteItem(mAssignment.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

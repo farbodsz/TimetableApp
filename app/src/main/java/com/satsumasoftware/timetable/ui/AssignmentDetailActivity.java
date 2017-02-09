@@ -14,8 +14,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
+import com.satsumasoftware.timetable.db.handler.AssignmentHandler;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Color;
@@ -50,6 +49,8 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
     private Assignment mAssignment;
     private boolean mIsNew;
+
+    private AssignmentHandler mAssignmentHandler = new AssignmentHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +140,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // get the edited assignment (it would have the highest id if new, same id if not)
                 int editedAssignmentId = mIsNew
-                        ? DataUtils.getHighestItemId(DataHandlers.ASSIGNMENTS, this)
+                        ? mAssignmentHandler.getHighestItemId()
                         : mAssignment.getId();
                 mAssignment = Assignment.create(this, editedAssignmentId);
 
@@ -195,7 +196,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
     private void saveEditsAndClose() {
         // overwrite db values as completionProgress may have changed
-        DataUtils.replaceItem(DataHandlers.ASSIGNMENTS, this, mAssignment.getId(), mAssignment);
+        mAssignmentHandler.replaceItem(mAssignment.getId(), mAssignment);
 
         setResult(RESULT_OK); // to reload any changes in AssignmentsActivity
         supportFinishAfterTransition();

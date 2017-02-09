@@ -14,8 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.DataHandlers;
-import com.satsumasoftware.timetable.db.DataUtils;
+import com.satsumasoftware.timetable.db.handler.TimetableHandler;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
 import com.satsumasoftware.timetable.util.UiUtils;
@@ -43,6 +42,8 @@ public class TimetablesActivity extends BaseActivity {
     private ArrayList<Timetable> mTimetables;
     private TimetablesAdapter mAdapter;
 
+    private TimetableHandler mTimetableUtils = new TimetableHandler(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +69,7 @@ public class TimetablesActivity extends BaseActivity {
     }
 
     private void setupList() {
-        mTimetables = DataUtils.getAllItems(DataHandlers.TIMETABLES, this);
+        mTimetables = mTimetableUtils.getAllItems();
         sortList();
 
         mAdapter = new TimetablesAdapter(this, mTimetables, findViewById(R.id.coordinatorLayout));
@@ -111,7 +112,7 @@ public class TimetablesActivity extends BaseActivity {
 
     private void refreshList() {
         mTimetables.clear();
-        mTimetables.addAll(DataUtils.getAllItems(DataHandlers.TIMETABLES, this));
+        mTimetables.addAll(mTimetableUtils.getAllItems());
         sortList();
         mAdapter.notifyDataSetChanged();
     }
