@@ -35,7 +35,7 @@ import java.util.Comparator;
  * @see Timetable
  * @see TimetableEditActivity
  */
-public class TimetablesActivity extends BaseActivity {
+public class TimetablesActivity extends NavigationDrawerActivity {
 
     private static final int REQUEST_CODE_TIMETABLE_EDIT = 1;
 
