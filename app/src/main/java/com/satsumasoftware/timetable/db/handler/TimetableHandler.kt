@@ -54,8 +54,8 @@ class TimetableHandler(context: Context) : DataHandler<Timetable>(context) {
                 .build()
 
         val subjectUtils = SubjectHandler(context)
-        for (subject in subjectUtils.getAllItems(subjectsQuery)) {
-            subjectUtils.deleteItemWithReferences(subject.id)
+        subjectUtils.getAllItems(subjectsQuery).forEach {
+            subjectUtils.deleteItemWithReferences(it.id)
         }
 
         val termsQuery = Query.Builder()

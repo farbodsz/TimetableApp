@@ -44,12 +44,12 @@ class ClassHandler(context: Context) : TimetableItemHandler<Class>(context) {
                 .build()
 
         val assignmentUtils = AssignmentHandler(context)
-        for (assignment in assignmentUtils.getAllItems(assignmentsQuery)) {
-            assignmentUtils.deleteItem(assignment.id)
+        assignmentUtils.getAllItems(assignmentsQuery).forEach {
+            assignmentUtils.deleteItem(it.id)
         }
 
-        for (classDetail in ClassDetailHandler.getClassDetailsForClass(context, itemId)) {
-            ClassDetailHandler(context).deleteItemWithReferences(classDetail.id)
+        ClassDetailHandler.getClassDetailsForClass(context, itemId).forEach {
+            ClassDetailHandler(context).deleteItemWithReferences(it.id)
         }
     }
 

@@ -32,8 +32,8 @@ class ClassDetailHandler(context: Context) : DataHandler<ClassDetail>(context) {
     override fun deleteItemWithReferences(itemId: Int) {
         super.deleteItemWithReferences(itemId)
 
-        for (classTime in ClassTimeHandler.getClassTimesForDetail(context, itemId)) {
-            ClassHandler(context).deleteItemWithReferences(classTime.id)
+        ClassTimeHandler.getClassTimesForDetail(context, itemId).forEach {
+            ClassHandler(context).deleteItemWithReferences(it.id)
         }
     }
 

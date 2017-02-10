@@ -40,8 +40,8 @@ class SubjectHandler(context: Context) : TimetableItemHandler<Subject>(context) 
                 .build()
 
         val classUtils = ClassHandler(context)
-        for (cls in classUtils.getAllItems(classesQuery)) {
-            classUtils.deleteItemWithReferences(cls.id)
+        classUtils.getAllItems(classesQuery).forEach {
+            classUtils.deleteItemWithReferences(it.id)
         }
 
         val examsQuery = Query.Builder()
@@ -49,8 +49,8 @@ class SubjectHandler(context: Context) : TimetableItemHandler<Subject>(context) 
                 .build()
 
         val examUtils = ExamHandler(context)
-        for (exam in examUtils.getAllItems(examsQuery)) {
-            examUtils.deleteItem(exam.id)
+        examUtils.getAllItems(examsQuery).forEach {
+            examUtils.deleteItem(it.id)
         }
     }
 
