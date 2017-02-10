@@ -21,7 +21,7 @@ import com.satsumasoftware.timetable.R;
  *
  * This should be implemented by activities which contain a navigation drawer.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class NavigationDrawerActivity extends AppCompatActivity {
 
     protected static final int NAVDRAWER_ITEM_HOME = R.id.navigation_item_home;
     protected static final int NAVDRAWER_ITEM_SCHEDULE = R.id.navigation_item_schedule;
@@ -53,7 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * This method should be overridden in subclasses of BaseActivity to use the Toolbar
+     * This method should be overridden in subclasses of NavigationDrawerActivity to use the Toolbar
      * Return null if there is no Toolbar
      */
     protected Toolbar getSelfToolbar() {
@@ -61,7 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * This method should be overridden in subclasses of BaseActivity to use the DrawerLayout
+     * This method should be overridden in subclasses of NavigationDrawerActivity to use the DrawerLayout
      * Return null if there is no DrawerLayout
      */
     protected DrawerLayout getSelfDrawerLayout() {
@@ -70,7 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * Returns the navigation drawer item that corresponds to this Activity. Subclasses
-     * of BaseActivity override this to indicate what nav drawer item corresponds to them
+     * of NavigationDrawerActivity override this to indicate what nav drawer item corresponds to them
      * Return NAVDRAWER_ITEM_INVALID to mean that this Activity should not have a Nav Drawer.
      */
     protected int getSelfNavDrawerItem() {
@@ -79,7 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * Returns the NavigationView that corresponds to this Activity. Subclasses
-     * of BaseActivity override this to indicate what nav drawer item corresponds to them
+     * of NavigationDrawerActivity override this to indicate what nav drawer item corresponds to them
      * Return null to mean that this Activity should not have a Nav Drawer.
      */
     protected NavigationView getSelfNavigationView() {

@@ -26,7 +26,7 @@ import java.util.ArrayList;
  *
  * @param <T> the type of list items to be displayed
  */
-abstract class ItemListActivity<T extends TimetableItem> extends BaseActivity {
+abstract class ItemListActivity<T extends TimetableItem> extends NavigationDrawerActivity {
 
     /**
      * A data handler relevant to the type of items being displayed.

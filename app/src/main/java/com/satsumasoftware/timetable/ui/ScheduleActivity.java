@@ -42,7 +42,7 @@ import java.util.Comparator;
  *
  * Each day is a tab in the layout, and each tab will display a list of classes for that day.
  */
-public class ScheduleActivity extends BaseActivity {
+public class ScheduleActivity extends NavigationDrawerActivity {
 
     private static final String LOG_TAG = "ScheduleActivity";
 
