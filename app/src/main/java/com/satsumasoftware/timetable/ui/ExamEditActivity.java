@@ -26,8 +26,8 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.ExamUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtils;
+import com.satsumasoftware.timetable.db.handler.ExamHandler;
+import com.satsumasoftware.timetable.db.handler.SubjectHandler;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -72,6 +72,8 @@ public class ExamEditActivity extends AppCompatActivity {
     private Exam mExam;
 
     private boolean mIsNew;
+
+    private ExamHandler mExamUtils = new ExamHandler(this);
 
     private Toolbar mToolbar;
 
@@ -163,7 +165,8 @@ public class ExamEditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
 
-                final ArrayList<Subject> subjects = SubjectUtils.getSubjects(ExamEditActivity.this);
+                final ArrayList<Subject> subjects =
+                        new SubjectHandler(ExamEditActivity.this).getItems(getApplication());
 
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
@@ -426,7 +429,7 @@ public class ExamEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? ExamUtils.getHighestExamId(this) + 1 : mExam.getId();
+        int id = mIsNew ? mExamUtils.getHighestItemId() + 1 : mExam.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
@@ -444,9 +447,9 @@ public class ExamEditActivity extends AppCompatActivity {
                 mExamIsResit);
 
         if (mIsNew) {
-            ExamUtils.addExam(this, mExam);
+            mExamUtils.addItem(mExam);
         } else {
-            ExamUtils.replaceExam(this, mExam.getId(), mExam);
+            mExamUtils.replaceItem(mExam.getId(), mExam);
         }
 
         Intent intent = new Intent();
@@ -461,7 +464,7 @@ public class ExamEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ExamUtils.deleteExam(getBaseContext(), mExam.getId());
+                        mExamUtils.deleteItem(mExam.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

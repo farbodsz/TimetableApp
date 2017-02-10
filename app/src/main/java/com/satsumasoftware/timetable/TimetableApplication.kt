@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.satsumasoftware.timetable.db.util.AssignmentUtils
-import com.satsumasoftware.timetable.db.util.ClassUtils
-import com.satsumasoftware.timetable.db.util.ExamUtils
+import com.satsumasoftware.timetable.db.handler.AssignmentHandler
+import com.satsumasoftware.timetable.db.handler.ClassTimeHandler
+import com.satsumasoftware.timetable.db.handler.ExamHandler
 import com.satsumasoftware.timetable.framework.Timetable
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.PrefUtils
@@ -45,26 +45,29 @@ class TimetableApplication : Application() {
         // Cancel alarms from all timetables and add alarms for the current one
         val alarmReceiver = AlarmReceiver()
 
+        val classTimeUtils = ClassTimeHandler(context)
+        val examUtils = ExamHandler(context)
+
         Log.i(LOG_TAG, "Cancelling ALL alarms")
-        ClassUtils.getAllClassTimes(context).forEach {
+        classTimeUtils.getAllItems().forEach {
             alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.CLASS, it.id)
         }
-        ExamUtils.getAllExams(context).forEach {
+        examUtils.getAllItems().forEach {
             alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.EXAM, it.id)
         }
 
         Log.i(LOG_TAG, "Adding alarms for the current timetable (id: ${currentTimetable!!.id})")
-        ClassUtils.getAllClassTimes(context, currentTimetable!!).forEach {
-            ClassUtils.addAlarmsForClassTime(context, this, it)
+        classTimeUtils.getItems(this).forEach {
+            ClassTimeHandler.addAlarmsForClassTime(context, this, it)
         }
-        ExamUtils.getExams(context, this).forEach { exam ->
+        examUtils.getItems(this).forEach { exam ->
             if (exam.date.isAfter(LocalDate.now()) ||
                     (exam.date.isEqual(LocalDate.now()) && exam.startTime.isAfter(LocalTime.now()))) {
-                ExamUtils.addAlarmForExam(context, exam)
+                ExamHandler.addAlarmForExam(context, exam)
             }
         }
 
-        AssignmentUtils.setAssignmentAlarmTime(
+        AssignmentHandler.setAssignmentAlarmTime(
                 context, PrefUtils.getAssignmentNotificationTime(context))
     }
 

@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.AssignmentUtils;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
-import com.satsumasoftware.timetable.db.util.ExamUtils;
+import com.satsumasoftware.timetable.db.handler.AssignmentHandler;
+import com.satsumasoftware.timetable.db.handler.ClassTimeHandler;
+import com.satsumasoftware.timetable.db.handler.ExamHandler;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Exam;
@@ -37,7 +37,7 @@ import java.util.Comparator;
 /**
  * The main screen showing an overview of the user's classes, assignments and exams.
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends NavigationDrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity {
         int weekNumber = DateUtils.findWeekNumber(getApplication());
 
         ArrayList<ClassTime> classTimes =
-                ClassUtils.getClassTimesForDay(this, today, weekNumber, now);
+                ClassTimeHandler.getClassTimesForDay(this, today, weekNumber, now);
 
         Collections.sort(classTimes, new Comparator<ClassTime>() {
             @Override
@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Assignment> assignments = new ArrayList<>();
         LocalDate now = LocalDate.now();
 
-        for (Assignment assignment : AssignmentUtils.getAssignments(this, getApplication())) {
+        for (Assignment assignment : new AssignmentHandler(this).getItems(getApplication())) {
             LocalDate dueDate = assignment.getDueDate();
 
             boolean dueInNextThreeDays = dueDate.isAfter(now) && dueDate.isBefore(now.plusDays(4));
@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity {
         ArrayList<Exam> exams = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
-        for (Exam exam : ExamUtils.getExams(this, getApplication())) {
+        for (Exam exam : new ExamHandler(this).getItems(getApplication())) {
             LocalDateTime examDateTime = exam.makeDateTimeObject();
 
             if (!examDateTime.isBefore(now) && examDateTime.isBefore(now.plusWeeks(6))) {

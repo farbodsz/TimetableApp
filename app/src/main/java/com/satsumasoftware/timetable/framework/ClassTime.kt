@@ -7,8 +7,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.ClassTimesSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
+import com.satsumasoftware.timetable.db.schema.ClassTimesSchema
 import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime
@@ -27,30 +27,93 @@ import org.threeten.bp.LocalTime
  * for each different class detail (e.g. when the student gets taught by teacher A and when they
  * get taught by teacher B).
  *
- * @property id the identifier for this class time
- * @property timetableId the identifier of the associated [Timetable]. We include this in our
- *      `ClassTime` for when we want to find a list of times in one particular timetable.
  * @property classDetailId the identifier of the associated [ClassDetail]
  * @property day a day of the week (Monday to Sunday) that the class takes place
  * @property weekNumber the number of a week rotation where the class takes place
  * @property startTime a start time of the class
  * @property endTime an end time of the class
  */
-class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val day: DayOfWeek,
-                val weekNumber: Int, val startTime: LocalTime, val endTime: LocalTime) : Parcelable {
+class ClassTime(override val id: Int, override val timetableId: Int, val classDetailId: Int,
+                val day: DayOfWeek, val weekNumber: Int, val startTime: LocalTime,
+                val endTime: LocalTime) : TimetableItem, Parcelable {
 
-    constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(ClassTimesSchema._ID)),
-            cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_TIMETABLE_ID)),
-            cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_CLASS_DETAIL_ID)),
-            DayOfWeek.of(cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_DAY))),
-            cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_WEEK_NUMBER)),
-            LocalTime.of(
+    companion object {
+
+        /**
+         * Constructs a [ClassTime] using column values from the cursor provided
+         *
+         * @param cursor a query of the class times table
+         * @see [ClassTimesSchema]
+         */
+        @JvmStatic
+        fun from(cursor: Cursor): ClassTime {
+            val dayOfWeek =
+                    DayOfWeek.of(cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_DAY)))
+
+            val startTime = LocalTime.of(
                     cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_START_TIME_HRS)),
-                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_START_TIME_MINS))),
-            LocalTime.of(
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_START_TIME_MINS)))
+
+            val endTime = LocalTime.of(
                     cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_HRS)),
-                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_MINS))))
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_END_TIME_MINS)))
+
+            return ClassTime(
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema._ID)),
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_TIMETABLE_ID)),
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_CLASS_DETAIL_ID)),
+                    dayOfWeek,
+                    cursor.getInt(cursor.getColumnIndex(ClassTimesSchema.COL_WEEK_NUMBER)),
+                    startTime,
+                    endTime)
+        }
+
+        @JvmStatic
+        fun create(context: Context, classTimeId: Int): ClassTime {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    ClassTimesSchema.TABLE_NAME,
+                    null,
+                    "${ClassTimesSchema._ID}=?",
+                    arrayOf(classTimeId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            val classTime = ClassTime.from(cursor)
+            cursor.close()
+            return classTime
+        }
+
+        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<ClassTime> =
+                object : Parcelable.Creator<ClassTime> {
+                    override fun createFromParcel(source: Parcel): ClassTime = ClassTime(source)
+                    override fun newArray(size: Int): Array<ClassTime?> = arrayOfNulls(size)
+                }
+
+        /**
+         * @return the string to be displayed indicating the week rotation (e.g. Week 1, Week C).
+         */
+        @JvmOverloads
+        @JvmStatic
+        fun getWeekText(activity: Activity, weekNumber: Int, fullText: Boolean = true): String {
+            val timetable = (activity.application as TimetableApplication).currentTimetable!!
+            if (timetable.hasFixedScheduling()) {
+                return ""
+            } else {
+                val weekChar = if (PrefUtils.displayWeeksAsLetters(activity)) {
+                    when(weekNumber) {
+                        1 -> "A"
+                        2 -> "B"
+                        3 -> "C"
+                        4 -> "D"
+                        else -> throw IllegalArgumentException("invalid week number '$weekNumber'")
+                    }
+                } else {
+                    weekNumber.toString()
+                }
+                return if (fullText) activity.getString(R.string.week_item, weekChar) else weekChar
+            }
+        }
+    }
 
     /**
      * @return the string to be displayed indicating the week rotation (e.g. Week 1, Week C).
@@ -80,52 +143,4 @@ class ClassTime(val id: Int, val timetableId: Int, val classDetailId: Int, val d
         dest?.writeSerializable(endTime)
     }
 
-    companion object {
-
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<ClassTime> =
-                object : Parcelable.Creator<ClassTime> {
-                    override fun createFromParcel(source: Parcel): ClassTime = ClassTime(source)
-                    override fun newArray(size: Int): Array<ClassTime?> = arrayOfNulls(size)
-                }
-
-        @JvmStatic
-        fun create(context: Context, classTimeId: Int): ClassTime {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    ClassTimesSchema.TABLE_NAME,
-                    null,
-                    "${ClassTimesSchema._ID}=?",
-                    arrayOf(classTimeId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            val classTime = ClassTime(cursor)
-            cursor.close()
-            return classTime
-        }
-
-        /**
-         * @return the string to be displayed indicating the week rotation (e.g. Week 1, Week C).
-         */
-        @JvmOverloads
-        @JvmStatic
-        fun getWeekText(activity: Activity, weekNumber: Int, fullText: Boolean = true): String {
-            val timetable = (activity.application as TimetableApplication).currentTimetable!!
-            if (timetable.hasFixedScheduling()) {
-                return ""
-            } else {
-                val weekChar = if (PrefUtils.displayWeeksAsLetters(activity)) {
-                    when(weekNumber) {
-                        1 -> "A"
-                        2 -> "B"
-                        3 -> "C"
-                        4 -> "D"
-                        else -> throw IllegalArgumentException("invalid week number '$weekNumber'")
-                    }
-                } else {
-                    weekNumber.toString()
-                }
-                return if (fullText) activity.getString(R.string.week_item, weekChar) else weekChar
-            }
-        }
-    }
 }
