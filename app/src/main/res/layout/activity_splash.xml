@@ -5,7 +5,7 @@
     android:background="?colorPrimaryDark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.SplashActivity">
+    tools:context="co.timetableapp.ui.SplashActivity">
 
     <LinearLayout
         android:orientation="vertical"
