@@ -5,8 +5,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.EventsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
+import com.satsumasoftware.timetable.db.schema.EventsSchema
 import com.satsumasoftware.timetable.framework.Event
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.DateUtils

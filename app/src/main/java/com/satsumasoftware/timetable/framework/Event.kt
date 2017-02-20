@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import com.satsumasoftware.timetable.db.EventsSchema
 import com.satsumasoftware.timetable.db.TimetableDbHelper
+import com.satsumasoftware.timetable.db.schema.EventsSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -21,8 +21,9 @@ import org.threeten.bp.LocalTime
  * @property startTime the starting time and date
  * @property endTime the ending time and date
  */
-class Event(val id: Int, val timetableId: Int, val title: String, val detail: String,
-            val startTime: LocalDateTime, val endTime: LocalDateTime) : Parcelable {
+class Event(override val id: Int, override val timetableId: Int, val title: String,
+            val detail: String, val startTime: LocalDateTime,
+            val endTime: LocalDateTime) : TimetableItem, Parcelable {
 
     companion object {
 
@@ -74,7 +75,9 @@ class Event(val id: Int, val timetableId: Int, val title: String, val detail: St
             return event
         }
 
-        @JvmField val CREATOR: Parcelable.Creator<Event> = object : Parcelable.Creator<Event> {
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Event> = object : Parcelable.Creator<Event> {
             override fun createFromParcel(source: Parcel): Event = Event(source)
             override fun newArray(size: Int): Array<Event?> = arrayOfNulls(size)
         }
