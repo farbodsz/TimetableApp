@@ -21,7 +21,7 @@ import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.handler.ClassTimeHandler;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -42,7 +42,7 @@ import java.util.Comparator;
  *
  * Each day is a tab in the layout, and each tab will display a list of classes for that day.
  */
-public class ScheduleActivity extends BaseActivity {
+public class ScheduleActivity extends NavigationDrawerActivity {
 
     private static final String LOG_TAG = "ScheduleActivity";
 
@@ -124,7 +124,7 @@ public class ScheduleActivity extends BaseActivity {
                 String tabTitle = titleBuilder.toString();
 
                 final ArrayList<ClassTime> classTimes =
-                        ClassUtils.getClassTimesForDay(this, dayOfWeek, weekNumber, thisDay);
+                        ClassTimeHandler.getClassTimesForDay(this, dayOfWeek, weekNumber, thisDay);
 
                 if (classTimes.isEmpty()) {
                     View placeholder = UiUtils.makePlaceholderView(this,

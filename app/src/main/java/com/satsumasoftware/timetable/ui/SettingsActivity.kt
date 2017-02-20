@@ -15,7 +15,7 @@ import org.threeten.bp.LocalTime
 /**
  * An activity to display a list of settings (preferences) that the user can modify.
  */
-class SettingsActivity : BaseActivity() {
+class SettingsActivity : NavigationDrawerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,7 +108,7 @@ class SettingsActivity : BaseActivity() {
     }
 
     override fun getSelfNavDrawerItem(): Int {
-        return BaseActivity.NAVDRAWER_ITEM_SETTINGS
+        return NavigationDrawerActivity.NAVDRAWER_ITEM_SETTINGS
     }
 
     override fun getSelfNavigationView(): NavigationView {

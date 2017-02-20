@@ -7,25 +7,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.AssignmentUtils;
+import com.satsumasoftware.timetable.db.handler.AssignmentHandler;
+import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
@@ -56,7 +51,7 @@ import java.util.Comparator;
  * @see AssignmentDetailActivity
  * @see AssignmentEditActivity
  */
-public class AssignmentsActivity extends BaseActivity {
+public class AssignmentsActivity extends ItemListActivity<Assignment> {
 
     private static final int REQUEST_CODE_ASSIGNMENT_DETAIL = 1;
 
@@ -90,30 +85,28 @@ public class AssignmentsActivity extends BaseActivity {
     private int mMode;
 
     private ArrayList<String> mHeaders;
-    private ArrayList<Assignment> mAssignments;
-    private AssignmentsAdapter mAdapter;
-
-    private RecyclerView mRecyclerView;
-    private FrameLayout mPlaceholderLayout;
 
     private boolean mShowPast;
 
     @Override
+    TimetableItemHandler<Assignment> instantiateDataHandler() {
+        return new AssignmentHandler(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content_list);
-
         determineDisplayMode();
+        super.onCreate(savedInstanceState);
+    }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    @Override
+    void setupToolbar() {
+        super.setupToolbar();
 
         if (mMode == DISPLAY_TODO) {
             assert getSupportActionBar() != null;
             getSupportActionBar().setTitle(R.string.title_activity_todo);
         }
-
-        setupLayout();
     }
 
     private void determineDisplayMode() {
@@ -129,35 +122,29 @@ public class AssignmentsActivity extends BaseActivity {
         }
     }
 
-    private void setupLayout() {
-        setupList();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
-            }
-        });
-
-        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
-        refreshPlaceholderStatus();
+    @Override
+    void onFabButtonClick() {
+        Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
     }
 
-    private void setupList() {
+    @Override
+    void setupList() {
         mHeaders = new ArrayList<>();
-        mAssignments = AssignmentUtils.getAssignments(this, getApplication());
-        sortList();
+        super.setupList();
+        makeItemTouchHelper().attachToRecyclerView(mRecyclerView);
+    }
 
-        mAdapter = new AssignmentsAdapter(this, mHeaders, mAssignments);
-        mAdapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
+    @Override
+    RecyclerView.Adapter setupAdapter() {
+        AssignmentsAdapter adapter = new AssignmentsAdapter(this, mHeaders, mItems);
+        adapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(
                         AssignmentsActivity.this, AssignmentDetailActivity.class);
                 intent.putExtra(
-                        AssignmentDetailActivity.EXTRA_ASSIGNMENT, mAssignments.get(position));
+                        AssignmentDetailActivity.EXTRA_ASSIGNMENT, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {
@@ -177,14 +164,7 @@ public class AssignmentsActivity extends BaseActivity {
             }
         });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(
-                this, DividerItemDecoration.VERTICAL_LIST));
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(mAdapter);
-
-        makeItemTouchHelper().attachToRecyclerView(mRecyclerView);
+        return adapter;
     }
 
     private ItemTouchHelper makeItemTouchHelper() {
@@ -198,7 +178,7 @@ public class AssignmentsActivity extends BaseActivity {
             public int getMovementFlags(RecyclerView recyclerView,
                                         RecyclerView.ViewHolder viewHolder) {
                 int position = viewHolder.getAdapterPosition();
-                boolean isHeader = mAssignments.get(position) == null;
+                boolean isHeader = mItems.get(position) == null;
 
                 int swipeFlags = isHeader ? 0 :
                         ItemTouchHelper.START | ItemTouchHelper.END;
@@ -216,7 +196,7 @@ public class AssignmentsActivity extends BaseActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
 
-                Assignment assignment = mAssignments.get(position);
+                Assignment assignment = mItems.get(position);
 
                 // Store the assignment we're about to remove for the undo action
                 mRemovedHeader = null;
@@ -225,15 +205,15 @@ public class AssignmentsActivity extends BaseActivity {
                 mRemovedCompletionProgress = assignment.getCompletionProgress();
 
                 assignment.setCompletionProgress(100);
-                AssignmentUtils.replaceAssignment(getBaseContext(), assignment.getId(), assignment);
+                mDataHandler.replaceItem(assignment.getId(), assignment);
 
                 // Do not completely remove the item if we're not in DISPLAY_TODO mode
                 if (mMode != DISPLAY_TODO) {
                     // We should remove and add back the item so the 'done' background goes away
                     // and the item gets updated
-                    mAssignments.remove(position);
+                    mItems.remove(position);
                     mAdapter.notifyItemRemoved(position);
-                    mAssignments.add(position, mRemovedAssignment);
+                    mItems.add(position, mRemovedAssignment);
                     mAdapter.notifyItemInserted(position);
 
                     final int finalPos = position;
@@ -247,12 +227,9 @@ public class AssignmentsActivity extends BaseActivity {
                                     Assignment assignment = mRemovedAssignment;
                                     assignment.setCompletionProgress(mRemovedCompletionProgress);
 
-                                    AssignmentUtils.replaceAssignment(
-                                            getBaseContext(),
-                                            assignment.getId(),
-                                            assignment);
+                                    mDataHandler.replaceItem(assignment.getId(), assignment);
 
-                                    mAssignments.set(finalPos, assignment);
+                                    mItems.set(finalPos, assignment);
                                     mAdapter.notifyItemChanged(finalPos);
                                 }
                             })
@@ -261,9 +238,9 @@ public class AssignmentsActivity extends BaseActivity {
                 }
 
                 // Check if assignment is only one in date group
-                if (mAssignments.get(position - 1) == null
-                        && (mAssignments.size() == position + 1
-                        || mAssignments.get(position + 1) == null)) {
+                if (mItems.get(position - 1) == null
+                        && (mItems.size() == position + 1
+                        || mItems.get(position + 1) == null)) {
                     // Positions either side of the assignment are empty (i.e. headers)
                     int headerPosition = position - 1;
 
@@ -272,7 +249,7 @@ public class AssignmentsActivity extends BaseActivity {
 
                     // Remove the header from both lists
                     mHeaders.remove(headerPosition);
-                    mAssignments.remove(headerPosition);
+                    mItems.remove(headerPosition);
                     mAdapter.notifyItemRemoved(position);
 
                     // Update the position of the assignment because we just removed an item
@@ -281,7 +258,7 @@ public class AssignmentsActivity extends BaseActivity {
 
                 // Remove the assignment from both lists
                 mHeaders.remove(position);
-                mAssignments.remove(position);
+                mItems.remove(position);
                 mAdapter.notifyItemRemoved(position);
 
                 // Show a Snackbar with the undo action
@@ -293,7 +270,7 @@ public class AssignmentsActivity extends BaseActivity {
                             public void onClick(View v) {
                                 if (mRemovedHeader != null) {
                                     mHeaders.add(mRemovedAssignmentPos - 1, mRemovedHeader);
-                                    mAssignments.add(mRemovedAssignmentPos - 1, null);
+                                    mItems.add(mRemovedAssignmentPos - 1, null);
                                     mAdapter.notifyItemInserted(mRemovedAssignmentPos - 1);
                                 }
 
@@ -301,13 +278,10 @@ public class AssignmentsActivity extends BaseActivity {
                                 assignment.setCompletionProgress(mRemovedCompletionProgress);
 
                                 mHeaders.add(mRemovedAssignmentPos, null);
-                                mAssignments.add(mRemovedAssignmentPos, assignment);
+                                mItems.add(mRemovedAssignmentPos, assignment);
                                 mAdapter.notifyItemInserted(mRemovedAssignmentPos);
 
-                                AssignmentUtils.replaceAssignment(
-                                        getBaseContext(),
-                                        assignment.getId(),
-                                        assignment);
+                                mDataHandler.replaceItem(assignment.getId(), assignment);
 
                                 refreshPlaceholderStatus();
                             }
@@ -351,16 +325,9 @@ public class AssignmentsActivity extends BaseActivity {
         });
     }
 
-    private void refreshList() {
-        mAssignments.clear();
-        mAssignments.addAll(AssignmentUtils.getAssignments(this, getApplication()));
-        sortList();
-        mAdapter.notifyDataSetChanged();
-        refreshPlaceholderStatus();
-    }
-
-    private void sortList() {
-        Collections.sort(mAssignments, new Comparator<Assignment>() {
+    @Override
+    void sortList() {
+        Collections.sort(mItems, new Comparator<Assignment>() {
             @Override
             public int compare(Assignment a1, Assignment a2) {
                 LocalDate dueDate1 = a1.getDueDate();
@@ -378,8 +345,8 @@ public class AssignmentsActivity extends BaseActivity {
 
         int currentTimePeriod = -1;
 
-        for (int i = 0; i < mAssignments.size(); i++) {
-            Assignment assignment = mAssignments.get(i);
+        for (int i = 0; i < mItems.size(); i++) {
+            Assignment assignment = mItems.get(i);
 
             LocalDate dueDate = assignment.getDueDate();
             int timePeriodId;
@@ -417,20 +384,12 @@ public class AssignmentsActivity extends BaseActivity {
         mHeaders.clear();
         mHeaders.addAll(headers);
 
-        mAssignments.clear();
-        mAssignments.addAll(assignments);
+        mItems.clear();
+        mItems.addAll(assignments);
     }
 
-    private void refreshPlaceholderStatus() {
-        if (!mAssignments.isEmpty()) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mPlaceholderLayout.setVisibility(View.GONE);
-            return;
-        }
-
-        mRecyclerView.setVisibility(View.GONE);
-        mPlaceholderLayout.setVisibility(View.VISIBLE);
-
+    @Override
+    View getPlaceholderView() {
         int titleRes = mShowPast ? R.string.placeholder_assignments_past_title :
                 R.string.placeholder_assignments_title;
 
@@ -445,15 +404,14 @@ public class AssignmentsActivity extends BaseActivity {
         int drawableRes = mShowPast ? R.drawable.ic_assignment_black_24dp :
                 R.drawable.ic_assignment_turned_in_black_24dp;
 
-        mPlaceholderLayout.removeAllViews();
-        mPlaceholderLayout.addView(UiUtils.makePlaceholderView(this,
+        return UiUtils.makePlaceholderView(this,
                 drawableRes,
                 titleRes,
                 R.color.mdu_blue_400,
                 R.color.mdu_white,
                 R.color.mdu_white,
                 true,
-                subtitleRes));
+                subtitleRes);
     }
 
     @Override
@@ -497,26 +455,10 @@ public class AssignmentsActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected Toolbar getSelfToolbar() {
-        return (Toolbar) findViewById(R.id.toolbar);
-    }
-
-    @Override
-    protected DrawerLayout getSelfDrawerLayout() {
-        return (DrawerLayout) findViewById(R.id.drawerLayout);
-    }
-
     @Override
     protected int getSelfNavDrawerItem() {
         determineDisplayMode();
         return mMode == DISPLAY_ALL_UPCOMING ? NAVDRAWER_ITEM_ASSIGNMENTS : NAVDRAWER_ITEM_TODO;
-    }
-
-    @Override
-    protected NavigationView getSelfNavigationView() {
-        return (NavigationView) findViewById(R.id.navigationView);
     }
 
 }
