@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.db.handler.EventHandler;
 import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
-import com.satsumasoftware.timetable.db.util.EventUtils;
 import com.satsumasoftware.timetable.framework.Event;
 import com.satsumasoftware.timetable.ui.adapter.EventsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
@@ -159,7 +158,7 @@ public class EventsActivity extends ItemListActivity<Event> {
     @Override
     void refreshList() {
         mItems.clear();
-        mItems.addAll(EventUtils.getEvents(this, getApplication()));
+        mItems.addAll(mDataHandler.getItems(getApplication()));
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();
