@@ -14,8 +14,6 @@ import org.threeten.bp.LocalTime
  * Represents an event that is not part of the usual schedule of the user.
  * For example, a meeting with a tutor, a sporting event, etc.
  *
- * @property id an integer identifier for the event
- * @property timetableId the ID of the linked [Timetable]
  * @property title the event's title
  * @property detail additional notes and details for the event
  * @property startTime the starting time and date
