@@ -21,7 +21,7 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.EventUtils;
+import com.satsumasoftware.timetable.db.handler.EventHandler;
 import com.satsumasoftware.timetable.framework.Event;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -57,6 +57,8 @@ public class EventEditActivity extends AppCompatActivity {
     private Event mEvent;
 
     private boolean mIsNew;
+
+    private EventHandler mEventHandler = new EventHandler(this);
 
     private EditText mEditTextTitle;
     private EditText mEditTextDetail;
@@ -284,7 +286,7 @@ public class EventEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? EventUtils.getHighestEventId(this) + 1 : mEvent.getId();
+        int id = mIsNew ? mEventHandler.getHighestItemId() + 1 : mEvent.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
@@ -298,9 +300,9 @@ public class EventEditActivity extends AppCompatActivity {
                 LocalDateTime.of(mEventDate, mEndTime));
 
         if (mIsNew) {
-            EventUtils.addEvent(this, mEvent);
+            mEventHandler.addItem(mEvent);
         } else {
-            EventUtils.replaceEvent(this, mEvent.getId(), mEvent);
+            mEventHandler.replaceItem(mEvent.getId(), mEvent);
         }
 
         Intent intent = new Intent();
@@ -315,7 +317,7 @@ public class EventEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EventUtils.deleteEvent(getBaseContext(), mEvent.getId());
+                        mEventHandler.deleteItem(mEvent.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
