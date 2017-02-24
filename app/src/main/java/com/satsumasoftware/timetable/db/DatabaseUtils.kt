@@ -7,7 +7,7 @@ import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.util.Log
 import com.satsumasoftware.timetable.BuildConfig
-import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -24,7 +24,7 @@ object DatabaseUtils {
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
     @JvmStatic private val DEFAULT_EXPORT_FILENAME =
-            "Timetables-Exported-" + LocalDate.now().toString()
+            "Timetables-Exported-" + LocalDateTime.now().toString()
 
 
     @JvmStatic
