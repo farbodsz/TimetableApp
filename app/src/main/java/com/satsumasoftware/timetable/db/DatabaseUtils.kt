@@ -24,7 +24,7 @@ object DatabaseUtils {
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
     @JvmStatic private val DEFAULT_EXPORT_FILENAME =
-            "Timetables-Exported-" + LocalDateTime.now().toString()
+            "Timetables-Exported-" + LocalDateTime.now().toString() + ".db"
 
 
     @JvmStatic
