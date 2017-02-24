@@ -1,8 +1,11 @@
 package com.satsumasoftware.timetable.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -11,9 +14,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.satsumasoftware.timetable.R;
+import com.satsumasoftware.timetable.db.DatabaseUtils;
 import com.satsumasoftware.timetable.db.handler.TimetableHandler;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
@@ -37,7 +45,13 @@ import java.util.Comparator;
  */
 public class TimetablesActivity extends NavigationDrawerActivity {
 
+    private static final String LOG_TAG = "TimetablesActivity";
+
     private static final int REQUEST_CODE_TIMETABLE_EDIT = 1;
+    private static final int REQUEST_CODE_EXT_STORAGE_PERM = 2;
+
+    private static final String[] STORAGE_PERMISSIONS =
+            {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     private ArrayList<Timetable> mTimetables;
     private TimetablesAdapter mAdapter;
@@ -126,6 +140,65 @@ public class TimetablesActivity extends NavigationDrawerActivity {
                 refreshList();
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CODE_EXT_STORAGE_PERM) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(LOG_TAG, "Permission to write to storage granted.");
+                completeDbExport();
+            } else {
+                Log.w(LOG_TAG, "Permission to write to storage denied.");
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timetables, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_export:
+                verifyStoragePermissions();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void verifyStoragePermissions() {
+        Log.v(LOG_TAG, "Verifying storage permissions");
+
+        // Check if we have the 'write' permission
+        int permission =
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            Log.v(LOG_TAG, "No permission - prompting user");
+            ActivityCompat.requestPermissions(
+                    this,
+                    STORAGE_PERMISSIONS,
+                    REQUEST_CODE_EXT_STORAGE_PERM);
+
+        } else {
+            completeDbExport();
+        }
+    }
+
+    private void completeDbExport() {
+        String toastText;
+        if (DatabaseUtils.exportDatabase(this)) {
+            toastText = "Successfully exported database to downloads folder";
+        } else {
+            toastText = "Failed to export database!";
+        }
+        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
     @Override
