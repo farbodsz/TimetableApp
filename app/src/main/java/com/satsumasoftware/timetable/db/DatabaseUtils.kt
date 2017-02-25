@@ -82,19 +82,12 @@ object DatabaseUtils {
         var fromChannel: FileChannel? = null
         var toChannel: FileChannel? = null
         try {
-            fromChannel = fromFile.getChannel()
-            toChannel = toFile.getChannel()
-            fromChannel!!.transferTo(0, fromChannel!!.size(), toChannel)
+            fromChannel = fromFile.channel
+            toChannel = toFile.channel
+            fromChannel!!.transferTo(0, fromChannel.size(), toChannel)
         } finally {
-            try {
-                if (fromChannel != null) {
-                    fromChannel!!.close()
-                }
-            } finally {
-                if (toChannel != null) {
-                    toChannel!!.close()
-                }
-            }
+            if (fromChannel != null) fromChannel.close()
+            if (toChannel != null) toChannel.close()
         }
     }
 

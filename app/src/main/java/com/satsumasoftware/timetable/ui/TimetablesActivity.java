@@ -192,13 +192,12 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     private void verifyStoragePermissions(boolean importing) {
         Log.v(LOG_TAG, "Verifying storage permissions");
 
-        String storagePermission = importing ?
-                Manifest.permission.READ_EXTERNAL_STORAGE :
-                Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        String storagePermission = importing
+                ? Manifest.permission.READ_EXTERNAL_STORAGE
+                : Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
         // Check if we have the 'write' permission
-        int permission =
-                ActivityCompat.checkSelfPermission(this, storagePermission);
+        int permission = ActivityCompat.checkSelfPermission(this, storagePermission);
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
@@ -217,30 +216,23 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     }
 
     private void handleDbExport() {
-        String toastText;
-        if (DatabaseUtils.exportDatabase(this)) {
-            toastText = "Successfully exported database to downloads folder";
-        } else {
-            toastText = "Failed to export database!";
-        }
+        String toastText = DatabaseUtils.exportDatabase(this)
+                ? "Successfully exported database to downloads folder"
+                : "Failed to export database!";
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
     private void handleDbImport() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        //intent.setType("application/x-sqlite3");
         intent.setType("*/*");
         startActivityForResult(intent, REQUEST_CODE_PICK_IMPORTING_DB);
     }
 
     private void completeDbImport(Uri importData) {
-        String toastText;
-        if (DatabaseUtils.importDatabase(this, importData)) {
-            toastText = "Successfully imported database";
-        } else {
-            toastText = "Failed to import database!";
-        }
+        String toastText = DatabaseUtils.importDatabase(this, importData)
+                ? "Successfully imported database"
+                : "Failed to import database!";
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }
 
