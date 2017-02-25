@@ -250,10 +250,27 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     }
 
     private void completeDbImport(Uri importData) {
+        if (!DatabaseUtils.isDatabaseValid(importData)) {
+            showImportInvalidDialog();
+            return;
+        }
+
         String toastText = DatabaseUtils.importDatabase(this, importData)
                 ? "Successfully imported database"
                 : "Failed to import database!";
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showImportInvalidDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_import_invalid_title)
+                .setMessage(R.string.dialog_import_invalid_message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .show();
     }
 
     @Override

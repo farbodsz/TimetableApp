@@ -163,6 +163,11 @@
         with the data from the imported file. \n\nDo you wish to continue?
     </string>
 
+    <string name="dialog_import_invalid_title">Invalid data file</string>
+    <string name="dialog_import_invalid_message">
+        The file selected cannot be imported since it is of an invalid format!
+    </string>
+
     <plurals name="notification_overdue_assignments">
         <item quantity="one">%1$d assignment is overdue</item>
         <item quantity="other">%1$d assignments are overdue</item>

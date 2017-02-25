@@ -3,11 +3,13 @@ package com.satsumasoftware.timetable.db
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.util.Log
 import com.satsumasoftware.timetable.BuildConfig
+import com.satsumasoftware.timetable.db.schema.TimetablesSchema
 import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.io.FileInputStream
@@ -58,6 +60,7 @@ object DatabaseUtils {
 
         if (localDatabase.exists()) {
             Log.d(LOG_TAG, "Deleting local database before import")
+            TimetableDbHelper.getInstance(activity).close()
             localDatabase.delete()
         }
 
@@ -69,6 +72,48 @@ object DatabaseUtils {
         TimetableDbHelper.getInstance(activity).writableDatabase.close()
 
         Log.i(LOG_TAG, "Successfully imported database")
+        return true
+    }
+
+    /**
+     * Checks whether a file is a valid database that can be imported into the app (with
+     * [importDatabase]).
+     * This is decided by the file extension (should be `.db`) and then if the database contains the
+     * timetables table.
+     *
+     * @param importData the uri for the file to be imported
+     * @return if the file is a valid importable database
+     *
+     * @see TimetablesSchema
+     */
+    @JvmStatic
+    fun isDatabaseValid(importData: Uri): Boolean {
+        // Check file extension using path name
+        val path = importData.path
+        var extension = ""
+        if (path.contains(".")) {
+            extension = path.substring(path.lastIndexOf("."))
+        }
+        if (extension != ".db") {
+            Log.v(LOG_TAG, "Importing file has incorrect extension: '$extension'")
+            return false
+        }
+
+        val importingDb = SQLiteDatabase.openDatabase(convertUriToFilePath(importData), null, 0)
+
+        // Check if 'timetables' table exists (it should always exist for timetable app data)
+        val tableCheckCursor = importingDb.rawQuery("SELECT DISTINCT tbl_name " +
+                "FROM sqlite_master WHERE tbl_name = '${TimetablesSchema.TABLE_NAME}'", null)
+        val cursorCount = tableCheckCursor.count
+        tableCheckCursor.close()
+
+        if (cursorCount == 0) {
+            Log.v(LOG_TAG, "Importing file has missing timetables table: " +
+                    "'${TimetablesSchema.TABLE_NAME}'")
+            return false
+        }
+
+        // The file looks okay for importing
         return true
     }
 
