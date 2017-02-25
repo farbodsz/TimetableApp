@@ -1,9 +1,9 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -48,7 +48,9 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     private static final String LOG_TAG = "TimetablesActivity";
 
     private static final int REQUEST_CODE_TIMETABLE_EDIT = 1;
-    private static final int REQUEST_CODE_EXT_STORAGE_PERM = 2;
+    private static final int REQUEST_CODE_EXPORT_PERM = 2;
+    private static final int REQUEST_CODE_IMPORT_PERM = 3;
+    private static final int REQUEST_CODE_PICK_IMPORTING_DB = 4;
 
     private static final String[] STORAGE_PERMISSIONS =
             {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -136,8 +138,13 @@ public class TimetablesActivity extends NavigationDrawerActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE_TIMETABLE_EDIT) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 refreshList();
+            }
+
+        } else if (requestCode == REQUEST_CODE_PICK_IMPORTING_DB) {
+            if (resultCode == RESULT_OK) {
+                completeDbImport(data.getData());
             }
         }
     }
@@ -145,10 +152,18 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CODE_EXT_STORAGE_PERM) {
+        if (requestCode == REQUEST_CODE_EXPORT_PERM) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.d(LOG_TAG, "Permission to write to storage granted.");
-                completeDbExport();
+                handleDbExport();
+            } else {
+                Log.w(LOG_TAG, "Permission to write to storage denied.");
+            }
+
+        } else if (requestCode == REQUEST_CODE_IMPORT_PERM) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(LOG_TAG, "Permission to write to storage granted.");
+                handleDbImport();
             } else {
                 Log.w(LOG_TAG, "Permission to write to storage denied.");
             }
@@ -165,38 +180,66 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_export:
-                verifyStoragePermissions();
+                verifyStoragePermissions(false);
+                break;
+            case R.id.action_import:
+                verifyStoragePermissions(true);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void verifyStoragePermissions() {
+    private void verifyStoragePermissions(boolean importing) {
         Log.v(LOG_TAG, "Verifying storage permissions");
+
+        String storagePermission = importing ?
+                Manifest.permission.READ_EXTERNAL_STORAGE :
+                Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
         // Check if we have the 'write' permission
         int permission =
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                ActivityCompat.checkSelfPermission(this, storagePermission);
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
             Log.v(LOG_TAG, "No permission - prompting user");
+
+            int requestCode = importing ? REQUEST_CODE_IMPORT_PERM : REQUEST_CODE_EXPORT_PERM;
+
             ActivityCompat.requestPermissions(
                     this,
                     STORAGE_PERMISSIONS,
-                    REQUEST_CODE_EXT_STORAGE_PERM);
+                    requestCode);
 
         } else {
-            completeDbExport();
+            if (importing) handleDbImport(); else handleDbExport();
         }
     }
 
-    private void completeDbExport() {
+    private void handleDbExport() {
         String toastText;
         if (DatabaseUtils.exportDatabase(this)) {
             toastText = "Successfully exported database to downloads folder";
         } else {
             toastText = "Failed to export database!";
+        }
+        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleDbImport() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //intent.setType("application/x-sqlite3");
+        intent.setType("*/*");
+        startActivityForResult(intent, REQUEST_CODE_PICK_IMPORTING_DB);
+    }
+
+    private void completeDbImport(Uri importData) {
+        String toastText;
+        if (DatabaseUtils.importDatabase(this, importData)) {
+            toastText = "Successfully imported database";
+        } else {
+            toastText = "Failed to import database!";
         }
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
     }

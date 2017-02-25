@@ -3,6 +3,7 @@ package com.satsumasoftware.timetable.db
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.util.Log
@@ -41,8 +42,40 @@ object DatabaseUtils {
 
         copyFile(FileInputStream(localDatabase), FileOutputStream(exportedFile))
 
-        Log.i(LOG_TAG, "Successfully exported database")
+        Log.i(LOG_TAG, "Successfully exported database to: " + exportedFile.path)
         return true
+    }
+
+    @JvmStatic
+    fun importDatabase(activity: Activity, importData: Uri): Boolean {
+        val newDatabase = File(convertUriToFilePath(importData))
+        val localDatabase = File(DB_PATH)
+
+        if (!newDatabase.exists()) {
+            Log.e(LOG_TAG, "Database path not found: ${newDatabase.path}")
+            return false
+        }
+
+        if (localDatabase.exists()) {
+            Log.d(LOG_TAG, "Deleting local database before import")
+            localDatabase.delete()
+        }
+
+        checkStoragePermissions(activity)
+
+        copyFile(FileInputStream(newDatabase), FileOutputStream(localDatabase))
+
+        // Access the imported database so that it will be cached and marked as created
+        TimetableDbHelper.getInstance(activity).writableDatabase.close()
+
+        Log.i(LOG_TAG, "Successfully imported database")
+        return true
+    }
+
+    private fun convertUriToFilePath(importData: Uri): String {
+        val path = importData.path
+        // TODO not sure if this always works
+        return path.replace("/document/primary:", "/storage/emulated/0/")
     }
 
     private fun copyFile(fromFile: FileInputStream, toFile: FileOutputStream) {

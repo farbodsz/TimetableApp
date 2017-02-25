@@ -7,4 +7,9 @@
         android:icon="@drawable/ic_file_download_black_24dp"
         app:showAsAction="never" />
 
+    <item android:id="@+id/action_import"
+        android:title="@string/action_import"
+        android:icon="@drawable/ic_input_black_24dp"
+        app:showAsAction="never" />
+
 </menu>
