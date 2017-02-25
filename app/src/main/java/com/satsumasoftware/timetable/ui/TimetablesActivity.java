@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -183,7 +185,7 @@ public class TimetablesActivity extends NavigationDrawerActivity {
                 verifyStoragePermissions(false);
                 break;
             case R.id.action_import:
-                verifyStoragePermissions(true);
+                showImportWarningDialog();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -213,6 +215,24 @@ public class TimetablesActivity extends NavigationDrawerActivity {
         } else {
             if (importing) handleDbImport(); else handleDbExport();
         }
+    }
+
+    private void showImportWarningDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_import_warning_title)
+                .setMessage(R.string.dialog_import_warning_message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        verifyStoragePermissions(true);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .show();
     }
 
     private void handleDbExport() {

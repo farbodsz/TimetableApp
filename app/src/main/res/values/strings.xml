@@ -157,6 +157,12 @@
     <string name="showing_past_assignments">Showing past assignments</string>
     <string name="showing_past_exams">Showing past exams</string>
 
+    <string name="dialog_import_warning_title">Replace app data?</string>
+    <string name="dialog_import_warning_message">
+        Importing will result in all current app data being lost! The app will instead be loaded
+        with the data from the imported file. \n\nDo you wish to continue?
+    </string>
+
     <plurals name="notification_overdue_assignments">
         <item quantity="one">%1$d assignment is overdue</item>
         <item quantity="other">%1$d assignments are overdue</item>
