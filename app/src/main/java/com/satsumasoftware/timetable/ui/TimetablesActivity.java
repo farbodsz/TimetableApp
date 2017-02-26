@@ -23,7 +23,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.DatabaseUtils;
+import com.satsumasoftware.timetable.db.DataPorting;
 import com.satsumasoftware.timetable.db.handler.TimetableHandler;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
@@ -244,10 +244,10 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     }
 
     private void handleDbExport() {
-        String toastText = DatabaseUtils.exportDatabase(this)
-                ? "Successfully exported database to downloads folder"
-                : "Failed to export database!";
-        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+        int toastTextRes = DataPorting.exportDatabase(this)
+                ? R.string.data_export_success
+                : R.string.data_export_fail;
+        Toast.makeText(this, toastTextRes, Toast.LENGTH_SHORT).show();
     }
 
     private void handleDbImport() {
@@ -258,7 +258,7 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     }
 
     private void completeDbImport(Uri importData) {
-        if (!DatabaseUtils.isDatabaseValid(importData)) {
+        if (!DataPorting.isDatabaseValid(importData)) {
             showImportInvalidDialog();
             return;
         }
@@ -266,10 +266,10 @@ public class TimetablesActivity extends NavigationDrawerActivity {
         Log.e(LOG_TAG, "Preparing to export backup of data before completing import.");
         startExport();
 
-        String toastText = DatabaseUtils.importDatabase(this, importData)
-                ? "Successfully imported database"
-                : "Failed to import database!";
-        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show();
+        int toastTextRes = DataPorting.importDatabase(this, importData)
+                ? R.string.data_import_success
+                : R.string.data_import_fail;
+        Toast.makeText(this, toastTextRes, Toast.LENGTH_SHORT).show();
     }
 
     private void showImportInvalidDialog() {

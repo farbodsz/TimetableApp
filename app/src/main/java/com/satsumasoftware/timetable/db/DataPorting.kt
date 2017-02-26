@@ -16,9 +16,9 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.channels.FileChannel
 
-object DatabaseUtils {
+object DataPorting {
 
-    private const val LOG_TAG = "DatabaseUtils"
+    private const val LOG_TAG = "DataPorting"
 
     private const val DB_PATH = "data/data/" + BuildConfig.APPLICATION_ID + "/databases/" +
             TimetableDbHelper.DATABASE_NAME

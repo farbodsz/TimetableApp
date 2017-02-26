@@ -170,6 +170,11 @@
         The file selected cannot be imported since it is of an invalid format!
     </string>
 
+    <string name="data_export_success">Successfully exported database to downloads folder</string>
+    <string name="data_export_fail">Failed to export database!</string>
+    <string name="data_import_success">Successfully imported database</string>
+    <string name="data_import_fail">Failed to import database!</string>
+
     <plurals name="notification_overdue_assignments">
         <item quantity="one">%1$d assignment is overdue</item>
         <item quantity="other">%1$d assignments are overdue</item>
