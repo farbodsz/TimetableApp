@@ -182,13 +182,21 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_export:
-                verifyStoragePermissions(false);
+                startExport();
                 break;
             case R.id.action_import:
-                showImportWarningDialog();
+                startImport();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startImport() {
+        showImportWarningDialog();
+    }
+
+    private void startExport() {
+        verifyStoragePermissions(false);
     }
 
     private void verifyStoragePermissions(boolean importing) {
@@ -254,6 +262,9 @@ public class TimetablesActivity extends NavigationDrawerActivity {
             showImportInvalidDialog();
             return;
         }
+
+        Log.e(LOG_TAG, "Preparing to export backup of data before completing import.");
+        startExport();
 
         String toastText = DatabaseUtils.importDatabase(this, importData)
                 ? "Successfully imported database"

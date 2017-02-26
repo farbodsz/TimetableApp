@@ -160,7 +160,9 @@
     <string name="dialog_import_warning_title">Replace app data?</string>
     <string name="dialog_import_warning_message">
         Importing will result in all current app data being lost! The app will instead be loaded
-        with the data from the imported file. \n\nDo you wish to continue?
+        with the data from the imported file.
+        \n\nA backup of your current data will be exported in case something goes wrong.
+        \n\nDo you wish to continue?
     </string>
 
     <string name="dialog_import_invalid_title">Invalid data file</string>
