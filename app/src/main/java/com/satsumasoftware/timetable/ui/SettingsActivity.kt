@@ -57,7 +57,7 @@ class SettingsActivity : NavigationDrawerActivity() {
 
             updateSummary(PrefUtils.getDefaultLessonDuration(activity))
 
-            lessonDurationPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            lessonDurationPref.setOnPreferenceChangeListener { preference, newValue ->
                 val strNewVal = newValue as String
                 updateSummary(strNewVal.toInt())
                 true
@@ -90,7 +90,7 @@ class SettingsActivity : NavigationDrawerActivity() {
                 }, initialHour, initialMinute, true).show()
             }
 
-            assignmentNotificationPref.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference ->
+            assignmentNotificationPref.setOnPreferenceClickListener { preference ->
                 displayAssignmentTimePicker(preference!!)
                 true
             }
@@ -139,20 +139,12 @@ class SettingsActivity : NavigationDrawerActivity() {
 
     }
 
-    override fun getSelfToolbar(): Toolbar {
-        return findViewById(R.id.toolbar) as Toolbar
-    }
+    override fun getSelfToolbar() = findViewById(R.id.toolbar) as Toolbar
 
-    override fun getSelfDrawerLayout(): DrawerLayout {
-        return findViewById(R.id.drawerLayout) as DrawerLayout
-    }
+    override fun getSelfDrawerLayout() = findViewById(R.id.drawerLayout) as DrawerLayout
 
-    override fun getSelfNavDrawerItem(): Int {
-        return NavigationDrawerActivity.NAVDRAWER_ITEM_SETTINGS
-    }
+    override fun getSelfNavDrawerItem() = NavigationDrawerActivity.NAVDRAWER_ITEM_SETTINGS
 
-    override fun getSelfNavigationView(): NavigationView {
-        return findViewById(R.id.navigationView) as NavigationView
-    }
+    override fun getSelfNavigationView() = findViewById(R.id.navigationView) as NavigationView
 
 }
