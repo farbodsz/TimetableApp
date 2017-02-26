@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.util
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
@@ -20,41 +21,56 @@ object NotificationUtils {
     private const val LOG_TAG = "NotificationUtils"
 
     /**
-     * Cancels alarms for all timetables add adds back alarms for the current timetable.
+     * Cancels all alarms for all timetables add adds back alarms for the current timetable.
      */
     @JvmStatic
     fun refreshAlarms(context: Context, application: TimetableApplication) {
         Log.i(LOG_TAG, "Refreshing alarms...")
 
-        val alarmReceiver = AlarmReceiver()
-
-        val classTimeUtils = ClassTimeHandler(context)
-        val examUtils = ExamHandler(context)
-
-        Log.i(LOG_TAG, "Cancelling ALL alarms")
-
-        classTimeUtils.getAllItems().forEach {
-            alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.CLASS, it.id)
-        }
-        examUtils.getAllItems().forEach {
-            alarmReceiver.cancelAlarm(context, AlarmReceiver.Type.EXAM, it.id)
-        }
-
-        Log.i(LOG_TAG, "Adding alarms for the current timetable " +
-                "(id: ${application.currentTimetable!!.id})")
-
-        classTimeUtils.getItems(application).forEach {
-            ClassTimeHandler.addAlarmsForClassTime(context, application, it)
-        }
-        examUtils.getItems(application).forEach { exam ->
-            if (exam.date.isAfter(LocalDate.now()) ||
-                    (exam.date.isEqual(LocalDate.now()) && exam.startTime.isAfter(LocalTime.now()))) {
-                ExamHandler.addAlarmForExam(context, exam)
-            }
-        }
+        refreshClassAlarms(context, application)
+        refreshExamAlarms(context, application)
 
         NotificationUtils.setAssignmentAlarmTime(
                 context, PrefUtils.getAssignmentNotificationTime(context))
+    }
+
+    @JvmStatic
+    fun refreshClassAlarms(context: Context, application: Application) {
+        Log.i(LOG_TAG, "Refreshing class time alarms...")
+
+        val classTimeUtils = ClassTimeHandler(context)
+
+        Log.v(LOG_TAG, "Cancelling all class time alarms")
+        classTimeUtils.getAllItems().forEach {
+            AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.CLASS, it.id)
+        }
+
+        Log.v(LOG_TAG, "Adding class time alarms for the current timetable")
+        classTimeUtils.getItems(application).forEach {
+            ClassTimeHandler.addAlarmsForClassTime(context, application, it)
+        }
+    }
+
+    @JvmStatic
+    fun refreshExamAlarms(context: Context, application: Application) {
+        Log.i(LOG_TAG, "Refreshing exam alarms...")
+
+        val examUtils = ExamHandler(context)
+
+        Log.v(LOG_TAG, "Cancelling all exam alarms")
+        examUtils.getAllItems().forEach {
+            AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.EXAM, it.id)
+        }
+
+        Log.v(LOG_TAG, "Adding exam alarms for the current timetable")
+        examUtils.getItems(application).forEach { exam ->
+            val examInPastToday =
+                    exam.date.isEqual(LocalDate.now()) && exam.startTime.isAfter(LocalTime.now())
+
+            if (exam.date.isAfter(LocalDate.now()) || examInPastToday) {
+                ExamHandler.addAlarmForExam(context, exam)
+            }
+        }
     }
 
     /**

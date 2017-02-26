@@ -22,6 +22,14 @@
     <PreferenceCategory
         android:title="@string/prefCategory_notifications">
 
+        <EditTextPreference
+            android:key="pref_class_notification_time"
+            android:title="@string/pref_classNotificationTime"
+            android:summary="@string/pref_classNotificationTime_summary"
+            android:inputType="number"
+            android:dialogMessage="@string/pref_classNotificationTime_dialogMessage"
+            android:defaultValue="5" />
+
         <Preference
             android:key="pref_assignment_notification_time"
             android:title="@string/pref_assignmentNotificationTime"

@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import com.satsumasoftware.timetable.BuildConfig
 import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.util.NotificationUtils
 import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.LocalTime
 
@@ -37,6 +38,7 @@ class SettingsActivity : NavigationDrawerActivity() {
 
             setupDefaultLessonDurationPref()
             setupAssignmentNotificationPref()
+            setupClassNotificationPref()
 
             setupAboutPrefs()
         }
@@ -88,6 +90,24 @@ class SettingsActivity : NavigationDrawerActivity() {
 
             assignmentNotificationPref.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference ->
                 displayAssignmentTimePicker(preference!!)
+                true
+            }
+        }
+
+        private fun setupClassNotificationPref() {
+            val classNotificationPref = findPreference(PrefUtils.PREF_CLASS_NOTIFICATION_TIME)
+
+            fun updateSummaryText(minsBefore: Int) {
+                classNotificationPref.summary =
+                        getString(R.string.pref_classNotificationTime_summary, minsBefore)
+            }
+
+            updateSummaryText(PrefUtils.getClassNotificationTime(activity))
+
+            classNotificationPref.setOnPreferenceChangeListener { preference, newValue ->
+                val minsBefore = newValue as String
+                updateSummaryText(minsBefore.toInt())
+                NotificationUtils.refreshClassAlarms(activity, activity.application)
                 true
             }
         }

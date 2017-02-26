@@ -62,4 +62,13 @@ object PrefUtils {
         NotificationUtils.setAssignmentAlarmTime(context, time)
     }
 
+
+    const val PREF_CLASS_NOTIFICATION_TIME = "pref_class_notification_time"
+
+    @JvmStatic
+    fun getClassNotificationTime(context: Context): Int {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        return sp.getString(PREF_CLASS_NOTIFICATION_TIME, "5").toInt()
+    }
+
 }

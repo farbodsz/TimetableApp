@@ -18,7 +18,17 @@
     <string name="prefCategory_notifications">Notifications</string>
 
     <string name="pref_assignmentNotificationTime">Incomplete assignments</string>
-    <string name="pref_assignmentNotificationTime_summary">You\'ll be notified of incomplete or overdue assignments the day before it\'s due at %1$s</string>
+    <string name="pref_assignmentNotificationTime_summary">
+        You\'ll be notified of incomplete or overdue assignments the day before it\'s due at %1$s
+    </string>
+
+    <string name="pref_classNotificationTime">Classes</string>
+    <string name="pref_classNotificationTime_summary">
+        You\'ll get notifications for your classes %1$d minutes before they start
+    </string>
+    <string name="pref_classNotificationTime_dialogMessage">
+        Be reminded of classes X minutes before they start.
+    </string>
 
 
     <string name="prefCategory_about">About</string>
