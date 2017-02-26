@@ -37,8 +37,10 @@ class SettingsActivity : NavigationDrawerActivity() {
             addPreferencesFromResource(R.xml.preferences)
 
             setupDefaultLessonDurationPref()
+
             setupAssignmentNotificationPref()
             setupClassNotificationPref()
+            setupExamNotificationPref()
 
             setupAboutPrefs()
         }
@@ -108,6 +110,24 @@ class SettingsActivity : NavigationDrawerActivity() {
                 val minsBefore = newValue as String
                 updateSummaryText(minsBefore.toInt())
                 NotificationUtils.refreshClassAlarms(activity, activity.application)
+                true
+            }
+        }
+
+        private fun setupExamNotificationPref() {
+            val examNotificationPref = findPreference(PrefUtils.PREF_EXAM_NOTIFICATION_TIME)
+
+            fun updateSummaryText(minsBefore: Int) {
+                examNotificationPref.summary =
+                        getString(R.string.pref_examNotificationTime_summary, minsBefore)
+            }
+
+            updateSummaryText(PrefUtils.getExamNotificationTime(activity))
+
+            examNotificationPref.setOnPreferenceChangeListener { preference, newValue ->
+                val minsBefore = newValue as String
+                updateSummaryText(minsBefore.toInt())
+                NotificationUtils.refreshExamAlarms(activity, activity.application)
                 true
             }
         }

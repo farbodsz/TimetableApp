@@ -71,4 +71,13 @@ object PrefUtils {
         return sp.getString(PREF_CLASS_NOTIFICATION_TIME, "5").toInt()
     }
 
+
+    const val PREF_EXAM_NOTIFICATION_TIME = "pref_exam_notification_time"
+
+    @JvmStatic
+    fun getExamNotificationTime(context: Context): Int {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        return sp.getString(PREF_EXAM_NOTIFICATION_TIME, "30").toInt()
+    }
+
 }

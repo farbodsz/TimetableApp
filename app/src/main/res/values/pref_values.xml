@@ -30,6 +30,14 @@
         Be reminded of classes X minutes before they start.
     </string>
 
+    <string name="pref_examNotificationTime">Exams</string>
+    <string name="pref_examNotificationTime_summary">
+        You\'ll receive exam notifications %1$d minutes before they start
+    </string>
+    <string name="pref_examNotificationTime_dialogMessage">
+        Be reminded of exams X minutes before they start.
+    </string>
+
 
     <string name="prefCategory_about">About</string>
 
