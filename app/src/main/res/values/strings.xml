@@ -144,6 +144,8 @@
     <string name="action_delete">Delete</string>
     <string name="action_done">Done</string>
     <string name="action_edit">Edit</string>
+    <string name="action_export">Export timetable app data</string>
+    <string name="action_import">Import timetable app data</string>
     <string name="action_new">New</string>
     <string name="action_show_past_assignments">Show past assignments</string>
     <string name="action_show_past_exams">Show past exams</string>
@@ -154,6 +156,24 @@
 
     <string name="showing_past_assignments">Showing past assignments</string>
     <string name="showing_past_exams">Showing past exams</string>
+
+    <string name="dialog_import_warning_title">Replace app data?</string>
+    <string name="dialog_import_warning_message">
+        Importing will result in all current app data being lost! The app will instead be loaded
+        with the data from the imported file.
+        \n\nA backup of your current data will be exported in case something goes wrong.
+        \n\nDo you wish to continue?
+    </string>
+
+    <string name="dialog_import_invalid_title">Invalid data file</string>
+    <string name="dialog_import_invalid_message">
+        The file selected cannot be imported since it is of an invalid format!
+    </string>
+
+    <string name="data_export_success">Successfully exported database to downloads folder</string>
+    <string name="data_export_fail">Failed to export database!</string>
+    <string name="data_import_success">Successfully imported database</string>
+    <string name="data_import_fail">Failed to import database!</string>
 
     <plurals name="notification_overdue_assignments">
         <item quantity="one">%1$d assignment is overdue</item>

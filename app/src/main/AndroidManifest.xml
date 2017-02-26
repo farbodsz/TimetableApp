@@ -3,8 +3,13 @@
     package="com.satsumasoftware.timetable"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Required for notifications -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Required for export/import -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-sdk tools:overrideLibrary="com.jakewharton.threetenabp" />
 
