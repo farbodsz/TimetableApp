@@ -170,6 +170,9 @@
         The file selected cannot be imported since it is of an invalid format!
     </string>
 
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+
     <string name="data_export_success">Successfully exported database to downloads folder</string>
     <string name="data_export_fail">Failed to export database!</string>
     <string name="data_import_success">Successfully imported database</string>
@@ -184,6 +187,9 @@
         <item quantity="one">%1$d incomplete assignment due tomorrow</item>
         <item quantity="other">%1$d incomplete assignments due tomorrow</item>
     </plurals>
+
+    <string name="welcome_start_title">Welcome to your Timetable!</string>
+    <string name="welcome_start_subtitle">Swipe left to get started…</string>
 
     <string name="placeholder_subjects">You haven\'t added any subjects yet</string>
     <string name="placeholder_classes">You haven\'t added any classes yet</string>

@@ -32,6 +32,10 @@
         </activity>
 
         <activity
+            android:name=".ui.start.WelcomeActivity"
+            android:label="@string/title_activity_home" />
+
+        <activity
             android:name=".ui.MainActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/Timetable.Home" />
