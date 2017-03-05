@@ -9,5 +9,8 @@ local.properties
 *.iml
 /.idea/
 
+# Screenshots
+/screenshots/
+
 # JSON file used for Google Play Services
 app/google-services.json
