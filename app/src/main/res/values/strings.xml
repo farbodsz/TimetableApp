@@ -16,6 +16,7 @@
     <string name="title_activity_exams">Exams</string>
     <string name="title_activity_exam_new">New Exam</string>
     <string name="title_activity_exam_edit">Edit Exam</string>
+    <string name="title_subjects">Subjects</string>
     <string name="title_activity_subjects">Manage subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
@@ -194,7 +195,15 @@
     <string name="welcome_timetable_subtitle">
         E.g. \'9th Grade\', \'2017\', \'Uni 1st year\', \'Year 8\'
     </string>
-    <string name="welcome_timetable_missing">Enter a name for your timetable</string>
+    <string name="welcome_timetable_details_title">Timetable details</string>
+    <string name="welcome_timetable_details_desc">
+        Enter the start and end dates of your timetable.
+        \nYou can modify these later on the \'Manage timetables\' page.
+    </string>
+
+    <string name="welcome_inputs_missing">
+        Make sure you have entered all required inputs before moving on.
+    </string>
 
     <string name="placeholder_subjects">You haven\'t added any subjects yet</string>
     <string name="placeholder_classes">You haven\'t added any classes yet</string>

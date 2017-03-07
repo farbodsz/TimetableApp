@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.ui.start
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -19,6 +20,7 @@ import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.db.handler.TimetableHandler
 import com.satsumasoftware.timetable.framework.Timetable
 import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -41,7 +43,7 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun setupLayout() {
         mViewPager = findViewById(R.id.viewPager) as ViewPager
-        mViewPager!!.adapter = ViewPagerAdapter(supportFragmentManager)
+        mViewPager!!.adapter = PagerAdapter(supportFragmentManager)
 
         mProgressText = findViewById(R.id.textView_progress) as TextView
         updateProgressText()
@@ -60,7 +62,8 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     private fun updateProgressText() {
-        mProgressText!!.text = (mViewPager!!.currentItem + 1).toString() + " / 5"
+        mProgressText!!.text =
+                (mViewPager!!.currentItem + 1).toString() + " / " + PagerAdapter.PAGES_COUNT
     }
 
     private fun changePage(goBack: Boolean = false) {
@@ -68,18 +71,54 @@ class WelcomeActivity : AppCompatActivity() {
             mViewPager!!.currentItem - 1
 
         } else {
-            if (mViewPager!!.currentItem == 1) {
-                // Just changed name - validate this name
-                if (sName.isNullOrEmpty()) {
-                    Snackbar.make( findViewById(R.id.rootLayout),
-                            R.string.welcome_timetable_missing,
-                            Snackbar.LENGTH_SHORT).show()
-                    return
-                }
+            if (hasMissingInputs()) {
+                Snackbar.make(
+                        findViewById(R.id.rootLayout),
+                        R.string.welcome_inputs_missing,
+                        Snackbar.LENGTH_SHORT
+                ).show()
+                return
+            }
+
+            if (!checkInvalidInputs()) {
+                return
             }
 
             mViewPager!!.currentItem + 1
         }
+    }
+
+    /**
+     * @return true if there is at least one missing input.
+     */
+    private fun hasMissingInputs(): Boolean {
+        return when (mViewPager!!.currentItem) {
+            PagerAdapter.PAGE_TIMETABLE_NAME -> sName.isNullOrEmpty()
+            PagerAdapter.PAGE_TIMETABLE_DETAILS -> sStartDate == null || sEndDate == null
+            else -> false
+        }
+    }
+
+    /**
+     * Checks the inputs for the current view pager item.
+     * It will display Snackbar messages accordingly.
+     *
+     * @return whether there are any invalid inputs (i.e. true for okay inputs, false for invalid).
+     */
+    private fun checkInvalidInputs(): Boolean {
+        when (mViewPager!!.currentItem) {
+            PagerAdapter.PAGE_TIMETABLE_DETAILS -> {
+                if (sStartDate!!.isAfter(sEndDate!!)) {
+                    Snackbar.make(
+                            findViewById(R.id.rootLayout),
+                            R.string.message_start_date_after_end_date,
+                            Snackbar.LENGTH_SHORT).show()
+                    return false
+                }
+            }
+        }
+
+        return true
     }
 
     fun createTimetable(): Timetable {
@@ -91,14 +130,23 @@ class WelcomeActivity : AppCompatActivity() {
                 checkNotNull(sWeekRotations))
     }
 
-    private class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    private class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        override fun getCount() = 2
+        companion object {
+            const val PAGES_COUNT = 3
+
+            const val PAGE_START = 0
+            const val PAGE_TIMETABLE_NAME = 1
+            const val PAGE_TIMETABLE_DETAILS = 2
+        }
+
+        override fun getCount() = PAGES_COUNT
 
         override fun getItem(position: Int): Fragment? {
             when (position) {
-                0 -> return StartFragment()
-                1 -> return TimetableNameFragment()
+                PAGE_START -> return StartFragment()
+                PAGE_TIMETABLE_NAME -> return TimetableNameFragment()
+                PAGE_TIMETABLE_DETAILS -> return TimetableDetailsFragment()
             }
             return null
         }
@@ -132,6 +180,63 @@ class WelcomeActivity : AppCompatActivity() {
             })
 
             return rootView
+        }
+    }
+
+    class TimetableDetailsFragment : Fragment() {
+
+        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+                                  savedInstanceState: Bundle?): View? {
+            val rootView = inflater!!.inflate(
+                    R.layout.fragment_welcome_timetable_details, container, false)
+
+            setupDateTexts(rootView)
+
+            return rootView
+        }
+
+        private fun setupDateTexts(rootView: View) {
+            val formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
+
+            val startDateText = rootView.findViewById(R.id.textView_start_date) as TextView
+            startDateText.setOnClickListener {
+                // Note -1s and +1s because Android month values are from 0-11 (to correspond with
+                // java.util.Calendar) but LocalDate month values are from 1-12
+
+                val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                    sStartDate = LocalDate.of(year, month + 1, dayOfMonth)
+
+                    startDateText.setTextColor(R.color.mdu_text_black)
+                    startDateText.text = sStartDate!!.format(formatter)
+                }
+
+                val initialDate = sStartDate ?: LocalDate.now()
+
+                DatePickerDialog(activity,
+                        dateSetListener,
+                        initialDate.year,
+                        initialDate.monthValue - 1,
+                        initialDate.dayOfMonth).show()
+            }
+
+            val endDateText = rootView.findViewById(R.id.textView_end_date) as TextView
+            endDateText.setOnClickListener {
+                val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                    sEndDate = LocalDate.of(year, month + 1, dayOfMonth)
+
+                    endDateText.setTextColor(R.color.mdu_text_black)
+                    endDateText.text = sEndDate!!.format(formatter)
+                }
+
+                val initialDate = sEndDate ?: LocalDate.now().plusMonths(8)
+
+                DatePickerDialog(
+                        activity,
+                        dateSetListener,
+                        initialDate.year,
+                        initialDate.monthValue - 1,
+                        initialDate.dayOfMonth).show()
+            }
         }
     }
 
