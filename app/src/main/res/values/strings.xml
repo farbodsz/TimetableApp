@@ -200,6 +200,13 @@
         Enter the start and end dates of your timetable.
         \nYou can modify these later on the \'Manage timetables\' page.
     </string>
+    <string name="welcome_end_title">All done!</string>
+    <string name="welcome_end_desc_classes">
+        You\'re done.
+        \n\nTo start adding classes, click the menu button on the top left of the home page and
+        choose \'Classes\'.
+        \n\nPress \'Finish\' to go to the home page.
+    </string>
 
     <string name="welcome_inputs_missing">
         Make sure you have entered all required inputs before moving on.

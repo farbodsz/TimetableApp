@@ -133,11 +133,13 @@ class WelcomeActivity : AppCompatActivity() {
     private class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         companion object {
-            const val PAGES_COUNT = 3
+
+            const val PAGES_COUNT = 4
 
             const val PAGE_START = 0
             const val PAGE_TIMETABLE_NAME = 1
             const val PAGE_TIMETABLE_DETAILS = 2
+            const val PAGE_END = 3
         }
 
         override fun getCount() = PAGES_COUNT
@@ -147,6 +149,7 @@ class WelcomeActivity : AppCompatActivity() {
                 PAGE_START -> return StartFragment()
                 PAGE_TIMETABLE_NAME -> return TimetableNameFragment()
                 PAGE_TIMETABLE_DETAILS -> return TimetableDetailsFragment()
+                PAGE_END -> return EndFragment()
             }
             return null
         }
@@ -237,6 +240,14 @@ class WelcomeActivity : AppCompatActivity() {
                         initialDate.monthValue - 1,
                         initialDate.dayOfMonth).show()
             }
+        }
+    }
+
+    class EndFragment : Fragment() {
+
+        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+                                  savedInstanceState: Bundle?): View? {
+            return inflater!!.inflate(R.layout.fragment_welcome_end, container, false)
         }
     }
 
