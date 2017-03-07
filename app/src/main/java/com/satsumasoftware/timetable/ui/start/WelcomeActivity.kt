@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui.start
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -17,8 +18,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.handler.TimetableHandler
 import com.satsumasoftware.timetable.framework.Timetable
+import com.satsumasoftware.timetable.ui.MainActivity
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -56,6 +59,11 @@ class WelcomeActivity : AppCompatActivity() {
 
         val nextButton = findViewById(R.id.button_next) as Button
         nextButton.setOnClickListener {
+            if (mViewPager!!.currentItem == PagerAdapter.PAGE_END) {
+                saveAndExit()
+                return@setOnClickListener
+            }
+
             changePage()
             updateProgressText()
         }
@@ -121,13 +129,24 @@ class WelcomeActivity : AppCompatActivity() {
         return true
     }
 
-    fun createTimetable(): Timetable {
-        return Timetable(
-                TimetableHandler(this).getHighestItemId() + 1,
+    /**
+     * Saves the timetable to the database and exits to the main page.
+     */
+    private fun saveAndExit() {
+        val dataHandler = TimetableHandler(this)
+
+        val timetable = Timetable(
+                dataHandler.getHighestItemId() + 1,
                 checkNotNull(sName),
                 checkNotNull(sStartDate),
                 checkNotNull(sEndDate),
-                checkNotNull(sWeekRotations))
+                1)  // default week rotations is 1
+
+        dataHandler.addItem(timetable)
+
+        (application as TimetableApplication).setCurrentTimetable(this, timetable)
+
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     private class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
