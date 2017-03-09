@@ -30,11 +30,13 @@ class WelcomeActivity : AppCompatActivity() {
     private var mViewPager: ViewPager? = null
     private var mProgressText: TextView? = null
 
+    private var mPrevButton: Button? = null
+    private var mNextButton: Button? = null
+
     companion object{
         private var sName: String? = null
         private var sStartDate: LocalDate? = null
         private var sEndDate: LocalDate? = null
-        private var sWeekRotations: Int? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,14 +53,14 @@ class WelcomeActivity : AppCompatActivity() {
         mProgressText = findViewById(R.id.textView_progress) as TextView
         updateProgressText()
 
-        val prevButton = findViewById(R.id.button_previous) as Button
-        prevButton.setOnClickListener {
+        mPrevButton = findViewById(R.id.button_previous) as Button
+        mPrevButton!!.setOnClickListener {
             changePage(true)
             updateProgressText()
         }
 
-        val nextButton = findViewById(R.id.button_next) as Button
-        nextButton.setOnClickListener {
+        mNextButton = findViewById(R.id.button_next) as Button
+        mNextButton!!.setOnClickListener {
             if (mViewPager!!.currentItem == PagerAdapter.PAGE_END) {
                 saveAndExit()
                 return@setOnClickListener
@@ -67,6 +69,8 @@ class WelcomeActivity : AppCompatActivity() {
             changePage()
             updateProgressText()
         }
+
+        updateButtonNames()
     }
 
     private fun updateProgressText() {
@@ -94,6 +98,8 @@ class WelcomeActivity : AppCompatActivity() {
 
             mViewPager!!.currentItem + 1
         }
+
+        updateButtonNames()
     }
 
     /**
@@ -147,6 +153,26 @@ class WelcomeActivity : AppCompatActivity() {
         (application as TimetableApplication).setCurrentTimetable(this, timetable)
 
         startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    /**
+     * Changes the names of the buttons from 'Next' to 'Finish' where applicable.
+     */
+    private fun updateButtonNames() {
+        val currentItem = mViewPager!!.currentItem
+
+        mNextButton!!.setText(if (currentItem == PagerAdapter.PAGE_END) {
+            R.string.finish
+        } else {
+            R.string.next
+        })
+
+        mPrevButton!!.isEnabled = currentItem != PagerAdapter.PAGE_START
+        mPrevButton!!.text = if (currentItem == PagerAdapter.PAGE_START) {
+            ""
+        } else {
+            getString(R.string.back)
+        }
     }
 
     private class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

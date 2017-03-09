@@ -173,6 +173,7 @@
 
     <string name="back">Back</string>
     <string name="next">Next</string>
+    <string name="finish">Finish</string>
 
     <string name="data_export_success">Successfully exported database to downloads folder</string>
     <string name="data_export_fail">Failed to export database!</string>
