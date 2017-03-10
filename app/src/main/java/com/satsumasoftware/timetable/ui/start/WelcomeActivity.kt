@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.ui.start
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -25,6 +26,9 @@ import com.satsumasoftware.timetable.ui.MainActivity
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
+/**
+ * This activity should be started when the app first runs for the user to setup their timetable.
+ */
 class WelcomeActivity : AppCompatActivity() {
 
     private var mViewPager: ViewPager? = null
@@ -33,10 +37,10 @@ class WelcomeActivity : AppCompatActivity() {
     private var mPrevButton: Button? = null
     private var mNextButton: Button? = null
 
-    companion object{
-        private var sName: String? = null
-        private var sStartDate: LocalDate? = null
-        private var sEndDate: LocalDate? = null
+    private companion object{
+        var sName: String? = null
+        var sStartDate: LocalDate? = null
+        var sEndDate: LocalDate? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,11 +77,19 @@ class WelcomeActivity : AppCompatActivity() {
         updateButtonNames()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateProgressText() {
         mProgressText!!.text =
                 (mViewPager!!.currentItem + 1).toString() + " / " + PagerAdapter.PAGES_COUNT
     }
 
+    /**
+     * Changes the ViewPager's current item and handles validation for each page.
+     *
+     * @see hasMissingInputs
+     * @see checkInvalidInputs
+     * @see updateButtonNames
+     */
     private fun changePage(goBack: Boolean = false) {
         mViewPager!!.currentItem = if (goBack) {
             mViewPager!!.currentItem - 1
@@ -179,6 +191,9 @@ class WelcomeActivity : AppCompatActivity() {
 
         companion object {
 
+            /**
+             * The number of pages this adapter will handle.
+             */
             const val PAGES_COUNT = 4
 
             const val PAGE_START = 0
@@ -200,6 +215,9 @@ class WelcomeActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * A part of the UI that displays a welcome/start message to the user.
+     */
     class StartFragment : Fragment() {
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -208,6 +226,9 @@ class WelcomeActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * A page for the user to enter the name of their new timetable.
+     */
     class TimetableNameFragment : Fragment() {
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -231,6 +252,9 @@ class WelcomeActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The portion of the UI for the user to set start and end dates of their new timetable.
+     */
     class TimetableDetailsFragment : Fragment() {
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -288,6 +312,9 @@ class WelcomeActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The page that displays a message to inform the user the timetable setup is complete.
+     */
     class EndFragment : Fragment() {
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
