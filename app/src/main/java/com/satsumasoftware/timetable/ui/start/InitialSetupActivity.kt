@@ -179,8 +179,8 @@ class InitialSetupActivity : AppCompatActivity() {
             R.string.next
         })
 
-        mPrevButton!!.isEnabled = currentItem != PagerAdapter.PAGE_START
-        mPrevButton!!.text = if (currentItem == PagerAdapter.PAGE_START) {
+        mPrevButton!!.isEnabled = currentItem != PagerAdapter.PAGE_TIMETABLE_NAME
+        mPrevButton!!.text = if (currentItem == PagerAdapter.PAGE_TIMETABLE_NAME) {
             ""
         } else {
             getString(R.string.back)
@@ -194,35 +194,22 @@ class InitialSetupActivity : AppCompatActivity() {
             /**
              * The number of pages this adapter will handle.
              */
-            const val PAGES_COUNT = 4
+            const val PAGES_COUNT = 3
 
-            const val PAGE_START = 0
-            const val PAGE_TIMETABLE_NAME = 1
-            const val PAGE_TIMETABLE_DETAILS = 2
-            const val PAGE_END = 3
+            const val PAGE_TIMETABLE_NAME = 0
+            const val PAGE_TIMETABLE_DETAILS = 1
+            const val PAGE_END = 2
         }
 
         override fun getCount() = PAGES_COUNT
 
         override fun getItem(position: Int): Fragment? {
             when (position) {
-                PAGE_START -> return StartFragment()
                 PAGE_TIMETABLE_NAME -> return TimetableNameFragment()
                 PAGE_TIMETABLE_DETAILS -> return TimetableDetailsFragment()
                 PAGE_END -> return EndFragment()
             }
             return null
-        }
-    }
-
-    /**
-     * A part of the UI that displays a welcome/start message to the user.
-     */
-    class StartFragment : Fragment() {
-
-        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                                  savedInstanceState: Bundle?): View? {
-            return inflater!!.inflate(R.layout.fragment_welcome_start, container, false)
         }
     }
 
