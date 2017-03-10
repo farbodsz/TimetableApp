@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.db.PortingFragment
 import com.satsumasoftware.timetable.ui.MainActivity
 
 /**
@@ -33,13 +34,25 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun setupLayout() {
         findViewById(R.id.button_import).setOnClickListener {
-            // TODO
+            startImportFragment()
         }
 
         findViewById(R.id.button_next).setOnClickListener {
             startActivity(Intent(this, InitialSetupActivity::class.java))
             finish()
         }
+    }
+
+    private fun startImportFragment() {
+        val fragmentArgs = Bundle()
+        fragmentArgs.putInt(PortingFragment.ARGUMENT_PORT_TYPE, PortingFragment.TYPE_IMPORT)
+
+        val fragment = PortingFragment()
+        fragment.arguments = fragmentArgs
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(fragment, null)
+        transaction.commit()
     }
 
 }
