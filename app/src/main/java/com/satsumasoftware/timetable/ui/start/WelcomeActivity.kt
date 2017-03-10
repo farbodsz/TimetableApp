@@ -49,6 +49,14 @@ class WelcomeActivity : AppCompatActivity() {
 
         val fragment = PortingFragment()
         fragment.arguments = fragmentArgs
+        fragment.onPortingCompleteListener = object : PortingFragment.OnPortingCompleteListener {
+            override fun onPortingComplete(portingType: Int, successful: Boolean) {
+                if (successful && portingType == PortingFragment.TYPE_IMPORT) {
+                    startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
+                    finish()
+                }
+            }
+        }
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(fragment, null)

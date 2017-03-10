@@ -26,8 +26,8 @@ class PortingFragment : Fragment() {
         private const val LOG_TAG = "PortingFragment"
 
         const val ARGUMENT_PORT_TYPE = "extra_port_type"
-        const val TYPE_IMPORT = 1
-        const val TYPE_EXPORT = 2
+        const val TYPE_IMPORT = 0
+        const val TYPE_EXPORT = 1
 
         private const val REQUEST_CODE_EXPORT_PERM = 1
         private const val REQUEST_CODE_IMPORT_PERM = 2
@@ -37,6 +37,8 @@ class PortingFragment : Fragment() {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
+
+    var onPortingCompleteListener: OnPortingCompleteListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,7 +127,11 @@ class PortingFragment : Fragment() {
     }
 
     private fun handleDbExport() {
-        val toastTextRes = if (DataPorting.exportDatabase(activity)) {
+        val successful = DataPorting.exportDatabase(activity)
+
+        onPortingCompleteListener?.onPortingComplete(TYPE_EXPORT, successful)
+
+        val toastTextRes = if (successful) {
             R.string.data_export_success
         } else {
             R.string.data_export_fail
@@ -159,12 +165,15 @@ class PortingFragment : Fragment() {
         Log.e(LOG_TAG, "Preparing to export backup of data before completing import.")
         startExport()
 
-        val toastTextRes = if (DataPorting.importDatabase(activity, importData)) {
+        val successful = DataPorting.importDatabase(activity, importData)
+
+        onPortingCompleteListener?.onPortingComplete(TYPE_IMPORT, successful)
+
+        val toastTextRes = if (successful) {
             R.string.data_import_success
         } else {
             R.string.data_import_fail
         }
-
         Toast.makeText(context, toastTextRes, Toast.LENGTH_SHORT).show()
     }
 
@@ -174,6 +183,18 @@ class PortingFragment : Fragment() {
                 .setMessage(R.string.dialog_import_invalid_message)
                 .setPositiveButton(android.R.string.ok) { _, _ -> }
                 .show()
+    }
+
+    interface OnPortingCompleteListener {
+
+        /**
+         * Callback invoked when import/export has been completed.
+         *
+         * @param portingType 0 for import, 1 for export
+         * @param successful whether the porting operation completed successfully
+         */
+        fun onPortingComplete(portingType: Int, successful: Boolean)
+
     }
 
 }
