@@ -99,7 +99,9 @@ class ClassTime(override val id: Int, override val timetableId: Int, val classDe
             if (timetable.hasFixedScheduling()) {
                 return ""
             } else {
-                val weekChar = if (PrefUtils.displayWeeksAsLetters(activity)) {
+                val weekChar = if (PrefUtils.isWeekRotationShownWithNumbers(activity)) {
+                    weekNumber.toString()
+                } else {
                     when(weekNumber) {
                         1 -> "A"
                         2 -> "B"
@@ -107,8 +109,6 @@ class ClassTime(override val id: Int, override val timetableId: Int, val classDe
                         4 -> "D"
                         else -> throw IllegalArgumentException("invalid week number '$weekNumber'")
                     }
-                } else {
-                    weekNumber.toString()
                 }
                 return if (fullText) activity.getString(R.string.week_item, weekChar) else weekChar
             }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -15,14 +16,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.db.handler.TimetableHandler
 import com.satsumasoftware.timetable.framework.Timetable
 import com.satsumasoftware.timetable.ui.MainActivity
+import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -41,6 +41,7 @@ class InitialSetupActivity : AppCompatActivity() {
         var sName: String? = null
         var sStartDate: LocalDate? = null
         var sEndDate: LocalDate? = null
+        var sWeekRotations: Int? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,7 +121,8 @@ class InitialSetupActivity : AppCompatActivity() {
     private fun hasMissingInputs(): Boolean {
         return when (mViewPager!!.currentItem) {
             PagerAdapter.PAGE_TIMETABLE_NAME -> sName.isNullOrEmpty()
-            PagerAdapter.PAGE_TIMETABLE_DETAILS -> sStartDate == null || sEndDate == null
+            PagerAdapter.PAGE_TIMETABLE_DATES -> sStartDate == null || sEndDate == null
+            PagerAdapter.PAGE_TIMETABLE_SCHEDULING -> sWeekRotations == null
             else -> false
         }
     }
@@ -133,7 +135,7 @@ class InitialSetupActivity : AppCompatActivity() {
      */
     private fun checkInvalidInputs(): Boolean {
         when (mViewPager!!.currentItem) {
-            PagerAdapter.PAGE_TIMETABLE_DETAILS -> {
+            PagerAdapter.PAGE_TIMETABLE_DATES -> {
                 if (sStartDate!!.isAfter(sEndDate!!)) {
                     Snackbar.make(
                             findViewById(R.id.rootLayout),
@@ -158,7 +160,7 @@ class InitialSetupActivity : AppCompatActivity() {
                 checkNotNull(sName),
                 checkNotNull(sStartDate),
                 checkNotNull(sEndDate),
-                1)  // default week rotations is 1
+                checkNotNull(sWeekRotations))
 
         dataHandler.addItem(timetable)
 
@@ -194,11 +196,12 @@ class InitialSetupActivity : AppCompatActivity() {
             /**
              * The number of pages this adapter will handle.
              */
-            const val PAGES_COUNT = 3
+            const val PAGES_COUNT = 4
 
             const val PAGE_TIMETABLE_NAME = 0
-            const val PAGE_TIMETABLE_DETAILS = 1
-            const val PAGE_END = 2
+            const val PAGE_TIMETABLE_DATES = 1
+            const val PAGE_TIMETABLE_SCHEDULING = 2
+            const val PAGE_END = 3
         }
 
         override fun getCount() = PAGES_COUNT
@@ -206,7 +209,8 @@ class InitialSetupActivity : AppCompatActivity() {
         override fun getItem(position: Int): Fragment? {
             when (position) {
                 PAGE_TIMETABLE_NAME -> return TimetableNameFragment()
-                PAGE_TIMETABLE_DETAILS -> return TimetableDetailsFragment()
+                PAGE_TIMETABLE_DATES -> return TimetableDatesFragment()
+                PAGE_TIMETABLE_SCHEDULING -> return TimetableSchedulingFragment()
                 PAGE_END -> return EndFragment()
             }
             return null
@@ -242,12 +246,12 @@ class InitialSetupActivity : AppCompatActivity() {
     /**
      * The portion of the UI for the user to set start and end dates of their new timetable.
      */
-    class TimetableDetailsFragment : Fragment() {
+    class TimetableDatesFragment : Fragment() {
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater!!.inflate(
-                    R.layout.fragment_welcome_timetable_details, container, false)
+                    R.layout.fragment_welcome_timetable_dates, container, false)
 
             setupDateTexts(rootView)
 
@@ -295,6 +299,54 @@ class InitialSetupActivity : AppCompatActivity() {
                         initialDate.year,
                         initialDate.monthValue - 1,
                         initialDate.dayOfMonth).show()
+            }
+        }
+    }
+
+    /**
+     * A page to allow the user to specify their timetable scheduling type.
+     */
+    class TimetableSchedulingFragment : Fragment() {
+
+        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+                                  savedInstanceState: Bundle?): View? {
+            val rootView = inflater!!.inflate(
+                    R.layout.fragment_welcome_timetable_sched, container, false)
+
+            setupLayout(rootView)
+
+            return rootView
+        }
+
+        private fun setupLayout(rootView: View) {
+            setupRadioButtons(rootView)
+
+            val checkboxUseNumbers =
+                    rootView.findViewById(R.id.checkbox_sched_use_numbers) as CheckBox
+            checkboxUseNumbers.setOnCheckedChangeListener { _, isChecked ->
+                PrefUtils.setWeekRotationShownWithNumbers(activity, isChecked)
+            }
+        }
+
+        private fun setupRadioButtons(rootView: View) {
+            with(rootView.findViewById(R.id.radio_scheduling_fixed) as RadioButton) {
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) sWeekRotations = 1
+                }
+
+                isChecked = true
+            }
+
+            @IdRes val otherRadioIds = arrayOf(
+                    R.id.radio_scheduling_2,
+                    R.id.radio_scheduling_3,
+                    R.id.radio_scheduling_4)
+
+            otherRadioIds.forEachIndexed { index, radioId ->
+                (rootView.findViewById(radioId) as RadioButton)
+                        .setOnCheckedChangeListener { _, isChecked ->
+                            if (isChecked) sWeekRotations = index + 2
+                        }
             }
         }
     }

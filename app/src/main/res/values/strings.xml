@@ -198,11 +198,22 @@
     <string name="welcome_timetable_subtitle">
         E.g. \'9th Grade\', \'2017\', \'Uni 1st year\', \'Year 8\'
     </string>
-    <string name="welcome_timetable_details_title">Timetable details</string>
-    <string name="welcome_timetable_details_desc">
+    <string name="welcome_timetable_dates_title">Timetable dates</string>
+    <string name="welcome_timetable_dates_desc">
         Enter the start and end dates of your timetable.
-        \nYou can modify these later on the \'Manage timetables\' page.
     </string>
+    <string name="welcome_timetable_sched_title">Timetable scheduling</string>
+    <string name="welcome_timetable_sched_desc">
+        Does your timetable have a fixed schedule (i.e. same classes each week)?
+        Or do you alternate between Week A, Week B, etc.?
+    </string>
+
+    <string name="scheduling_fixed">Fixed scheduling</string>
+    <string name="scheduling_rotation_two">2 week rotation (Week A, Week B)</string>
+    <string name="scheduling_rotation_three">3 week rotation (Week A, Week B, Week C)</string>
+    <string name="scheduling_rotation_four">4 week rotation (Week A, …, Week D)</string>
+    <string name="scheduling_use_numbers">Use numbers instead of letters (e.g. Week 1 instead of Week A)</string>
+
     <string name="welcome_end_title">All done!</string>
     <string name="welcome_end_desc_classes">
         You\'re done.

@@ -5,10 +5,10 @@
         android:title="@string/prefCategory_general">
 
         <CheckBoxPreference
-            android:key="pref_display_weeks_as_letters"
-            android:title="@string/pref_weeksAsLetters"
-            android:summaryOn="@string/pref_weeksAsLetters_summaryOn"
-            android:summaryOff="@string/pref_weeksAsLetters_summaryOff"
+            android:key="pref_show_week_rotations_with_numbers"
+            android:title="@string/pref_weeksAsNumbers"
+            android:summaryOn="@string/pref_weeksAsNumbers_summaryOn"
+            android:summaryOff="@string/pref_weeksAsNumbers_summaryOff"
             android:defaultValue="false" />
 
         <EditTextPreference
