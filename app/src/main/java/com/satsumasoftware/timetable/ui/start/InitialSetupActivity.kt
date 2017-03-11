@@ -37,7 +37,10 @@ class InitialSetupActivity : AppCompatActivity() {
     private var mPrevButton: Button? = null
     private var mNextButton: Button? = null
 
-    private companion object{
+    /**
+     * Contains static variables for setting [Timetable] properties.
+     */
+    private companion object {
         var sName: String? = null
         var sStartDate: LocalDate? = null
         var sEndDate: LocalDate? = null
@@ -80,6 +83,8 @@ class InitialSetupActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateProgressText() {
+        // Suppressing lint check for internationalizing text as we're only displaying numbers and
+        // a forward slash - no words from any particular language.
         mProgressText!!.text =
                 (mViewPager!!.currentItem + 1).toString() + " / " + PagerAdapter.PAGES_COUNT
     }
