@@ -19,7 +19,9 @@ import android.view.ViewGroup
 import android.widget.*
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.TimetableApplication
+import com.satsumasoftware.timetable.db.handler.SubjectHandler
 import com.satsumasoftware.timetable.db.handler.TimetableHandler
+import com.satsumasoftware.timetable.framework.Subject
 import com.satsumasoftware.timetable.framework.Timetable
 import com.satsumasoftware.timetable.ui.MainActivity
 import com.satsumasoftware.timetable.util.PrefUtils
@@ -38,13 +40,18 @@ class InitialSetupActivity : AppCompatActivity() {
     private var mNextButton: Button? = null
 
     /**
-     * Contains static variables for setting [Timetable] properties.
+     * Contains static variables for setting up the timetable.
      */
     private companion object {
+
+        /* For creating a Timetable */
         var sName: String? = null
         var sStartDate: LocalDate? = null
         var sEndDate: LocalDate? = null
         var sWeekRotations: Int? = null
+
+        /* For adding subjects */
+        var sSubjects: String? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -128,6 +135,7 @@ class InitialSetupActivity : AppCompatActivity() {
             PagerAdapter.PAGE_TIMETABLE_NAME -> sName.isNullOrEmpty()
             PagerAdapter.PAGE_TIMETABLE_DATES -> sStartDate == null || sEndDate == null
             PagerAdapter.PAGE_TIMETABLE_SCHEDULING -> sWeekRotations == null
+            PagerAdapter.PAGE_SUBJECTS -> sSubjects.isNullOrEmpty()
             else -> false
         }
     }
@@ -155,9 +163,22 @@ class InitialSetupActivity : AppCompatActivity() {
     }
 
     /**
-     * Saves the timetable to the database and exits to the main page.
+     * Saves user's inputs to the database and exits to the main page.
+     *
+     * @see addTimetable
+     * @see addSubjects
      */
     private fun saveAndExit() {
+        val timetable = addTimetable()
+        addSubjects(timetable.id)
+
+        startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    /**
+     * Writes the new [Timetable] to the database.
+     */
+    private fun addTimetable(): Timetable {
         val dataHandler = TimetableHandler(this)
 
         val timetable = Timetable(
@@ -168,10 +189,37 @@ class InitialSetupActivity : AppCompatActivity() {
                 checkNotNull(sWeekRotations))
 
         dataHandler.addItem(timetable)
-
         (application as TimetableApplication).setCurrentTimetable(this, timetable)
 
-        startActivity(Intent(this, MainActivity::class.java))
+        return timetable
+    }
+
+    /**
+     * Writes the user's [Subject]s to the database.
+     * The subject names are derived from a string of names separated by line breaks, [sSubjects].
+     */
+    private fun addSubjects(timetableId: Int) {
+        val dataHandler = SubjectHandler(this)
+
+        val subjectStrings = sSubjects!!.split("\n")
+        for (i in 1..subjectStrings.size) {
+            val subjectStr = subjectStrings[i - 1]
+
+            if (subjectStr.isNullOrEmpty()) {
+                continue
+            }
+
+            // The color of the subject will be the index i, but adjusted if i is over 19
+            val defaultColorId = (i + 19) % 19
+
+            val subject = Subject(
+                    dataHandler.getHighestItemId() + 1,
+                    timetableId,
+                    subjectStr,
+                    "",
+                    defaultColorId)
+            dataHandler.addItem(subject)
+        }
     }
 
     /**
@@ -201,12 +249,13 @@ class InitialSetupActivity : AppCompatActivity() {
             /**
              * The number of pages this adapter will handle.
              */
-            const val PAGES_COUNT = 4
+            const val PAGES_COUNT = 5
 
             const val PAGE_TIMETABLE_NAME = 0
             const val PAGE_TIMETABLE_DATES = 1
             const val PAGE_TIMETABLE_SCHEDULING = 2
-            const val PAGE_END = 3
+            const val PAGE_SUBJECTS = 3
+            const val PAGE_END = 4
         }
 
         override fun getCount() = PAGES_COUNT
@@ -216,6 +265,7 @@ class InitialSetupActivity : AppCompatActivity() {
                 PAGE_TIMETABLE_NAME -> return TimetableNameFragment()
                 PAGE_TIMETABLE_DATES -> return TimetableDatesFragment()
                 PAGE_TIMETABLE_SCHEDULING -> return TimetableSchedulingFragment()
+                PAGE_SUBJECTS -> return SubjectsFragment()
                 PAGE_END -> return EndFragment()
             }
             return null
@@ -353,6 +403,32 @@ class InitialSetupActivity : AppCompatActivity() {
                             if (isChecked) sWeekRotations = index + 2
                         }
             }
+        }
+    }
+
+    /**
+     * On this page, the user can set terms/semesters and their dates.
+     */
+    class SubjectsFragment : Fragment() {
+
+        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+                                  savedInstanceState: Bundle?): View? {
+            val rootView = inflater!!.inflate(R.layout.fragment_welcome_subjects, container, false)
+
+            val editText = rootView.findViewById(R.id.editText) as EditText
+            editText.addTextChangedListener(object : TextWatcher {
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int,
+                                               after: Int) {}
+
+                override fun afterTextChanged(s: Editable?) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    sSubjects = s.toString()
+                }
+            })
+
+            return rootView
         }
     }
 

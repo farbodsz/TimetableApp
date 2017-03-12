@@ -208,6 +208,9 @@
         Or do you alternate between Week A, Week B, etc.?
     </string>
 
+    <string name="welcome_subjects_desc">Enter your subjects below, each on a different line.</string>
+    <string name="welcome_subjects_hint">Mathematics\nEnglish\nScience\nEtc.</string>
+
     <string name="scheduling_fixed">Fixed scheduling</string>
     <string name="scheduling_rotation_two">2 week rotation (Week A, Week B)</string>
     <string name="scheduling_rotation_three">3 week rotation (Week A, Week B, Week C)</string>
