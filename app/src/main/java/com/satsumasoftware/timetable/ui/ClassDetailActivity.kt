@@ -12,12 +12,14 @@ import android.widget.TextView
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.db.handler.ClassDetailHandler
 import com.satsumasoftware.timetable.db.handler.ClassHandler
+import com.satsumasoftware.timetable.db.handler.ClassTimeHandler
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.Color
 import com.satsumasoftware.timetable.framework.Subject
 import com.satsumasoftware.timetable.ui.ClassDetailActivity.Companion.EXTRA_CLASS
 import com.satsumasoftware.timetable.util.UiUtils
+import java.util.*
 
 /**
  * Shows the details of a class.
@@ -97,7 +99,7 @@ class ClassDetailActivity : AppCompatActivity() {
         teacherText.text = teacherBuilder.toString().removeSuffix("\n")
 
         val classTimesText = findViewById(R.id.textView_times) as TextView
-        classTimesText.text = classTimesBuilder.toString()
+        classTimesText.text = classTimesBuilder.toString().removeSuffix("\n")
     }
 
     private fun setupToolbar(subject: Subject) {
@@ -114,7 +116,41 @@ class ClassDetailActivity : AppCompatActivity() {
     }
 
     private fun produceClassTimesText(classDetail: ClassDetail): StringBuilder {
-        return StringBuilder().append("TODO\n")
+        val classTimes = ClassTimeHandler.getClassTimesForDetail(this, classDetail.id)
+
+        Collections.sort(classTimes) { classTime1, classTime2 ->
+            // Sort by day, then by time
+            val dayComparison = classTime1.day.compareTo(classTime2.day)
+            if (dayComparison != 0) {
+                dayComparison
+            } else {
+                classTime1.startTime.compareTo(classTime2.startTime)
+            }
+        }
+
+        val stringBuilder = StringBuilder()
+
+        classTimes.forEach {
+            val dayString = it.day.toString()
+            val formattedDayString =
+                    dayString.substring(0, 1).toUpperCase() + dayString.substring(1).toLowerCase()
+            stringBuilder.append(formattedDayString)
+
+            val weekText = it.getWeekText(this)
+            if (weekText.isNotEmpty()) {
+                stringBuilder.append(" ")
+                        .append(weekText)
+            }
+
+            stringBuilder.append(it.getWeekText(this))
+                    .append(", ")
+                    .append(it.startTime.toString())
+                    .append(" - ")
+                    .append(it.endTime.toString())
+                    .append("\n")
+        }
+
+        return stringBuilder
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
