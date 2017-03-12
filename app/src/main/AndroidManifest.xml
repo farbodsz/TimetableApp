@@ -47,6 +47,10 @@
             android:theme="@style/Timetable.Home"/>
 
         <activity
+            android:name=".ui.ClassDetailActivity"
+            android:theme="@style/Timetable"/>
+
+        <activity
             android:name=".ui.ClassEditActivity"
             android:theme="@style/Timetable"/>
 
