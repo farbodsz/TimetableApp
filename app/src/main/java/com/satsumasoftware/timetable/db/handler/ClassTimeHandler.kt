@@ -32,6 +32,8 @@ class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(conte
 
     override fun createFromCursor(cursor: Cursor) = ClassTime.from(cursor)
 
+    override fun createFromId(id: Int) = ClassTime.create(context, id)
+
     override fun propertiesAsContentValues(item: ClassTime): ContentValues {
         val values = ContentValues()
         with(values) {

@@ -18,6 +18,8 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
 
     override fun createFromCursor(cursor: Cursor) = Exam.from(cursor)
 
+    override fun createFromId(id: Int) = Exam.create(context, id)
+
     override fun propertiesAsContentValues(item: Exam): ContentValues {
         val values = ContentValues()
         with(values) {

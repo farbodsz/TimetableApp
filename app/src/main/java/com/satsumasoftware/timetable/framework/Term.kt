@@ -1,8 +1,10 @@
 package com.satsumasoftware.timetable.framework
 
+import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.schema.TermsSchema
 import org.threeten.bp.LocalDate
 
@@ -46,6 +48,25 @@ class Term(override val id: Int, override val timetableId: Int, val name: String
                     cursor.getString(cursor.getColumnIndex(TermsSchema.COL_NAME)),
                     startDate,
                     endDate)
+        }
+
+        @JvmStatic
+        fun create(context: Context, termId: Int): Term? {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    TermsSchema.TABLE_NAME,
+                    null,
+                    "${TermsSchema._ID}=?",
+                    arrayOf(termId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val term = Term.from(cursor)
+            cursor.close()
+            return term
         }
 
         @Suppress("unused")

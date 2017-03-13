@@ -17,6 +17,8 @@ class ClassDetailHandler(context: Context) : DataHandler<ClassDetail>(context) {
 
     override fun createFromCursor(cursor: Cursor) = ClassDetail.from(cursor)
 
+    override fun createFromId(id: Int) = ClassDetail.create(context, id)
+
     override fun propertiesAsContentValues(item: ClassDetail): ContentValues {
         val values = ContentValues()
         with(values) {

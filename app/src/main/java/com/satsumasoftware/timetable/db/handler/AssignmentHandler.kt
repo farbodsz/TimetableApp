@@ -22,6 +22,8 @@ class AssignmentHandler(context: Context) : TimetableItemHandler<Assignment>(con
 
     override fun createFromCursor(cursor: Cursor) = Assignment.from(cursor)
 
+    override fun createFromId(id: Int) = Assignment.create(context, id)
+
     override fun propertiesAsContentValues(item: Assignment): ContentValues {
         val values = ContentValues()
         with(values) {

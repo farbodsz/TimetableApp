@@ -16,6 +16,8 @@ class TermHandler(context: Context) : TimetableItemHandler<Term>(context) {
 
     override fun createFromCursor(cursor: Cursor) = Term.from(cursor)
 
+    override fun createFromId(id: Int) = Term.create(context, id)
+
     override fun propertiesAsContentValues(item: Term): ContentValues {
         val values = ContentValues()
         with(values) {
