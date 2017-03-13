@@ -24,7 +24,7 @@ import org.threeten.bp.LocalTime
  */
 class Exam(override val id: Int, override val timetableId: Int, val subjectId: Int,
            val moduleName: String, val date: LocalDate, val startTime: LocalTime, val duration: Int,
-           val seat: String, val room: String, val resit: Boolean) : TimetableItem, Parcelable {
+           val seat: String, val room: String, val resit: Boolean) : TimetableItem {
 
     companion object {
 
@@ -75,14 +75,15 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
             return exam
         }
 
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Exam> =
-                object : Parcelable.Creator<Exam> {
-                    override fun createFromParcel(source: Parcel): Exam = Exam(source)
-                    override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
-                }
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Exam> = object : Parcelable.Creator<Exam> {
+            override fun createFromParcel(source: Parcel): Exam = Exam(source)
+            override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
+        }
     }
 
-    constructor(source: Parcel): this(
+    constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readInt(),

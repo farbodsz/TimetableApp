@@ -35,7 +35,7 @@ import org.threeten.bp.LocalTime
  */
 class ClassTime(override val id: Int, override val timetableId: Int, val classDetailId: Int,
                 val day: DayOfWeek, val weekNumber: Int, val startTime: LocalTime,
-                val endTime: LocalTime) : TimetableItem, Parcelable {
+                val endTime: LocalTime) : TimetableItem {
 
     companion object {
 
@@ -83,11 +83,12 @@ class ClassTime(override val id: Int, override val timetableId: Int, val classDe
             return classTime
         }
 
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<ClassTime> =
-                object : Parcelable.Creator<ClassTime> {
-                    override fun createFromParcel(source: Parcel): ClassTime = ClassTime(source)
-                    override fun newArray(size: Int): Array<ClassTime?> = arrayOfNulls(size)
-                }
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<ClassTime> = object : Parcelable.Creator<ClassTime> {
+            override fun createFromParcel(source: Parcel): ClassTime = ClassTime(source)
+            override fun newArray(size: Int): Array<ClassTime?> = arrayOfNulls(size)
+        }
 
         /**
          * @return the string to be displayed indicating the week rotation (e.g. Week 1, Week C).

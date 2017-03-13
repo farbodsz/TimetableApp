@@ -19,7 +19,7 @@ import org.threeten.bp.LocalDate
  * @property endDate the end date of this term
  */
 class Term(override val id: Int, override val timetableId: Int, val name: String,
-           val startDate: LocalDate, val endDate: LocalDate) : TimetableItem, Parcelable {
+           val startDate: LocalDate, val endDate: LocalDate) : TimetableItem {
 
     companion object {
 
@@ -48,11 +48,12 @@ class Term(override val id: Int, override val timetableId: Int, val name: String
                     endDate)
         }
 
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Term> =
-                object : Parcelable.Creator<Term> {
-                    override fun createFromParcel(source: Parcel): Term = Term(source)
-                    override fun newArray(size: Int): Array<Term?> = arrayOfNulls(size)
-                }
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Term> = object : Parcelable.Creator<Term> {
+            override fun createFromParcel(source: Parcel): Term = Term(source)
+            override fun newArray(size: Int): Array<Term?> = arrayOfNulls(size)
+        }
     }
 
     constructor(source: Parcel) : this(
