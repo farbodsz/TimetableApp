@@ -67,7 +67,7 @@ public class ExamsActivity extends ItemListActivity<Exam> {
             @Override
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(ExamsActivity.this, ExamDetailActivity.class);
-                intent.putExtra(ExamDetailActivity.EXTRA_EXAM, mItems.get(position));
+                intent.putExtra(ExamDetailActivity.EXTRA_ITEM, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {

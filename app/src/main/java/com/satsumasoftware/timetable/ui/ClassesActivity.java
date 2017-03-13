@@ -54,7 +54,7 @@ public class ClassesActivity extends ItemListActivity<Class> {
             @Override
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(ClassesActivity.this, ClassDetailActivity.class);
-                intent.putExtra(ClassDetailActivity.EXTRA_CLASS, mItems.get(position));
+                intent.putExtra(ClassDetailActivity.EXTRA_ITEM, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {
