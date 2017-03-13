@@ -142,8 +142,7 @@ class ClassDetailActivity : AppCompatActivity() {
                         .append(weekText)
             }
 
-            stringBuilder.append(it.getWeekText(this))
-                    .append(", ")
+            stringBuilder.append(", ")
                     .append(it.startTime.toString())
                     .append(" - ")
                     .append(it.endTime.toString())
