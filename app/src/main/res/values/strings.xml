@@ -99,7 +99,9 @@
     <string name="message_title_required">You must enter a title</string>
     <string name="message_class_required">You must choose a class</string>
     <string name="message_due_date_required">You must select a due date</string>
-    <string name="placeholder_detail_empty"><![CDATA[<i>It looks like you haven\'t entered any details for this assignment.</i>]]></string>
+    <string name="placeholder_detail_empty">
+        It looks like you haven\'t entered any details for this assignment.
+    </string>
 
     <string name="message_assignment_completed">Marked one item as complete</string>
 

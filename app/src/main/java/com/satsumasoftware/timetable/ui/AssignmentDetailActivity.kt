@@ -2,9 +2,9 @@ package com.satsumasoftware.timetable.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Typeface
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
-import android.text.Html
 import android.widget.SeekBar
 import android.widget.TextView
 import com.satsumasoftware.timetable.R
@@ -66,10 +66,14 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         with(detailText) {
             if (mItem!!.hasDetail()) {
                 text = mItem!!.detail
+
+                setTypeface(null, Typeface.NORMAL)
                 setTextColor(ContextCompat.getColor(
                         this@AssignmentDetailActivity, R.color.mdu_text_black))
             } else {
-                text = Html.fromHtml(getString(R.string.placeholder_detail_empty))
+                text = getString(R.string.placeholder_detail_empty)
+
+                setTypeface(null, Typeface.ITALIC)
                 setTextColor(ContextCompat.getColor(
                         this@AssignmentDetailActivity, R.color.mdu_text_black_secondary))
             }
@@ -83,12 +87,13 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        assert(supportActionBar != null)
-        supportActionBar!!.title = mItem!!.title
-
         val cls = Class.create(this, mItem!!.classId)!!
         val subject = Subject.create(this, cls.subjectId)!!
-        supportActionBar!!.subtitle = subject.name
+
+        with(supportActionBar!!) {
+            title = mItem!!.title
+            subtitle = subject.name
+        }
 
         val color = Color(subject.colorId)
         UiUtils.setBarColors(color, this, toolbar)

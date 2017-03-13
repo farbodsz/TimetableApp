@@ -156,8 +156,6 @@ public class ScheduleActivity extends NavigationDrawerActivity {
 
                         Intent intent = new Intent(ScheduleActivity.this, ClassDetailActivity.class);
                         intent.putExtra(ClassDetailActivity.EXTRA_ITEM, cls);
-                        //intent.putExtra(ClassEditActivity.EXTRA_CLASS_DETAIL_ID, // TODO remove this?
-                        //        classDetail.getId());
 
                         Bundle bundle = null;
                         if (UiUtils.isApi21()) {
