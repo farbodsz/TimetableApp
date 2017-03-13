@@ -14,12 +14,13 @@ import com.satsumasoftware.timetable.db.handler.ClassDetailHandler
 import com.satsumasoftware.timetable.db.handler.ClassHandler
 import com.satsumasoftware.timetable.db.handler.ClassTimeHandler
 import com.satsumasoftware.timetable.framework.Class
-import com.satsumasoftware.timetable.framework.ClassDetail
+import com.satsumasoftware.timetable.framework.ClassTime
 import com.satsumasoftware.timetable.framework.Color
 import com.satsumasoftware.timetable.framework.Subject
 import com.satsumasoftware.timetable.ui.ClassDetailActivity.Companion.EXTRA_CLASS
 import com.satsumasoftware.timetable.util.UiUtils
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Shows the details of a class.
@@ -78,7 +79,8 @@ class ClassDetailActivity : AppCompatActivity() {
 
         val locationBuilder = StringBuilder()
         val teacherBuilder = StringBuilder()
-        val classTimesBuilder = StringBuilder()
+
+        val allClassTimes = ArrayList<ClassTime>()
 
         ClassDetailHandler.getClassDetailsForClass(this, mClass!!.id).forEach { classDetail ->
             classDetail.formatLocationName()?.let {
@@ -89,7 +91,7 @@ class ClassDetailActivity : AppCompatActivity() {
                 teacherBuilder.append(classDetail.teacher).append("\n")
             }
 
-            classTimesBuilder.append(produceClassTimesText(classDetail))
+            allClassTimes.addAll(ClassTimeHandler.getClassTimesForDetail(this, classDetail.id))
         }
 
         val locationText = findViewById(R.id.textView_location) as TextView
@@ -99,7 +101,7 @@ class ClassDetailActivity : AppCompatActivity() {
         teacherText.text = teacherBuilder.toString().removeSuffix("\n")
 
         val classTimesText = findViewById(R.id.textView_times) as TextView
-        classTimesText.text = classTimesBuilder.toString().removeSuffix("\n")
+        classTimesText.text = produceClassTimesText(allClassTimes)
     }
 
     private fun setupToolbar(subject: Subject) {
@@ -115,9 +117,7 @@ class ClassDetailActivity : AppCompatActivity() {
         UiUtils.setBarColors(color, this, toolbar)
     }
 
-    private fun produceClassTimesText(classDetail: ClassDetail): StringBuilder {
-        val classTimes = ClassTimeHandler.getClassTimesForDetail(this, classDetail.id)
-
+    private fun produceClassTimesText(classTimes: ArrayList<ClassTime>): String {
         Collections.sort(classTimes) { classTime1, classTime2 ->
             // Sort by day, then by time
             val dayComparison = classTime1.day.compareTo(classTime2.day)
@@ -150,7 +150,7 @@ class ClassDetailActivity : AppCompatActivity() {
                     .append("\n")
         }
 
-        return stringBuilder
+        return stringBuilder.toString().removeSuffix("\n")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
