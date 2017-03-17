@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
@@ -17,16 +18,19 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.TimetableApplication
+import com.satsumasoftware.timetable.db.handler.AssignmentHandler
 import com.satsumasoftware.timetable.db.handler.ClassTimeHandler
 import com.satsumasoftware.timetable.db.handler.ExamHandler
 import com.satsumasoftware.timetable.db.query.Filters
 import com.satsumasoftware.timetable.db.query.Query
+import com.satsumasoftware.timetable.db.schema.AssignmentsSchema
 import com.satsumasoftware.timetable.db.schema.ClassTimesSchema
 import com.satsumasoftware.timetable.db.schema.ExamsSchema
 import com.satsumasoftware.timetable.framework.*
 import com.satsumasoftware.timetable.util.DateUtils
 import com.satsumasoftware.timetable.util.SectionUi
 import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * The main screen showing an overview of the user's classes, assignments and exams.
@@ -129,7 +133,6 @@ class MainActivity : NavigationDrawerActivity() {
 
                 sectionContainer.addView(examsSection.view)
             }
-
         }
 
         private fun addClassesCards(container: ViewGroup, inflater: LayoutInflater,
@@ -198,7 +201,7 @@ class MainActivity : NavigationDrawerActivity() {
                 (card.findViewById(R.id.title) as TextView).text = Exam.makeName(exam, subject)
 
                 card.setOnClickListener {
-                    // TODO ClassDetailActivity
+                    // TODO ExamDetailActivity
                 }
 
                 container.addView(card)
@@ -237,7 +240,193 @@ class MainActivity : NavigationDrawerActivity() {
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
-            return super.onCreateView(inflater, container, savedInstanceState)
+            val rootView = inflater!!.inflate(R.layout.fragment_home_main, container, false)
+
+            setupLayout(rootView)
+
+            return rootView
+        }
+
+        private fun setupLayout(rootView: View) {
+            val timetableId = (activity.application as TimetableApplication).currentTimetable!!.id
+
+            val sectionContainer = rootView.findViewById(R.id.section_container) as LinearLayout
+            val inflater = LayoutInflater.from(context)
+
+            val assignmentSection = SectionUi.Builder(context, sectionContainer)
+                    .setTitle(R.string.title_activity_assignments)
+                    .build()
+            addAssignmentCards(assignmentSection.containerView, inflater,
+                    getUpcomingAssignments(timetableId))
+            sectionContainer.addView(assignmentSection.view)
+
+            val exams = getUpcomingExams(timetableId)
+            if (exams.isNotEmpty()) {
+                val examsSection = SectionUi.Builder(context, sectionContainer)
+                        .setTitle(R.string.title_activity_exams)
+                        .build()
+                addExamCards(examsSection.containerView, inflater, exams)
+
+                sectionContainer.addView(examsSection.view)
+            }
+        }
+
+        /**
+         * @return a list of assignments due between today's date and next week.
+         */
+        private fun getUpcomingAssignments(timetableId: Int): ArrayList<Assignment> {
+            val now = LocalDate.now()
+            val lowerDate = now.plusDays(1)
+            val upperDate = now.plusWeeks(1)
+
+            val queryBuilder = Query.Builder().addFilter(
+                    Filters.equal(AssignmentsSchema.COL_TIMETABLE_ID, timetableId.toString()))
+
+            val thisYearFilter = Filters.equal(AssignmentsSchema.COL_DUE_DATE_YEAR,
+                    lowerDate.year.toString())
+            queryBuilder.addFilter(if (lowerDate.year == upperDate.year) {
+                thisYearFilter
+            } else {
+                Filters.or(
+                        thisYearFilter,
+                        Filters.equal(AssignmentsSchema.COL_DUE_DATE_YEAR,
+                                upperDate.year.toString()))
+            })
+
+            val thisMonthFilter = Filters.equal(AssignmentsSchema.COL_DUE_DATE_MONTH,
+                    lowerDate.monthValue.toString())
+            queryBuilder.addFilter(if (lowerDate.monthValue == upperDate.monthValue) {
+                thisMonthFilter
+            } else {
+                Filters.or(
+                        thisMonthFilter,
+                        Filters.equal(AssignmentsSchema.COL_DUE_DATE_MONTH,
+                                upperDate.monthValue.toString()))
+            })
+
+            queryBuilder
+                    .addFilter(Filters.moreOrEqualThan(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH,
+                            lowerDate.dayOfMonth.toString()))
+                    .addFilter(Filters.lessOrEqualThan(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH,
+                            upperDate.dayOfMonth.toString()))
+
+            return AssignmentHandler(context).getAllItems(queryBuilder.build())
+        }
+
+        /**
+         * @return a list of exams due between today's date and next week.
+         */
+        private fun getUpcomingExams(timetableId: Int): ArrayList<Exam> {
+            val now = LocalDate.now()
+            val lowerDate = now.plusDays(1)
+            val upperDate = lowerDate.plusWeeks(1)
+
+            val queryBuilder = Query.Builder().addFilter(
+                    Filters.equal(ExamsSchema.COL_TIMETABLE_ID, timetableId.toString()))
+
+            val thisYearFilter = Filters.equal(ExamsSchema.COL_DATE_YEAR, lowerDate.year.toString())
+            queryBuilder.addFilter(if (lowerDate.year == upperDate.year) {
+                thisYearFilter
+            } else {
+                Filters.or(
+                        thisYearFilter,
+                        Filters.equal(ExamsSchema.COL_DATE_YEAR, upperDate.year.toString()))
+            })
+
+            val thisMonthFilter = Filters.equal(ExamsSchema.COL_DATE_MONTH,
+                    lowerDate.monthValue.toString())
+            queryBuilder.addFilter(if (lowerDate.monthValue == upperDate.monthValue) {
+                thisMonthFilter
+            } else {
+                Filters.or(
+                        thisMonthFilter,
+                        Filters.equal(ExamsSchema.COL_DATE_MONTH, upperDate.monthValue.toString()))
+            })
+
+            queryBuilder
+                    .addFilter(Filters.moreOrEqualThan(ExamsSchema.COL_DATE_DAY_OF_MONTH,
+                            lowerDate.dayOfMonth.toString()))
+                    .addFilter(Filters.lessOrEqualThan(ExamsSchema.COL_DATE_DAY_OF_MONTH,
+                            upperDate.dayOfMonth.toString()))
+
+            return ExamHandler(context).getAllItems(queryBuilder.build())
+        }
+
+        private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
+                                       assignments: ArrayList<Assignment>) {
+            if (assignments.isEmpty()) {
+                val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
+                container.addView(card)
+                return
+            }
+
+            assignments.sort()
+
+            for (assignment in assignments) {
+                val card = inflater.inflate(R.layout.item_home_card, container, false)
+
+                val cls = Class.create(context, assignment.classId)!!
+                val subject = Subject.create(context, cls.subjectId)!!
+
+                val color = Color(subject.colorId)
+                card.findViewById(R.id.color).setBackgroundColor(
+                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+
+                val formatter = DateTimeFormatter.ofPattern("EEE\nd")
+                val datesText = assignment.dueDate.format(formatter).toUpperCase()
+
+                with(card) {
+                    (findViewById(R.id.times) as TextView).text = datesText
+
+                    (findViewById(R.id.title) as TextView).text = assignment.title
+                    (findViewById(R.id.subtitle) as TextView).text = Class.makeName(cls, subject)
+
+                    setOnClickListener {
+                        val intent = Intent(context, AssignmentDetailActivity::class.java)
+                        intent.putExtra(AssignmentDetailActivity.EXTRA_ASSIGNMENT, assignment)
+                        startActivity(intent)
+                    }
+                }
+
+                container.addView(card)
+            }
+        }
+
+        private fun addExamCards(container: ViewGroup, inflater: LayoutInflater,
+                                 exams: ArrayList<Exam>) {
+            if (exams.isEmpty()) {
+                val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
+                container.addView(card)
+                return
+            }
+
+            exams.sort()
+
+            for (exam in exams) {
+                val card = inflater.inflate(R.layout.item_home_card, container, false)
+
+                val subject = Subject.create(context, exam.subjectId)!!
+
+                val color = Color(subject.colorId)
+                card.findViewById(R.id.color).setBackgroundColor(
+                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+
+                val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
+                val datesText = exam.makeDateTimeObject().format(formatter).toUpperCase()
+
+                with(card) {
+                    (findViewById(R.id.times) as TextView).text = datesText
+
+                    (findViewById(R.id.title) as TextView).text = Exam.makeName(exam, subject)
+                    //(findViewById(R.id.subtitle) as TextView).text = // TODO exam location text
+
+                    setOnClickListener {
+                        // TODO ExamDetailActivity
+                    }
+                }
+
+                container.addView(card)
+            }
         }
     }
 
