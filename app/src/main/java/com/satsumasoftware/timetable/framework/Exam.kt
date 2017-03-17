@@ -24,7 +24,7 @@ import org.threeten.bp.LocalTime
  */
 class Exam(override val id: Int, override val timetableId: Int, val subjectId: Int,
            val moduleName: String, val date: LocalDate, val startTime: LocalTime, val duration: Int,
-           val seat: String, val room: String, val resit: Boolean) : TimetableItem, Parcelable {
+           val seat: String, val room: String, val resit: Boolean) : TimetableItem, Parcelable, Comparable<Exam> {
 
     companion object {
 
@@ -115,6 +115,10 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
      * @return a [LocalDateTime] object using the [date] and [startTime] of the exam
      */
     fun makeDateTimeObject() = LocalDateTime.of(date, startTime)!!
+
+    override fun compareTo(other: Exam): Int {
+        return makeDateTimeObject().compareTo(other.makeDateTimeObject())
+    }
 
     override fun describeContents() = 0
 

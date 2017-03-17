@@ -35,7 +35,7 @@ import org.threeten.bp.LocalTime
  */
 class ClassTime(override val id: Int, override val timetableId: Int, val classDetailId: Int,
                 val day: DayOfWeek, val weekNumber: Int, val startTime: LocalTime,
-                val endTime: LocalTime) : TimetableItem, Parcelable {
+                val endTime: LocalTime) : TimetableItem, Parcelable, Comparable<ClassTime> {
 
     companion object {
 
@@ -121,6 +121,16 @@ class ClassTime(override val id: Int, override val timetableId: Int, val classDe
      * @see Companion.getWeekText
      */
     fun getWeekText(activity: Activity) = Companion.getWeekText(activity, weekNumber)
+
+    override fun compareTo(other: ClassTime): Int {
+        // Sort by day, then by time
+        val dayComparison = day.compareTo(other.day)
+        return if (dayComparison != 0) {
+            dayComparison
+        } else {
+            startTime.compareTo(other.startTime)
+        }
+    }
 
     constructor(source: Parcel) : this(
             source.readInt(),

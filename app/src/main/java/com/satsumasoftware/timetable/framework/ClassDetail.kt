@@ -62,4 +62,27 @@ class ClassDetail(override val id: Int, val classId: Int, val room: String, val 
 
     fun hasTeacher() = teacher.trim().isNotEmpty()
 
+    /**
+     * @return a location string consisting of the room and building texts
+     */
+    fun formatLocationName(): String? {
+        val stringBuilder = StringBuilder()
+
+        if (hasRoom()) {
+            stringBuilder.append(room)
+
+            if (hasBuilding()) stringBuilder.append(", ")
+        }
+
+        if (hasBuilding()) {
+            stringBuilder.append(building)
+        }
+
+        return if (stringBuilder.isNullOrEmpty()) {
+            null
+        } else {
+            stringBuilder.toString()
+        }
+    }
+
 }

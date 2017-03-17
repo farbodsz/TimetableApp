@@ -10,6 +10,8 @@
 
     <dimen name="subject_color_strip_width">4dp</dimen>
 
+    <dimen name="classes_home_card_spacing">6dp</dimen>
+
     <integer name="subject_color_dialog_columns">5</integer>
 
     <!-- Card dimensions, per Material Design guidelines -->
