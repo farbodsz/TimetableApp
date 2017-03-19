@@ -12,5 +12,11 @@ local.properties
 # Screenshots
 /screenshots/
 
+# APK files
+/bin/
+
+# Keystore files
+*.jks
+
 # JSON file used for Google Play Services
 app/google-services.json
