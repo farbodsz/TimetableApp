@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
@@ -9,6 +10,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import com.satsumasoftware.timetable.BuildConfig
 import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.licenses.LicensesActivity
 import com.satsumasoftware.timetable.util.NotificationUtils
 import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.LocalTime
@@ -133,6 +135,12 @@ class SettingsActivity : NavigationDrawerActivity() {
         }
 
         private fun setupAboutPrefs() {
+            val licensePref = findPreference("pref_about_licenses")
+            licensePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                startActivity(Intent(activity, LicensesActivity::class.java))
+                true
+            }
+
             val versionPref = findPreference("pref_about_app_version")
             versionPref.summary = BuildConfig.VERSION_NAME
         }
