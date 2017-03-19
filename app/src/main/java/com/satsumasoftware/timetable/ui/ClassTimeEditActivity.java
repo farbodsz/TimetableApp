@@ -19,7 +19,7 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
+import com.satsumasoftware.timetable.db.handler.ClassTimeHandler;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
 import com.satsumasoftware.timetable.framework.Timetable;
@@ -49,7 +49,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
      *
      * It should be null if we're adding a new class time.
      */
-    protected static final String EXTRA_CLASS_TIME = "extra_class_time";
+    static final String EXTRA_CLASS_TIME = "extra_class_time";
 
     /**
      * The key for the integer identifier of the {@link ClassDetail} passed through an intent extra.
@@ -60,7 +60,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
      * @see ClassTime#getClassDetailId()
      * @see ClassDetail#getId()
      */
-    protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
+    static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
 
     /**
      * The key passed through an intent extra for the index of the tab where this class time is
@@ -70,13 +70,15 @@ public class ClassTimeEditActivity extends AppCompatActivity {
      * value to {@link ClassEditActivity} so that only the class time values for the relevant tab
      * can be updated.
      */
-    protected static final String EXTRA_TAB_POSITION = "extra_tab_position";
+    static final String EXTRA_TAB_POSITION = "extra_tab_position";
 
     private int mClassDetailId;
     private ArrayList<ClassTime> mClassTimes;
     private int mTabPos;
 
     private boolean mIsNewTime;
+
+    private ClassTimeHandler mClassTimeHandler = new ClassTimeHandler(this);
 
     private LocalTime mStartTime, mEndTime;
     private TextView mStartTimeText, mEndTimeText;
@@ -466,7 +468,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
         if (!mIsNewTime) {
             for (ClassTime classTime : mClassTimes) {
-                ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+                mClassTimeHandler.deleteItemWithReferences(classTime.getId());
             }
         }
 
@@ -482,7 +484,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                     continue;
                 }
 
-                int id = ClassUtils.getHighestClassTimeId(this) + 1;
+                int id = mClassTimeHandler.getHighestItemId() + 1;
 
                 ClassTime classTime = new ClassTime(id, timetable.getId(), mClassDetailId,
                         dayOfWeek, weekNumber, mStartTime, mEndTime);
@@ -490,7 +492,8 @@ public class ClassTimeEditActivity extends AppCompatActivity {
                 // Everything will be added fresh regardless of whether or not it is new.
                 // This is because there may be more or less ClassTimes than before so ids cannot
                 // be replaced exactly (delete 1, add 1).
-                ClassUtils.addClassTime(this, classTime);
+                mClassTimeHandler.addItem(classTime);
+                ClassTimeHandler.addAlarmsForClassTime(this, classTime);
             }
 
             Intent intent = new Intent();
@@ -502,7 +505,7 @@ public class ClassTimeEditActivity extends AppCompatActivity {
 
     private void handleDeleteAction() {
         for (ClassTime classTime : mClassTimes) {
-            ClassUtils.completelyDeleteClassTime(this, classTime.getId());
+            mClassTimeHandler.deleteItemWithReferences(classTime.getId());
         }
         Intent intent = new Intent();
         intent.putExtra(EXTRA_TAB_POSITION, mTabPos);

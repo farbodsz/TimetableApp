@@ -5,11 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
+import com.satsumasoftware.timetable.util.NotificationUtils
 
 /**
  * Receives broadcasts - specifically, when the device has finished being booted.
  */
-class BootReceiver() : BroadcastReceiver() {
+class BootReceiver : BroadcastReceiver() {
 
     companion object {
         private const val LOG_TAG = "BootReceiver"
@@ -20,7 +21,7 @@ class BootReceiver() : BroadcastReceiver() {
             Log.i(LOG_TAG, "@onReceive() - ACTION_BOOT_COMPLETED - now refreshing alarms...")
 
             val application = context!!.applicationContext as TimetableApplication
-            application.refreshAlarms(context)
+            NotificationUtils.refreshAlarms(context, application)
         }
     }
 

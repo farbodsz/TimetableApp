@@ -9,12 +9,34 @@
 
     <string name="pref_defaultLessonDuration">Default lesson duration</string>
     <string name="pref_defaultLessonDuration_dialogMessage">Enter the default lesson duration (in minutes)</string>
-    <string name="pref_defaultLessonDuration_summary">The default lesson duration is %1$d minutes</string>
+    <!-- TODO disallow lesson durations of less than 15 minutes and remove plural -->
+    <plurals name="pref_defaultLessonDuration_summary">
+        <item quantity="one">The default lesson duration is %1$d minute</item>
+        <item quantity="other">The default lesson duration is %1$d minutes</item>
+    </plurals>
 
     <string name="prefCategory_notifications">Notifications</string>
 
     <string name="pref_assignmentNotificationTime">Incomplete assignments</string>
-    <string name="pref_assignmentNotificationTime_summary">You\'ll be notified of incomplete or overdue assignments the day before it\'s due at %1$s</string>
+    <string name="pref_assignmentNotificationTime_summary">
+        You\'ll be notified of incomplete or overdue assignments the day before it\'s due at %1$s
+    </string>
+
+    <string name="pref_classNotificationTime">Classes</string>
+    <string name="pref_classNotificationTime_summary">
+        You\'ll get notifications for your classes %1$d minutes before they start
+    </string>
+    <string name="pref_classNotificationTime_dialogMessage">
+        Be reminded of classes X minutes before they start.
+    </string>
+
+    <string name="pref_examNotificationTime">Exams</string>
+    <string name="pref_examNotificationTime_summary">
+        You\'ll receive exam notifications %1$d minutes before they start
+    </string>
+    <string name="pref_examNotificationTime_dialogMessage">
+        Be reminded of exams X minutes before they start.
+    </string>
 
 
     <string name="prefCategory_about">About</string>

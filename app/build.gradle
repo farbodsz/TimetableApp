@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "24.0.3"
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "com.satsumasoftware.timetable"
@@ -20,6 +20,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // The return statement removes the lint error 'Not all execution paths return a value'.
+    return void
 }
 
 dependencies {
@@ -36,7 +39,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$android_support_lib_version"
 
     // Other libraries
-    compile 'com.jakewharton.threetenabp:threetenabp:1.0.4'
+    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
     compile 'com.satsuware.lib:usefulviews:2.3.6'
     compile 'com.satsuware.lib:mdutils:1.2.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'

@@ -32,8 +32,10 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.util.ClassUtils;
-import com.satsumasoftware.timetable.db.util.SubjectUtils;
+import com.satsumasoftware.timetable.db.handler.ClassDetailHandler;
+import com.satsumasoftware.timetable.db.handler.ClassHandler;
+import com.satsumasoftware.timetable.db.handler.ClassTimeHandler;
+import com.satsumasoftware.timetable.db.handler.SubjectHandler;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;
@@ -56,14 +58,13 @@ import java.util.Comparator;
 /**
  * Invoked and displayed to the user to edit the details of a class.
  *
- * Currently, it is also responsible for showing the details, since there is no activity dedicated
- * to merely displaying the details (like in {@link AssignmentDetailActivity}).
- *
- * It can also be called to create a new class. If so, there will be no intent extra data supplied
- * to this activity (i.e. {@link #EXTRA_CLASS} will be null).
+ * It can also be called to create a new assignment. If so, it will be started by
+ * {@link ClassDetailActivity} and no data will be passed to this activity (i.e.
+ * {@link #EXTRA_CLASS} will be null).
  *
  * @see Class
  * @see ClassesActivity
+ * @see ClassDetailActivity
  */
 public class ClassEditActivity extends AppCompatActivity {
 
@@ -74,25 +75,17 @@ public class ClassEditActivity extends AppCompatActivity {
      *
      * It should be null if we're creating a new class.
      */
-    protected static final String EXTRA_CLASS = "extra_class";
+    static final String EXTRA_CLASS = "extra_class";
 
-    /**
-     * The key for the integer identifier of the {@link ClassDetail} to be displayed.
-     *
-     * Because class details in this activity are shown each as separate tabs, we use this value
-     * to determine which tab should be shown to the user. It can also be null, notably if we're
-     * creating a new class.
-     *
-     * @see ClassDetail#getId()
-     */
-    protected static final String EXTRA_CLASS_DETAIL_ID = "extra_class_detail_id";
-
-    protected static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
-    protected static final int REQUEST_CODE_CLASS_TIME_DETAIL = 3;
+    private static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
+    private static final int REQUEST_CODE_CLASS_TIME_DETAIL = 3;
 
     private boolean mIsNew;
 
     private int mNewDetailIdCount = 1;
+
+    private ClassHandler mClassHandler = new ClassHandler(this);
+    private ClassDetailHandler mClassDetailHandler = new ClassDetailHandler(this);
 
     private Class mClass;
     private ArrayList<Integer> mClassDetailIds;
@@ -125,12 +118,9 @@ public class ClassEditActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         assert getSupportActionBar() != null;
 
-        int displayedDetailId = -1;
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mClass = extras.getParcelable(EXTRA_CLASS);
-            displayedDetailId = extras.getInt(EXTRA_CLASS_DETAIL_ID, -1);
         }
         mIsNew = mClass == null;
 
@@ -146,10 +136,10 @@ public class ClassEditActivity extends AppCompatActivity {
             }
         });
 
-        setupLayout(displayedDetailId);
+        setupLayout();
     }
 
-    private void setupLayout(int displayedDetailId) {
+    private void setupLayout() {
         setupSubjectText();
 
         mEditTextModule = (EditText) findViewById(R.id.editText_module);
@@ -162,10 +152,10 @@ public class ClassEditActivity extends AppCompatActivity {
 
         setupExpandToggle();
 
-        setupTabs(displayedDetailId);
+        setupTabs();
     }
 
-    private void setupTabs(int displayedDetailId) {
+    private void setupTabs() {
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
@@ -182,10 +172,10 @@ public class ClassEditActivity extends AppCompatActivity {
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white));
 
-        populateTabs(viewPager, displayedDetailId);
+        populateTabs();
     }
 
-    private void populateTabs(ViewPager viewPager, int displayedDetailId) {
+    private void populateTabs() {
         mClassDetailIds = new ArrayList<>();
 
         mAllClassTimeGroups = new ArrayList<>();
@@ -196,7 +186,7 @@ public class ClassEditActivity extends AppCompatActivity {
             updateLinkedSubject();
 
             ArrayList<ClassDetail> classDetails =
-                    ClassUtils.getClassDetailsForClass(this, mClass.getId());
+                    ClassDetailHandler.getClassDetailsForClass(this, mClass.getId());
             for (ClassDetail classDetail : classDetails) {
                 addDetailTab(classDetail, false);
             }
@@ -204,24 +194,6 @@ public class ClassEditActivity extends AppCompatActivity {
             addDetailTab(null, false);  // first tab for adding detail
         }
         addDetailTab(null, true);
-
-        // Go to the tab sent via the intent with displayedDetailId
-        goToTab(displayedDetailId, viewPager);
-    }
-
-    private void goToTab(int displayedDetailId, ViewPager viewPager) {
-        if (displayedDetailId == -1) {
-            return;
-        }
-
-        int tabCount = 0;
-        for (int classDetailId : mClassDetailIds) {
-            if (classDetailId == displayedDetailId) {
-                break;
-            }
-            tabCount++;
-        }
-        viewPager.setCurrentItem(tabCount);
     }
 
     private void setupSubjectText() {
@@ -233,7 +205,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
 
                 final ArrayList<Subject> subjects =
-                        SubjectUtils.getSubjects(ClassEditActivity.this);
+                        new SubjectHandler(ClassEditActivity.this).getItems(getApplication());
                 Collections.sort(subjects, new Comparator<Subject>() {
                     @Override
                     public int compare(Subject subject, Subject t1) {
@@ -431,7 +403,7 @@ public class ClassEditActivity extends AppCompatActivity {
         final int pagerCount = mPagerAdapter.getCount();
 
         final int classDetailId = isNewDetail ?
-                ClassUtils.getHighestClassDetailId(this) + mNewDetailIdCount :
+                mClassDetailHandler.getHighestItemId() + mNewDetailIdCount :
                 classDetail.getId();
         mClassDetailIds.add(classDetailId);
 
@@ -453,7 +425,7 @@ public class ClassEditActivity extends AppCompatActivity {
         }
 
         ArrayList<ClassTime> classTimes = isNewDetail ? new ArrayList<ClassTime>() :
-                ClassUtils.getClassTimesForDetail(this, classDetail.getId());
+                ClassTimeHandler.getClassTimesForDetail(this, classDetail.getId());
         final ArrayList<ClassTimeGroup> classTimeGroups = sortAndGroupTimes(classTimes);
         mAllClassTimeGroups.add(classTimeGroups);
 
@@ -617,7 +589,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
                 ArrayList<ClassTimeGroup> thisTabTimeGroups = mAllClassTimeGroups.get(tabIndex);
 
-                ArrayList<ClassTime> classTimes = ClassUtils.getClassTimesForDetail(
+                ArrayList<ClassTime> classTimes = ClassTimeHandler.getClassTimesForDetail(
                         this, mClassDetailIds.get(tabIndex));
 
                 thisTabTimeGroups.clear();
@@ -751,7 +723,8 @@ public class ClassEditActivity extends AppCompatActivity {
 
         // now write the data (replace class detail values)
 
-        int classId = mIsNew ? ClassUtils.getHighestClassId(this) + 1 : mClass.getId();
+        int highestClassId = mClassHandler.getHighestItemId();
+        int classId = mIsNew ? highestClassId + 1 : mClass.getId();
 
         for (int i = 0; i < rooms.size(); i++) {
             int classDetailId = classDetailIds.get(i);
@@ -762,7 +735,7 @@ public class ClassEditActivity extends AppCompatActivity {
             ClassDetail classDetail =
                     new ClassDetail(classDetailId, classId, room, building, teacher);
 
-            ClassUtils.replaceClassDetail(this, classDetailId, classDetail);
+            mClassDetailHandler.replaceItem(classDetailId, classDetail);
         }
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
@@ -785,9 +758,9 @@ public class ClassEditActivity extends AppCompatActivity {
                 dbEndDate);
 
         if (mIsNew) {
-            ClassUtils.addClass(this, mClass);
+            mClassHandler.addItem(mClass);
         } else {
-            ClassUtils.replaceClass(this, mClass.getId(), mClass);
+            mClassHandler.replaceItem(mClass.getId(), mClass);
         }
 
         setResult(Activity.RESULT_OK);
@@ -801,7 +774,7 @@ public class ClassEditActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ClassUtils.completelyDeleteClass(getBaseContext(), mClass);
+                        mClassHandler.deleteItemWithReferences(mClass.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

@@ -3,22 +3,17 @@ package com.satsumasoftware.timetable.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.util.ExamUtils;
+import com.satsumasoftware.timetable.db.handler.ExamHandler;
+import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.ui.adapter.ExamsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
@@ -35,66 +30,44 @@ import java.util.Comparator;
 /**
  * An activity for displaying a list of exams to the user.
  *
- * If there are no exams to display, a placeholder background will be shown instead.
+ * If there are no classes to display, a placeholder background will be shown instead.
  *
- * Clicking on an exam to view or edit, or choosing to create a new exam will direct the user to
- * {@link ExamEditActivity}.
+ * Clicking on a class will allow the user to view its details in {@link ExamDetailActivity}.
+ * The user can also choose to create a new exam in which case {@link ExamDetailActivity}
+ * will also be invoked but with no intent extra data.
  *
  * @see Exam
+ * @see ExamDetailActivity
  * @see ExamEditActivity
  */
-public class ExamsActivity extends BaseActivity {
+public class ExamsActivity extends ItemListActivity<Exam> {
 
-    protected static final int REQUEST_CODE_EXAM_EDIT = 1;
+    private static final int REQUEST_CODE_EXAM_EDIT = 1;
 
     private ArrayList<String> mHeaders;
-    private ArrayList<Exam> mExams;
-
-    private ExamsAdapter mAdapter;
-
-    private RecyclerView mRecyclerView;
-    private FrameLayout mPlaceholderLayout;
 
     private boolean mShowPast;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content_list);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        setupLayout();
+    TimetableItemHandler<Exam> instantiateDataHandler() {
+        return new ExamHandler(this);
     }
 
-    private void setupLayout() {
-        setupList();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT);
-            }
-        });
-
-        mPlaceholderLayout = (FrameLayout) findViewById(R.id.placeholder);
-        refreshPlaceholderStatus();
+    @Override
+    void onFabButtonClick() {
+        Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT);
     }
 
-    private void setupList() {
-        mHeaders = new ArrayList<>();
-        mExams = ExamUtils.getExams(this, getApplication());
-        sortList();
+    @Override
+    RecyclerView.Adapter setupAdapter() {
+        ExamsAdapter adapter = new ExamsAdapter(this, mHeaders, mItems);
 
-        mAdapter = new ExamsAdapter(this, mHeaders, mExams);
-        mAdapter.setOnEntryClickListener(new ExamsAdapter.OnEntryClickListener() {
+        adapter.setOnEntryClickListener(new ExamsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
-                intent.putExtra(ExamEditActivity.EXTRA_EXAM, mExams.get(position));
+                Intent intent = new Intent(ExamsActivity.this, ExamDetailActivity.class);
+                intent.putExtra(ExamDetailActivity.EXTRA_ITEM, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {
@@ -111,16 +84,18 @@ public class ExamsActivity extends BaseActivity {
             }
         });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(mAdapter);
+        return adapter;
     }
 
-    private void sortList() {
-        Collections.sort(mExams, new Comparator<Exam>() {
+    @Override
+    void setupList() {
+        mHeaders = new ArrayList<>();
+        super.setupList();
+    }
+
+    @Override
+    void sortList() {
+        Collections.sort(mItems, new Comparator<Exam>() {
             @Override
             public int compare(Exam e1, Exam e2) {
                 LocalDateTime dateTime1 = e1.makeDateTimeObject();
@@ -138,8 +113,8 @@ public class ExamsActivity extends BaseActivity {
 
         int currentTimePeriod = -1;
 
-        for (int i = 0; i < mExams.size(); i++) {
-            Exam exam = mExams.get(i);
+        for (int i = 0; i < mItems.size(); i++) {
+            Exam exam = mItems.get(i);
 
             LocalDate examDate = exam.getDate();
             int timePeriodId;
@@ -181,39 +156,22 @@ public class ExamsActivity extends BaseActivity {
         mHeaders.clear();
         mHeaders.addAll(headers);
 
-        mExams.clear();
-        mExams.addAll(exams);
+        mItems.clear();
+        mItems.addAll(exams);
     }
 
-    private void refreshList() {
-        mExams.clear();
-        mExams.addAll(ExamUtils.getExams(this, getApplication()));
-        sortList();
-        mAdapter.notifyDataSetChanged();
-        refreshPlaceholderStatus();
-    }
+    @Override
+    View getPlaceholderView() {
+        int stringRes = mShowPast ? R.string.placeholder_exams_past :
+                R.string.placeholder_exams;
 
-    private void refreshPlaceholderStatus() {
-        if (mExams.isEmpty()) {
-            mRecyclerView.setVisibility(View.GONE);
-            mPlaceholderLayout.setVisibility(View.VISIBLE);
-
-            int stringRes = mShowPast ? R.string.placeholder_exams_past :
-                    R.string.placeholder_exams;
-
-            mPlaceholderLayout.removeAllViews();
-            mPlaceholderLayout.addView(UiUtils.makePlaceholderView(this,
-                    R.drawable.ic_assessment_black_24dp,
-                    stringRes,
-                    R.color.mdu_blue_400,
-                    R.color.mdu_white,
-                    R.color.mdu_white,
-                    true));
-
-        } else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mPlaceholderLayout.setVisibility(View.GONE);
-        }
+        return UiUtils.makePlaceholderView(this,
+                R.drawable.ic_assessment_black_24dp,
+                stringRes,
+                R.color.mdu_blue_400,
+                R.color.mdu_white,
+                R.color.mdu_white,
+                true);
     }
 
     @Override
@@ -255,23 +213,8 @@ public class ExamsActivity extends BaseActivity {
     }
 
     @Override
-    protected Toolbar getSelfToolbar() {
-        return (Toolbar) findViewById(R.id.toolbar);
-    }
-
-    @Override
-    protected DrawerLayout getSelfDrawerLayout() {
-        return (DrawerLayout) findViewById(R.id.drawerLayout);
-    }
-
-    @Override
     protected int getSelfNavDrawerItem() {
         return NAVDRAWER_ITEM_EXAMS;
-    }
-
-    @Override
-    protected NavigationView getSelfNavigationView() {
-        return (NavigationView) findViewById(R.id.navigationView);
     }
 
 }

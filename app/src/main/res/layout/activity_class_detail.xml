@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ClassDetailActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/Widget.Timetable.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/content_vertical_padding"
+        android:paddingBottom="@dimen/mdu_padding_normal"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false">
+
+        <android.support.v7.widget.CardView
+            android:transitionName="@string/transition_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/content_lateral_padding"
+            android:layout_marginRight="@dimen/content_lateral_padding">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:srcCompat="@drawable/ic_room_black_24dp"
+                        style="@style/Widget.Timetable.ItemIcon" />
+
+                    <TextView
+                        android:id="@+id/textView_location"
+                        tools:text="M002, Building A\nA120, Building X\nRoom 14"
+                        style="@style/Widget.Timetable.TextView.Item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/mdu_keyline_2"
+                        android:layout_marginRight="@dimen/mdu_keyline_1" />
+                </FrameLayout>
+
+                <include layout="@layout/divider" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:srcCompat="@drawable/ic_person_black_24dp"
+                        style="@style/Widget.Timetable.ItemIcon" />
+
+                    <TextView
+                        android:id="@+id/textView_teacher"
+                        tools:text="Mr Bob\nMrs Smith"
+                        style="@style/Widget.Timetable.TextView.Item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/mdu_keyline_2"
+                        android:layout_marginRight="@dimen/mdu_keyline_1" />
+                </FrameLayout>
+
+                <include layout="@layout/divider" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:srcCompat="@drawable/ic_access_time_black_24dp"
+                        style="@style/Widget.Timetable.ItemIcon" />
+
+                    <TextView
+                        android:id="@+id/textView_times"
+                        tools:text="Mon, Tue, Wed 15:00\nThu, Fri:\t17:00"
+                        style="@style/Widget.Timetable.TextView.Item"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/mdu_keyline_2"
+                        android:layout_marginRight="@dimen/mdu_keyline_1" />
+                </FrameLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

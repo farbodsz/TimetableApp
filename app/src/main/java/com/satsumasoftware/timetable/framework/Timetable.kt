@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.db.TimetablesSchema
+import com.satsumasoftware.timetable.db.schema.TimetablesSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -21,15 +21,14 @@ import org.threeten.bp.format.DateTimeFormatter
  * and assignments, exactly like how one would have different classes, exams, and assignments for
  * each academic year.
  *
- * @property id an integer identifier for this timetable
  * @property name the name of the timetable. This could be the name of the academic year (e.g.
  *      "Year 11", "9th Grade", "2016") or something else (e.g. "Friend's Timetable", "Evening
  *      classes").
  * @property startDate the first day this timetable is applicable for
  * @property endDate the last day this timetable is applicable for
  */
-class Timetable(val id: Int, val name: String, val startDate: LocalDate, val endDate: LocalDate,
-                val weekRotations: Int) : Parcelable {
+class Timetable(override val id: Int, val name: String, val startDate: LocalDate,
+                val endDate: LocalDate, val weekRotations: Int) : BaseItem {
 
     val displayedName: String
         get() {
@@ -41,18 +40,59 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate, val end
             }
         }
 
-    constructor(cursor: Cursor) : this(
-            cursor.getInt(cursor.getColumnIndex(TimetablesSchema._ID)),
-            cursor.getString(cursor.getColumnIndex(TimetablesSchema.COL_NAME)),
-            LocalDate.of(
+    companion object {
+
+        /**
+         * Constructs a [Timetable] using column values from the cursor provided
+         *
+         * @param cursor a query of the timetables table
+         * @see [TimetablesSchema]
+         */
+        @JvmStatic
+        fun from(cursor: Cursor): Timetable {
+            val startDate = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_DAY_OF_MONTH))),
-            LocalDate.of(
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_START_DATE_DAY_OF_MONTH)))
+            val endDate = LocalDate.of(
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_YEAR)),
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_MONTH)),
-                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH))),
-            cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_WEEK_ROTATIONS)))
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_END_DATE_DAY_OF_MONTH)))
+
+            return Timetable(
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema._ID)),
+                    cursor.getString(cursor.getColumnIndex(TimetablesSchema.COL_NAME)),
+                    startDate,
+                    endDate,
+                    cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_WEEK_ROTATIONS)))
+        }
+
+        @JvmStatic
+        fun create(context: Context, timetableId: Int): Timetable? {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    TimetablesSchema.TABLE_NAME,
+                    null,
+                    "${TimetablesSchema._ID}=?",
+                    arrayOf(timetableId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val timetable = Timetable.from(cursor)
+            cursor.close()
+            return timetable
+        }
+
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Timetable> = object : Parcelable.Creator<Timetable> {
+            override fun createFromParcel(source: Parcel): Timetable = Timetable(source)
+            override fun newArray(size: Int): Array<Timetable?> = arrayOfNulls(size)
+        }
+    }
 
     fun hasName() = name.trim().isNotEmpty()
 
@@ -76,32 +116,5 @@ class Timetable(val id: Int, val name: String, val startDate: LocalDate, val end
         dest?.writeSerializable(endDate)
         dest?.writeInt(weekRotations)
     }
-
-    companion object {
-
-        @JvmField val CREATOR: Parcelable.Creator<Timetable> = object : Parcelable.Creator<Timetable> {
-            override fun createFromParcel(source: Parcel): Timetable = Timetable(source)
-            override fun newArray(size: Int): Array<Timetable?> = arrayOfNulls(size)
-        }
-
-        @JvmStatic
-        fun create(context: Context, timetableId: Int): Timetable? {
-            val db = TimetableDbHelper.getInstance(context).readableDatabase
-            val cursor = db.query(
-                    TimetablesSchema.TABLE_NAME,
-                    null,
-                    "${TimetablesSchema._ID}=?",
-                    arrayOf(timetableId.toString()),
-                    null, null, null)
-            cursor.moveToFirst()
-            if (cursor.count == 0) {
-                cursor.close()
-                return null
-            }
-            val timetable = Timetable(cursor)
-            cursor.close()
-            return timetable
-        }
-
-    }
+    
 }
