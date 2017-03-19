@@ -1,9 +1,11 @@
 package com.satsumasoftware.timetable.framework
 
+import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import com.satsumasoftware.timetable.db.schema.TermsSchema
+import com.satsumasoftware.timetable.data.TimetableDbHelper
+import com.satsumasoftware.timetable.data.schema.TermsSchema
 import org.threeten.bp.LocalDate
 
 /**
@@ -19,7 +21,7 @@ import org.threeten.bp.LocalDate
  * @property endDate the end date of this term
  */
 class Term(override val id: Int, override val timetableId: Int, val name: String,
-           val startDate: LocalDate, val endDate: LocalDate) : TimetableItem, Parcelable {
+           val startDate: LocalDate, val endDate: LocalDate) : TimetableItem {
 
     companion object {
 
@@ -48,11 +50,31 @@ class Term(override val id: Int, override val timetableId: Int, val name: String
                     endDate)
         }
 
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Term> =
-                object : Parcelable.Creator<Term> {
-                    override fun createFromParcel(source: Parcel): Term = Term(source)
-                    override fun newArray(size: Int): Array<Term?> = arrayOfNulls(size)
-                }
+        @JvmStatic
+        fun create(context: Context, termId: Int): Term? {
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
+            val cursor = db.query(
+                    TermsSchema.TABLE_NAME,
+                    null,
+                    "${TermsSchema._ID}=?",
+                    arrayOf(termId.toString()),
+                    null, null, null)
+            cursor.moveToFirst()
+            if (cursor.count == 0) {
+                cursor.close()
+                return null
+            }
+            val term = Term.from(cursor)
+            cursor.close()
+            return term
+        }
+
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Term> = object : Parcelable.Creator<Term> {
+            override fun createFromParcel(source: Parcel): Term = Term(source)
+            override fun newArray(size: Int): Array<Term?> = arrayOfNulls(size)
+        }
     }
 
     constructor(source: Parcel) : this(

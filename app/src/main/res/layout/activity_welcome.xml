@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="?colorPrimaryDark"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    tools:context=".ui.start.WelcomeActivity">
+
+    <TextView
+        android:text="@string/welcome_start_title"
+        android:textColor="@color/mdu_text_white"
+        android:textSize="32sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/mdu_keyline_1"
+        android:paddingRight="@dimen/mdu_keyline_1"
+        android:layout_marginTop="72dp" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true">
+
+        <include layout="@layout/divider_white" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/button_import"
+                android:text="@string/import_data"
+                style="@style/Widget.Timetable.Button.Light"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/button_next"
+                app:srcCompat="@drawable/ic_chevron_right_white_24dp"
+                android:contentDescription="@string/next"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:layout_gravity="end" />
+        </FrameLayout>
+    </FrameLayout>
+
+</RelativeLayout>

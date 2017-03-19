@@ -22,7 +22,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".ui.start.WelcomeActivity"
             android:label="@string/app_name"
             android:theme="@style/Timetable">
             <intent-filter>
@@ -30,6 +30,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.start.InitialSetupActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.MainActivity"
@@ -45,6 +50,10 @@
             android:name=".ui.ClassesActivity"
             android:label="@string/title_activity_classes"
             android:theme="@style/Timetable.Home" />
+
+        <activity
+            android:name=".ui.ClassDetailActivity"
+            android:theme="@style/Timetable"/>
 
         <activity
             android:name=".ui.ClassEditActivity"
@@ -70,11 +79,15 @@
         <activity
             android:name=".ui.ExamsActivity"
             android:label="@string/title_activity_exams"
-            android:theme="@style/Timetable.Home"/>
+            android:theme="@style/Timetable.Home" />
+
+        <activity
+            android:name=".ui.ExamDetailActivity"
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.ExamEditActivity"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.SubjectsActivity"
@@ -102,6 +115,15 @@
             android:name=".ui.SettingsActivity"
             android:label="@string/action_settings"
             android:theme="@style/Timetable"/>
+
+        <activity
+            android:name=".licenses.LicensesActivity"
+            android:label="@string/title_licenses"
+            android:theme="@style/Timetable" />
+
+        <activity
+            android:name=".licenses.LibraryDetailActivity"
+            android:theme="@style/Timetable" />
 
         <receiver android:name=".receiver.AlarmReceiver" />
 

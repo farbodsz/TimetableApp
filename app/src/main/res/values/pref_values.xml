@@ -3,9 +3,9 @@
 
     <string name="prefCategory_general">General</string>
 
-    <string name="pref_weeksAsLetters">Display week names as letters</string>
-    <string name="pref_weeksAsLetters_summaryOn">Showing weeks as \"Week A\", \"Week B\", etc.</string>
-    <string name="pref_weeksAsLetters_summaryOff">Showing weeks as \"Week 1\", \"Week 2\", etc.</string>
+    <string name="pref_weeksAsNumbers">Display week names with numbers</string>
+    <string name="pref_weeksAsNumbers_summaryOn">Showing weeks as \"Week 1\", \"Week 2\", etc.</string>
+    <string name="pref_weeksAsNumbers_summaryOff">Showing weeks as \"Week A\", \"Week B\", etc.</string>
 
     <string name="pref_defaultLessonDuration">Default lesson duration</string>
     <string name="pref_defaultLessonDuration_dialogMessage">Enter the default lesson duration (in minutes)</string>
@@ -18,11 +18,30 @@
     <string name="prefCategory_notifications">Notifications</string>
 
     <string name="pref_assignmentNotificationTime">Incomplete assignments</string>
-    <string name="pref_assignmentNotificationTime_summary">You\'ll be notified of incomplete or overdue assignments the day before it\'s due at %1$s</string>
+    <string name="pref_assignmentNotificationTime_summary">
+        You\'ll be notified of incomplete or overdue assignments the day before it\'s due at %1$s
+    </string>
+
+    <string name="pref_classNotificationTime">Classes</string>
+    <string name="pref_classNotificationTime_summary">
+        You\'ll get notifications for your classes %1$d minutes before they start
+    </string>
+    <string name="pref_classNotificationTime_dialogMessage">
+        Be reminded of classes X minutes before they start.
+    </string>
+
+    <string name="pref_examNotificationTime">Exams</string>
+    <string name="pref_examNotificationTime_summary">
+        You\'ll receive exam notifications %1$d minutes before they start
+    </string>
+    <string name="pref_examNotificationTime_dialogMessage">
+        Be reminded of exams X minutes before they start.
+    </string>
 
 
     <string name="prefCategory_about">About</string>
 
+    <string name="pref_licenses">Open-source licenses</string>
     <string name="pref_appVersion">Version</string>
 
 </resources>

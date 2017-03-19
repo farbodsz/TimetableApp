@@ -2,7 +2,6 @@ package com.satsumasoftware.timetable.util
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.satsumasoftware.timetable.db.handler.AssignmentHandler
 import com.satsumasoftware.timetable.framework.Timetable
 import org.threeten.bp.LocalTime
 
@@ -28,12 +27,18 @@ object PrefUtils {
     }
 
 
-    const val PREF_DISPLAY_WEEKS_AS_LETTERS = "pref_display_weeks_as_letters"
+    private const val PREF_SHOW_WEEK_ROTATIONS_WITH_NUMBERS = "pref_show_week_rotations_with_numbers"
 
     @JvmStatic
-    fun displayWeeksAsLetters(context: Context): Boolean {
+    fun isWeekRotationShownWithNumbers(context: Context): Boolean {
         val sp = PreferenceManager.getDefaultSharedPreferences(context)
-        return sp.getBoolean(PREF_DISPLAY_WEEKS_AS_LETTERS, false)
+        return sp.getBoolean(PREF_SHOW_WEEK_ROTATIONS_WITH_NUMBERS, false)
+    }
+
+    @JvmStatic
+    fun setWeekRotationShownWithNumbers(context: Context, displayWithNumbers: Boolean) {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        sp.edit().putBoolean(PREF_SHOW_WEEK_ROTATIONS_WITH_NUMBERS, displayWithNumbers).apply()
     }
 
 
@@ -60,7 +65,25 @@ object PrefUtils {
     fun setAssignmentNotificationTime(context: Context, time: LocalTime) {
         val sp = PreferenceManager.getDefaultSharedPreferences(context)
         sp.edit().putString(PREF_ASSIGNMENT_NOTIFICATION_TIME, time.toString()).apply()
-        AssignmentHandler.setAssignmentAlarmTime(context, time)
+        NotificationUtils.setAssignmentAlarmTime(context, time)
+    }
+
+
+    const val PREF_CLASS_NOTIFICATION_TIME = "pref_class_notification_time"
+
+    @JvmStatic
+    fun getClassNotificationTime(context: Context): Int {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        return sp.getString(PREF_CLASS_NOTIFICATION_TIME, "5").toInt()
+    }
+
+
+    const val PREF_EXAM_NOTIFICATION_TIME = "pref_exam_notification_time"
+
+    @JvmStatic
+    fun getExamNotificationTime(context: Context): Int {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        return sp.getString(PREF_EXAM_NOTIFICATION_TIME, "30").toInt()
     }
 
 }

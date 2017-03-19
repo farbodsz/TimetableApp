@@ -19,8 +19,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.handler.AssignmentHandler;
-import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
+import com.satsumasoftware.timetable.data.handler.AssignmentHandler;
+import com.satsumasoftware.timetable.data.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.Assignment;
 import com.satsumasoftware.timetable.ui.adapter.AssignmentsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
@@ -141,10 +141,8 @@ public class AssignmentsActivity extends ItemListActivity<Assignment> {
         adapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(
-                        AssignmentsActivity.this, AssignmentDetailActivity.class);
-                intent.putExtra(
-                        AssignmentDetailActivity.EXTRA_ASSIGNMENT, mItems.get(position));
+                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
+                intent.putExtra(AssignmentDetailActivity.EXTRA_ITEM, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {

@@ -16,6 +16,7 @@
     <string name="title_activity_exams">Exams</string>
     <string name="title_activity_exam_new">New Exam</string>
     <string name="title_activity_exam_edit">Edit Exam</string>
+    <string name="title_subjects">Subjects</string>
     <string name="title_activity_subjects">Manage subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
@@ -24,6 +25,8 @@
     <string name="title_activity_timetable_edit">Edit Timetable</string>
     <string name="title_activity_term_new">New Term</string>
     <string name="title_activity_term_edit">Edit Term</string>
+    
+    <string name="title_licenses">Licenses</string>
 
     <string name="tab_today">Today</string>
     <string name="tab_upcoming">Upcoming</string>
@@ -102,7 +105,9 @@
     <string name="message_title_required">You must enter a title</string>
     <string name="message_class_required">You must choose a class</string>
     <string name="message_due_date_required">You must select a due date</string>
-    <string name="placeholder_detail_empty"><![CDATA[<i>It looks like you haven\'t entered any details for this assignment.</i>]]></string>
+    <string name="placeholder_detail_empty">
+        It looks like you haven\'t entered any details for this assignment.
+    </string>
 
     <string name="message_assignment_completed">Marked one item as complete</string>
 
@@ -150,6 +155,7 @@
     <string name="action_export">Export timetable app data</string>
     <string name="action_import">Import timetable app data</string>
     <string name="action_new">New</string>
+    <string name="action_show_all">Show all</string>
     <string name="action_show_past_assignments">Show past assignments</string>
     <string name="action_show_past_exams">Show past exams</string>
     <string name="action_settings">Settings</string>
@@ -173,6 +179,12 @@
         The file selected cannot be imported since it is of an invalid format!
     </string>
 
+    <string name="import_data">Import existing data</string>
+
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
+
     <string name="data_export_success">Successfully exported database to downloads folder</string>
     <string name="data_export_fail">Failed to export database!</string>
     <string name="data_import_success">Successfully imported database</string>
@@ -187,6 +199,43 @@
         <item quantity="one">%1$d incomplete assignment due tomorrow</item>
         <item quantity="other">%1$d incomplete assignments due tomorrow</item>
     </plurals>
+
+    <string name="welcome_start_title">Welcome to your Timetable!</string>
+    <string name="welcome_start_subtitle">Swipe left to get started…</string>
+    <string name="welcome_timetable_title">Name your timetable</string>
+    <string name="welcome_timetable_subtitle">
+        E.g. \'9th Grade\', \'2017\', \'Uni 1st year\', \'Year 8\'
+    </string>
+    <string name="welcome_timetable_dates_title">Timetable dates</string>
+    <string name="welcome_timetable_dates_desc">
+        Enter the start and end dates of your timetable.
+    </string>
+    <string name="welcome_timetable_sched_title">Timetable scheduling</string>
+    <string name="welcome_timetable_sched_desc">
+        Does your timetable have a fixed schedule (i.e. same classes each week)?
+        Or do you alternate between Week A, Week B, etc.?
+    </string>
+
+    <string name="welcome_subjects_desc">Enter your subjects below, each on a different line.</string>
+    <string name="welcome_subjects_hint">Mathematics\nEnglish\nScience\nEtc.</string>
+
+    <string name="scheduling_fixed">Fixed scheduling</string>
+    <string name="scheduling_rotation_two">2 week rotation (Week A, Week B)</string>
+    <string name="scheduling_rotation_three">3 week rotation (Week A, Week B, Week C)</string>
+    <string name="scheduling_rotation_four">4 week rotation (Week A, …, Week D)</string>
+    <string name="scheduling_use_numbers">Use numbers instead of letters (e.g. Week 1 instead of Week A)</string>
+
+    <string name="welcome_end_title">All done!</string>
+    <string name="welcome_end_desc_classes">
+        You\'re done.
+        \n\nTo start adding classes, click the menu button on the top left of the home page and
+        choose \'Classes\'.
+        \n\nPress \'Finish\' to go to the home page.
+    </string>
+
+    <string name="welcome_inputs_missing">
+        Make sure you have entered all required inputs before moving on.
+    </string>
 
     <string name="placeholder_subjects">You haven\'t added any subjects yet</string>
     <string name="placeholder_classes">You haven\'t added any classes yet</string>

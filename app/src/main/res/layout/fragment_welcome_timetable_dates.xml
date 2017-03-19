@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="?colorPrimaryDark"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/mdu_keyline_1">
+
+    <TextView
+        android:text="@string/welcome_timetable_dates_title"
+        android:textColor="@color/mdu_text_white"
+        android:textSize="24sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mdu_keyline_1" />
+
+    <TextView
+        android:text="@string/welcome_timetable_dates_desc"
+        android:textColor="@color/mdu_text_white_secondary"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mdu_keyline_1" />
+
+    <android.support.v7.widget.CardView
+        style="@style/Widget.Timetable.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mdu_keyline_2_minus_16dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                app:srcCompat="@drawable/ic_date_range_black_24dp"
+                style="@style/Widget.Timetable.ItemIcon" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/mdu_keyline_2">
+                <TextView
+                    android:id="@+id/textView_start_date"
+                    android:text="@string/property_start_date"
+                    style="@style/Widget.Timetable.TextView.Item.Selectable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <include layout="@layout/divider" />
+                <TextView
+                    android:id="@+id/textView_end_date"
+                    android:text="@string/property_end_date"
+                    style="@style/Widget.Timetable.TextView.Item.Selectable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

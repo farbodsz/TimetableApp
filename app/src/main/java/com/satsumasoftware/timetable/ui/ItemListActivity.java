@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
+import com.satsumasoftware.timetable.data.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.TimetableItem;
 
 import java.util.ArrayList;
@@ -115,6 +115,7 @@ abstract class ItemListActivity<T extends TimetableItem> extends NavigationDrawe
      * Populates the items list with data from the database table for the current timetable, before
      * sorting this and displaying it.
      *
+     * @see #getItems()
      * @see #sortList()
      * @see #setupAdapter()
      */
@@ -130,6 +131,14 @@ abstract class ItemListActivity<T extends TimetableItem> extends NavigationDrawe
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    /**
+     * @return a list of items to use when populating the user interface. This can be overridden by
+     * subclasses to specify items to display when filtering a list, for example.
+     */
+    ArrayList<T> getItems() {
+        return mDataHandler.getItems(getApplication());
     }
 
     /**
@@ -149,12 +158,13 @@ abstract class ItemListActivity<T extends TimetableItem> extends NavigationDrawe
      * Updates the list with any modified or removed data. If there is none to display, the
      * placeholder layout is shown instead.
      *
+     * @see #getItems()
      * @see #sortList()
      * @see #refreshPlaceholderStatus()
      */
     void refreshList() {
         mItems.clear();
-        mItems.addAll(mDataHandler.getItems(getApplication()));
+        mItems.addAll(getItems());
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();

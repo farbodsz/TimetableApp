@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.db.schema.AssignmentsSchema
+import com.satsumasoftware.timetable.data.TimetableDbHelper
+import com.satsumasoftware.timetable.data.schema.AssignmentsSchema
 import org.threeten.bp.LocalDate
 
 /**
@@ -20,7 +20,7 @@ import org.threeten.bp.LocalDate
  */
 class Assignment(override val id: Int, override val timetableId: Int, val classId: Int,
                  val title: String, val detail: String, val dueDate: LocalDate,
-                 var completionProgress: Int) : TimetableItem, Parcelable, Comparable<Assignment> {
+                 var completionProgress: Int) : TimetableItem, Comparable<Assignment> {
 
     companion object {
 
@@ -66,14 +66,15 @@ class Assignment(override val id: Int, override val timetableId: Int, val classI
             return assignment
         }
 
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Assignment> =
-                object : Parcelable.Creator<Assignment> {
-                    override fun createFromParcel(source: Parcel): Assignment = Assignment(source)
-                    override fun newArray(size: Int): Array<Assignment?> = arrayOfNulls(size)
-                }
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Assignment> = object : Parcelable.Creator<Assignment> {
+            override fun createFromParcel(source: Parcel): Assignment = Assignment(source)
+            override fun newArray(size: Int): Array<Assignment?> = arrayOfNulls(size)
+        }
     }
 
-    constructor(source: Parcel): this(
+    constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readInt(),

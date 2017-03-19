@@ -1,30 +1,25 @@
 package com.satsumasoftware.timetable.ui;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.DataPorting;
-import com.satsumasoftware.timetable.db.handler.TimetableHandler;
+import com.satsumasoftware.timetable.data.PortingFragment;
+import com.satsumasoftware.timetable.data.handler.TimetableHandler;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
 import com.satsumasoftware.timetable.util.UiUtils;
@@ -143,32 +138,6 @@ public class TimetablesActivity extends NavigationDrawerActivity {
             if (resultCode == RESULT_OK) {
                 refreshList();
             }
-
-        } else if (requestCode == REQUEST_CODE_PICK_IMPORTING_DB) {
-            if (resultCode == RESULT_OK) {
-                completeDbImport(data.getData());
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CODE_EXPORT_PERM) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d(LOG_TAG, "Permission to write to storage granted.");
-                handleDbExport();
-            } else {
-                Log.w(LOG_TAG, "Permission to write to storage denied.");
-            }
-
-        } else if (requestCode == REQUEST_CODE_IMPORT_PERM) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d(LOG_TAG, "Permission to write to storage granted.");
-                handleDbImport();
-            } else {
-                Log.w(LOG_TAG, "Permission to write to storage denied.");
-            }
         }
     }
 
@@ -180,108 +149,31 @@ public class TimetablesActivity extends NavigationDrawerActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handles import/export options.
+        int portType = -1;
         switch (item.getItemId()) {
             case R.id.action_export:
-                startExport();
+                portType = PortingFragment.TYPE_EXPORT;
                 break;
             case R.id.action_import:
-                startImport();
+                portType = PortingFragment.TYPE_IMPORT;
                 break;
         }
+       startPortingFragment(portType);
+
         return super.onOptionsItemSelected(item);
     }
 
-    private void startImport() {
-        showImportWarningDialog();
-    }
+    private void startPortingFragment(int portType) {
+        Bundle fragmentArgs = new Bundle();
+        fragmentArgs.putInt(PortingFragment.ARGUMENT_PORT_TYPE, portType);
 
-    private void startExport() {
-        verifyStoragePermissions(false);
-    }
+        Fragment portFragment = new PortingFragment();
+        portFragment.setArguments(fragmentArgs);
 
-    private void verifyStoragePermissions(boolean importing) {
-        Log.v(LOG_TAG, "Verifying storage permissions");
-
-        String storagePermission = importing
-                ? Manifest.permission.READ_EXTERNAL_STORAGE
-                : Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
-        // Check if we have the 'write' permission
-        int permission = ActivityCompat.checkSelfPermission(this, storagePermission);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            Log.v(LOG_TAG, "No permission - prompting user");
-
-            int requestCode = importing ? REQUEST_CODE_IMPORT_PERM : REQUEST_CODE_EXPORT_PERM;
-
-            ActivityCompat.requestPermissions(
-                    this,
-                    STORAGE_PERMISSIONS,
-                    requestCode);
-
-        } else {
-            if (importing) handleDbImport(); else handleDbExport();
-        }
-    }
-
-    private void showImportWarningDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_import_warning_title)
-                .setMessage(R.string.dialog_import_warning_message)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        verifyStoragePermissions(true);
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .show();
-    }
-
-    private void handleDbExport() {
-        int toastTextRes = DataPorting.exportDatabase(this)
-                ? R.string.data_export_success
-                : R.string.data_export_fail;
-        Toast.makeText(this, toastTextRes, Toast.LENGTH_SHORT).show();
-    }
-
-    private void handleDbImport() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");
-        startActivityForResult(intent, REQUEST_CODE_PICK_IMPORTING_DB);
-    }
-
-    private void completeDbImport(Uri importData) {
-        if (!DataPorting.isDatabaseValid(importData)) {
-            showImportInvalidDialog();
-            return;
-        }
-
-        Log.e(LOG_TAG, "Preparing to export backup of data before completing import.");
-        startExport();
-
-        int toastTextRes = DataPorting.importDatabase(this, importData)
-                ? R.string.data_import_success
-                : R.string.data_import_fail;
-        Toast.makeText(this, toastTextRes, Toast.LENGTH_SHORT).show();
-    }
-
-    private void showImportInvalidDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_import_invalid_title)
-                .setMessage(R.string.dialog_import_invalid_message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .show();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(portFragment, null);
+        transaction.commit();
     }
 
     @Override

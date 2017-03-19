@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.handler.ExamHandler;
-import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
+import com.satsumasoftware.timetable.data.handler.ExamHandler;
+import com.satsumasoftware.timetable.data.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.ui.adapter.ExamsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;
@@ -30,12 +30,14 @@ import java.util.Comparator;
 /**
  * An activity for displaying a list of exams to the user.
  *
- * If there are no exams to display, a placeholder background will be shown instead.
+ * If there are no classes to display, a placeholder background will be shown instead.
  *
- * Clicking on an exam to view or edit, or choosing to create a new exam will direct the user to
- * {@link ExamEditActivity}.
+ * Clicking on a class will allow the user to view its details in {@link ExamDetailActivity}.
+ * The user can also choose to create a new exam in which case {@link ExamDetailActivity}
+ * will also be invoked but with no intent extra data.
  *
  * @see Exam
+ * @see ExamDetailActivity
  * @see ExamEditActivity
  */
 public class ExamsActivity extends ItemListActivity<Exam> {
@@ -64,8 +66,8 @@ public class ExamsActivity extends ItemListActivity<Exam> {
         adapter.setOnEntryClickListener(new ExamsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(ExamsActivity.this, ExamEditActivity.class);
-                intent.putExtra(ExamEditActivity.EXTRA_EXAM, mItems.get(position));
+                Intent intent = new Intent(ExamsActivity.this, ExamDetailActivity.class);
+                intent.putExtra(ExamDetailActivity.EXTRA_ITEM, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/mdu_spacing_normal">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/card_padding"
+        android:paddingBottom="@dimen/card_padding"
+        android:paddingLeft="@dimen/card_padding"
+        android:paddingRight="@dimen/card_padding">
+
+        <TextView
+            android:id="@+id/title"
+            android:text="Apache 2.0"
+            android:textColor="@color/mdu_text_black"
+            android:textSize="@dimen/card_text_primary_title_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:text="Farbod Salamat-Zadeh"
+            android:textColor="@color/mdu_text_black"
+            android:textSize="@dimen/card_text_primary_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/card_padding" />
+
+        <TextView
+            android:id="@+id/content_text"
+            android:text="@string/license_apache_2.0"
+            android:textColor="@color/mdu_text_black_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

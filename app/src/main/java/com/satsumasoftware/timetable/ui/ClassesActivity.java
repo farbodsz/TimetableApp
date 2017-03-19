@@ -6,16 +6,19 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.handler.ClassHandler;
-import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
+import com.satsumasoftware.timetable.data.handler.ClassHandler;
+import com.satsumasoftware.timetable.data.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 import com.satsumasoftware.timetable.util.UiUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -24,15 +27,19 @@ import java.util.Comparator;
  *
  * If there are no classes to display, a placeholder background will be shown instead.
  *
- * Clicking on a class to view or edit, or choosing to create a new class will direct the user to
- * {@link ClassEditActivity}.
+ * Clicking on a class will allow the user to view its details in {@link ClassDetailActivity}.
+ * The user can also choose to create a new class in which case {@link ClassDetailActivity}
+ * will also be invoked but with no intent extra data.
  *
  * @see Class
+ * @see ClassDetailActivity
  * @see ClassEditActivity
  */
 public class ClassesActivity extends ItemListActivity<Class> {
 
     private static final int REQUEST_CODE_CLASS_DETAIL = 1;
+
+    private boolean mShowAll = false;
 
     @Override
     TimetableItemHandler<Class> instantiateDataHandler() {
@@ -51,8 +58,8 @@ public class ClassesActivity extends ItemListActivity<Class> {
         adapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(ClassesActivity.this, ClassEditActivity.class);
-                intent.putExtra(ClassEditActivity.EXTRA_CLASS, mItems.get(position));
+                Intent intent = new Intent(ClassesActivity.this, ClassDetailActivity.class);
+                intent.putExtra(ClassDetailActivity.EXTRA_ITEM, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {
@@ -70,6 +77,11 @@ public class ClassesActivity extends ItemListActivity<Class> {
         });
 
         return adapter;
+    }
+
+    @Override
+    ArrayList<Class> getItems() {
+        return ((ClassHandler) mDataHandler).getCurrentClasses(getApplication(), mShowAll);
     }
 
     @Override
@@ -106,6 +118,34 @@ public class ClassesActivity extends ItemListActivity<Class> {
                 refreshList();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_classes, menu);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_manage_subjects);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_manage_subjects:
+                startActivity(new Intent(this, SubjectsActivity.class));
+                break;
+
+            case R.id.action_show_all:
+                if (mShowAll) {
+                    item.setChecked(false);
+                    mShowAll = false;
+                } else {
+                    item.setChecked(true);
+                    mShowAll = true;
+                }
+                refreshList();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

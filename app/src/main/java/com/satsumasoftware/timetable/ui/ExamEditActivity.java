@@ -26,8 +26,8 @@ import android.widget.TimePicker;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.handler.ExamHandler;
-import com.satsumasoftware.timetable.db.handler.SubjectHandler;
+import com.satsumasoftware.timetable.data.handler.ExamHandler;
+import com.satsumasoftware.timetable.data.handler.SubjectHandler;
 import com.satsumasoftware.timetable.framework.Color;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.framework.Subject;
@@ -55,6 +55,7 @@ import java.util.Comparator;
  *
  * @see Exam
  * @see ExamsActivity
+ * @see ExamDetailActivity
  */
 public class ExamEditActivity extends AppCompatActivity {
 

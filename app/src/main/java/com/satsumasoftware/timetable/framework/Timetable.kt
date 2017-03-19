@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.db.schema.TimetablesSchema
+import com.satsumasoftware.timetable.data.TimetableDbHelper
+import com.satsumasoftware.timetable.data.schema.TimetablesSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -28,7 +28,7 @@ import org.threeten.bp.format.DateTimeFormatter
  * @property endDate the last day this timetable is applicable for
  */
 class Timetable(override val id: Int, val name: String, val startDate: LocalDate,
-                val endDate: LocalDate, val weekRotations: Int) : BaseItem, Parcelable {
+                val endDate: LocalDate, val weekRotations: Int) : BaseItem {
 
     val displayedName: String
         get() {
@@ -86,11 +86,12 @@ class Timetable(override val id: Int, val name: String, val startDate: LocalDate
             return timetable
         }
 
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Timetable> =
-                object : Parcelable.Creator<Timetable> {
-                    override fun createFromParcel(source: Parcel): Timetable = Timetable(source)
-                    override fun newArray(size: Int): Array<Timetable?> = arrayOfNulls(size)
-                }
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Timetable> = object : Parcelable.Creator<Timetable> {
+            override fun createFromParcel(source: Parcel): Timetable = Timetable(source)
+            override fun newArray(size: Int): Array<Timetable?> = arrayOfNulls(size)
+        }
     }
 
     fun hasName() = name.trim().isNotEmpty()

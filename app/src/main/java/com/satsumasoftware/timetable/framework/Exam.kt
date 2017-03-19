@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.db.schema.ExamsSchema
+import com.satsumasoftware.timetable.data.TimetableDbHelper
+import com.satsumasoftware.timetable.data.schema.ExamsSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -24,7 +24,7 @@ import org.threeten.bp.LocalTime
  */
 class Exam(override val id: Int, override val timetableId: Int, val subjectId: Int,
            val moduleName: String, val date: LocalDate, val startTime: LocalTime, val duration: Int,
-           val seat: String, val room: String, val resit: Boolean) : TimetableItem, Parcelable, Comparable<Exam> {
+           val seat: String, val room: String, val resit: Boolean) : TimetableItem, Comparable<Exam> {
 
     companion object {
 
@@ -75,25 +75,15 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
             return exam
         }
 
-        /**
-         * @return the displayed name for the exam, consisting of the subject name and exam module
-         * name if it exists
-         */
-        @JvmStatic
-        fun makeName(exam: Exam, subject: Subject) = if (exam.hasModuleName()) {
-            "${subject.name}: ${exam.moduleName}"
-        } else {
-            subject.name
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Exam> = object : Parcelable.Creator<Exam> {
+            override fun createFromParcel(source: Parcel): Exam = Exam(source)
+            override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
         }
-
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Exam> =
-                object : Parcelable.Creator<Exam> {
-                    override fun createFromParcel(source: Parcel): Exam = Exam(source)
-                    override fun newArray(size: Int): Array<Exam?> = arrayOfNulls(size)
-                }
     }
 
-    constructor(source: Parcel): this(
+    constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readInt(),
@@ -110,6 +100,16 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
     fun hasSeat() = seat.trim().isNotEmpty()
 
     fun hasRoom() = room.trim().isNotEmpty()
+
+    /**
+     * @return the displayed name for the exam, consisting of the subject name and exam module
+     * name if it exists
+     */
+    fun makeName(subject: Subject) = if (hasModuleName()) {
+        "${subject.name}: $moduleName"
+    } else {
+        subject.name
+    }
 
     /**
      * @return a [LocalDateTime] object using the [date] and [startTime] of the exam
