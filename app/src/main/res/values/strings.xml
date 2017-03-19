@@ -151,6 +151,7 @@
     <string name="action_export">Export timetable app data</string>
     <string name="action_import">Import timetable app data</string>
     <string name="action_new">New</string>
+    <string name="action_show_all">Show all</string>
     <string name="action_show_past_assignments">Show past assignments</string>
     <string name="action_show_past_exams">Show past exams</string>
     <string name="action_settings">Settings</string>

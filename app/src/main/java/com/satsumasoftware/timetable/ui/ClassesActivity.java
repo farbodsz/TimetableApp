@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
@@ -35,6 +37,8 @@ import java.util.Comparator;
 public class ClassesActivity extends ItemListActivity<Class> {
 
     private static final int REQUEST_CODE_CLASS_DETAIL = 1;
+
+    private boolean mShowAll = false; // TODO add implementation
 
     @Override
     TimetableItemHandler<Class> instantiateDataHandler() {
@@ -108,6 +112,34 @@ public class ClassesActivity extends ItemListActivity<Class> {
                 refreshList();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_classes, menu);
+        UiUtils.tintMenuIcons(this, menu, R.id.action_manage_subjects);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_manage_subjects:
+                startActivity(new Intent(this, SubjectsActivity.class));
+                break;
+
+            case R.id.action_show_all:
+                if (mShowAll) {
+                    item.setChecked(false);
+                    mShowAll = false;
+                } else {
+                    item.setChecked(true);
+                    mShowAll = true;
+                }
+                refreshList();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
