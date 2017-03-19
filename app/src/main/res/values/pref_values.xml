@@ -3,9 +3,9 @@
 
     <string name="prefCategory_general">General</string>
 
-    <string name="pref_weeksAsLetters">Display week names as letters</string>
-    <string name="pref_weeksAsLetters_summaryOn">Showing weeks as \"Week A\", \"Week B\", etc.</string>
-    <string name="pref_weeksAsLetters_summaryOff">Showing weeks as \"Week 1\", \"Week 2\", etc.</string>
+    <string name="pref_weeksAsNumbers">Display week names with numbers</string>
+    <string name="pref_weeksAsNumbers_summaryOn">Showing weeks as \"Week 1\", \"Week 2\", etc.</string>
+    <string name="pref_weeksAsNumbers_summaryOff">Showing weeks as \"Week A\", \"Week B\", etc.</string>
 
     <string name="pref_defaultLessonDuration">Default lesson duration</string>
     <string name="pref_defaultLessonDuration_dialogMessage">Enter the default lesson duration (in minutes)</string>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="?colorPrimaryDark"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/mdu_keyline_1">
+
+    <TextView
+        android:text="@string/welcome_timetable_title"
+        android:textColor="@color/mdu_text_white"
+        android:textSize="24sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mdu_keyline_1" />
+
+    <TextView
+        android:text="@string/welcome_timetable_subtitle"
+        android:textColor="@color/mdu_text_white_secondary"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mdu_keyline_1" />
+
+    <android.support.design.widget.TextInputLayout
+        android:hint="@string/property_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mdu_keyline_2">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editText_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

@@ -27,12 +27,18 @@ object PrefUtils {
     }
 
 
-    const val PREF_DISPLAY_WEEKS_AS_LETTERS = "pref_display_weeks_as_letters"
+    private const val PREF_SHOW_WEEK_ROTATIONS_WITH_NUMBERS = "pref_show_week_rotations_with_numbers"
 
     @JvmStatic
-    fun displayWeeksAsLetters(context: Context): Boolean {
+    fun isWeekRotationShownWithNumbers(context: Context): Boolean {
         val sp = PreferenceManager.getDefaultSharedPreferences(context)
-        return sp.getBoolean(PREF_DISPLAY_WEEKS_AS_LETTERS, false)
+        return sp.getBoolean(PREF_SHOW_WEEK_ROTATIONS_WITH_NUMBERS, false)
+    }
+
+    @JvmStatic
+    fun setWeekRotationShownWithNumbers(context: Context, displayWithNumbers: Boolean) {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        sp.edit().putBoolean(PREF_SHOW_WEEK_ROTATIONS_WITH_NUMBERS, displayWithNumbers).apply()
     }
 
 
