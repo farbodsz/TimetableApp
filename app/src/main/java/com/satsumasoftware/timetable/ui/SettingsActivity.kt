@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import com.satsumasoftware.timetable.BuildConfig
 import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.util.NotificationUtils
 import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.LocalTime
 
@@ -36,7 +37,10 @@ class SettingsActivity : NavigationDrawerActivity() {
             addPreferencesFromResource(R.xml.preferences)
 
             setupDefaultLessonDurationPref()
+
             setupAssignmentNotificationPref()
+            setupClassNotificationPref()
+            setupExamNotificationPref()
 
             setupAboutPrefs()
         }
@@ -53,7 +57,7 @@ class SettingsActivity : NavigationDrawerActivity() {
 
             updateSummary(PrefUtils.getDefaultLessonDuration(activity))
 
-            lessonDurationPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            lessonDurationPref.setOnPreferenceChangeListener { preference, newValue ->
                 val strNewVal = newValue as String
                 updateSummary(strNewVal.toInt())
                 true
@@ -86,8 +90,44 @@ class SettingsActivity : NavigationDrawerActivity() {
                 }, initialHour, initialMinute, true).show()
             }
 
-            assignmentNotificationPref.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference ->
+            assignmentNotificationPref.setOnPreferenceClickListener { preference ->
                 displayAssignmentTimePicker(preference!!)
+                true
+            }
+        }
+
+        private fun setupClassNotificationPref() {
+            val classNotificationPref = findPreference(PrefUtils.PREF_CLASS_NOTIFICATION_TIME)
+
+            fun updateSummaryText(minsBefore: Int) {
+                classNotificationPref.summary =
+                        getString(R.string.pref_classNotificationTime_summary, minsBefore)
+            }
+
+            updateSummaryText(PrefUtils.getClassNotificationTime(activity))
+
+            classNotificationPref.setOnPreferenceChangeListener { preference, newValue ->
+                val minsBefore = newValue as String
+                updateSummaryText(minsBefore.toInt())
+                NotificationUtils.refreshClassAlarms(activity, activity.application)
+                true
+            }
+        }
+
+        private fun setupExamNotificationPref() {
+            val examNotificationPref = findPreference(PrefUtils.PREF_EXAM_NOTIFICATION_TIME)
+
+            fun updateSummaryText(minsBefore: Int) {
+                examNotificationPref.summary =
+                        getString(R.string.pref_examNotificationTime_summary, minsBefore)
+            }
+
+            updateSummaryText(PrefUtils.getExamNotificationTime(activity))
+
+            examNotificationPref.setOnPreferenceChangeListener { preference, newValue ->
+                val minsBefore = newValue as String
+                updateSummaryText(minsBefore.toInt())
+                NotificationUtils.refreshExamAlarms(activity, activity.application)
                 true
             }
         }
@@ -99,20 +139,12 @@ class SettingsActivity : NavigationDrawerActivity() {
 
     }
 
-    override fun getSelfToolbar(): Toolbar {
-        return findViewById(R.id.toolbar) as Toolbar
-    }
+    override fun getSelfToolbar() = findViewById(R.id.toolbar) as Toolbar
 
-    override fun getSelfDrawerLayout(): DrawerLayout {
-        return findViewById(R.id.drawerLayout) as DrawerLayout
-    }
+    override fun getSelfDrawerLayout() = findViewById(R.id.drawerLayout) as DrawerLayout
 
-    override fun getSelfNavDrawerItem(): Int {
-        return NavigationDrawerActivity.NAVDRAWER_ITEM_SETTINGS
-    }
+    override fun getSelfNavDrawerItem() = NavigationDrawerActivity.NAVDRAWER_ITEM_SETTINGS
 
-    override fun getSelfNavigationView(): NavigationView {
-        return findViewById(R.id.navigationView) as NavigationView
-    }
+    override fun getSelfNavigationView() = findViewById(R.id.navigationView) as NavigationView
 
 }
