@@ -55,6 +55,7 @@ import java.util.Comparator;
  *
  * @see Exam
  * @see ExamsActivity
+ * @see ExamDetailActivity
  */
 public class ExamEditActivity extends AppCompatActivity {
 

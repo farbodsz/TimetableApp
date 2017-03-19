@@ -24,10 +24,12 @@ import java.util.Comparator;
  *
  * If there are no classes to display, a placeholder background will be shown instead.
  *
- * Clicking on a class to view or edit, or choosing to create a new class will direct the user to
- * {@link ClassEditActivity}.
+ * Clicking on a class will allow the user to view its details in {@link ClassDetailActivity}.
+ * The user can also choose to create a new class in which case {@link ClassDetailActivity}
+ * will also be invoked but with no intent extra data.
  *
  * @see Class
+ * @see ClassDetailActivity
  * @see ClassEditActivity
  */
 public class ClassesActivity extends ItemListActivity<Class> {
@@ -51,8 +53,8 @@ public class ClassesActivity extends ItemListActivity<Class> {
         adapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(ClassesActivity.this, ClassEditActivity.class);
-                intent.putExtra(ClassEditActivity.EXTRA_CLASS, mItems.get(position));
+                Intent intent = new Intent(ClassesActivity.this, ClassDetailActivity.class);
+                intent.putExtra(ClassDetailActivity.EXTRA_ITEM, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {

@@ -47,6 +47,10 @@
             android:theme="@style/Timetable.Home"/>
 
         <activity
+            android:name=".ui.ClassDetailActivity"
+            android:theme="@style/Timetable"/>
+
+        <activity
             android:name=".ui.ClassEditActivity"
             android:theme="@style/Timetable"/>
 
@@ -70,11 +74,15 @@
         <activity
             android:name=".ui.ExamsActivity"
             android:label="@string/title_activity_exams"
-            android:theme="@style/Timetable.Home"/>
+            android:theme="@style/Timetable.Home" />
+
+        <activity
+            android:name=".ui.ExamDetailActivity"
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.ExamEditActivity"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.SubjectsActivity"

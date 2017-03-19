@@ -22,7 +22,7 @@ import org.threeten.bp.LocalDate
  */
 class Class(override val id: Int, override val timetableId: Int, val subjectId: Int,
             val moduleName: String, val startDate: LocalDate,
-            val endDate: LocalDate) : TimetableItem, Parcelable {
+            val endDate: LocalDate) : TimetableItem {
 
     companion object {
 
@@ -85,11 +85,12 @@ class Class(override val id: Int, override val timetableId: Int, val subjectId: 
          */
         @JvmField val NO_DATE: LocalDate = LocalDate.MIN
 
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Class> =
-                object : Parcelable.Creator<Class> {
-                    override fun createFromParcel(source: Parcel): Class = Class(source)
-                    override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
-                }
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Class> = object : Parcelable.Creator<Class> {
+            override fun createFromParcel(source: Parcel): Class = Class(source)
+            override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
+        }
     }
 
     constructor(source: Parcel) : this(

@@ -41,7 +41,7 @@ public class HomeExamsAdapter extends RecyclerView.Adapter<HomeExamsAdapter.Exam
         Subject subject = Subject.create(mContext, exam.getSubjectId());
         assert subject != null;
 
-        holder.mTitle.setText(Exam.makeName(exam, subject));
+        holder.mTitle.setText(exam.makeName(subject));
 
         Color color = new Color(subject.getColorId());
         holder.mColorCircle.setImageResource(color.getPrimaryColorResId(mContext));

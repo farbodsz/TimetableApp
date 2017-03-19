@@ -141,10 +141,8 @@ public class AssignmentsActivity extends ItemListActivity<Assignment> {
         adapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
-                Intent intent = new Intent(
-                        AssignmentsActivity.this, AssignmentDetailActivity.class);
-                intent.putExtra(
-                        AssignmentDetailActivity.EXTRA_ASSIGNMENT, mItems.get(position));
+                Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
+                intent.putExtra(AssignmentDetailActivity.EXTRA_ITEM, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {

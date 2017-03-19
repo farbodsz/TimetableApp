@@ -2,6 +2,8 @@ package com.satsumasoftware.timetable.framework
 
 import android.content.Context
 import android.database.Cursor
+import android.os.Parcel
+import android.os.Parcelable
 import com.satsumasoftware.timetable.db.TimetableDbHelper
 import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema
 
@@ -54,12 +56,59 @@ class ClassDetail(override val id: Int, val classId: Int, val room: String, val 
             cursor.close()
             return classDetail
         }
+
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<ClassDetail> = object : Parcelable.Creator<ClassDetail> {
+            override fun createFromParcel(source: Parcel): ClassDetail = ClassDetail(source)
+            override fun newArray(size: Int): Array<ClassDetail?> = arrayOfNulls(size)
+        }
     }
+
+    constructor(source: Parcel) : this(
+            source.readInt(),
+            source.readInt(),
+            source.readString(),
+            source.readString(),
+            source.readString())
 
     fun hasRoom() = room.trim().isNotEmpty()
 
     fun hasBuilding() = building.trim().isNotEmpty()
 
     fun hasTeacher() = teacher.trim().isNotEmpty()
+
+    /**
+     * @return a location string consisting of the room and building texts
+     */
+    fun formatLocationName(): String? {
+        val stringBuilder = StringBuilder()
+
+        if (hasRoom()) {
+            stringBuilder.append(room)
+
+            if (hasBuilding()) stringBuilder.append(", ")
+        }
+
+        if (hasBuilding()) {
+            stringBuilder.append(building)
+        }
+
+        return if (stringBuilder.isNullOrEmpty()) {
+            null
+        } else {
+            stringBuilder.toString()
+        }
+    }
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(id)
+        dest?.writeInt(classId)
+        dest?.writeString(room)
+        dest?.writeString(building)
+        dest?.writeString(teacher)
+    }
 
 }

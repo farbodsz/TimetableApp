@@ -20,6 +20,8 @@ class TimetableHandler(context: Context) : DataHandler<Timetable>(context) {
 
     override fun createFromCursor(cursor: Cursor) = Timetable.from(cursor)
 
+    override fun createFromId(id: Int) = Timetable.create(context, id)
+
     override fun propertiesAsContentValues(item: Timetable): ContentValues {
         val values = ContentValues()
         with(values) {
