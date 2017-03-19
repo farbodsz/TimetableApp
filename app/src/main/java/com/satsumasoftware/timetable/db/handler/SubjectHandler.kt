@@ -20,6 +20,8 @@ class SubjectHandler(context: Context) : TimetableItemHandler<Subject>(context) 
 
     override fun createFromCursor(cursor: Cursor) = Subject.from(cursor)
 
+    override fun createFromId(id: Int) = Subject.create(context, id)
+
     override fun propertiesAsContentValues(item: Subject): ContentValues {
         val values = ContentValues()
         with(values) {

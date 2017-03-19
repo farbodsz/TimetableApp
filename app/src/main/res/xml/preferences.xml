@@ -22,15 +22,34 @@
     <PreferenceCategory
         android:title="@string/prefCategory_notifications">
 
+        <EditTextPreference
+            android:key="pref_class_notification_time"
+            android:title="@string/pref_classNotificationTime"
+            android:summary="@string/pref_classNotificationTime_summary"
+            android:inputType="number"
+            android:dialogMessage="@string/pref_classNotificationTime_dialogMessage"
+            android:defaultValue="5" />
+
         <Preference
             android:key="pref_assignment_notification_time"
             android:title="@string/pref_assignmentNotificationTime"
             android:summary="@string/pref_assignmentNotificationTime_summary" />
+
+        <EditTextPreference
+            android:key="pref_exam_notification_time"
+            android:title="@string/pref_examNotificationTime"
+            android:summary="@string/pref_examNotificationTime_summary"
+            android:inputType="number"
+            android:dialogMessage="@string/pref_examNotificationTime_dialogMessage"
+            android:defaultValue="30" />
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/prefCategory_about">
 
+        <Preference
+            android:key="pref_about_licenses"
+            android:title="@string/pref_licenses" />
         <Preference
             android:key="pref_about_app_version"
             android:title="@string/pref_appVersion" />

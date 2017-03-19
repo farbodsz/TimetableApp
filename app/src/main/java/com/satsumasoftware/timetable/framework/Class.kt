@@ -22,7 +22,7 @@ import org.threeten.bp.LocalDate
  */
 class Class(override val id: Int, override val timetableId: Int, val subjectId: Int,
             val moduleName: String, val startDate: LocalDate,
-            val endDate: LocalDate) : TimetableItem, Parcelable {
+            val endDate: LocalDate) : TimetableItem {
 
     companion object {
 
@@ -85,11 +85,12 @@ class Class(override val id: Int, override val timetableId: Int, val subjectId: 
          */
         @JvmField val NO_DATE: LocalDate = LocalDate.MIN
 
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Class> =
-                object : Parcelable.Creator<Class> {
-                    override fun createFromParcel(source: Parcel): Class = Class(source)
-                    override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
-                }
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Class> = object : Parcelable.Creator<Class> {
+            override fun createFromParcel(source: Parcel): Class = Class(source)
+            override fun newArray(size: Int): Array<Class?> = arrayOfNulls(size)
+        }
     }
 
     constructor(source: Parcel) : this(
@@ -111,6 +112,20 @@ class Class(override val id: Int, override val timetableId: Int, val subjectId: 
     fun hasModuleName() = moduleName.trim().isNotEmpty()
 
     fun hasStartEndDates() = startDate != NO_DATE && endDate != NO_DATE
+
+    /**
+     * @return false if the class' start and end dates are in the past or the future. This would be
+     * used when displaying a list of classes - most of the time, the user would only want to see
+     * their current classes.
+     *
+     * @see startDate
+     * @see endDate
+     */
+    fun isCurrent() = if (hasStartEndDates()) {
+        !startDate.isAfter(LocalDate.now()) && !endDate.isBefore(LocalDate.now())
+    } else {
+        true
+    }
 
     override fun describeContents() = 0
 

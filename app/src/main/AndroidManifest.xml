@@ -52,6 +52,10 @@
             android:theme="@style/Timetable.Home"/>
 
         <activity
+            android:name=".ui.ClassDetailActivity"
+            android:theme="@style/Timetable"/>
+
+        <activity
             android:name=".ui.ClassEditActivity"
             android:theme="@style/Timetable"/>
 
@@ -75,11 +79,15 @@
         <activity
             android:name=".ui.ExamsActivity"
             android:label="@string/title_activity_exams"
-            android:theme="@style/Timetable.Home"/>
+            android:theme="@style/Timetable.Home" />
+
+        <activity
+            android:name=".ui.ExamDetailActivity"
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.ExamEditActivity"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.SubjectsActivity"
@@ -107,6 +115,15 @@
             android:name=".ui.SettingsActivity"
             android:label="@string/action_settings"
             android:theme="@style/Timetable"/>
+
+        <activity
+            android:name=".licenses.LicensesActivity"
+            android:label="@string/title_licenses"
+            android:theme="@style/Timetable" />
+
+        <activity
+            android:name=".licenses.LibraryDetailActivity"
+            android:theme="@style/Timetable" />
 
         <receiver android:name=".receiver.AlarmReceiver" />
 

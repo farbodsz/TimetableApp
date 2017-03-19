@@ -10,6 +10,7 @@ import com.satsumasoftware.timetable.db.schema.SubjectsSchema
 import com.satsumasoftware.timetable.db.schema.TermsSchema
 import com.satsumasoftware.timetable.db.schema.TimetablesSchema
 import com.satsumasoftware.timetable.framework.Timetable
+import com.satsumasoftware.timetable.util.NotificationUtils
 
 class TimetableHandler(context: Context) : DataHandler<Timetable>(context) {
 
@@ -18,6 +19,8 @@ class TimetableHandler(context: Context) : DataHandler<Timetable>(context) {
     override val itemIdCol = TimetablesSchema._ID
 
     override fun createFromCursor(cursor: Cursor) = Timetable.from(cursor)
+
+    override fun createFromId(id: Int) = Timetable.create(context, id)
 
     override fun propertiesAsContentValues(item: Timetable): ContentValues {
         val values = ContentValues()
@@ -40,7 +43,7 @@ class TimetableHandler(context: Context) : DataHandler<Timetable>(context) {
 
         // Refresh alarms in case start/end dates have changed
         val application = context.applicationContext as TimetableApplication
-        application.refreshAlarms(context)
+        NotificationUtils.refreshAlarms(context, application)
     }
 
     override fun deleteItemWithReferences(itemId: Int) {

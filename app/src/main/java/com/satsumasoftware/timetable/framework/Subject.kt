@@ -15,7 +15,7 @@ import com.satsumasoftware.timetable.db.schema.SubjectsSchema
  * @property colorId the identifier of the [Color] used when displaying this subject
  */
 class Subject(override val id: Int, override val timetableId: Int, var name: String,
-              var abbreviation: String, var colorId: Int) : TimetableItem, Parcelable {
+              var abbreviation: String, var colorId: Int) : TimetableItem {
 
     companion object {
 
@@ -53,11 +53,12 @@ class Subject(override val id: Int, override val timetableId: Int, var name: Str
             return subject
         }
 
-        @Suppress("unused") @JvmField val CREATOR: Parcelable.Creator<Subject> =
-                object : Parcelable.Creator<Subject> {
-                    override fun createFromParcel(source: Parcel): Subject = Subject(source)
-                    override fun newArray(size: Int): Array<Subject?> = arrayOfNulls(size)
-                }
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<Subject> = object : Parcelable.Creator<Subject> {
+            override fun createFromParcel(source: Parcel): Subject = Subject(source)
+            override fun newArray(size: Int): Array<Subject?> = arrayOfNulls(size)
+        }
     }
 
     constructor(source: Parcel) : this(

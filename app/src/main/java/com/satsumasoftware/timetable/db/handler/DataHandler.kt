@@ -42,8 +42,16 @@ abstract class DataHandler<T : BaseItem>(val context: Context) {
      * Constructs the data model type using column values from the cursor provided.
      *
      * @see addItem
+     * @see createFromId
      */
     abstract fun createFromCursor(cursor: Cursor): T
+
+    /**
+     * Constructs the data model type using its integer identifier.
+     *
+     * @see createFromCursor
+     */
+    abstract fun createFromId(id: Int): T?
 
     /**
      * Puts properties of the data model type into [ContentValues] and returns this.

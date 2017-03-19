@@ -7,6 +7,7 @@ import com.satsumasoftware.timetable.db.schema.ExamsSchema
 import com.satsumasoftware.timetable.framework.Exam
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.DateUtils
+import com.satsumasoftware.timetable.util.PrefUtils
 
 class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
 
@@ -17,6 +18,8 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
     override val timetableIdCol = ExamsSchema.COL_TIMETABLE_ID
 
     override fun createFromCursor(cursor: Cursor) = Exam.from(cursor)
+
+    override fun createFromId(id: Int) = Exam.create(context, id)
 
     override fun propertiesAsContentValues(item: Exam): ContentValues {
         val values = ContentValues()
@@ -47,7 +50,9 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
     companion object {
         @JvmStatic
         fun addAlarmForExam(context: Context, exam: Exam) {
-            val remindDate = exam.makeDateTimeObject().minusMinutes(30)
+            val minsBefore = PrefUtils.getExamNotificationTime(context).toLong()
+            val remindDate = exam.makeDateTimeObject().minusMinutes(minsBefore)
+
             AlarmReceiver().setAlarm(context,
                     AlarmReceiver.Type.EXAM,
                     DateUtils.asCalendar(remindDate),

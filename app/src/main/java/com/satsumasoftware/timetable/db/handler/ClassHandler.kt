@@ -1,5 +1,6 @@
 package com.satsumasoftware.timetable.db.handler
 
+import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -18,6 +19,8 @@ class ClassHandler(context: Context) : TimetableItemHandler<Class>(context) {
     override val timetableIdCol = ClassesSchema.COL_TIMETABLE_ID
 
     override fun createFromCursor(cursor: Cursor) = Class.from(cursor)
+
+    override fun createFromId(id: Int) = Class.create(context, id)
 
     override fun propertiesAsContentValues(item: Class): ContentValues {
         val values = ContentValues()
@@ -51,6 +54,28 @@ class ClassHandler(context: Context) : TimetableItemHandler<Class>(context) {
         ClassDetailHandler.getClassDetailsForClass(context, itemId).forEach {
             ClassDetailHandler(context).deleteItemWithReferences(it.id)
         }
+    }
+
+    /**
+     * @return a list of filtered classes based on whether they are a 'current' class (i.e. today's
+     * date falls between the start and end dates of the class).
+     *
+     * @see Class.isCurrent
+     */
+    @JvmOverloads
+    fun getCurrentClasses(application: Application, showAll: Boolean = false): ArrayList<Class> {
+        if (showAll) {
+            return getItems(application)
+        }
+
+        // TODO: use a more efficient filtering method
+        val currentClasses = ArrayList<Class>()
+        getItems(application).forEach {
+            if (it.isCurrent()) {
+                currentClasses.add(it)
+            }
+        }
+        return currentClasses
     }
 
 }

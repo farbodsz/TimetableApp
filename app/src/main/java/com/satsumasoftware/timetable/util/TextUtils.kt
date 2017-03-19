@@ -1,16 +1,21 @@
 package com.satsumasoftware.timetable.util
 
 fun String.title(): String {
-    if (this.trim().isEmpty()) {
-        return this
+    val string = this.trim()
+
+    if (string.isEmpty()) {
+        return string
     }
 
-    val words = this.split(" ")
+    val words = string.split(" ")
     val builder = StringBuilder()
     words.forEach {
-        val titledWord = it.substring(0, 1).toUpperCase() + it.substring(1)
-        builder.append(titledWord)
-                .append(" ")
+        if (it.isNotEmpty()) {
+            val titledWord = it.substring(0, 1).toUpperCase() + it.substring(1)
+            builder.append(titledWord)
+                    .append(" ")
+        }
     }
+
     return builder.toString().trim()
 }

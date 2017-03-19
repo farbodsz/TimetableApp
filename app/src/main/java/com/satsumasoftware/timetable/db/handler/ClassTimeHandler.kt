@@ -15,6 +15,7 @@ import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.DateUtils
+import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -31,6 +32,8 @@ class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(conte
     override val timetableIdCol = ClassTimesSchema.COL_TIMETABLE_ID
 
     override fun createFromCursor(cursor: Cursor) = ClassTime.from(cursor)
+
+    override fun createFromId(id: Int) = ClassTime.create(context, id)
 
     override fun propertiesAsContentValues(item: ClassTime): ContentValues {
         val values = ContentValues()
@@ -86,8 +89,9 @@ class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(conte
             }
 
             // Make a LocalDateTime using the calculated start date and ClassTime
+            val minsBefore = PrefUtils.getClassNotificationTime(context).toLong()
             val startDateTime = LocalDateTime.of(possibleDate,
-                    classTime.startTime.minusMinutes(5)) // remind 5 mins before start
+                    classTime.startTime.minusMinutes(minsBefore)) // remind X mins before start
 
             // Find the repeat interval in milliseconds (for the alarm to repeat)
             val timetable = (application as TimetableApplication).currentTimetable!!

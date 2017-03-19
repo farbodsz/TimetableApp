@@ -12,7 +12,7 @@ import java.util.*
  *
  * @see ClassTime
  */
-class ClassTimeGroup(val startTime: LocalTime, val endTime: LocalTime) {
+class ClassTimeGroup(val startTime: LocalTime, val endTime: LocalTime) : Iterable<ClassTime> {
 
     val classTimes = ArrayList<ClassTime>()
 
@@ -37,5 +37,18 @@ class ClassTimeGroup(val startTime: LocalTime, val endTime: LocalTime) {
      */
     fun canAdd(classTime: ClassTime) =
             classTime.startTime == startTime && classTime.endTime == endTime
+
+
+    override fun iterator() = ClassTimeIterator()
+
+    inner class ClassTimeIterator : Iterator<ClassTime> {
+
+        private var currentIndex = 0
+
+        override fun hasNext() = currentIndex < classTimes.size
+
+        override fun next() = classTimes[currentIndex++]
+
+    }
 
 }
