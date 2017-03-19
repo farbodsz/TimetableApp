@@ -18,6 +18,7 @@ import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;
 import com.satsumasoftware.timetable.util.UiUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -38,7 +39,7 @@ public class ClassesActivity extends ItemListActivity<Class> {
 
     private static final int REQUEST_CODE_CLASS_DETAIL = 1;
 
-    private boolean mShowAll = false; // TODO add implementation
+    private boolean mShowAll = false;
 
     @Override
     TimetableItemHandler<Class> instantiateDataHandler() {
@@ -76,6 +77,11 @@ public class ClassesActivity extends ItemListActivity<Class> {
         });
 
         return adapter;
+    }
+
+    @Override
+    ArrayList<Class> getItems() {
+        return ((ClassHandler) mDataHandler).getCurrentClasses(getApplication(), mShowAll);
     }
 
     @Override
