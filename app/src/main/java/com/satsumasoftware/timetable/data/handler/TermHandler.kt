@@ -1,9 +1,9 @@
-package com.satsumasoftware.timetable.db.handler
+package com.satsumasoftware.timetable.data.handler
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import com.satsumasoftware.timetable.db.schema.TermsSchema
+import com.satsumasoftware.timetable.data.schema.TermsSchema
 import com.satsumasoftware.timetable.framework.Term
 
 class TermHandler(context: Context) : TimetableItemHandler<Term>(context) {

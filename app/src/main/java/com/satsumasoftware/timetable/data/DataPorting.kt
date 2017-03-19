@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db
+package com.satsumasoftware.timetable.data
 
 import android.Manifest
 import android.app.Activity
@@ -9,7 +9,7 @@ import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.util.Log
 import com.satsumasoftware.timetable.BuildConfig
-import com.satsumasoftware.timetable.db.schema.TimetablesSchema
+import com.satsumasoftware.timetable.data.schema.TimetablesSchema
 import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.io.FileInputStream

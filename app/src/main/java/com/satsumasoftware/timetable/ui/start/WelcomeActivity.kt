@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.satsumasoftware.timetable.R
-import com.satsumasoftware.timetable.db.PortingFragment
+import com.satsumasoftware.timetable.data.PortingFragment
 import com.satsumasoftware.timetable.ui.MainActivity
 
 /**

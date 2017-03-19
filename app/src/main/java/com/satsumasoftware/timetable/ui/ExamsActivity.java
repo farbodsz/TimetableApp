@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.handler.ExamHandler;
-import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
+import com.satsumasoftware.timetable.data.handler.ExamHandler;
+import com.satsumasoftware.timetable.data.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.Exam;
 import com.satsumasoftware.timetable.ui.adapter.ExamsAdapter;
 import com.satsumasoftware.timetable.util.DateUtils;

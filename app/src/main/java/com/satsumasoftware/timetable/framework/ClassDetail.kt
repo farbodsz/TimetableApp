@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema
+import com.satsumasoftware.timetable.data.TimetableDbHelper
+import com.satsumasoftware.timetable.data.schema.ClassDetailsSchema
 
 /**
  * An object to represent one set of details of a class.

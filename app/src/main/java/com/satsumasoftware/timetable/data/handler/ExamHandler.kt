@@ -1,9 +1,9 @@
-package com.satsumasoftware.timetable.db.handler
+package com.satsumasoftware.timetable.data.handler
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import com.satsumasoftware.timetable.db.schema.ExamsSchema
+import com.satsumasoftware.timetable.data.schema.ExamsSchema
 import com.satsumasoftware.timetable.framework.Exam
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import com.satsumasoftware.timetable.util.DateUtils

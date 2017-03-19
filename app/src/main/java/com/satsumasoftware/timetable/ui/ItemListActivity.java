@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
+import com.satsumasoftware.timetable.data.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.TimetableItem;
 
 import java.util.ArrayList;

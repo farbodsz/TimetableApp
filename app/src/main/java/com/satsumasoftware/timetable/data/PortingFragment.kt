@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db
+package com.satsumasoftware.timetable.data
 
 import android.Manifest
 import android.app.Activity.RESULT_OK

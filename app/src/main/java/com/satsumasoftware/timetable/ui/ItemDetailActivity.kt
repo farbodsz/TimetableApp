@@ -9,7 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.satsumasoftware.timetable.R
-import com.satsumasoftware.timetable.db.handler.TimetableItemHandler
+import com.satsumasoftware.timetable.data.handler.TimetableItemHandler
 import com.satsumasoftware.timetable.framework.TimetableItem
 import com.satsumasoftware.timetable.ui.ItemDetailActivity.Companion.EXTRA_ITEM
 import com.satsumasoftware.timetable.util.UiUtils

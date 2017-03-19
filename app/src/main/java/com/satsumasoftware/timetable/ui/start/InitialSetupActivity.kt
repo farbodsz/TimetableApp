@@ -19,8 +19,8 @@ import android.view.ViewGroup
 import android.widget.*
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.handler.SubjectHandler
-import com.satsumasoftware.timetable.db.handler.TimetableHandler
+import com.satsumasoftware.timetable.data.handler.SubjectHandler
+import com.satsumasoftware.timetable.data.handler.TimetableHandler
 import com.satsumasoftware.timetable.framework.Subject
 import com.satsumasoftware.timetable.framework.Timetable
 import com.satsumasoftware.timetable.ui.MainActivity

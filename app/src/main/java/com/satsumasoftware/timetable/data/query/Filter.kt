@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db.query
+package com.satsumasoftware.timetable.data.query
 
 /**
  * Can store part of a SQL selection statement, used to filter results in database queries.

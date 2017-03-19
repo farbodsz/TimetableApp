@@ -7,8 +7,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.db.schema.ClassTimesSchema
+import com.satsumasoftware.timetable.data.TimetableDbHelper
+import com.satsumasoftware.timetable.data.schema.ClassTimesSchema
 import com.satsumasoftware.timetable.util.PrefUtils
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime

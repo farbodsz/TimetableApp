@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.widget.SeekBar
 import android.widget.TextView
 import com.satsumasoftware.timetable.R
-import com.satsumasoftware.timetable.db.handler.AssignmentHandler
+import com.satsumasoftware.timetable.data.handler.AssignmentHandler
 import com.satsumasoftware.timetable.framework.Assignment
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.Color

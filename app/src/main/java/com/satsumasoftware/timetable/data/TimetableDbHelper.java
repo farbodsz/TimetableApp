@@ -1,19 +1,19 @@
-package com.satsumasoftware.timetable.db;
+package com.satsumasoftware.timetable.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.satsumasoftware.timetable.db.schema.AssignmentsSchema;
-import com.satsumasoftware.timetable.db.schema.ClassDetailsSchema;
-import com.satsumasoftware.timetable.db.schema.ClassTimesSchema;
-import com.satsumasoftware.timetable.db.schema.ClassesSchema;
-import com.satsumasoftware.timetable.db.schema.ExamsSchema;
-import com.satsumasoftware.timetable.db.schema.SqlHelperKt;
-import com.satsumasoftware.timetable.db.schema.SubjectsSchema;
-import com.satsumasoftware.timetable.db.schema.TermsSchema;
-import com.satsumasoftware.timetable.db.schema.TimetablesSchema;
+import com.satsumasoftware.timetable.data.schema.AssignmentsSchema;
+import com.satsumasoftware.timetable.data.schema.ClassDetailsSchema;
+import com.satsumasoftware.timetable.data.schema.ClassTimesSchema;
+import com.satsumasoftware.timetable.data.schema.ClassesSchema;
+import com.satsumasoftware.timetable.data.schema.ExamsSchema;
+import com.satsumasoftware.timetable.data.schema.SqlHelperKt;
+import com.satsumasoftware.timetable.data.schema.SubjectsSchema;
+import com.satsumasoftware.timetable.data.schema.TermsSchema;
+import com.satsumasoftware.timetable.data.schema.TimetablesSchema;
 import com.satsumasoftware.timetable.framework.Class;
 
 import org.threeten.bp.LocalDate;

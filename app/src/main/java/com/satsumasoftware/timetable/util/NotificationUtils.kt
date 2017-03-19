@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.handler.ClassTimeHandler
-import com.satsumasoftware.timetable.db.handler.ExamHandler
+import com.satsumasoftware.timetable.data.handler.ClassTimeHandler
+import com.satsumasoftware.timetable.data.handler.ExamHandler
 import com.satsumasoftware.timetable.receiver.AlarmReceiver
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime

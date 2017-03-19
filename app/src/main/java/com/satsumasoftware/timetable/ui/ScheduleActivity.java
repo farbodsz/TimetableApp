@@ -21,7 +21,7 @@ import android.view.View;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.handler.ClassTimeHandler;
+import com.satsumasoftware.timetable.data.handler.ClassTimeHandler;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;

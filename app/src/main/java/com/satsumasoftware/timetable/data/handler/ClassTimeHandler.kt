@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db.handler
+package com.satsumasoftware.timetable.data.handler
 
 import android.app.Activity
 import android.app.Application
@@ -6,10 +6,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.db.query.Filters
-import com.satsumasoftware.timetable.db.query.Query
-import com.satsumasoftware.timetable.db.schema.ClassTimesSchema
+import com.satsumasoftware.timetable.data.TimetableDbHelper
+import com.satsumasoftware.timetable.data.query.Filters
+import com.satsumasoftware.timetable.data.query.Query
+import com.satsumasoftware.timetable.data.schema.ClassTimesSchema
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassDetail
 import com.satsumasoftware.timetable.framework.ClassTime

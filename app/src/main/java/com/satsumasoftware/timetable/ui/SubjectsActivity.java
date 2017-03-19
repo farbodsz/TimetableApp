@@ -9,8 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.handler.SubjectHandler;
-import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
+import com.satsumasoftware.timetable.data.handler.SubjectHandler;
+import com.satsumasoftware.timetable.data.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.SubjectsAdapter;
 import com.satsumasoftware.timetable.util.UiUtils;

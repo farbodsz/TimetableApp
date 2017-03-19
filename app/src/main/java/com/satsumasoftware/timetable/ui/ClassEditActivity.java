@@ -32,10 +32,10 @@ import android.widget.TextView;
 
 import com.satsumasoftware.timetable.R;
 import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.handler.ClassDetailHandler;
-import com.satsumasoftware.timetable.db.handler.ClassHandler;
-import com.satsumasoftware.timetable.db.handler.ClassTimeHandler;
-import com.satsumasoftware.timetable.db.handler.SubjectHandler;
+import com.satsumasoftware.timetable.data.handler.ClassDetailHandler;
+import com.satsumasoftware.timetable.data.handler.ClassHandler;
+import com.satsumasoftware.timetable.data.handler.ClassTimeHandler;
+import com.satsumasoftware.timetable.data.handler.SubjectHandler;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.ClassDetail;
 import com.satsumasoftware.timetable.framework.ClassTime;

@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.TextView
 import com.satsumasoftware.timetable.R
-import com.satsumasoftware.timetable.db.handler.ExamHandler
+import com.satsumasoftware.timetable.data.handler.ExamHandler
 import com.satsumasoftware.timetable.framework.Color
 import com.satsumasoftware.timetable.framework.Exam
 import com.satsumasoftware.timetable.framework.Subject

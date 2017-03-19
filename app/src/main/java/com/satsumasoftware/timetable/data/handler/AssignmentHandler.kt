@@ -1,9 +1,9 @@
-package com.satsumasoftware.timetable.db.handler
+package com.satsumasoftware.timetable.data.handler
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import com.satsumasoftware.timetable.db.schema.AssignmentsSchema
+import com.satsumasoftware.timetable.data.schema.AssignmentsSchema
 import com.satsumasoftware.timetable.framework.Assignment
 
 class AssignmentHandler(context: Context) : TimetableItemHandler<Assignment>(context) {

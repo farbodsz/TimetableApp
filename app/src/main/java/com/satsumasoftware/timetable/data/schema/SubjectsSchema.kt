@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db.schema
+package com.satsumasoftware.timetable.data.schema
 
 import android.provider.BaseColumns
 
@@ -20,7 +20,7 @@ object SubjectsSchema : BaseColumns {
     /**
      * An SQLite statement which creates the 'subjects' table upon execution.
      *
-     * @see com.satsumasoftware.timetable.db.TimetableDbHelper
+     * @see com.satsumasoftware.timetable.data.TimetableDbHelper
      */
     internal const val SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             BaseColumns._ID + INTEGER_TYPE + PRIMARY_KEY_AUTOINCREMENT + COMMA_SEP +

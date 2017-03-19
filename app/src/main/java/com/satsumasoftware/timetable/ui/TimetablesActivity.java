@@ -18,8 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.PortingFragment;
-import com.satsumasoftware.timetable.db.handler.TimetableHandler;
+import com.satsumasoftware.timetable.data.PortingFragment;
+import com.satsumasoftware.timetable.data.handler.TimetableHandler;
 import com.satsumasoftware.timetable.framework.Timetable;
 import com.satsumasoftware.timetable.ui.adapter.TimetablesAdapter;
 import com.satsumasoftware.timetable.util.UiUtils;

@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.db.handler.ClassHandler;
-import com.satsumasoftware.timetable.db.handler.TimetableItemHandler;
+import com.satsumasoftware.timetable.data.handler.ClassHandler;
+import com.satsumasoftware.timetable.data.handler.TimetableItemHandler;
 import com.satsumasoftware.timetable.framework.Class;
 import com.satsumasoftware.timetable.framework.Subject;
 import com.satsumasoftware.timetable.ui.adapter.ClassesAdapter;

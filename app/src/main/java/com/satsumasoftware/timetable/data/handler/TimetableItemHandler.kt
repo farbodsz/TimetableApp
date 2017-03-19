@@ -1,10 +1,10 @@
-package com.satsumasoftware.timetable.db.handler
+package com.satsumasoftware.timetable.data.handler
 
 import android.app.Application
 import android.content.Context
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.query.Filters
-import com.satsumasoftware.timetable.db.query.Query
+import com.satsumasoftware.timetable.data.query.Filters
+import com.satsumasoftware.timetable.data.query.Query
 import com.satsumasoftware.timetable.framework.TimetableItem
 import java.util.*
 

@@ -5,9 +5,9 @@ import android.content.Intent
 import android.support.v7.widget.Toolbar
 import android.widget.TextView
 import com.satsumasoftware.timetable.R
-import com.satsumasoftware.timetable.db.handler.ClassDetailHandler
-import com.satsumasoftware.timetable.db.handler.ClassHandler
-import com.satsumasoftware.timetable.db.handler.ClassTimeHandler
+import com.satsumasoftware.timetable.data.handler.ClassDetailHandler
+import com.satsumasoftware.timetable.data.handler.ClassHandler
+import com.satsumasoftware.timetable.data.handler.ClassTimeHandler
 import com.satsumasoftware.timetable.framework.Class
 import com.satsumasoftware.timetable.framework.ClassTime
 import com.satsumasoftware.timetable.framework.Color

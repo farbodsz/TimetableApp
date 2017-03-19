@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db.query
+package com.satsumasoftware.timetable.data.query
 
 import android.util.Log
 import java.util.*
