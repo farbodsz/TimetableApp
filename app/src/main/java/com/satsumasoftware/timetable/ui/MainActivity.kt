@@ -255,7 +255,7 @@ class MainActivity : NavigationDrawerActivity() {
 
         private fun addOverdueAssignmentsCard(container: ViewGroup, inflater: LayoutInflater,
                                               overdueAssignments: ArrayList<Assignment>) {
-            val card = inflater.inflate(R.layout.item_home_card, container, false)
+            val card = inflater.inflate(R.layout.item_home_card_no_date, container, false)
 
             val numOverdue = overdueAssignments.size
 
@@ -307,7 +307,7 @@ class MainActivity : NavigationDrawerActivity() {
         private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
                                     assignments: ArrayList<Assignment>) {
             for (assignment in assignments.sorted()) {
-                val card = inflater.inflate(R.layout.item_home_card, container, false)
+                val card = inflater.inflate(R.layout.item_home_card_no_date, container, false)
 
                 val cls = Class.create(context, assignment.classId)!!
                 val subject = Subject.create(context, cls.subjectId)!!
