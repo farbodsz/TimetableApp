@@ -116,6 +116,25 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
      */
     fun makeDateTimeObject() = LocalDateTime.of(date, startTime)!!
 
+    /**
+     * @return a location string consisting of the seat and room texts
+     */
+    fun formatLocationText(): String {
+        val stringBuilder = StringBuilder()
+
+        if (hasSeat()) {
+            stringBuilder.append(seat)
+
+            if (hasRoom()) stringBuilder.append(" \u2022 ")
+        }
+
+        if (hasRoom()) {
+            stringBuilder.append(room)
+        }
+
+        return stringBuilder.toString()
+    }
+
     override fun compareTo(other: Exam): Int {
         return makeDateTimeObject().compareTo(other.makeDateTimeObject())
     }

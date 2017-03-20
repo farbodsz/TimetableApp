@@ -3,7 +3,9 @@ package com.satsumasoftware.timetable.ui.start
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.satsumasoftware.timetable.BuildConfig
 import com.satsumasoftware.timetable.R
+import com.satsumasoftware.timetable.TimetableApplication
 import com.satsumasoftware.timetable.data.PortingFragment
 import com.satsumasoftware.timetable.ui.MainActivity
 
@@ -30,7 +32,14 @@ class WelcomeActivity : AppCompatActivity() {
         setupLayout()
     }
 
-    private fun hasExistingData() = false // TODO: (application as TimetableApplication).currentTimetable != null
+    private fun hasExistingData(): Boolean {
+        return if (BuildConfig.DEBUG) {
+            // If debugging, we may (or may not) want to see the welcome page
+            true
+        } else {
+            (application as TimetableApplication).currentTimetable != null
+        }
+    }
 
     private fun setupLayout() {
         findViewById(R.id.button_import).setOnClickListener {

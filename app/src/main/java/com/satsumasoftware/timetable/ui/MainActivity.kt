@@ -18,14 +18,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.satsumasoftware.timetable.R
 import com.satsumasoftware.timetable.TimetableApplication
-import com.satsumasoftware.timetable.db.handler.AssignmentHandler
-import com.satsumasoftware.timetable.db.handler.ClassTimeHandler
-import com.satsumasoftware.timetable.db.handler.ExamHandler
-import com.satsumasoftware.timetable.db.query.Filters
-import com.satsumasoftware.timetable.db.query.Query
-import com.satsumasoftware.timetable.db.schema.AssignmentsSchema
-import com.satsumasoftware.timetable.db.schema.ClassTimesSchema
-import com.satsumasoftware.timetable.db.schema.ExamsSchema
+import com.satsumasoftware.timetable.data.handler.AssignmentHandler
+import com.satsumasoftware.timetable.data.handler.ClassTimeHandler
+import com.satsumasoftware.timetable.data.handler.ExamHandler
+import com.satsumasoftware.timetable.data.query.Filters
+import com.satsumasoftware.timetable.data.query.Query
+import com.satsumasoftware.timetable.data.schema.AssignmentsSchema
+import com.satsumasoftware.timetable.data.schema.ClassTimesSchema
+import com.satsumasoftware.timetable.data.schema.ExamsSchema
 import com.satsumasoftware.timetable.framework.*
 import com.satsumasoftware.timetable.util.DateUtils
 import com.satsumasoftware.timetable.util.SectionUi
@@ -39,10 +39,6 @@ import org.threeten.bp.format.DateTimeFormatter
  * navigate between the pages using tabs.
  */
 class MainActivity : NavigationDrawerActivity() {
-
-    companion object {
-        private const val LOG_TAG = "MainActivity"
-    }
 
     private var mViewPager: ViewPager? = null
 
@@ -98,7 +94,7 @@ class MainActivity : NavigationDrawerActivity() {
     }
 
     /**
-     * This page displays the user's classes for today.
+     * This page displays the user's classes and exams for today.
      */
     class TodayFragment : Fragment() {
 
@@ -143,24 +139,16 @@ class MainActivity : NavigationDrawerActivity() {
                 return
             }
 
-            classTimes.sort()
-
-            for (classTime in classTimes) {
+            for (classTime in classTimes.sorted()) {
                 val card = inflater.inflate(R.layout.item_home_card, container, false)
 
                 val classDetail = ClassDetail.create(context, classTime.classDetailId)
                 val cls = Class.create(context, classDetail.classId)!!
                 val subject = Subject.create(context, cls.subjectId)!!
-
                 val color = Color(subject.colorId)
-                card.findViewById(R.id.color).setBackgroundColor(
-                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
 
                 val classTimesText =
                         classTime.startTime.toString() + "\n" + classTime.endTime.toString()
-                (card.findViewById(R.id.times) as TextView).text = classTimesText
-
-                (card.findViewById(R.id.title) as TextView).text = Class.makeName(cls, subject)
 
                 val classDetailBuilder = StringBuilder()
                 classDetailBuilder.append(classDetail.formatLocationName())
@@ -168,11 +156,21 @@ class MainActivity : NavigationDrawerActivity() {
                     classDetailBuilder.append(" \u2022 ")
                             .append(classDetail.teacher)
                 }
-                (card.findViewById(R.id.subtitle) as TextView).text =
-                        classDetailBuilder.toString()
 
-                card.setOnClickListener {
-                    // TODO ClassDetailActivity
+                with(card) {
+                    findViewById(R.id.color).setBackgroundColor(
+                            ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+
+                    (findViewById(R.id.title) as TextView).text = Class.makeName(cls, subject)
+
+                    (findViewById(R.id.subtitle) as TextView).text = classDetailBuilder.toString()
+                    (findViewById(R.id.times) as TextView).text = classTimesText
+
+                    setOnClickListener {
+                        val intent = Intent(activity, ClassDetailActivity::class.java)
+                        intent.putExtra(ItemDetailActivity.EXTRA_ITEM, cls)
+                        startActivity(intent)
+                    }
                 }
 
                 container.addView(card)
@@ -181,27 +179,29 @@ class MainActivity : NavigationDrawerActivity() {
 
         private fun addExamsCards(container: ViewGroup, inflater: LayoutInflater,
                                     exams: ArrayList<Exam>) {
-            exams.sort()
-
-            for (exam in exams) {
+            for (exam in exams.sorted()) {
                 val card = inflater.inflate(R.layout.item_home_card, container, false)
 
                 val subject = Subject.create(context, exam.subjectId)!!
-
                 val color = Color(subject.colorId)
-                card.findViewById(R.id.color).setBackgroundColor(
-                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
 
                 val endTime = exam.startTime.plusMinutes(exam.duration.toLong())
-
                 val timesText =
                         exam.startTime.toString() + "\n" + endTime.toString()
-                (card.findViewById(R.id.times) as TextView).text = timesText
 
-                (card.findViewById(R.id.title) as TextView).text = Exam.makeName(exam, subject)
+                with(card) {
+                    findViewById(R.id.color).setBackgroundColor(
+                            ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
 
-                card.setOnClickListener {
-                    // TODO ExamDetailActivity
+                    (findViewById(R.id.title) as TextView).text = exam.makeName(subject)
+
+                    (findViewById(R.id.times) as TextView).text = timesText
+
+                    setOnClickListener {
+                        val intent = Intent(activity, ExamDetailActivity::class.java)
+                        intent.putExtra(ItemDetailActivity.EXTRA_ITEM, exam)
+                        startActivity(intent)
+                    }
                 }
 
                 container.addView(card)
@@ -360,9 +360,7 @@ class MainActivity : NavigationDrawerActivity() {
                 return
             }
 
-            assignments.sort()
-
-            for (assignment in assignments) {
+            for (assignment in assignments.sorted()) {
                 val card = inflater.inflate(R.layout.item_home_card, container, false)
 
                 val cls = Class.create(context, assignment.classId)!!
@@ -383,7 +381,7 @@ class MainActivity : NavigationDrawerActivity() {
 
                     setOnClickListener {
                         val intent = Intent(context, AssignmentDetailActivity::class.java)
-                        intent.putExtra(AssignmentDetailActivity.EXTRA_ASSIGNMENT, assignment)
+                        intent.putExtra(ItemDetailActivity.EXTRA_ITEM, assignment)
                         startActivity(intent)
                     }
                 }
@@ -400,28 +398,28 @@ class MainActivity : NavigationDrawerActivity() {
                 return
             }
 
-            exams.sort()
-
-            for (exam in exams) {
+            for (exam in exams.sorted()) {
                 val card = inflater.inflate(R.layout.item_home_card, container, false)
 
                 val subject = Subject.create(context, exam.subjectId)!!
-
                 val color = Color(subject.colorId)
-                card.findViewById(R.id.color).setBackgroundColor(
-                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
 
                 val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
                 val datesText = exam.makeDateTimeObject().format(formatter).toUpperCase()
 
                 with(card) {
+                    findViewById(R.id.color).setBackgroundColor(
+                            ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+
+                    (findViewById(R.id.title) as TextView).text = exam.makeName(subject)
+                    (findViewById(R.id.subtitle) as TextView).text = exam.formatLocationText()
+
                     (findViewById(R.id.times) as TextView).text = datesText
 
-                    (findViewById(R.id.title) as TextView).text = Exam.makeName(exam, subject)
-                    //(findViewById(R.id.subtitle) as TextView).text = // TODO exam location text
-
                     setOnClickListener {
-                        // TODO ExamDetailActivity
+                        val intent = Intent(activity, ExamDetailActivity::class.java)
+                        intent.putExtra(ItemDetailActivity.EXTRA_ITEM, exam)
+                        startActivity(intent)
                     }
                 }
 

@@ -75,15 +75,9 @@ public class ExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         StringBuilder details = new StringBuilder();
         details.append(exam.getStartTime().toString());
-        if (exam.hasSeat() || exam.hasRoom()) {
-            details.append(" \u2022 ");
-        }
-        if (exam.hasSeat()) {
-            details.append(exam.getSeat())
-                    .append(" \u2022 ");
-        }
-        if (exam.hasRoom()) {
-            details.append(exam.getRoom());
+        if (!exam.formatLocationText().equals("")) {
+            details.append(" \u2022 ")
+                    .append(exam.formatLocationText());
         }
         holder.mDetail.setText(details.toString());
 
