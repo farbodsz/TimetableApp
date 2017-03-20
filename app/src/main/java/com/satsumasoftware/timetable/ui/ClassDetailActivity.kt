@@ -73,7 +73,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        supportActionBar!!.title = Class.makeName(mItem!!, subject)
+        supportActionBar!!.title = mItem!!.makeName(subject)
 
         val color = Color(subject.colorId)
         UiUtils.setBarColors(color, this, toolbar)

@@ -120,6 +120,16 @@ class MainActivity : NavigationDrawerActivity() {
 
             sectionContainer.addView(classesSection.view)
 
+            val assignments = getAssignmentsToday(timetableId)
+            if (assignments.isNotEmpty()) {
+                val assignmentsSection = SectionUi.Builder(context, sectionContainer)
+                        .setTitle(R.string.title_activity_assignments)
+                        .build()
+                addAssignmentCards(assignmentsSection.containerView, inflater, assignments)
+
+                sectionContainer.addView(assignmentsSection.view)
+            }
+
             val exams = getExamsToday(timetableId)
             if (exams.isNotEmpty()) {
                 val examsSection = SectionUi.Builder(context, sectionContainer)
@@ -129,6 +139,47 @@ class MainActivity : NavigationDrawerActivity() {
 
                 sectionContainer.addView(examsSection.view)
             }
+        }
+
+        private fun getClassesToday(timetableId: Int): ArrayList<ClassTime> {
+            val now = LocalDate.now()
+            val today = now.dayOfWeek
+            val weekNumber = DateUtils.findWeekNumber(activity.application)
+
+            val query = Query.Builder()
+                    .addFilter(Filters.equal(ClassTimesSchema.COL_TIMETABLE_ID, timetableId.toString()))
+                    .addFilter(Filters.equal(ClassTimesSchema.COL_DAY, today.value.toString()))
+                    .addFilter(Filters.equal(ClassTimesSchema.COL_WEEK_NUMBER, weekNumber.toString()))
+                    .build()
+
+            return ClassTimeHandler(activity).getAllItems(query)
+        }
+
+        // TODO display assignments on the class card
+        private fun getAssignmentsToday(timetableId: Int): ArrayList<Assignment> {
+            val now = LocalDate.now()
+
+            val query = Query.Builder()
+                    .addFilter(Filters.equal(AssignmentsSchema.COL_TIMETABLE_ID, timetableId.toString()))
+                    .addFilter(Filters.equal(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH, now.dayOfMonth.toString()))
+                    .addFilter(Filters.equal(AssignmentsSchema.COL_DUE_DATE_MONTH, now.monthValue.toString()))
+                    .addFilter(Filters.equal(AssignmentsSchema.COL_DUE_DATE_YEAR, now.year.toString()))
+                    .build()
+
+            return AssignmentHandler(activity).getAllItems(query)
+        }
+
+        private fun getExamsToday(timetableId: Int): ArrayList<Exam> {
+            val today = LocalDate.now()
+
+            val query = Query.Builder()
+                    .addFilter(Filters.equal(ExamsSchema.COL_TIMETABLE_ID, timetableId.toString()))
+                    .addFilter(Filters.equal(ExamsSchema.COL_DATE_DAY_OF_MONTH, today.dayOfMonth.toString()))
+                    .addFilter(Filters.equal(ExamsSchema.COL_DATE_MONTH, today.monthValue.toString()))
+                    .addFilter(Filters.equal(ExamsSchema.COL_DATE_YEAR, today.year.toString()))
+                    .build()
+
+            return ExamHandler(activity).getAllItems(query)
         }
 
         private fun addClassesCards(container: ViewGroup, inflater: LayoutInflater,
@@ -161,14 +212,40 @@ class MainActivity : NavigationDrawerActivity() {
                     findViewById(R.id.color).setBackgroundColor(
                             ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
 
-                    (findViewById(R.id.title) as TextView).text = Class.makeName(cls, subject)
-
+                    (findViewById(R.id.title) as TextView).text = cls.makeName(subject)
                     (findViewById(R.id.subtitle) as TextView).text = classDetailBuilder.toString()
                     (findViewById(R.id.times) as TextView).text = classTimesText
 
                     setOnClickListener {
                         val intent = Intent(activity, ClassDetailActivity::class.java)
                         intent.putExtra(ItemDetailActivity.EXTRA_ITEM, cls)
+                        startActivity(intent)
+                    }
+                }
+
+                container.addView(card)
+            }
+        }
+
+        private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
+                                    assignments: ArrayList<Assignment>) {
+            for (assignment in assignments.sorted()) {
+                val card = inflater.inflate(R.layout.item_home_card, container, false)
+
+                val cls = Class.create(context, assignment.classId)!!
+                val subject = Subject.create(context, cls.subjectId)!!
+                val color = Color(subject.colorId)
+
+                with(card) {
+                    findViewById(R.id.color).setBackgroundColor(
+                            ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+
+                    (findViewById(R.id.title) as TextView).text = assignment.title
+                    (findViewById(R.id.subtitle) as TextView).text = cls.makeName(subject)
+
+                    setOnClickListener {
+                        val intent = Intent(activity, ExamDetailActivity::class.java)
+                        intent.putExtra(ItemDetailActivity.EXTRA_ITEM, assignment)
                         startActivity(intent)
                     }
                 }
@@ -206,33 +283,6 @@ class MainActivity : NavigationDrawerActivity() {
 
                 container.addView(card)
             }
-        }
-
-        private fun getClassesToday(timetableId: Int): ArrayList<ClassTime> {
-            val now = LocalDate.now()
-            val today = now.dayOfWeek
-            val weekNumber = DateUtils.findWeekNumber(activity.application)
-
-            val query = Query.Builder()
-                    .addFilter(Filters.equal(ClassTimesSchema.COL_TIMETABLE_ID, timetableId.toString()))
-                    .addFilter(Filters.equal(ClassTimesSchema.COL_DAY, today.value.toString()))
-                    .addFilter(Filters.equal(ClassTimesSchema.COL_WEEK_NUMBER, weekNumber.toString()))
-                    .build()
-
-            return ClassTimeHandler(activity).getAllItems(query)
-        }
-
-        private fun getExamsToday(timetableId: Int): ArrayList<Exam> {
-            val today = LocalDate.now()
-
-            val query = Query.Builder()
-                    .addFilter(Filters.equal(ExamsSchema.COL_TIMETABLE_ID, timetableId.toString()))
-                    .addFilter(Filters.equal(ExamsSchema.COL_DATE_DAY_OF_MONTH, today.dayOfMonth.toString()))
-                    .addFilter(Filters.equal(ExamsSchema.COL_DATE_MONTH, today.monthValue.toString()))
-                    .addFilter(Filters.equal(ExamsSchema.COL_DATE_YEAR, today.year.toString()))
-                    .build()
-
-            return ExamHandler(activity).getAllItems(query)
         }
     }
 
@@ -365,19 +415,18 @@ class MainActivity : NavigationDrawerActivity() {
 
                 val cls = Class.create(context, assignment.classId)!!
                 val subject = Subject.create(context, cls.subjectId)!!
-
                 val color = Color(subject.colorId)
-                card.findViewById(R.id.color).setBackgroundColor(
-                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
 
                 val formatter = DateTimeFormatter.ofPattern("EEE\nd")
                 val datesText = assignment.dueDate.format(formatter).toUpperCase()
 
                 with(card) {
-                    (findViewById(R.id.times) as TextView).text = datesText
+                    findViewById(R.id.color).setBackgroundColor(
+                            ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
 
                     (findViewById(R.id.title) as TextView).text = assignment.title
-                    (findViewById(R.id.subtitle) as TextView).text = Class.makeName(cls, subject)
+                    (findViewById(R.id.subtitle) as TextView).text = cls.makeName(subject)
+                    (findViewById(R.id.times) as TextView).text = datesText
 
                     setOnClickListener {
                         val intent = Intent(context, AssignmentDetailActivity::class.java)
@@ -413,7 +462,6 @@ class MainActivity : NavigationDrawerActivity() {
 
                     (findViewById(R.id.title) as TextView).text = exam.makeName(subject)
                     (findViewById(R.id.subtitle) as TextView).text = exam.formatLocationText()
-
                     (findViewById(R.id.times) as TextView).text = datesText
 
                     setOnClickListener {
