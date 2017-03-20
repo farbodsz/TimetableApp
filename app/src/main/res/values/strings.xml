@@ -28,6 +28,9 @@
     
     <string name="title_licenses">Licenses</string>
 
+    <string name="tab_today">Today</string>
+    <string name="tab_upcoming">Upcoming</string>
+
     <string name="home_card_classes_title">Agenda</string>
     <string name="home_card_classes_action">Open schedule</string>
     <string name="home_card_classes_placeholder">No classes today!</string>
@@ -36,6 +39,11 @@
     <string name="home_card_assignments_placeholder">No assignments due for the next 3 days!</string>
     <string name="home_card_exams_title">Upcoming exams</string>
     <string name="home_card_exams_action">View all exams</string>
+
+    <plurals name="assignments_overdue_text">
+        <item quantity="one">1 assignment overdue</item>
+        <item quantity="other">%1$d assignments overdue</item>
+    </plurals>
 
     <string name="due_overdue">Overdue</string>
     <string name="due_today">Today</string>
@@ -243,6 +251,8 @@
     <string name="placeholder_assignments_past_subtitle">You haven\'t completed any assignments yet</string>
     <string name="placeholder_exams">You don\'t have any upcoming exams</string>
     <string name="placeholder_exams_past">You haven\'t sat any exams yet</string>
+
+    <string name="empty_placeholder_text">No content to display here</string>
 
     <string name="choose_class">Select a class</string>
     <string name="choose_color">Pick a color</string>

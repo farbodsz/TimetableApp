@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/section_container"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/content_vertical_padding"
+    android:paddingBottom="@dimen/fab_padding"
+    android:paddingLeft="@dimen/content_lateral_padding"
+    android:paddingRight="@dimen/content_lateral_padding" />

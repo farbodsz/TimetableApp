@@ -9,7 +9,8 @@
     android:fitsSystemWindows="true"
     tools:context=".ui.MainActivity">
 
-    <android.support.design.widget.CoordinatorLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,31 +18,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true">
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 style="@style/Widget.Timetable.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <include layout="@layout/info_bar" />
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </android.support.design.widget.AppBarLayout>
 
-        <FrameLayout
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingLeft="@dimen/content_lateral_padding"
-            android:paddingRight="@dimen/content_lateral_padding">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/mdu_spacing_micro"
-                android:clipToPadding="false" />
-        </FrameLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </LinearLayout>
 
     <include layout="@layout/navigation_drawer"/>
 

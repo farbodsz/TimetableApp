@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardUseCompatPadding="true"
+    android:foreground="?selectableItemBackground"
+    android:background="@color/mdu_white"
+    android:layout_width="match_parent"
+    android:layout_height="96dp">
+
+    <TextView
+        android:text="@string/empty_placeholder_text"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="@color/mdu_text_black_secondary"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</android.support.v7.widget.CardView>

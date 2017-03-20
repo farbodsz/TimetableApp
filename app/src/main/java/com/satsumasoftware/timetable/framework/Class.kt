@@ -71,16 +71,6 @@ class Class(override val id: Int, override val timetableId: Int, val subjectId: 
         }
 
         /**
-         * @return the displayed name of the class, including the module name if it has one
-         */
-        @JvmStatic
-        fun makeName(cls: Class, subject: Subject) = if (cls.hasModuleName()) {
-            "${subject.name}: ${cls.moduleName}"
-        } else {
-            subject.name
-        }
-
-        /**
          * The field used if the class has no start/end dates
          */
         @JvmField val NO_DATE: LocalDate = LocalDate.MIN
@@ -125,6 +115,15 @@ class Class(override val id: Int, override val timetableId: Int, val subjectId: 
         !startDate.isAfter(LocalDate.now()) && !endDate.isBefore(LocalDate.now())
     } else {
         true
+    }
+
+    /**
+     * @return the displayed name of the class, including the module name if it has one
+     */
+    fun makeName(subject: Subject) = if (hasModuleName()) {
+        "${subject.name}: $moduleName"
+    } else {
+        subject.name
     }
 
     override fun describeContents() = 0
