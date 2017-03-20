@@ -42,7 +42,7 @@ object NotificationUtils {
 
         Log.v(LOG_TAG, "Cancelling all class time alarms")
         classTimeUtils.getAllItems().forEach {
-            co.timetableapp.receiver.AlarmReceiver().cancelAlarm(context, co.timetableapp.receiver.AlarmReceiver.Type.CLASS, it.id)
+            AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.CLASS, it.id)
         }
 
         Log.v(LOG_TAG, "Adding class time alarms for the current timetable")
@@ -59,7 +59,7 @@ object NotificationUtils {
 
         Log.v(LOG_TAG, "Cancelling all exam alarms")
         examUtils.getAllItems().forEach {
-            co.timetableapp.receiver.AlarmReceiver().cancelAlarm(context, co.timetableapp.receiver.AlarmReceiver.Type.EXAM, it.id)
+            AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.EXAM, it.id)
         }
 
         Log.v(LOG_TAG, "Adding exam alarms for the current timetable")
@@ -81,20 +81,20 @@ object NotificationUtils {
         Log.d(LOG_TAG, "Setting the alarm notification time to $time")
 
         // Cancel the current time
-        co.timetableapp.receiver.AlarmReceiver().cancelAlarm(
+        AlarmReceiver().cancelAlarm(
                 context,
-                co.timetableapp.receiver.AlarmReceiver.Type.ASSIGNMENT,
-                co.timetableapp.receiver.AlarmReceiver.ASSIGNMENTS_NOTIFICATION_ID)
+                AlarmReceiver.Type.ASSIGNMENT,
+                AlarmReceiver.ASSIGNMENTS_NOTIFICATION_ID)
 
         // Repeat every day
         val repeatInterval: Long = 86400000
 
         // Remind every day at the specified time
         val reminderStartTime = LocalDateTime.of(LocalDate.now(), time)
-        co.timetableapp.receiver.AlarmReceiver().setRepeatingAlarm(context,
-                co.timetableapp.receiver.AlarmReceiver.Type.ASSIGNMENT,
+        AlarmReceiver().setRepeatingAlarm(context,
+                AlarmReceiver.Type.ASSIGNMENT,
                 DateUtils.asCalendar(reminderStartTime),
-                co.timetableapp.receiver.AlarmReceiver.ASSIGNMENTS_NOTIFICATION_ID,
+                AlarmReceiver.ASSIGNMENTS_NOTIFICATION_ID,
                 repeatInterval)
     }
 

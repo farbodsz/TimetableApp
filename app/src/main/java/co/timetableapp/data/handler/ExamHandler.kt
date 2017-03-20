@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import co.timetableapp.data.schema.ExamsSchema
 import co.timetableapp.framework.Exam
+import co.timetableapp.receiver.AlarmReceiver
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.PrefUtils
 
@@ -43,7 +44,7 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
     override fun deleteItem(itemId: Int) {
         super.deleteItem(itemId)
 
-        co.timetableapp.receiver.AlarmReceiver().cancelAlarm(context, co.timetableapp.receiver.AlarmReceiver.Type.EXAM, itemId)
+        AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.EXAM, itemId)
     }
 
     companion object {
@@ -52,7 +53,7 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
             val minsBefore = PrefUtils.getExamNotificationTime(context).toLong()
             val remindDate = exam.makeDateTimeObject().minusMinutes(minsBefore)
 
-            co.timetableapp.receiver.AlarmReceiver().setAlarm(context,
+            AlarmReceiver().setAlarm(context,
                     co.timetableapp.receiver.AlarmReceiver.Type.EXAM,
                     DateUtils.asCalendar(remindDate),
                     exam.id)

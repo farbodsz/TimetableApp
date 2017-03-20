@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.schema.TimetablesSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
@@ -68,7 +69,7 @@ class Timetable(override val id: Int, val name: String, val startDate: LocalDate
 
         @JvmStatic
         fun create(context: Context, timetableId: Int): Timetable? {
-            val db = co.timetableapp.data.TimetableDbHelper.getInstance(context).readableDatabase
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     TimetablesSchema.TABLE_NAME,
                     null,

@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.schema.SubjectsSchema
 
 /**
@@ -35,7 +36,7 @@ class Subject(override val id: Int, override val timetableId: Int, var name: Str
 
         @JvmStatic
         fun create(context: Context, subjectId: Int): Subject? {
-            val db = co.timetableapp.data.TimetableDbHelper.getInstance(context).readableDatabase
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     SubjectsSchema.TABLE_NAME,
                     null,

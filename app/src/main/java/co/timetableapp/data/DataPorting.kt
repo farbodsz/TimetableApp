@@ -21,7 +21,7 @@ object DataPorting {
     private const val LOG_TAG = "DataPorting"
 
     private const val DB_PATH = "data/data/" + BuildConfig.APPLICATION_ID + "/databases/" +
-            co.timetableapp.data.TimetableDbHelper.DATABASE_NAME
+            TimetableDbHelper.DATABASE_NAME
 
     @JvmStatic private val DEFAULT_EXPORT_DIRECTORY =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -60,7 +60,7 @@ object DataPorting {
 
         if (localDatabase.exists()) {
             Log.d(LOG_TAG, "Deleting local database before import")
-            co.timetableapp.data.TimetableDbHelper.getInstance(activity).close()
+            TimetableDbHelper.getInstance(activity).close()
             localDatabase.delete()
         }
 
@@ -69,7 +69,7 @@ object DataPorting {
         copyFile(FileInputStream(newDatabase), FileOutputStream(localDatabase))
 
         // Access the imported database so that it will be cached and marked as created
-        co.timetableapp.data.TimetableDbHelper.getInstance(activity).writableDatabase.close()
+        TimetableDbHelper.getInstance(activity).writableDatabase.close()
 
         Log.i(LOG_TAG, "Successfully imported database")
         return true

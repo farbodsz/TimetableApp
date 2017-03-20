@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.schema.TermsSchema
 import org.threeten.bp.LocalDate
 
@@ -51,7 +52,7 @@ class Term(override val id: Int, override val timetableId: Int, val name: String
 
         @JvmStatic
         fun create(context: Context, termId: Int): Term? {
-            val db = co.timetableapp.data.TimetableDbHelper.getInstance(context).readableDatabase
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     TermsSchema.TABLE_NAME,
                     null,

@@ -18,7 +18,7 @@ import org.threeten.bp.LocalTime
 /**
  * An activity to display a list of settings (preferences) that the user can modify.
  */
-class SettingsActivity : co.timetableapp.ui.NavigationDrawerActivity() {
+class SettingsActivity : NavigationDrawerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,7 +151,7 @@ class SettingsActivity : co.timetableapp.ui.NavigationDrawerActivity() {
 
     override fun getSelfDrawerLayout() = findViewById(R.id.drawerLayout) as DrawerLayout
 
-    override fun getSelfNavDrawerItem() = co.timetableapp.ui.NavigationDrawerActivity.NAVDRAWER_ITEM_SETTINGS
+    override fun getSelfNavDrawerItem() = NavigationDrawerActivity.NAVDRAWER_ITEM_SETTINGS
 
     override fun getSelfNavigationView() = findViewById(R.id.navigationView) as NavigationView
 

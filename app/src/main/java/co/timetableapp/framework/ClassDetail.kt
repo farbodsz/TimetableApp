@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.schema.ClassDetailsSchema
 
 /**
@@ -43,7 +44,7 @@ class ClassDetail(override val id: Int, val classId: Int, val room: String, val 
 
         @JvmStatic
         fun create(context: Context, classDetailId: Int): ClassDetail {
-            val db = co.timetableapp.data.TimetableDbHelper.getInstance(context).readableDatabase
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ClassDetailsSchema.TABLE_NAME,
                     null,

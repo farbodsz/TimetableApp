@@ -42,12 +42,12 @@
             android:theme="@style/Timetable.Home" />
 
         <activity
-            android:name="co.timetableapp.ui.ScheduleActivity"
+            android:name=".ui.ScheduleActivity"
             android:label="@string/title_activity_schedule"
             android:theme="@style/Timetable.Home" />
 
         <activity
-            android:name="co.timetableapp.ui.ClassesActivity"
+            android:name=".ui.ClassesActivity"
             android:label="@string/title_activity_classes"
             android:theme="@style/Timetable.Home" />
 
@@ -56,15 +56,15 @@
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name="co.timetableapp.ui.ClassEditActivity"
+            android:name=".ui.ClassEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name="co.timetableapp.ui.ClassTimeEditActivity"
+            android:name=".ui.ClassTimeEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
-            android:name="co.timetableapp.ui.AssignmentsActivity"
+            android:name=".ui.AssignmentsActivity"
             android:label="@string/title_activity_assignments"
             android:theme="@style/Timetable.Home"/>
 
@@ -73,11 +73,11 @@
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name="co.timetableapp.ui.AssignmentEditActivity"
+            android:name=".ui.AssignmentEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name="co.timetableapp.ui.ExamsActivity"
+            android:name=".ui.ExamsActivity"
             android:label="@string/title_activity_exams"
             android:theme="@style/Timetable.Home" />
 
@@ -86,29 +86,29 @@
             android:theme="@style/Timetable" />
 
         <activity
-            android:name="co.timetableapp.ui.ExamEditActivity"
+            android:name=".ui.ExamEditActivity"
             android:theme="@style/Timetable" />
 
         <activity
-            android:name="co.timetableapp.ui.SubjectsActivity"
+            android:name=".ui.SubjectsActivity"
             android:label="@string/title_activity_subjects"
             android:theme="@style/Timetable.Home"/>
 
         <activity
-            android:name="co.timetableapp.ui.SubjectEditActivity"
+            android:name=".ui.SubjectEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name="co.timetableapp.ui.TimetablesActivity"
+            android:name=".ui.TimetablesActivity"
             android:label="@string/title_activity_timetables"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name="co.timetableapp.ui.TimetableEditActivity"
+            android:name=".ui.TimetableEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
-            android:name="co.timetableapp.ui.TermEditActivity"
+            android:name=".ui.TermEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
@@ -125,7 +125,7 @@
             android:name=".licenses.LibraryDetailActivity"
             android:theme="@style/Timetable" />
 
-        <receiver android:name="co.timetableapp.receiver.AlarmReceiver" />
+        <receiver android:name=".receiver.AlarmReceiver" />
 
         <receiver android:name=".receiver.BootReceiver">
             <intent-filter>

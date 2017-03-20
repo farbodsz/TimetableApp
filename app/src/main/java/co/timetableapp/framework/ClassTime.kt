@@ -7,6 +7,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
+import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.schema.ClassTimesSchema
 import co.timetableapp.util.PrefUtils
 import org.threeten.bp.DayOfWeek
@@ -69,7 +70,7 @@ class ClassTime(override val id: Int, override val timetableId: Int, val classDe
 
         @JvmStatic
         fun create(context: Context, classTimeId: Int): ClassTime {
-            val db = co.timetableapp.data.TimetableDbHelper.getInstance(context).readableDatabase
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ClassTimesSchema.TABLE_NAME,
                     null,

@@ -39,7 +39,7 @@ import org.threeten.bp.format.DateTimeFormatter
  * The UI is divided into two pages: one for today, and another for upcoming events. The user can
  * navigate between the pages using tabs.
  */
-class MainActivity : co.timetableapp.ui.NavigationDrawerActivity() {
+class MainActivity : NavigationDrawerActivity() {
 
     private var mViewPager: ViewPager? = null
 
@@ -294,8 +294,8 @@ class MainActivity : co.timetableapp.ui.NavigationDrawerActivity() {
                         Intent(activity, AssignmentDetailActivity::class.java)
                                 .putExtra(ItemDetailActivity.EXTRA_ITEM, overdueAssignments[0])
                     } else {
-                        Intent(activity, co.timetableapp.ui.AssignmentsActivity::class.java)
-                                .putExtra(co.timetableapp.ui.AssignmentsActivity.EXTRA_MODE, co.timetableapp.ui.AssignmentsActivity.DISPLAY_TODO)
+                        Intent(activity, AssignmentsActivity::class.java)
+                                .putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO)
                     }
                     startActivity(intent)
                 }

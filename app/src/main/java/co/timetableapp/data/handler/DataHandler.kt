@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.util.Log
+import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.query.Query
 import co.timetableapp.framework.BaseItem
 import java.util.*
@@ -68,7 +69,7 @@ abstract class DataHandler<T : BaseItem>(val context: Context) {
     fun getAllItems(query: Query? = null): ArrayList<T> {
         val items = ArrayList<T>()
 
-        val dbHelper = co.timetableapp.data.TimetableDbHelper.getInstance(context)
+        val dbHelper = TimetableDbHelper.getInstance(context)
         val cursor = dbHelper.readableDatabase.query(
                 tableName,
                 null,
@@ -89,7 +90,7 @@ abstract class DataHandler<T : BaseItem>(val context: Context) {
      *          used as a way of determining the id of a new item to be added.
      */
     fun getHighestItemId(): Int {
-        val db = co.timetableapp.data.TimetableDbHelper.getInstance(context).readableDatabase
+        val db = TimetableDbHelper.getInstance(context).readableDatabase
         val cursor = db.query(
                 tableName,
                 arrayOf(itemIdCol),
@@ -117,7 +118,7 @@ abstract class DataHandler<T : BaseItem>(val context: Context) {
     open fun addItem(item: T) {
         val values = propertiesAsContentValues(item)
 
-        val db = co.timetableapp.data.TimetableDbHelper.getInstance(context).writableDatabase
+        val db = TimetableDbHelper.getInstance(context).writableDatabase
         db.insert(tableName, null, values)
 
         Log.i(LOG_TAG, "Added item with id ${item.id} to $tableName")
@@ -131,7 +132,7 @@ abstract class DataHandler<T : BaseItem>(val context: Context) {
      * @see deleteItemWithReferences
      */
     open fun deleteItem(itemId: Int) {
-        val db = co.timetableapp.data.TimetableDbHelper.getInstance(context).writableDatabase
+        val db = TimetableDbHelper.getInstance(context).writableDatabase
         db.delete(tableName,
                 "$itemIdCol=?",
                 arrayOf(itemId.toString()))

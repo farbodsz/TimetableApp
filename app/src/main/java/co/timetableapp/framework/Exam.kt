@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.schema.ExamsSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -57,7 +58,7 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
 
         @JvmStatic
         fun create(context: Context, examId: Int): Exam? {
-            val db = co.timetableapp.data.TimetableDbHelper.getInstance(context).readableDatabase
+            val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ExamsSchema.TABLE_NAME,
                     null,

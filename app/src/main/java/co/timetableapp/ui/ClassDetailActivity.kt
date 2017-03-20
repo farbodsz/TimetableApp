@@ -31,7 +31,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
     override fun getLayoutResource() = R.layout.activity_class_detail
 
     override fun onNullExtras() {
-        val intent = Intent(this, co.timetableapp.ui.ClassEditActivity::class.java)
+        val intent = Intent(this, ClassEditActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_ITEM_EDIT)
     }
 
@@ -115,8 +115,8 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
     }
 
     override fun onMenuEditClick() {
-        val intent = Intent(this, co.timetableapp.ui.ClassEditActivity::class.java)
-        intent.putExtra(co.timetableapp.ui.ClassEditActivity.EXTRA_CLASS, mItem)
+        val intent = Intent(this, ClassEditActivity::class.java)
+        intent.putExtra(ClassEditActivity.EXTRA_CLASS, mItem)
         startActivityForResult(intent, REQUEST_CODE_ITEM_EDIT)
 
     }

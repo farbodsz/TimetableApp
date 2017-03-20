@@ -6,12 +6,14 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import co.timetableapp.TimetableApplication
+import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.ClassTimesSchema
 import co.timetableapp.framework.Class
 import co.timetableapp.framework.ClassDetail
 import co.timetableapp.framework.ClassTime
+import co.timetableapp.receiver.AlarmReceiver
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.PrefUtils
 import org.threeten.bp.DayOfWeek
@@ -52,7 +54,7 @@ class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(conte
     override fun deleteItem(itemId: Int) {
         super.deleteItem(itemId)
 
-        co.timetableapp.receiver.AlarmReceiver().cancelAlarm(context, co.timetableapp.receiver.AlarmReceiver.Type.CLASS, itemId)
+        AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.CLASS, itemId)
     }
 
     companion object {
@@ -96,8 +98,8 @@ class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(conte
             val repeatInterval = timetable.weekRotations * WEEK_AS_MILLISECONDS
 
             // Set repeating alarm
-            co.timetableapp.receiver.AlarmReceiver().setRepeatingAlarm(context,
-                    co.timetableapp.receiver.AlarmReceiver.Type.CLASS,
+            AlarmReceiver().setRepeatingAlarm(context,
+                    AlarmReceiver.Type.CLASS,
                     DateUtils.asCalendar(startDateTime),
                     classTime.id,
                     repeatInterval)
@@ -120,7 +122,7 @@ class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(conte
 
             val timetable = (activity.application as TimetableApplication).currentTimetable!!
 
-            val dbHelper = co.timetableapp.data.TimetableDbHelper.getInstance(activity)
+            val dbHelper = TimetableDbHelper.getInstance(activity)
             val cursor = dbHelper.readableDatabase.query(
                     ClassTimesSchema.TABLE_NAME,
                     null,

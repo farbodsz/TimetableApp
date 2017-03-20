@@ -31,7 +31,7 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
     override fun getLayoutResource() = R.layout.activity_assignment_detail
 
     override fun onNullExtras() {
-        val intent = Intent(this, co.timetableapp.ui.AssignmentEditActivity::class.java)
+        val intent = Intent(this, AssignmentEditActivity::class.java)
         startActivityForResult(intent, ItemDetailActivity.REQUEST_CODE_ITEM_EDIT)
     }
 
@@ -100,8 +100,8 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
     }
 
     override fun onMenuEditClick() {
-        val intent = Intent(this, co.timetableapp.ui.AssignmentEditActivity::class.java)
-        intent.putExtra(co.timetableapp.ui.AssignmentEditActivity.EXTRA_ASSIGNMENT, mItem)
+        val intent = Intent(this, AssignmentEditActivity::class.java)
+        intent.putExtra(AssignmentEditActivity.EXTRA_ASSIGNMENT, mItem)
         startActivityForResult(intent, ItemDetailActivity.REQUEST_CODE_ITEM_EDIT)
     }
 
