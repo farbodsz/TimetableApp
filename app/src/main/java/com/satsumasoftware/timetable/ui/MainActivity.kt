@@ -1,6 +1,7 @@
 package com.satsumasoftware.timetable.ui
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
@@ -98,6 +99,10 @@ class MainActivity : NavigationDrawerActivity() {
      */
     class TodayFragment : Fragment() {
 
+        private val mAllAssignments: ArrayList<Assignment> by lazy {
+            AssignmentHandler(context).getItems(activity.application)
+        }
+
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater!!.inflate(R.layout.fragment_home_main, container, false)
@@ -120,12 +125,21 @@ class MainActivity : NavigationDrawerActivity() {
 
             sectionContainer.addView(classesSection.view)
 
-            val assignments = getAssignmentsToday(timetableId)
-            if (assignments.isNotEmpty()) {
+            val assignments = getAssignmentsToday()
+            val overdueAssignments = getOverdueAssignments()
+            if (assignments.isNotEmpty() || overdueAssignments.isNotEmpty()) {
                 val assignmentsSection = SectionUi.Builder(context, sectionContainer)
                         .setTitle(R.string.title_activity_assignments)
                         .build()
-                addAssignmentCards(assignmentsSection.containerView, inflater, assignments)
+
+                if (overdueAssignments.isNotEmpty()) {
+                    addOverdueAssignmentsCard(
+                            assignmentsSection.containerView, inflater, overdueAssignments)
+                }
+
+                if (assignments.isNotEmpty()) {
+                    addAssignmentCards(assignmentsSection.containerView, inflater, assignments)
+                }
 
                 sectionContainer.addView(assignmentsSection.view)
             }
@@ -156,17 +170,29 @@ class MainActivity : NavigationDrawerActivity() {
         }
 
         // TODO display assignments on the class card
-        private fun getAssignmentsToday(timetableId: Int): ArrayList<Assignment> {
-            val now = LocalDate.now()
+        private fun getAssignmentsToday(): ArrayList<Assignment> {
+            val today = LocalDate.now()
+            val assignmentsToday = ArrayList<Assignment>()
 
-            val query = Query.Builder()
-                    .addFilter(Filters.equal(AssignmentsSchema.COL_TIMETABLE_ID, timetableId.toString()))
-                    .addFilter(Filters.equal(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH, now.dayOfMonth.toString()))
-                    .addFilter(Filters.equal(AssignmentsSchema.COL_DUE_DATE_MONTH, now.monthValue.toString()))
-                    .addFilter(Filters.equal(AssignmentsSchema.COL_DUE_DATE_YEAR, now.year.toString()))
-                    .build()
+            mAllAssignments.forEach {
+                if (it.dueDate == today) {
+                    assignmentsToday.add(it)
+                }
+            }
 
-            return AssignmentHandler(activity).getAllItems(query)
+            return assignmentsToday
+        }
+
+        private fun getOverdueAssignments(): ArrayList<Assignment> {
+            val overdueAssignments = ArrayList<Assignment>()
+
+            mAllAssignments.forEach {
+                if (it.isOverdue()) {
+                    overdueAssignments.add(it)
+                }
+            }
+
+            return overdueAssignments
         }
 
         private fun getExamsToday(timetableId: Int): ArrayList<Exam> {
@@ -227,6 +253,57 @@ class MainActivity : NavigationDrawerActivity() {
             }
         }
 
+        private fun addOverdueAssignmentsCard(container: ViewGroup, inflater: LayoutInflater,
+                                              overdueAssignments: ArrayList<Assignment>) {
+            val card = inflater.inflate(R.layout.item_home_card, container, false)
+
+            val numOverdue = overdueAssignments.size
+
+            with(card) {
+                findViewById(R.id.color).setBackgroundColor(
+                        ContextCompat.getColor(context, R.color.mdu_red_900))
+
+                with(findViewById(R.id.title) as TextView) {
+                    text = resources.getQuantityString(
+                            R.plurals.assignments_overdue_text,
+                            numOverdue,
+                            numOverdue)
+
+                    setTextColor(ContextCompat.getColor(activity, R.color.mdu_red_900))
+                    setTypeface(null, Typeface.BOLD)
+                }
+
+                with(findViewById(R.id.subtitle) as TextView) {
+                    text = if (numOverdue == 1) {
+                        overdueAssignments[0].title
+                    } else {
+                        // Add the first 4 assignments or less (if there aren't 4 assignments)
+                        // Note that in the UI, only up to one line will be displayed.
+                        val stringBuilder = StringBuilder()
+                        (0..numOverdue - 1)
+                                .takeWhile { it < 4 }
+                                .forEach {
+                                    stringBuilder.append(overdueAssignments[it].title).append(", ")
+                                }
+                        stringBuilder.removeSuffix(", ").toString()
+                    }
+                }
+
+                setOnClickListener {
+                    val intent = if (numOverdue == 1) {
+                        Intent(activity, AssignmentDetailActivity::class.java)
+                                .putExtra(ItemDetailActivity.EXTRA_ITEM, overdueAssignments[0])
+                    } else {
+                        Intent(activity, AssignmentsActivity::class.java)
+                                .putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO)
+                    }
+                    startActivity(intent)
+                }
+            }
+
+            container.addView(card)
+        }
+
         private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
                                     assignments: ArrayList<Assignment>) {
             for (assignment in assignments.sorted()) {
@@ -244,7 +321,7 @@ class MainActivity : NavigationDrawerActivity() {
                     (findViewById(R.id.subtitle) as TextView).text = cls.makeName(subject)
 
                     setOnClickListener {
-                        val intent = Intent(activity, ExamDetailActivity::class.java)
+                        val intent = Intent(activity, AssignmentDetailActivity::class.java)
                         intent.putExtra(ItemDetailActivity.EXTRA_ITEM, assignment)
                         startActivity(intent)
                     }

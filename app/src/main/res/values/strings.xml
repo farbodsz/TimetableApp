@@ -40,6 +40,11 @@
     <string name="home_card_exams_title">Upcoming exams</string>
     <string name="home_card_exams_action">View all exams</string>
 
+    <plurals name="assignments_overdue_text">
+        <item quantity="one">1 assignment overdue</item>
+        <item quantity="other">%1$d assignments overdue</item>
+    </plurals>
+
     <string name="due_overdue">Overdue</string>
     <string name="due_today">Today</string>
     <string name="due_tomorrow">Tomorrow</string>
