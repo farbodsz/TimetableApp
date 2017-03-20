@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.satsumasoftware.timetable"
+    package="co.timetableapp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Required for notifications -->
@@ -42,12 +42,12 @@
             android:theme="@style/Timetable.Home" />
 
         <activity
-            android:name=".ui.ScheduleActivity"
+            android:name="co.timetableapp.ui.ScheduleActivity"
             android:label="@string/title_activity_schedule"
             android:theme="@style/Timetable.Home" />
 
         <activity
-            android:name=".ui.ClassesActivity"
+            android:name="co.timetableapp.ui.ClassesActivity"
             android:label="@string/title_activity_classes"
             android:theme="@style/Timetable.Home" />
 
@@ -56,15 +56,15 @@
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.ClassEditActivity"
+            android:name="co.timetableapp.ui.ClassEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.ClassTimeEditActivity"
+            android:name="co.timetableapp.ui.ClassTimeEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
-            android:name=".ui.AssignmentsActivity"
+            android:name="co.timetableapp.ui.AssignmentsActivity"
             android:label="@string/title_activity_assignments"
             android:theme="@style/Timetable.Home"/>
 
@@ -73,11 +73,11 @@
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.AssignmentEditActivity"
+            android:name="co.timetableapp.ui.AssignmentEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.ExamsActivity"
+            android:name="co.timetableapp.ui.ExamsActivity"
             android:label="@string/title_activity_exams"
             android:theme="@style/Timetable.Home" />
 
@@ -86,29 +86,29 @@
             android:theme="@style/Timetable" />
 
         <activity
-            android:name=".ui.ExamEditActivity"
+            android:name="co.timetableapp.ui.ExamEditActivity"
             android:theme="@style/Timetable" />
 
         <activity
-            android:name=".ui.SubjectsActivity"
+            android:name="co.timetableapp.ui.SubjectsActivity"
             android:label="@string/title_activity_subjects"
             android:theme="@style/Timetable.Home"/>
 
         <activity
-            android:name=".ui.SubjectEditActivity"
+            android:name="co.timetableapp.ui.SubjectEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.TimetablesActivity"
+            android:name="co.timetableapp.ui.TimetablesActivity"
             android:label="@string/title_activity_timetables"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.TimetableEditActivity"
+            android:name="co.timetableapp.ui.TimetableEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
-            android:name=".ui.TermEditActivity"
+            android:name="co.timetableapp.ui.TermEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
@@ -125,7 +125,7 @@
             android:name=".licenses.LibraryDetailActivity"
             android:theme="@style/Timetable" />
 
-        <receiver android:name=".receiver.AlarmReceiver" />
+        <receiver android:name="co.timetableapp.receiver.AlarmReceiver" />
 
         <receiver android:name=".receiver.BootReceiver">
             <intent-filter>
