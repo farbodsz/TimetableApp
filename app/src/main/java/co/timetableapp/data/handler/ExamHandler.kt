@@ -54,7 +54,7 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
             val remindDate = exam.makeDateTimeObject().minusMinutes(minsBefore)
 
             AlarmReceiver().setAlarm(context,
-                    co.timetableapp.receiver.AlarmReceiver.Type.EXAM,
+                    AlarmReceiver.Type.EXAM,
                     DateUtils.asCalendar(remindDate),
                     exam.id)
         }
