@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import co.timetableapp.R;
+import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.PortingFragment;
 import co.timetableapp.data.handler.TimetableHandler;
 import co.timetableapp.framework.Timetable;
@@ -46,7 +47,7 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     private ArrayList<Timetable> mTimetables;
     private TimetablesAdapter mAdapter;
 
-    private TimetableHandler mTimetableUtils = new TimetableHandler(this);
+    private TimetableHandler mDataHandler = new TimetableHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class TimetablesActivity extends NavigationDrawerActivity {
     }
 
     private void setupList() {
-        mTimetables = mTimetableUtils.getAllItems();
+        mTimetables = mDataHandler.getAllItems();
         sortList();
 
         mAdapter = new TimetablesAdapter(this, mTimetables, findViewById(R.id.coordinatorLayout));
@@ -116,7 +117,7 @@ public class TimetablesActivity extends NavigationDrawerActivity {
 
     private void refreshList() {
         mTimetables.clear();
-        mTimetables.addAll(mTimetableUtils.getAllItems());
+        mTimetables.addAll(mDataHandler.getAllItems());
         sortList();
         mAdapter.notifyDataSetChanged();
     }
@@ -159,12 +160,37 @@ public class TimetablesActivity extends NavigationDrawerActivity {
         Bundle fragmentArgs = new Bundle();
         fragmentArgs.putInt(PortingFragment.ARGUMENT_PORT_TYPE, portType);
 
-        Fragment portFragment = new PortingFragment();
+        PortingFragment portFragment = new PortingFragment();
+        portFragment.setOnPortingCompleteListener(new PortingFragment.OnPortingCompleteListener() {
+            @Override
+            public void onPortingComplete(int portingType, boolean successful) {
+                refreshList();
+                String message = getString(R.string.message_set_current_timetable,
+                        String.valueOf(setNewCurrentTimetable().getId()));
+                Snackbar.make(findViewById(R.id.coordinatorLayout),
+                        message,
+                        Snackbar.LENGTH_LONG).show();
+            }
+        });
         portFragment.setArguments(fragmentArgs);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(portFragment, null);
         transaction.commit();
+    }
+
+    private Timetable setNewCurrentTimetable() {
+        ArrayList<Timetable> timetables = mDataHandler.getAllItems();
+        Collections.sort(timetables, new Comparator<Timetable>() {
+            @Override
+            public int compare(Timetable o1, Timetable o2) {
+                return o1.getId() - o2.getId();
+            }
+        });
+
+        Timetable newCurrent = timetables.get(0);
+        ((TimetableApplication) getApplication()).setCurrentTimetable(this, newCurrent);
+        return newCurrent;
     }
 
     @Override
