@@ -10,11 +10,21 @@ import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.util.UiUtils
 
+/**
+ * An activity to display the detail of a library, such as its name, author and license.
+ *
+ * @see Library
+ */
 class LibraryDetailActivity : AppCompatActivity() {
 
-    internal companion object {
+    companion object {
+
         private const val LOG_TAG = "LibraryDetailActivity"
-        const val EXTRA_LIBRARY = "extra_library"
+
+        /**
+         * The key for the [Library] being passed through the intent extra to this activity.
+         */
+        internal const val EXTRA_LIBRARY = "extra_library"
     }
 
     private var mLibrary: Library? = null
@@ -23,9 +33,6 @@ class LibraryDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
-
         mLibrary = intent.extras.getParcelable<Library>(EXTRA_LIBRARY)
 
         if (mLibrary == null) {
@@ -33,13 +40,20 @@ class LibraryDetailActivity : AppCompatActivity() {
             return
         }
 
-        setupToolbar(toolbar)
+        setupLayout()
+    }
+
+    private fun setupLayout() {
+        setupToolbar()
 
         val container = findViewById(R.id.container) as LinearLayout
         container.addView(makeLicenseCard(container))
     }
 
-    private fun setupToolbar(toolbar: Toolbar) {
+    private fun setupToolbar() {
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+
         with(supportActionBar!!) {
             title = mLibrary!!.name
             subtitle = mLibrary!!.author
@@ -55,7 +69,7 @@ class LibraryDetailActivity : AppCompatActivity() {
         val card = layoutInflater.inflate(R.layout.card_general, container, false)
 
         with(card) {
-            (findViewById(R.id.title) as TextView).text = "License"
+            (findViewById(R.id.title) as TextView).text = getString(R.string.title_license)
             (findViewById(R.id.subtitle) as TextView).text = mLibrary!!.license.name
             (findViewById(R.id.content_text) as TextView).text =
                     mLibrary!!.license.getNotice(context)

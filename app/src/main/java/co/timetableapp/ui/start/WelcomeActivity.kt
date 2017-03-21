@@ -3,7 +3,6 @@ package co.timetableapp.ui.start
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import co.timetableapp.BuildConfig
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.PortingFragment
@@ -32,14 +31,7 @@ class WelcomeActivity : AppCompatActivity() {
         setupLayout()
     }
 
-    private fun hasExistingData(): Boolean {
-        return if (BuildConfig.DEBUG) {
-            // If debugging, we may (or may not) want to see the welcome page
-            false
-        } else {
-            (application as TimetableApplication).currentTimetable != null
-        }
-    }
+    private fun hasExistingData() = (application as TimetableApplication).currentTimetable != null
 
     private fun setupLayout() {
         findViewById(R.id.button_import).setOnClickListener {

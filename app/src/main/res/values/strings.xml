@@ -26,6 +26,7 @@
     <string name="title_activity_term_new">New Term</string>
     <string name="title_activity_term_edit">Edit Term</string>
     
+    <string name="title_license">License</string>
     <string name="title_licenses">Licenses</string>
 
     <string name="tab_today">Today</string>
