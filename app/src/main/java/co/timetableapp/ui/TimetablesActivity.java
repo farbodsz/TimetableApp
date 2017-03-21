@@ -165,8 +165,13 @@ public class TimetablesActivity extends NavigationDrawerActivity {
             @Override
             public void onPortingComplete(int portingType, boolean successful) {
                 refreshList();
+
+                Timetable currentTimetable =
+                        ((TimetableApplication) getApplication()).getCurrentTimetable();
+                assert currentTimetable != null;
                 String message = getString(R.string.message_set_current_timetable,
-                        String.valueOf(setNewCurrentTimetable().getId()));
+                        currentTimetable.getDisplayedName());
+
                 Snackbar.make(findViewById(R.id.coordinatorLayout),
                         message,
                         Snackbar.LENGTH_LONG).show();
@@ -177,20 +182,6 @@ public class TimetablesActivity extends NavigationDrawerActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(portFragment, null);
         transaction.commit();
-    }
-
-    private Timetable setNewCurrentTimetable() {
-        ArrayList<Timetable> timetables = mDataHandler.getAllItems();
-        Collections.sort(timetables, new Comparator<Timetable>() {
-            @Override
-            public int compare(Timetable o1, Timetable o2) {
-                return o1.getId() - o2.getId();
-            }
-        });
-
-        Timetable newCurrent = timetables.get(0);
-        ((TimetableApplication) getApplication()).setCurrentTimetable(this, newCurrent);
-        return newCurrent;
     }
 
     @Override

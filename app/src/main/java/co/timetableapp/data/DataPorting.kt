@@ -58,6 +58,12 @@ object DataPorting {
             return false
         }
 
+        if (!localDatabase.exists()) {
+            // Local db doesn't exist - create it to avoid FileNotFoundException later
+            Log.d(LOG_TAG, "Local database doesn't exist - creating a blank dummy")
+            TimetableDbHelper.getInstance(activity).writableDatabase.close()
+        }
+
         if (localDatabase.exists()) {
             Log.d(LOG_TAG, "Deleting local database before import")
             TimetableDbHelper.getInstance(activity).close()

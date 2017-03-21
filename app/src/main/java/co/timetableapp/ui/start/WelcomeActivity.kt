@@ -35,7 +35,7 @@ class WelcomeActivity : AppCompatActivity() {
     private fun hasExistingData(): Boolean {
         return if (BuildConfig.DEBUG) {
             // If debugging, we may (or may not) want to see the welcome page
-            true
+            false
         } else {
             (application as TimetableApplication).currentTimetable != null
         }
@@ -55,6 +55,7 @@ class WelcomeActivity : AppCompatActivity() {
     private fun startImportFragment() {
         val fragmentArgs = Bundle()
         fragmentArgs.putInt(PortingFragment.ARGUMENT_PORT_TYPE, PortingFragment.TYPE_IMPORT)
+        fragmentArgs.putBoolean(PortingFragment.ARGUMENT_IMPORT_FIRST_DB, true)
 
         val fragment = PortingFragment()
         fragment.arguments = fragmentArgs

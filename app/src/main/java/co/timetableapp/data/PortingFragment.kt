@@ -12,6 +12,9 @@ import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.widget.Toast
 import co.timetableapp.R
+import co.timetableapp.TimetableApplication
+import co.timetableapp.data.handler.TimetableHandler
+import java.util.*
 
 /**
  * A worker fragment to handle import and export actions. It displays warning dialogs, verifies the
@@ -29,6 +32,22 @@ class PortingFragment : Fragment() {
         const val TYPE_IMPORT = 0
         const val TYPE_EXPORT = 1
 
+        /**
+         * A fragment construction argument key used to specify whether the database being imported
+         * will be the first database in the app. This would be true if the user has installed the
+         * app for the first time, and there is no database in the app.
+         *
+         * The value passed with this argument key is only used if the argument key
+         * [ARGUMENT_PORT_TYPE] is passed with a value [TYPE_IMPORT] (i.e. if this fragment is being
+         * used to import).
+         * By default, a value of 'false' will be used for this key if this argument is not
+         * specified when creating the fragment.
+         *
+         * @see mImportingFirstDb
+         * @see startImport
+         */
+        const val ARGUMENT_IMPORT_FIRST_DB = "extra_import_first_database"
+
         private const val REQUEST_CODE_EXPORT_PERM = 1
         private const val REQUEST_CODE_IMPORT_PERM = 2
         private const val REQUEST_CODE_PICK_IMPORTING_DB = 3
@@ -40,8 +59,18 @@ class PortingFragment : Fragment() {
 
     var onPortingCompleteListener: OnPortingCompleteListener? = null
 
+    /**
+     * Whether the database being imported will be the first database in the app (i.e. true if the
+     * app doesn't have an existing database).
+     *
+     * @see ARGUMENT_IMPORT_FIRST_DB
+     */
+    private var mImportingFirstDb: Boolean? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mImportingFirstDb = arguments.getBoolean(ARGUMENT_IMPORT_FIRST_DB, false)
 
         val portType = arguments.getInt(ARGUMENT_PORT_TYPE)
         when (portType) {
@@ -57,10 +86,20 @@ class PortingFragment : Fragment() {
      * continue with the import, then we check to see if we've been granted storage permissions.
      */
     private fun startImport() {
+        if (mImportingFirstDb!!) {
+            // Don't show the warning dialog since there is no data that would be overwritten.
+            verifyStoragePermissions(true)
+            handleDbImport()
+            return
+        }
+
         AlertDialog.Builder(context)
                 .setTitle(R.string.dialog_import_warning_title)
                 .setMessage(R.string.dialog_import_warning_message)
-                .setPositiveButton(android.R.string.yes) { _, _ -> verifyStoragePermissions(true) }
+                .setPositiveButton(android.R.string.yes) { _, _ ->
+                    verifyStoragePermissions(true)
+                    handleDbImport()
+                }
                 .setNegativeButton(android.R.string.cancel) { _, _ -> }
                 .show()
     }
@@ -71,6 +110,7 @@ class PortingFragment : Fragment() {
      */
     private fun startExport() {
         verifyStoragePermissions(false)
+        handleDbExport()
     }
 
     /**
@@ -80,10 +120,11 @@ class PortingFragment : Fragment() {
     private fun verifyStoragePermissions(importing: Boolean) {
         Log.v(LOG_TAG, "Verifying storage permissions")
 
-        val storagePermission = if (importing)
+        val storagePermission = if (importing) {
             Manifest.permission.READ_EXTERNAL_STORAGE
-        else
+        } else {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
+        }
 
         // Check if we have the 'write' permission
         val permission = ActivityCompat.checkSelfPermission(context, storagePermission)
@@ -99,8 +140,6 @@ class PortingFragment : Fragment() {
                     STORAGE_PERMISSIONS,
                     requestCode)
 
-        } else {
-            if (importing) handleDbImport() else handleDbExport()
         }
     }
 
@@ -151,21 +190,26 @@ class PortingFragment : Fragment() {
 
         if (requestCode == REQUEST_CODE_PICK_IMPORTING_DB) {
             if (resultCode == RESULT_OK) {
-                completeDbImport(data!!.data)
+                val exportBackup = !mImportingFirstDb!! // export backup if there is an existing db
+                completeDbImport(data!!.data, exportBackup)
             }
         }
     }
 
-    private fun completeDbImport(importData: Uri) {
+    private fun completeDbImport(importData: Uri, exportBackup: Boolean) {
         if (!DataPorting.isDatabaseValid(importData)) {
             showImportInvalidDialog()
             return
         }
 
-        Log.e(LOG_TAG, "Preparing to export backup of data before completing import.")
-        startExport()
+        if (exportBackup) {
+            Log.e(LOG_TAG, "Preparing to export backup of data before completing import.")
+            startExport()
+        }
 
         val successful = DataPorting.importDatabase(activity, importData)
+
+        setNewCurrentTimetable()
 
         onPortingCompleteListener?.onPortingComplete(TYPE_IMPORT, successful)
 
@@ -183,6 +227,14 @@ class PortingFragment : Fragment() {
                 .setMessage(R.string.dialog_import_invalid_message)
                 .setPositiveButton(android.R.string.ok) { _, _ -> }
                 .show()
+    }
+
+    private fun setNewCurrentTimetable() {
+        val timetables = TimetableHandler(context).getAllItems()
+        Collections.sort(timetables, { o1, o2 -> o1.id - o2.id })
+
+        val newCurrent = timetables[0]
+        (activity.application as TimetableApplication).setCurrentTimetable(context, newCurrent)
     }
 
     interface OnPortingCompleteListener {
