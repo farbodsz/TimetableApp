@@ -25,7 +25,6 @@ import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.AssignmentsSchema
-import co.timetableapp.data.schema.ClassTimesSchema
 import co.timetableapp.data.schema.ExamsSchema
 import co.timetableapp.framework.*
 import co.timetableapp.util.DateUtils
@@ -121,7 +120,7 @@ class MainActivity : NavigationDrawerActivity() {
             val classesSection = SectionUi.Builder(context, sectionContainer)
                     .setTitle(R.string.title_activity_classes)
                     .build()
-            addClassesCards(classesSection.containerView, inflater, getClassesToday(timetableId))
+            addClassesCards(classesSection.containerView, inflater, getClassesToday())
 
             sectionContainer.addView(classesSection.view)
 
@@ -155,18 +154,23 @@ class MainActivity : NavigationDrawerActivity() {
             }
         }
 
-        private fun getClassesToday(timetableId: Int): ArrayList<ClassTime> {
+        private fun getClassesToday(): ArrayList<ClassTime> {
             val now = LocalDate.now()
             val today = now.dayOfWeek
             val weekNumber = DateUtils.findWeekNumber(activity.application)
 
-            val query = Query.Builder()
-                    .addFilter(Filters.equal(ClassTimesSchema.COL_TIMETABLE_ID, timetableId.toString()))
-                    .addFilter(Filters.equal(ClassTimesSchema.COL_DAY, today.value.toString()))
-                    .addFilter(Filters.equal(ClassTimesSchema.COL_WEEK_NUMBER, weekNumber.toString()))
-                    .build()
+            val classesToday = ArrayList<ClassTime>()
+            ClassTimeHandler(activity).getItems(activity.application).forEach {
+                if (it.day == today && it.weekNumber == weekNumber) {
+                    val classDetail = ClassDetail.create(context, it.classDetailId)
+                    val cls = Class.create(context, classDetail.classId)!!
+                    if (cls.isCurrent()) {
+                        classesToday.add(it)
+                    }
+                }
+            }
 
-            return ClassTimeHandler(activity).getAllItems(query)
+            return classesToday
         }
 
         // TODO display assignments on the class card
