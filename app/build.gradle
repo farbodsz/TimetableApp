@@ -9,8 +9,8 @@ android {
         applicationId "co.timetableapp"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 1001
-        versionName "1.0.0-rc1"
+        versionCode 1002
+        versionName "1.0.0-rc2"
 
         vectorDrawables.useSupportLibrary = true
     }
