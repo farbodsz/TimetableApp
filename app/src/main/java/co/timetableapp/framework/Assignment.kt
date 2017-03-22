@@ -94,7 +94,7 @@ class Assignment(override val id: Int, override val timetableId: Int, val classI
     override fun compareTo(other: Assignment): Int {
         // Sorting order is due dates then titles
         val dateComparison = dueDate.compareTo(other.dueDate)
-        return if (dateComparison != 0) {
+        return if (dateComparison == 0) {
             title.compareTo(other.title)
         } else {
             dateComparison
