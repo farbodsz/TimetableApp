@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import java.util.Collections;
-import java.util.Comparator;
 
 import co.timetableapp.R;
 import co.timetableapp.data.handler.SubjectHandler;
@@ -72,12 +71,7 @@ public class SubjectsActivity extends ItemListActivity<Subject> {
 
     @Override
     void sortList() {
-        Collections.sort(mItems, new Comparator<Subject>() {
-            @Override
-            public int compare(Subject subject, Subject t1) {
-                return subject.getName().compareTo(t1.getName());
-            }
-        });
+        Collections.sort(mItems);
     }
 
     @Override

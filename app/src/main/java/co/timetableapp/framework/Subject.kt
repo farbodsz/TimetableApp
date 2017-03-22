@@ -15,7 +15,7 @@ import co.timetableapp.data.schema.SubjectsSchema
  * @property colorId the identifier of the [Color] used when displaying this subject
  */
 class Subject(override val id: Int, override val timetableId: Int, var name: String,
-              var abbreviation: String, var colorId: Int) : TimetableItem {
+              var abbreviation: String, var colorId: Int) : TimetableItem, Comparable<Subject> {
 
     companion object {
 
@@ -67,6 +67,10 @@ class Subject(override val id: Int, override val timetableId: Int, var name: Str
             source.readString(),
             source.readString(),
             source.readInt())
+
+    override fun compareTo(other: Subject): Int {
+        return name.compareTo(other.name)
+    }
 
     override fun describeContents() = 0
 
