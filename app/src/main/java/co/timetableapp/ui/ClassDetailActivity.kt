@@ -13,8 +13,6 @@ import co.timetableapp.framework.ClassTime
 import co.timetableapp.framework.Color
 import co.timetableapp.framework.Subject
 import co.timetableapp.util.UiUtils
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Shows the details of a class.
@@ -41,16 +39,20 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
 
         val locationBuilder = StringBuilder()
         val teacherBuilder = StringBuilder()
-
         val allClassTimes = ArrayList<ClassTime>()
 
+        // Add locations, teachers, and times to StringBuilders or ArrayLists, with no duplicates
         ClassDetailHandler.getClassDetailsForClass(this, mItem!!.id).forEach { classDetail ->
             classDetail.formatLocationName()?.let {
-                locationBuilder.append(it).append("\n")
+                if (!locationBuilder.contains(it)) {
+                    locationBuilder.append(it).append("\n")
+                }
             }
 
             if (classDetail.hasTeacher()) {
-                teacherBuilder.append(classDetail.teacher).append("\n")
+                if (!teacherBuilder.contains(classDetail.teacher)) {
+                    teacherBuilder.append(classDetail.teacher).append("\n")
+                }
             }
 
             allClassTimes.addAll(ClassTimeHandler.getClassTimesForDetail(this, classDetail.id))
@@ -79,19 +81,14 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         UiUtils.setBarColors(color, this, toolbar)
     }
 
+    /**
+     * @return the list of class times as a formatted string
+     */
     private fun produceClassTimesText(classTimes: ArrayList<ClassTime>): String {
-        Collections.sort(classTimes) { classTime1, classTime2 ->
-            // Sort by day, then by time
-            val dayComparison = classTime1.day.compareTo(classTime2.day)
-            if (dayComparison != 0) {
-                dayComparison
-            } else {
-                classTime1.startTime.compareTo(classTime2.startTime)
-            }
-        }
-
+        classTimes.sort()
         val stringBuilder = StringBuilder()
 
+        // Add all time texts - not expecting duplicate values for times
         classTimes.forEach {
             val dayString = it.day.toString()
             val formattedDayString =
@@ -118,7 +115,6 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         val intent = Intent(this, ClassEditActivity::class.java)
         intent.putExtra(ClassEditActivity.EXTRA_CLASS, mItem)
         startActivityForResult(intent, REQUEST_CODE_ITEM_EDIT)
-
     }
 
     override fun cancelAndClose() {
