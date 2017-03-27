@@ -25,6 +25,7 @@ import co.timetableapp.util.UiUtils
  *
  * @param T the type of the item (e.g. assignment, class, exam)
  *
+ * @see ItemEditActivity
  * @see ItemListActivity
  */
 abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {

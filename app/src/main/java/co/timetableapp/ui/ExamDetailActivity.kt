@@ -81,7 +81,7 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
 
     override fun onMenuEditClick() {
         val intent = Intent(this, ExamEditActivity::class.java)
-        intent.putExtra(ExamEditActivity.EXTRA_EXAM, mItem)
+        intent.putExtra(ItemEditActivity.EXTRA_ITEM, mItem)
         startActivityForResult(intent, REQUEST_CODE_ITEM_EDIT)
     }
 

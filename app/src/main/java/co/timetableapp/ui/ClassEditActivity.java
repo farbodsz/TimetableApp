@@ -13,13 +13,9 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -56,42 +52,27 @@ import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
 
 /**
- * Invoked and displayed to the user to edit the details of a class.
+ * Allows the user to edit a {@link Class}.
  *
- * It can also be called to create a new assignment. If so, it will be started by
- * {@link ClassDetailActivity} and no data will be passed to this activity (i.e.
- * {@link #EXTRA_CLASS} will be null).
- *
- * @see Class
  * @see ClassesActivity
  * @see ClassDetailActivity
+ * @see ItemEditActivity
  */
-public class ClassEditActivity extends AppCompatActivity {
+public class ClassEditActivity extends ItemEditActivity<Class> {
 
     private static final String LOG_TAG = "ClassDetailActivity";
 
-    /**
-     * The key for the {@link Class} passed through an intent extra.
-     *
-     * It should be null if we're creating a new class.
-     */
-    static final String EXTRA_CLASS = "extra_class";
-
     private static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
     private static final int REQUEST_CODE_CLASS_TIME_DETAIL = 3;
-
-    private boolean mIsNew;
 
     private int mNewDetailIdCount = 1;
 
     private ClassHandler mClassHandler = new ClassHandler(this);
     private ClassDetailHandler mClassDetailHandler = new ClassDetailHandler(this);
 
-    private Class mClass;
     private ArrayList<Integer> mClassDetailIds;
 
     private AppBarLayout mAppBarLayout;
-    private Toolbar mToolbar;
     private TabLayout mTabLayout;
 
     private Subject mSubject;
@@ -109,42 +90,24 @@ public class ClassEditActivity extends AppCompatActivity {
     private ArrayList<ClassTimesAdapter> mAdapters;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_edit);
-
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        assert getSupportActionBar() != null;
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mClass = extras.getParcelable(EXTRA_CLASS);
-        }
-        mIsNew = mClass == null;
-
-        int titleResId = mIsNew ? R.string.title_activity_class_new :
-                R.string.title_activity_class_edit;
-        getSupportActionBar().setTitle(getResources().getString(titleResId));
-
-        mToolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleCloseAction();
-            }
-        });
-
-        setupLayout();
+    protected int getLayoutResource() {
+        return R.layout.activity_class_edit;
     }
 
-    private void setupLayout() {
+    @Override
+    protected int getTitleRes(boolean isNewItem) {
+        return isNewItem ? R.string.title_activity_class_new : R.string.title_activity_class_edit;
+    }
+
+    @Override
+    protected void setupLayout() {
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
+
         setupSubjectText();
 
         mEditTextModule = (EditText) findViewById(R.id.editText_module);
         if (!mIsNew) {
-            mEditTextModule.setText(mClass.getModuleName());
+            mEditTextModule.setText(mItem.getModuleName());
         }
 
         setupDateTexts();
@@ -182,11 +145,11 @@ public class ClassEditActivity extends AppCompatActivity {
         mAdapters = new ArrayList<>();
 
         if (!mIsNew) {
-            mSubject = Subject.create(this, mClass.getSubjectId());
+            mSubject = Subject.create(this, mItem.getSubjectId());
             updateLinkedSubject();
 
             ArrayList<ClassDetail> classDetails =
-                    ClassDetailHandler.getClassDetailsForClass(this, mClass.getId());
+                    ClassDetailHandler.getClassDetailsForClass(this, mItem.getId());
             for (ClassDetail classDetail : classDetails) {
                 addDetailTab(classDetail, false);
             }
@@ -262,9 +225,9 @@ public class ClassEditActivity extends AppCompatActivity {
         mStartDateText = (TextView) findViewById(R.id.textView_start_date);
         mEndDateText = (TextView) findViewById(R.id.textView_end_date);
 
-        if (!mIsNew && mClass.hasStartEndDates()) {
-            mStartDate = mClass.getStartDate();
-            mEndDate = mClass.getEndDate();
+        if (!mIsNew && mItem.hasStartEndDates()) {
+            mStartDate = mItem.getStartDate();
+            mEndDate = mItem.getEndDate();
             updateDateTexts();
         }
 
@@ -282,7 +245,7 @@ public class ClassEditActivity extends AppCompatActivity {
                     }
                 };
 
-                boolean useNowTime = mIsNew || !mClass.hasStartEndDates();
+                boolean useNowTime = mIsNew || !mItem.hasStartEndDates();
 
                 new DatePickerDialog(
                         ClassEditActivity.this,
@@ -305,7 +268,7 @@ public class ClassEditActivity extends AppCompatActivity {
                     }
                 };
 
-                boolean useNowTime = mIsNew || !mClass.hasStartEndDates();
+                boolean useNowTime = mIsNew || !mItem.hasStartEndDates();
 
                 new DatePickerDialog(
                         ClassEditActivity.this,
@@ -342,9 +305,9 @@ public class ClassEditActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     datesSection.setVisibility(View.VISIBLE);
-                    if (!mIsNew && mClass.hasStartEndDates()) {
-                        mStartDate = mClass.getStartDate();
-                        mEndDate = mClass.getEndDate();
+                    if (!mIsNew && mItem.hasStartEndDates()) {
+                        mStartDate = mItem.getStartDate();
+                        mEndDate = mItem.getEndDate();
                     } else {
                         LocalDate today = LocalDate.now();
                         mStartDate = today;
@@ -359,7 +322,7 @@ public class ClassEditActivity extends AppCompatActivity {
             }
         });
 
-        if (!mIsNew && mClass.hasStartEndDates()) {
+        if (!mIsNew && mItem.hasStartEndDates()) {
             datesSwitch.setChecked(true);
         }
     }
@@ -576,7 +539,7 @@ public class ClassEditActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                mSubject = data.getParcelableExtra(SubjectEditActivity.EXTRA_SUBJECT);
+                mSubject = data.getParcelableExtra(ItemEditActivity.EXTRA_ITEM);
                 mSubjectDialog.dismiss();
                 updateLinkedSubject();
             }
@@ -601,45 +564,7 @@ public class ClassEditActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        UiUtils.tintMenuIcons(this, menu, R.id.action_done);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mIsNew) {
-            menu.findItem(R.id.action_delete).setVisible(false);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                handleDoneAction();
-                break;
-            case R.id.action_delete:
-                handleDeleteAction();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        handleCloseAction();
-    }
-
-    private void handleCloseAction() {
-        setResult(Activity.RESULT_CANCELED);
-        supportFinishAfterTransition();
-    }
-
-    private void handleDoneAction() {
+    protected void handleDoneAction() {
         // Validate subject and start/end dates
         if (mSubject == null) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_subject_required,
@@ -724,7 +649,7 @@ public class ClassEditActivity extends AppCompatActivity {
         // now write the data (replace class detail values)
 
         int highestClassId = mClassHandler.getHighestItemId();
-        int classId = mIsNew ? highestClassId + 1 : mClass.getId();
+        int classId = mIsNew ? highestClassId + 1 : mItem.getId();
 
         for (int i = 0; i < rooms.size(); i++) {
             int classDetailId = classDetailIds.get(i);
@@ -750,7 +675,7 @@ public class ClassEditActivity extends AppCompatActivity {
             dbEndDate = Class.NO_DATE;
         }
 
-        mClass = new Class(classId,
+        mItem = new Class(classId,
                 timetable.getId(),
                 mSubject.getId(),
                 moduleName,
@@ -758,23 +683,24 @@ public class ClassEditActivity extends AppCompatActivity {
                 dbEndDate);
 
         if (mIsNew) {
-            mClassHandler.addItem(mClass);
+            mClassHandler.addItem(mItem);
         } else {
-            mClassHandler.replaceItem(mClass.getId(), mClass);
+            mClassHandler.replaceItem(mItem.getId(), mItem);
         }
 
         setResult(Activity.RESULT_OK);
         supportFinishAfterTransition();
     }
 
-    private void handleDeleteAction() {
+    @Override
+    protected void handleDeleteAction() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.delete_class)
                 .setMessage(R.string.delete_confirmation_class)
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mClassHandler.deleteItemWithReferences(mClass.getId());
+                        mClassHandler.deleteItemWithReferences(mItem.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
