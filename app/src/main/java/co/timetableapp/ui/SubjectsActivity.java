@@ -49,7 +49,7 @@ public class SubjectsActivity extends ItemListActivity<Subject> {
             @Override
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(SubjectsActivity.this, SubjectEditActivity.class);
-                intent.putExtra(SubjectEditActivity.EXTRA_SUBJECT, mItems.get(position));
+                intent.putExtra(ItemEditActivity.EXTRA_ITEM, mItems.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {

@@ -3,15 +3,10 @@ package co.timetableapp.ui;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,28 +25,17 @@ import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
 
 /**
- * Invoked and displayed to the user for editing the details of a subject, or creating a new one.
+ * Allows the user to edit a {@link Subject}.
  *
  * The user can choose to modify the name, abbreviation, or the {@link Color} associated with the
  * subject.
  *
- * @see Subject
  * @see SubjectsActivity
+ * @see ItemEditActivity
  */
-public class SubjectEditActivity extends AppCompatActivity {
+public class SubjectEditActivity extends ItemEditActivity<Subject> {
 
-    /**
-     * The key for the {@link Subject} passed through an intent extra.
-     *
-     * It should be null if we're creating a new subject.
-     */
-    static final String EXTRA_SUBJECT = "extra_subject";
-
-    private Subject mSubject;
-
-    private boolean mIsNew;
-
-    private SubjectHandler mSubjectUtils = new SubjectHandler(this);
+    private SubjectHandler mDataHandler = new SubjectHandler(this);
 
     private EditText mEditTextName;
     private EditText mEditTextAbbreviation;
@@ -60,53 +44,35 @@ public class SubjectEditActivity extends AppCompatActivity {
     private AlertDialog mColorDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subject_edit);
-
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mSubject = extras.getParcelable(EXTRA_SUBJECT);
-        }
-        mIsNew = mSubject == null;
-
-        int titleResId = mIsNew ? R.string.title_activity_subject_new :
-                R.string.title_activity_subject_edit;
-        getSupportActionBar().setTitle(getResources().getString(titleResId));
-
-        toolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleCloseAction();
-            }
-        });
-
-        setupLayout(toolbar);
+    protected int getLayoutResource() {
+        return R.layout.activity_subject_edit;
     }
 
-    private void setupLayout(Toolbar toolbar) {
+    @Override
+    protected int getTitleRes(boolean isNewItem) {
+        return isNewItem ? R.string.title_activity_subject_new :
+                R.string.title_activity_subject_edit;
+    }
+
+    @Override
+    protected void setupLayout() {
         mEditTextName = (EditText) findViewById(R.id.editText_name);
         if (!mIsNew) {
-            mEditTextName.setText(mSubject.getName());
+            mEditTextName.setText(mItem.getName());
         }
 
         mEditTextAbbreviation = (EditText) findViewById(R.id.editText_abbreviation);
         if (!mIsNew) {
-            mEditTextAbbreviation.setText(mSubject.getAbbreviation());
+            mEditTextAbbreviation.setText(mItem.getAbbreviation());
         }
 
-        setupColorPicker(toolbar);
+        setupColorPicker();
     }
 
-    private void setupColorPicker(final Toolbar toolbar) {
-        mColor = new Color(mIsNew ? 6 : mSubject.getColorId());
+    private void setupColorPicker() {
+        mColor = new Color(mIsNew ? 6 : mItem.getColorId());
 
-        UiUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
+        UiUtils.setBarColors(mColor, SubjectEditActivity.this, mToolbar);
 
         final ImageView imageView = (ImageView) findViewById(R.id.imageView);
         imageView.setImageResource(mColor.getPrimaryColorResId(this));
@@ -124,7 +90,7 @@ public class SubjectEditActivity extends AppCompatActivity {
                     public void onEntryClick(View view, int position) {
                         mColor = colors.get(position);
                         imageView.setImageResource(mColor.getPrimaryColorResId(getBaseContext()));
-                        UiUtils.setBarColors(mColor, SubjectEditActivity.this, toolbar);
+                        UiUtils.setBarColors(mColor, SubjectEditActivity.this, mToolbar);
                         mColorDialog.dismiss();
                     }
                 });
@@ -149,45 +115,7 @@ public class SubjectEditActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        UiUtils.tintMenuIcons(this, menu, R.id.action_done);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mIsNew) {
-            menu.findItem(R.id.action_delete).setVisible(false);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                handleDoneAction();
-                break;
-            case R.id.action_delete:
-                handleDeleteAction();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        handleCloseAction();
-    }
-
-    private void handleCloseAction() {
-        setResult(Activity.RESULT_CANCELED);
-        supportFinishAfterTransition();
-    }
-
-    private void handleDoneAction() {
+    protected void handleDoneAction() {
         String newName = mEditTextName.getText().toString();
         if (newName.length() == 0) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_invalid_name,
@@ -203,35 +131,36 @@ public class SubjectEditActivity extends AppCompatActivity {
                     ((TimetableApplication) getApplication()).getCurrentTimetable();
             assert currentTimetable != null;
 
-            mSubject = new Subject(mSubjectUtils.getHighestItemId() + 1,
+            mItem = new Subject(mDataHandler.getHighestItemId() + 1,
                     currentTimetable.getId(),
                     newName,
                     newAbbreviation,
                     mColor.getId());
 
-            mSubjectUtils.addItem(mSubject);
+            mDataHandler.addItem(mItem);
 
         } else {
-            mSubject.setName(newName);
-            mSubject.setAbbreviation(newAbbreviation);
-            mSubject.setColorId(mColor.getId());
-            mSubjectUtils.replaceItem(mSubject.getId(), mSubject);
+            mItem.setName(newName);
+            mItem.setAbbreviation(newAbbreviation);
+            mItem.setColorId(mColor.getId());
+            mDataHandler.replaceItem(mItem.getId(), mItem);
         }
 
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_SUBJECT, mSubject);
+        intent.putExtra(ItemEditActivity.EXTRA_ITEM, mItem);
         setResult(Activity.RESULT_OK, intent);
         supportFinishAfterTransition();
     }
 
-    private void handleDeleteAction() {
+    @Override
+    protected void handleDeleteAction() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.delete_subject)
                 .setMessage(R.string.delete_confirmation_subject)
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mSubjectUtils.deleteItemWithReferences(mSubject.getId());
+                        mDataHandler.deleteItemWithReferences(mItem.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

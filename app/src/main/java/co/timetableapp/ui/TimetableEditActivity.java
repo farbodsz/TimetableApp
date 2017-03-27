@@ -11,12 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -51,35 +47,19 @@ import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
 
 /**
- * Invoked and displayed to the user to edit the details of a timetable.
+ * Allows the user to edit a {@link Timetable}
  *
- * Currently, it is also responsible for showing the details, since there is no activity dedicated
- * to merely displaying the details (like in {@link AssignmentDetailActivity}).
- *
- * It can also be called to create a new timetable. If so, there will be no intent extra data
- * supplied to this activity (i.e. {@link #EXTRA_TIMETABLE} will be null).
- *
- * @see Timetable
+ * @see ItemEditActivity
  * @see TimetablesActivity
  */
-public class TimetableEditActivity extends AppCompatActivity
+public class TimetableEditActivity extends ItemEditActivity<Timetable>
         implements LabelledSpinner.OnItemChosenListener {
-
-    /**
-     * The key for the {@link Timetable} passed through an intent extra.
-     *
-     * It should be null if we're creating a new timetable.
-     */
-    static final String EXTRA_TIMETABLE = "extra_timetable";
 
     private static final int REQUEST_CODE_TERM_EDIT = 1;
 
-    private Timetable mTimetable;
-
     private boolean mIsFirst;
-    private boolean mIsNew;
 
-    private TimetableHandler mTimetableUtils = new TimetableHandler(this);
+    private TimetableHandler mDataHandler = new TimetableHandler(this);
 
     private EditText mEditTextName;
 
@@ -93,41 +73,27 @@ public class TimetableEditActivity extends AppCompatActivity
     private TermsAdapter mAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timetable_edit);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mTimetable = extras.getParcelable(EXTRA_TIMETABLE);
-        }
-        mIsNew = mTimetable == null;
-
-        mIsFirst = ((TimetableApplication) getApplication()).getCurrentTimetable() == null;
-
-        int titleResId = mIsNew ? R.string.title_activity_timetable_new :
-                R.string.title_activity_timetable_edit;
-        getSupportActionBar().setTitle(getResources().getString(titleResId));
-
-        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleCloseAction();
-            }
-        });
-
-        setupLayout();
+    protected int getLayoutResource() {
+        return R.layout.activity_timetable_edit;
     }
 
-    private void setupLayout() {
+    @Override
+    protected void handleExtras() {
+        super.handleExtras();
+        mIsFirst = ((TimetableApplication) getApplication()).getCurrentTimetable() == null;
+    }
+
+    @Override
+    protected int getTitleRes(boolean isNewItem) {
+        return isNewItem ? R.string.title_activity_timetable_new :
+                R.string.title_activity_timetable_edit;
+    }
+
+    @Override
+    protected void setupLayout() {
         mEditTextName = (EditText) findViewById(R.id.editText_name);
         if (!mIsNew) {
-            mEditTextName.setText(mTimetable.getName());
+            mEditTextName.setText(mItem.getName());
         }
 
         setupDateTexts();
@@ -138,7 +104,7 @@ public class TimetableEditActivity extends AppCompatActivity
         mSpinnerScheduling.setOnItemChosenListener(this);
         mSpinnerWeekRotations.setOnItemChosenListener(this);
 
-        mWeekRotations = mIsNew ? 1 : mTimetable.getWeekRotations();
+        mWeekRotations = mIsNew ? 1 : mItem.getWeekRotations();
         updateSchedulingSpinners();
 
         setupTermsList();
@@ -151,8 +117,8 @@ public class TimetableEditActivity extends AppCompatActivity
         mEndDateText = (TextView) findViewById(R.id.textView_end_date);
 
         if (!mIsNew) {
-            mStartDate = mTimetable.getStartDate();
-            mEndDate = mTimetable.getEndDate();
+            mStartDate = mItem.getStartDate();
+            mEndDate = mItem.getEndDate();
             updateDateTexts();
         }
 
@@ -235,7 +201,7 @@ public class TimetableEditActivity extends AppCompatActivity
             @Override
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(TimetableEditActivity.this, TermEditActivity.class);
-                intent.putExtra(TermEditActivity.EXTRA_TERM, mTerms.get(position));
+                intent.putExtra(ItemEditActivity.EXTRA_ITEM, mTerms.get(position));
                 intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());
 
                 Bundle bundle = null;
@@ -297,8 +263,8 @@ public class TimetableEditActivity extends AppCompatActivity
                 if (isFixedScheduling) {
                     mWeekRotations = 1;
                 } else {
-                    mWeekRotations = (mIsNew || mTimetable.getWeekRotations() == 1) ?
-                            2 : mTimetable.getWeekRotations();
+                    mWeekRotations = (mIsNew || mItem.getWeekRotations() == 1) ?
+                            2 : mItem.getWeekRotations();
                 }
                 updateSchedulingSpinners();
                 break;
@@ -309,6 +275,10 @@ public class TimetableEditActivity extends AppCompatActivity
                 updateSchedulingSpinners();
                 break;
         }
+    }
+
+    @Override
+    public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {
     }
 
     private void sortList() {
@@ -335,7 +305,7 @@ public class TimetableEditActivity extends AppCompatActivity
     }
 
     private int findTimetableId() {
-        return mTimetable == null ? mTimetableUtils.getHighestItemId() + 1 : mTimetable.getId();
+        return mItem == null ? mDataHandler.getHighestItemId() + 1 : mItem.getId();
     }
 
     @Override
@@ -350,42 +320,7 @@ public class TimetableEditActivity extends AppCompatActivity
     }
 
     @Override
-    public void onNothingChosen(View labelledSpinner, AdapterView<?> adapterView) {}
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mIsNew) {
-            menu.findItem(R.id.action_delete).setVisible(false);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                handleDoneAction();
-                break;
-            case R.id.action_delete:
-                handleDeleteAction();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        handleCloseAction();
-    }
-
-    private void handleCloseAction() {
+    protected void handleCloseAction() {
         if (mIsFirst) {
             Snackbar.make(findViewById(R.id.rootView),
                     R.string.message_first_timetable_required, Snackbar.LENGTH_SHORT);
@@ -395,7 +330,8 @@ public class TimetableEditActivity extends AppCompatActivity
         supportFinishAfterTransition();
     }
 
-    private void handleDoneAction() {
+    @Override
+    protected void handleDoneAction() {
         String name = TextUtilsKt.title(mEditTextName.getText().toString());
 
         if (mStartDate == null || mEndDate == null) {
@@ -415,8 +351,8 @@ public class TimetableEditActivity extends AppCompatActivity
         }
 
         if (!mIsNew) {
-            // delete class times with an invalid week number
-            if (mWeekRotations < mTimetable.getWeekRotations()) {
+            // Delete class times with an invalid week number
+            if (mWeekRotations < mItem.getWeekRotations()) {
                 TimetableDbHelper helper = TimetableDbHelper.getInstance(this);
                 Cursor cursor = helper.getReadableDatabase().query(
                         ClassTimesSchema.TABLE_NAME,
@@ -434,24 +370,25 @@ public class TimetableEditActivity extends AppCompatActivity
             }
         }
 
-        mTimetable = new Timetable(findTimetableId(), name, mStartDate, mEndDate, mWeekRotations);
+        mItem = new Timetable(findTimetableId(), name, mStartDate, mEndDate, mWeekRotations);
 
         if (mIsNew) {
-            mTimetableUtils.addItem(mTimetable);
+            mDataHandler.addItem(mItem);
         } else {
-            mTimetableUtils.replaceItem(mTimetable.getId(), mTimetable);
+            mDataHandler.replaceItem(mItem.getId(), mItem);
         }
 
         TimetableApplication application = (TimetableApplication) getApplication();
-        application.setCurrentTimetable(this, mTimetable);
+        application.setCurrentTimetable(this, mItem);
 
         setResult(Activity.RESULT_OK);
         supportFinishAfterTransition();
     }
 
-    private void handleDeleteAction() {
-        if (mTimetableUtils.getAllItems().size() == 1) {
-            // there needs to be at least one timetable for the app to work
+    @Override
+    protected void handleDeleteAction() {
+        // There needs to be at least one timetable for the app to work
+        if (mDataHandler.getAllItems().size() == 1) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_first_timetable_required,
                     Snackbar.LENGTH_SHORT).show();
             return;
@@ -463,10 +400,10 @@ public class TimetableEditActivity extends AppCompatActivity
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mTimetableUtils.deleteItemWithReferences(mTimetable.getId());
+                        mDataHandler.deleteItemWithReferences(mItem.getId());
 
                         // After the timetable has been deleted, change the current timetable
-                        int highestId = mTimetableUtils.getHighestItemId();
+                        int highestId = mDataHandler.getHighestItemId();
                         Timetable newCurrentTimetable =
                                 Timetable.create(getBaseContext(), highestId);
 

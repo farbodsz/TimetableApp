@@ -5,16 +5,11 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -45,38 +40,19 @@ import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
 
 /**
- * Invoked and displayed to the user for editing the details of an exam.
+ * Allows the user to edit an {@link Exam}.
  *
- * Currently, it is also responsible for showing the details, since there is no activity dedicated
- * to merely displaying the details (like in {@link AssignmentDetailActivity}).
- *
- * It can also be called to create a new exam. If so, there will be no intent extra data supplied
- * to this activity (i.e. {@link #EXTRA_EXAM} will be null).
- *
- * @see Exam
  * @see ExamsActivity
  * @see ExamDetailActivity
+ * @see ItemEditActivity
  */
-public class ExamEditActivity extends AppCompatActivity {
-
-    /**
-     * The key for the {@link Exam} passed through an intent extra.
-     *
-     * It should be null if we're creating a new exam.
-     */
-    static final String EXTRA_EXAM = "extra_exam";
+public class ExamEditActivity extends ItemEditActivity<Exam> {
 
     private static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
 
     private static final int NO_DURATION = -1;
 
-    private Exam mExam;
-
-    private boolean mIsNew;
-
-    private ExamHandler mExamUtils = new ExamHandler(this);
-
-    private Toolbar mToolbar;
+    private ExamHandler mDataHandler = new ExamHandler(this);
 
     private EditText mEditTextModule;
     private EditText mEditTextSeat;
@@ -99,49 +75,32 @@ public class ExamEditActivity extends AppCompatActivity {
     private boolean mExamIsResit;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exam_edit);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        assert getSupportActionBar() != null;
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mExam = extras.getParcelable(EXTRA_EXAM);
-        }
-        mIsNew = mExam == null;
-
-        int titleResId = mIsNew ? R.string.title_activity_exam_new :
-                R.string.title_activity_exam_edit;
-        getSupportActionBar().setTitle(getResources().getString(titleResId));
-
-        mToolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleCloseAction();
-            }
-        });
-
-        setupLayout();
+    protected int getLayoutResource() {
+        return R.layout.activity_exam_edit;
     }
 
-    private void setupLayout() {
+    @Override
+    protected int getTitleRes(boolean isNewItem) {
+        return isNewItem ? R.string.title_activity_exam_new : R.string.title_activity_exam_edit;
+    }
+
+    @Override
+    protected void setupLayout() {
+        assert mItem != null;
+
         mEditTextModule = (EditText) findViewById(R.id.editText_module);
         if (!mIsNew) {
-            mEditTextModule.setText(mExam.getModuleName());
+            mEditTextModule.setText(mItem.getModuleName());
         }
 
         mEditTextSeat = (EditText) findViewById(R.id.editText_seat);
         if (!mIsNew) {
-            mEditTextSeat.setText(mExam.getSeat());
+            mEditTextSeat.setText(mItem.getSeat());
         }
 
         mEditTextRoom = (EditText) findViewById(R.id.editText_room);
         if (!mIsNew) {
-            mEditTextRoom.setText(mExam.getRoom());
+            mEditTextRoom.setText(mItem.getRoom());
         }
 
         setupSubjectText();
@@ -157,7 +116,7 @@ public class ExamEditActivity extends AppCompatActivity {
         mSubjectText = (TextView) findViewById(R.id.textView_subject);
 
         if (!mIsNew) {
-            mSubject = Subject.create(this, mExam.getSubjectId());
+            mSubject = Subject.create(this, mItem.getSubjectId());
             updateLinkedSubject();
         }
 
@@ -224,7 +183,7 @@ public class ExamEditActivity extends AppCompatActivity {
         mDateText = (TextView) findViewById(R.id.textView_date);
 
         if (!mIsNew) {
-            mExamDate = mExam.getDate();
+            mExamDate = mItem.getDate();
             updateDateText();
         }
 
@@ -262,7 +221,7 @@ public class ExamEditActivity extends AppCompatActivity {
         mTimeText = (TextView) findViewById(R.id.textView_start_time);
 
         if (!mIsNew) {
-            mExamTime = mExam.getStartTime();
+            mExamTime = mItem.getStartTime();
             updateTimeText();
         }
 
@@ -296,7 +255,7 @@ public class ExamEditActivity extends AppCompatActivity {
         mDurationText = (TextView) findViewById(R.id.textView_duration);
 
         if (!mIsNew) {
-            mExamDuration = mExam.getDuration();
+            mExamDuration = mItem.getDuration();
             updateDurationText();
         }
 
@@ -338,7 +297,7 @@ public class ExamEditActivity extends AppCompatActivity {
     }
 
     private void setupResitCheckbox() {
-        mExamIsResit = !mIsNew && mExam.getResit();
+        mExamIsResit = !mIsNew && mItem.getResit();
 
         CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox_resit);
         checkBox.setChecked(mExamIsResit);
@@ -356,7 +315,7 @@ public class ExamEditActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                mSubject = data.getParcelableExtra(SubjectEditActivity.EXTRA_SUBJECT);
+                mSubject = data.getParcelableExtra(ItemEditActivity.EXTRA_ITEM);
                 mSubjectDialog.dismiss();
                 updateLinkedSubject();
             }
@@ -364,45 +323,7 @@ public class ExamEditActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        UiUtils.tintMenuIcons(this, menu, R.id.action_done);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mIsNew) {
-            menu.findItem(R.id.action_delete).setVisible(false);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                handleDoneAction();
-                break;
-            case R.id.action_delete:
-                handleDeleteAction();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        handleCloseAction();
-    }
-
-    private void handleCloseAction() {
-        setResult(Activity.RESULT_CANCELED);
-        supportFinishAfterTransition();
-    }
-
-    private void handleDoneAction() {
+    protected void handleDoneAction() {
         String newModuleName = mEditTextModule.getText().toString();
         newModuleName = TextUtilsKt.title(newModuleName);
 
@@ -430,12 +351,12 @@ public class ExamEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? mExamUtils.getHighestItemId() + 1 : mExam.getId();
+        int id = mIsNew ? mDataHandler.getHighestItemId() + 1 : mItem.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mExam = new Exam(
+        mItem = new Exam(
                 id,
                 timetable.getId(),
                 mSubject.getId(),
@@ -448,9 +369,9 @@ public class ExamEditActivity extends AppCompatActivity {
                 mExamIsResit);
 
         if (mIsNew) {
-            mExamUtils.addItem(mExam);
+            mDataHandler.addItem(mItem);
         } else {
-            mExamUtils.replaceItem(mExam.getId(), mExam);
+            mDataHandler.replaceItem(mItem.getId(), mItem);
         }
 
         Intent intent = new Intent();
@@ -458,14 +379,15 @@ public class ExamEditActivity extends AppCompatActivity {
         supportFinishAfterTransition();
     }
 
-    private void handleDeleteAction() {
+    @Override
+    protected void handleDeleteAction() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.delete_exam)
                 .setMessage(R.string.delete_confirmation)
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mExamUtils.deleteItem(mExam.getId());
+                        mDataHandler.deleteItem(mItem.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

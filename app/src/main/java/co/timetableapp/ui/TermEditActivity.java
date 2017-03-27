@@ -5,10 +5,6 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -25,18 +21,12 @@ import co.timetableapp.framework.Timetable;
 import co.timetableapp.util.TextUtilsKt;
 
 /**
- * Invoked and displayed to the user to edit the details of a term, or to create a new one.
+ * Allows the user to edit a {@link Term}
  *
- * @see Term
+ * @see ItemEditActivity
+ * @see TimetableEditActivity
  */
-public class TermEditActivity extends AppCompatActivity {
-
-    /**
-     * The key for the {@link Term} passed through an intent extra.
-     *
-     * It should be null if we're creating a new term.
-     */
-    static final String EXTRA_TERM = "extra_term";
+public class TermEditActivity extends ItemEditActivity<Term> {
 
     /**
      * The key for the integer identifier of the {@link Timetable} this {@link Term} belongs to.
@@ -48,12 +38,9 @@ public class TermEditActivity extends AppCompatActivity {
      */
     static final String EXTRA_TIMETABLE_ID = "extra_timetable_id";
 
-    private Term mTerm;
     private int mTimetableId;
 
-    private boolean mIsNew;
-
-    private TermHandler mTermUtils = new TermHandler(this);
+    private TermHandler mDataHandler = new TermHandler(this);
 
     private EditText mEditText;
 
@@ -61,46 +48,41 @@ public class TermEditActivity extends AppCompatActivity {
     private TextView mStartDateText, mEndDateText;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_term_edit);
+    protected int getLayoutResource() {
+        return R.layout.activity_term_edit;
+    }
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-
+    @Override
+    protected void handleExtras() {
+        // We also need to get the timetable id for this term
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            if (extras.getParcelable(EXTRA_TERM) != null) {
-                mTerm = extras.getParcelable(EXTRA_TERM);
+            if (extras.getParcelable(EXTRA_ITEM) != null) {
+                mItem = extras.getParcelable(EXTRA_ITEM);
             }
 
+            // TODO: find a better way of doing this
+            // If the timetable is new, then it may not be saved to the database. In this case the
+            // value passed for the id will be -1. If this is the case, we need to find what the id
+            // would be.
             mTimetableId = extras.getInt(EXTRA_TIMETABLE_ID, -1);
             if (mTimetableId == -1) {
                 mTimetableId = new TimetableHandler(this).getHighestItemId() + 1;
             }
         }
-        mIsNew = mTerm == null;
-
-        int titleResId = mIsNew ? R.string.title_activity_term_new :
-                R.string.title_activity_term_edit;
-        getSupportActionBar().setTitle(getResources().getString(titleResId));
-
-        toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleCloseAction();
-            }
-        });
-
-        setupLayout();
+        mIsNew = mItem == null;
     }
 
-    private void setupLayout() {
+    @Override
+    protected int getTitleRes(boolean isNewItem) {
+        return isNewItem ? R.string.title_activity_term_new : R.string.title_activity_term_edit;
+    }
+
+    @Override
+    protected void setupLayout() {
         mEditText = (EditText) findViewById(R.id.editText);
         if (!mIsNew) {
-            mEditText.setText(mTerm.getName());
+            mEditText.setText(mItem.getName());
         }
 
         setupDateTexts();
@@ -111,8 +93,8 @@ public class TermEditActivity extends AppCompatActivity {
         mEndDateText = (TextView) findViewById(R.id.textView_end_date);
 
         if (!mIsNew) {
-            mStartDate = mTerm.getStartDate();
-            mEndDate = mTerm.getEndDate();
+            mStartDate = mItem.getStartDate();
+            mEndDate = mItem.getEndDate();
             updateDateTexts();
         }
 
@@ -175,44 +157,7 @@ public class TermEditActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mIsNew) {
-            menu.findItem(R.id.action_delete).setVisible(false);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                handleDoneAction();
-                break;
-            case R.id.action_delete:
-                handleDeleteAction();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        handleCloseAction();
-    }
-
-    private void handleCloseAction() {
-        setResult(Activity.RESULT_CANCELED);
-        supportFinishAfterTransition();
-    }
-
-    private void handleDoneAction() {
+    protected void handleDoneAction() {
         String newName = mEditText.getText().toString();
         if (newName.length() == 0) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_invalid_name,
@@ -237,21 +182,22 @@ public class TermEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? mTermUtils.getHighestItemId() + 1 : mTerm.getId();
-        mTerm = new Term(id, mTimetableId, newName, mStartDate, mEndDate);
+        int id = mIsNew ? mDataHandler.getHighestItemId() + 1 : mItem.getId();
+        mItem = new Term(id, mTimetableId, newName, mStartDate, mEndDate);
 
         if (mIsNew) {
-            mTermUtils.addItem(mTerm);
+            mDataHandler.addItem(mItem);
         } else {
-            mTermUtils.replaceItem(mTerm.getId(), mTerm);
+            mDataHandler.replaceItem(mItem.getId(), mItem);
         }
 
         setResult(Activity.RESULT_OK);
         supportFinishAfterTransition();
     }
 
-    private void handleDeleteAction() {
-        mTermUtils.deleteItem(mTerm.getId());
+    @Override
+    protected void handleDeleteAction() {
+        mDataHandler.deleteItem(mItem.getId());
         setResult(Activity.RESULT_OK);
         finish();
     }

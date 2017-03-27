@@ -82,7 +82,7 @@ public class TimetablesActivity extends NavigationDrawerActivity {
             @Override
             public void onEntryClick(View view, int position) {
                 Intent intent = new Intent(TimetablesActivity.this, TimetableEditActivity.class);
-                intent.putExtra(TimetableEditActivity.EXTRA_TIMETABLE, mTimetables.get(position));
+                intent.putExtra(ItemEditActivity.EXTRA_ITEM, mTimetables.get(position));
 
                 Bundle bundle = null;
                 if (UiUtils.isApi21()) {
