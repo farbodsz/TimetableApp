@@ -24,7 +24,6 @@ import co.timetableapp.data.handler.ClassTimeHandler
 import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
-import co.timetableapp.data.schema.AssignmentsSchema
 import co.timetableapp.data.schema.ExamsSchema
 import co.timetableapp.framework.*
 import co.timetableapp.util.DateUtils
@@ -379,19 +378,16 @@ class MainActivity : NavigationDrawerActivity() {
         }
 
         private fun setupLayout(rootView: View) {
-            val timetableId = (activity.application as TimetableApplication).currentTimetable!!.id
-
             val sectionContainer = rootView.findViewById(R.id.section_container) as LinearLayout
             val inflater = LayoutInflater.from(context)
 
             val assignmentSection = SectionUi.Builder(context, sectionContainer)
                     .setTitle(R.string.title_activity_assignments)
                     .build()
-            addAssignmentCards(assignmentSection.containerView, inflater,
-                    getUpcomingAssignments(timetableId))
+            addAssignmentCards(assignmentSection.containerView, inflater, getUpcomingAssignments())
             sectionContainer.addView(assignmentSection.view)
 
-            val exams = getUpcomingExams(timetableId)
+            val exams = getUpcomingExams()
             if (exams.isNotEmpty()) {
                 val examsSection = SectionUi.Builder(context, sectionContainer)
                         .setTitle(R.string.title_activity_exams)
@@ -405,82 +401,35 @@ class MainActivity : NavigationDrawerActivity() {
         /**
          * @return a list of assignments due between today's date and next week.
          */
-        private fun getUpcomingAssignments(timetableId: Int): ArrayList<Assignment> {
+        private fun getUpcomingAssignments(): ArrayList<Assignment> {
+            val upcomingAssignments = ArrayList<Assignment>()
             val now = LocalDate.now()
-            val lowerDate = now.plusDays(1)
             val upperDate = now.plusWeeks(1)
 
-            val queryBuilder = Query.Builder().addFilter(
-                    Filters.equal(AssignmentsSchema.COL_TIMETABLE_ID, timetableId.toString()))
+            AssignmentHandler(context).getItems(activity.application).forEach {
+                if (it.dueDate.isAfter(now) && it.dueDate.isBefore(upperDate)) {
+                    upcomingAssignments.add(it)
+                }
+            }
 
-            val thisYearFilter = Filters.equal(AssignmentsSchema.COL_DUE_DATE_YEAR,
-                    lowerDate.year.toString())
-            queryBuilder.addFilter(if (lowerDate.year == upperDate.year) {
-                thisYearFilter
-            } else {
-                Filters.or(
-                        thisYearFilter,
-                        Filters.equal(AssignmentsSchema.COL_DUE_DATE_YEAR,
-                                upperDate.year.toString()))
-            })
-
-            val thisMonthFilter = Filters.equal(AssignmentsSchema.COL_DUE_DATE_MONTH,
-                    lowerDate.monthValue.toString())
-            queryBuilder.addFilter(if (lowerDate.monthValue == upperDate.monthValue) {
-                thisMonthFilter
-            } else {
-                Filters.or(
-                        thisMonthFilter,
-                        Filters.equal(AssignmentsSchema.COL_DUE_DATE_MONTH,
-                                upperDate.monthValue.toString()))
-            })
-
-            queryBuilder
-                    .addFilter(Filters.moreOrEqualThan(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH,
-                            lowerDate.dayOfMonth.toString()))
-                    .addFilter(Filters.lessOrEqualThan(AssignmentsSchema.COL_DUE_DATE_DAY_OF_MONTH,
-                            upperDate.dayOfMonth.toString()))
-
-            return AssignmentHandler(context).getAllItems(queryBuilder.build())
+            return upcomingAssignments
         }
 
         /**
          * @return a list of exams due between today's date and next week.
          */
-        private fun getUpcomingExams(timetableId: Int): ArrayList<Exam> {
+        private fun getUpcomingExams(): ArrayList<Exam> {
+            val upcomingExams = ArrayList<Exam>()
             val now = LocalDate.now()
-            val lowerDate = now.plusDays(1)
-            val upperDate = lowerDate.plusWeeks(1)
+            val upperDate = now.plusWeeks(1)
 
-            val queryBuilder = Query.Builder().addFilter(
-                    Filters.equal(ExamsSchema.COL_TIMETABLE_ID, timetableId.toString()))
+            ExamHandler(context).getItems(activity.application).forEach {
+                if (it.date.isAfter(now) && it.date.isBefore(upperDate)) {
+                    upcomingExams.add(it)
+                }
+            }
 
-            val thisYearFilter = Filters.equal(ExamsSchema.COL_DATE_YEAR, lowerDate.year.toString())
-            queryBuilder.addFilter(if (lowerDate.year == upperDate.year) {
-                thisYearFilter
-            } else {
-                Filters.or(
-                        thisYearFilter,
-                        Filters.equal(ExamsSchema.COL_DATE_YEAR, upperDate.year.toString()))
-            })
-
-            val thisMonthFilter = Filters.equal(ExamsSchema.COL_DATE_MONTH,
-                    lowerDate.monthValue.toString())
-            queryBuilder.addFilter(if (lowerDate.monthValue == upperDate.monthValue) {
-                thisMonthFilter
-            } else {
-                Filters.or(
-                        thisMonthFilter,
-                        Filters.equal(ExamsSchema.COL_DATE_MONTH, upperDate.monthValue.toString()))
-            })
-
-            queryBuilder
-                    .addFilter(Filters.moreOrEqualThan(ExamsSchema.COL_DATE_DAY_OF_MONTH,
-                            lowerDate.dayOfMonth.toString()))
-                    .addFilter(Filters.lessOrEqualThan(ExamsSchema.COL_DATE_DAY_OF_MONTH,
-                            upperDate.dayOfMonth.toString()))
-
-            return ExamHandler(context).getAllItems(queryBuilder.build())
+            return upcomingExams
         }
 
         private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
