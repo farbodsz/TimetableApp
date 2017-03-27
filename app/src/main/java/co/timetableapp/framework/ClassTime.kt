@@ -37,6 +37,12 @@ class ClassTime(override val id: Int, override val timetableId: Int, val classDe
                 val day: DayOfWeek, val weekNumber: Int, val startTime: LocalTime,
                 val endTime: LocalTime) : TimetableItem, Comparable<ClassTime> {
 
+    init {
+        if (startTime.isAfter(endTime)) {
+            throw IllegalArgumentException("the start time cannot be after the end time")
+        }
+    }
+
     companion object {
 
         /**

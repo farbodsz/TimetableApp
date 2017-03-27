@@ -30,6 +30,12 @@ import org.threeten.bp.format.DateTimeFormatter
 class Timetable(override val id: Int, val name: String, val startDate: LocalDate,
                 val endDate: LocalDate, val weekRotations: Int) : BaseItem {
 
+    init {
+        if (startDate.isAfter(endDate)) {
+            throw IllegalArgumentException("the start date cannot be after the end date")
+        }
+    }
+
     val displayedName: String
         get() {
             return if (hasName()) {

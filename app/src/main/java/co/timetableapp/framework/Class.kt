@@ -24,6 +24,12 @@ class Class(override val id: Int, override val timetableId: Int, val subjectId: 
             val moduleName: String, val startDate: LocalDate,
             val endDate: LocalDate) : TimetableItem {
 
+    init {
+        if (hasStartEndDates() && startDate.isAfter(endDate)) {
+            throw IllegalArgumentException("the start date cannot be after the end date")
+        }
+    }
+
     companion object {
 
         /**
