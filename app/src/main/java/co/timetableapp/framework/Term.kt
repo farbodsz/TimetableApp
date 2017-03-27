@@ -23,6 +23,12 @@ import org.threeten.bp.LocalDate
 class Term(override val id: Int, override val timetableId: Int, val name: String,
            val startDate: LocalDate, val endDate: LocalDate) : TimetableItem {
 
+    init {
+        if (startDate.isAfter(endDate)) {
+            throw IllegalArgumentException("the start date cannot be after the end date")
+        }
+    }
+
     companion object {
 
         /**

@@ -22,6 +22,12 @@ class Assignment(override val id: Int, override val timetableId: Int, val classI
                  val title: String, val detail: String, val dueDate: LocalDate,
                  var completionProgress: Int) : TimetableItem, Comparable<Assignment> {
 
+    init {
+        if (completionProgress !in 0..100) {
+            throw IllegalArgumentException("the completion progress must be between 0 and 100")
+        }
+    }
+
     companion object {
 
         /**
