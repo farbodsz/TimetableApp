@@ -28,7 +28,7 @@ import org.threeten.bp.format.DateTimeFormatter
  * @property endDate the last day this timetable is applicable for
  */
 class Timetable(override val id: Int, val name: String, val startDate: LocalDate,
-                val endDate: LocalDate, val weekRotations: Int) : BaseItem {
+                val endDate: LocalDate, val weekRotations: Int) : BaseItem, Comparable<Timetable> {
 
     init {
         if (startDate.isAfter(endDate)) {
@@ -100,18 +100,20 @@ class Timetable(override val id: Int, val name: String, val startDate: LocalDate
         }
     }
 
-    fun hasName() = name.trim().isNotEmpty()
-
-    fun hasFixedScheduling() = weekRotations == 1
-
-    fun isValidToday() = !LocalDate.now().isBefore(startDate) && !LocalDate.now().isAfter(endDate)
-
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readString(),
             source.readSerializable() as LocalDate,
             source.readSerializable() as LocalDate,
             source.readInt())
+
+    fun hasName() = name.trim().isNotEmpty()
+
+    fun hasFixedScheduling() = weekRotations == 1
+
+    fun isValidToday() = !LocalDate.now().isBefore(startDate) && !LocalDate.now().isAfter(endDate)
+
+    override fun compareTo(other: Timetable) = startDate.compareTo(other.startDate)
 
     override fun describeContents() = 0
 
