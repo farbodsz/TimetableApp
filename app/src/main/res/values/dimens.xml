@@ -8,6 +8,8 @@
 
     <dimen name="fab_padding">88dp</dimen>
 
+    <dimen name="list_item_elevation">1dp</dimen>
+
     <dimen name="subject_color_strip_width">4dp</dimen>
 
     <dimen name="classes_home_card_spacing">6dp</dimen>
