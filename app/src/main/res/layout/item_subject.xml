@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:foreground="?selectableItemBackground"
     android:background="@color/mdu_white"
     android:layout_width="match_parent"
-    android:layout_height="48dp">
+    android:layout_height="48dp"
+    android:elevation="@dimen/list_item_elevation">
+
+    <include layout="@layout/divider" />
 
     <View
         android:id="@+id/color"

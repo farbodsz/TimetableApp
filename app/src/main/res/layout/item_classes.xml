@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:foreground="?selectableItemBackground"
     android:background="@color/mdu_white"
     android:transitionName="@string/transition_1"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/list_item_elevation">
+
+    <include layout="@layout/divider" />
 
     <View
         android:id="@+id/color"
@@ -24,7 +29,7 @@
 
         <TextView
             android:id="@+id/subject"
-            android:text="Computer Science"
+            tools:text="Computer Science"
             android:textColor="@color/mdu_text_black"
             android:textSize="16sp"
             android:layout_width="match_parent"
@@ -32,7 +37,7 @@
 
         <TextView
             android:id="@+id/class_details"
-            android:text="10:15 - 11:15 on Wednesday Week A \n13:10 - 15:10 on Thursday"
+            tools:text="10:15 - 11:15 on Wednesday Week A \n13:10 - 15:10 on Thursday"
             android:textColor="@color/mdu_text_black_secondary"
             android:textSize="14sp"
             android:layout_width="match_parent"
