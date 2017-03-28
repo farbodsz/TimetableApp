@@ -101,7 +101,7 @@
         <activity
             android:name=".ui.TimetablesActivity"
             android:label="@string/title_activity_timetables"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable.Home" />
 
         <activity
             android:name=".ui.TimetableEditActivity"
@@ -114,7 +114,7 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/action_settings"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable.Home" />
 
         <activity
             android:name=".licenses.LicensesActivity"
