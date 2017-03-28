@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.util.Log
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.query.Query
+import co.timetableapp.data.schema.SqliteSeqSchema
 import co.timetableapp.framework.BaseItem
 import java.util.*
 
@@ -92,19 +93,21 @@ abstract class DataHandler<T : BaseItem>(val context: Context) {
     fun getHighestItemId(): Int {
         val db = TimetableDbHelper.getInstance(context).readableDatabase
         val cursor = db.query(
-                tableName,
-                arrayOf(itemIdCol),
+                SqliteSeqSchema.TABLE_NAME,
                 null,
-                null,
-                null,
-                null,
-                "$itemIdCol DESC")
-        if (cursor.count == 0) {
-            return 0
+                SqliteSeqSchema.COL_NAME + "=?",
+                arrayOf(tableName),
+                null, null, null)
+
+        val highestId = if (cursor.count == 0) {
+          0
+        } else {
+            cursor.moveToFirst()
+            cursor.getInt(cursor.getColumnIndex(SqliteSeqSchema.COL_SEQ))
         }
-        cursor.moveToFirst()
-        val highestId = cursor.getInt(cursor.getColumnIndex(itemIdCol))
         cursor.close()
+
+        Log.v(LOG_TAG, "Highest id found is $highestId")
         return highestId
     }
 
