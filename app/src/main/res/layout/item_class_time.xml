@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:transitionName="@string/transition_2"
     android:background="?selectableItemBackground"
@@ -16,7 +18,7 @@
 
         <TextView
             android:id="@+id/time"
-            android:text="10:15 - 11:15"
+            tools:text="10:15 - 11:15"
             android:textColor="@color/mdu_text_black"
             android:textSize="16sp"
             android:layout_width="match_parent"
@@ -24,7 +26,7 @@
 
         <TextView
             android:id="@+id/day"
-            android:text="Wednesday Week A\nThursday Week B"
+            tools:text="Wednesday Week A\nThursday Week B"
             android:textColor="@color/mdu_text_black_secondary"
             android:textSize="14sp"
             android:layout_width="match_parent"
@@ -35,5 +37,4 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom" />
-
 </LinearLayout>

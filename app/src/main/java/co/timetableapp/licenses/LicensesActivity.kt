@@ -75,7 +75,7 @@ class LicensesActivity : AppCompatActivity() {
     }
 
     private fun makeCard(library: Library, container: LinearLayout): View {
-        val card = layoutInflater.inflate(R.layout.card_general, container, false)
+        val card = layoutInflater.inflate(R.layout.item_license_card, container, false)
 
         with(card) {
             (findViewById(R.id.title) as TextView).text = library.name

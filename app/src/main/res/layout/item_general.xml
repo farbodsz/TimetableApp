@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:foreground="?selectableItemBackground"
     android:background="@color/mdu_white"
     android:transitionName="@string/transition_1"
@@ -28,7 +29,7 @@
 
         <TextView
             android:id="@+id/text1"
-            android:text="Title"
+            tools:text="Title"
             android:textColor="@color/mdu_text_black"
             android:textSize="16sp"
             android:layout_width="match_parent"
@@ -37,7 +38,7 @@
 
         <TextView
             android:id="@+id/text2"
-            android:text="Some detail stuff"
+            tools:text="Some detail stuff"
             android:textColor="@color/mdu_text_black_secondary"
             android:textSize="14sp"
             android:layout_width="wrap_content"
@@ -46,7 +47,7 @@
 
         <TextView
             android:id="@+id/text3"
-            android:text="20 Aug"
+            tools:text="20 Aug"
             android:textColor="@color/mdu_text_black_secondary"
             android:textSize="12sp"
             android:layout_width="wrap_content"
@@ -56,7 +57,7 @@
 
         <TextView
             android:id="@+id/text4"
-            android:text="55%"
+            tools:text="55%"
             android:textColor="@color/mdu_text_black_secondary"
             android:textSize="12sp"
             android:layout_width="wrap_content"

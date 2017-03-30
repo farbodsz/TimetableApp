@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:foreground="?selectableItemBackground"
     android:background="@color/mdu_white"
     android:transitionName="@string/transition_1"
@@ -25,7 +27,7 @@
 
         <TextView
             android:id="@+id/name"
-            android:text="Year 11"
+            tools:text="Year 11"
             android:textColor="@color/mdu_text_black"
             android:textSize="16sp"
             android:layout_width="wrap_content"
@@ -33,12 +35,11 @@
 
         <TextView
             android:id="@+id/details"
-            android:text="Sep 5 - Jul 17 2016"
+            tools:text="Sep 5 - Jul 17 2016"
             android:textColor="@color/mdu_text_black_secondary"
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="2dp"/>
     </LinearLayout>
-
 </FrameLayout>
