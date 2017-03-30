@@ -26,6 +26,7 @@ import co.timetableapp.framework.TimetableItem;
  *
  * @param <T> the type of list items to be displayed
  */
+@Deprecated
 public abstract class ItemListActivity<T extends TimetableItem> extends NavigationDrawerActivity {
 
     /**
