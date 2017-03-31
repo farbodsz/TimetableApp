@@ -1,5 +1,7 @@
 package co.timetableapp.ui
 
+import android.support.v7.widget.RecyclerView
+import android.view.View
 import co.timetableapp.data.handler.TimetableItemHandler
 import co.timetableapp.framework.TimetableItem
 
@@ -15,6 +17,8 @@ interface ItemListImpl<T : TimetableItem> {
      * @return a new data handler instance relevant to the type of items being displayed
      */
     fun instantiateDataHandler(): TimetableItemHandler<T>
+
+    fun setupLayout()
 
     /**
      * Defines the actions for when the floating action button is clicked.
@@ -45,7 +49,7 @@ interface ItemListImpl<T : TimetableItem> {
      * Instantiates, sets up, and returns the relevant RecyclerView adapter.
      * The setup process may involve setting properties, adding listeners, etc.
      */
-    fun setupAdapter()
+    fun setupAdapter(): RecyclerView.Adapter<*>
 
     /**
      * Sorts the list of items being displayed.
@@ -74,6 +78,6 @@ interface ItemListImpl<T : TimetableItem> {
      *
      * @see refreshPlaceholderStatus()
      */
-    fun getPlaceholderView()
+    fun getPlaceholderView(): View
 
 }
