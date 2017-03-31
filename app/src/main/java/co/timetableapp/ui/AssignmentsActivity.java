@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -88,8 +89,9 @@ public class AssignmentsActivity extends ItemListActivity<Assignment> {
 
     private boolean mShowPast;
 
+    @NotNull
     @Override
-    TimetableItemHandler<Assignment> instantiateDataHandler() {
+    public TimetableItemHandler<Assignment> instantiateDataHandler() {
         return new AssignmentHandler(this);
     }
 
@@ -123,20 +125,21 @@ public class AssignmentsActivity extends ItemListActivity<Assignment> {
     }
 
     @Override
-    void onFabButtonClick() {
+    public void onFabButtonClick() {
         Intent intent = new Intent(AssignmentsActivity.this, AssignmentDetailActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL);
     }
 
     @Override
-    void setupList() {
+    public void setupList() {
         mHeaders = new ArrayList<>();
         super.setupList();
         makeItemTouchHelper().attachToRecyclerView(mRecyclerView);
     }
 
+    @NotNull
     @Override
-    RecyclerView.Adapter setupAdapter() {
+    public RecyclerView.Adapter setupAdapter() {
         AssignmentsAdapter adapter = new AssignmentsAdapter(this, mHeaders, mItems);
         adapter.setOnEntryClickListener(new AssignmentsAdapter.OnEntryClickListener() {
             @Override
@@ -324,7 +327,7 @@ public class AssignmentsActivity extends ItemListActivity<Assignment> {
     }
 
     @Override
-    void sortList() {
+    public void sortList() {
         Collections.sort(mItems, new Comparator<Assignment>() {
             @Override
             public int compare(Assignment a1, Assignment a2) {
@@ -386,8 +389,9 @@ public class AssignmentsActivity extends ItemListActivity<Assignment> {
         mItems.addAll(assignments);
     }
 
+    @NotNull
     @Override
-    View getPlaceholderView() {
+    public View getPlaceholderView() {
         int titleRes = mShowPast ? R.string.placeholder_assignments_past_title :
                 R.string.placeholder_assignments_title;
 
@@ -418,7 +422,7 @@ public class AssignmentsActivity extends ItemListActivity<Assignment> {
 
         if (requestCode == REQUEST_CODE_ASSIGNMENT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
-                refreshList();
+                updateList();
             }
         }
     }
@@ -448,11 +452,12 @@ public class AssignmentsActivity extends ItemListActivity<Assignment> {
                 } else {
                     textView.setVisibility(View.GONE);
                 }
-                refreshList();
+                updateList();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     protected int getSelfNavDrawerItem() {
         determineDisplayMode();

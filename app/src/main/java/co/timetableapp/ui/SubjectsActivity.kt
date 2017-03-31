@@ -23,14 +23,14 @@ class SubjectsActivity : ItemListActivity<Subject>() {
         private val REQUEST_CODE_SUBJECT_DETAIL = 1
     }
 
-    internal override fun instantiateDataHandler() = SubjectHandler(this)
+    override fun instantiateDataHandler() = SubjectHandler(this)
 
-    internal override fun onFabButtonClick() {
+    override fun onFabButtonClick() {
         val intent = Intent(this, SubjectEditActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL)
     }
 
-    internal override fun setupAdapter(): RecyclerView.Adapter<*> {
+    override fun setupAdapter(): RecyclerView.Adapter<*> {
         val adapter = SubjectsAdapter(this, mItems)
         adapter.setOnEntryClickListener { view, position ->
             val intent = Intent(this, SubjectEditActivity::class.java)
@@ -51,9 +51,9 @@ class SubjectsActivity : ItemListActivity<Subject>() {
         return adapter
     }
 
-    internal override fun sortList() = mItems!!.sort()
+    override fun sortList() = mItems!!.sort()
 
-    internal override fun getPlaceholderView() = UiUtils.makePlaceholderView(
+    override fun getPlaceholderView() = UiUtils.makePlaceholderView(
             this,
             R.drawable.ic_list_black_24dp,
             R.string.placeholder_subjects,
@@ -67,7 +67,7 @@ class SubjectsActivity : ItemListActivity<Subject>() {
 
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == RESULT_OK) {
-                refreshList()
+                updateList()
             }
         }
     }

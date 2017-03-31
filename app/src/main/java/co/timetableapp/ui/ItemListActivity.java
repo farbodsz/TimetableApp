@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import co.timetableapp.R;
@@ -27,7 +29,8 @@ import co.timetableapp.framework.TimetableItem;
  * @param <T> the type of list items to be displayed
  */
 @Deprecated
-public abstract class ItemListActivity<T extends TimetableItem> extends NavigationDrawerActivity {
+public abstract class ItemListActivity<T extends TimetableItem> extends NavigationDrawerActivity
+        implements ItemListImpl<T> {
 
     /**
      * A data handler relevant to the type of items being displayed.
@@ -35,11 +38,6 @@ public abstract class ItemListActivity<T extends TimetableItem> extends Navigati
      * @see #instantiateDataHandler()
      */
     TimetableItemHandler<T> mDataHandler;
-
-    /**
-     * @return a new data handler instance relevant to the type of items being displayed
-     */
-    abstract TimetableItemHandler<T> instantiateDataHandler();
 
     /**
      * A list of the data items being displayed of the generic type {@link T}
@@ -92,7 +90,8 @@ public abstract class ItemListActivity<T extends TimetableItem> extends Navigati
      * @see #onFabButtonClick()
      * @see #refreshPlaceholderStatus()
      */
-    void setupLayout() {
+    @Override
+    public void setupLayout() {
         setupList();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -107,20 +106,8 @@ public abstract class ItemListActivity<T extends TimetableItem> extends Navigati
         refreshPlaceholderStatus();
     }
 
-    /**
-     * This should be overridden to define the actions when the floating action button is clicked.
-     */
-    abstract void onFabButtonClick();
-
-    /**
-     * Populates the items list with data from the database table for the current timetable, before
-     * sorting this and displaying it.
-     *
-     * @see #getItems()
-     * @see #sortList()
-     * @see #setupAdapter()
-     */
-    void setupList() {
+    @Override
+    public void setupList() {
         mItems = mDataHandler.getItems(getApplication());
         sortList();
 
@@ -132,50 +119,23 @@ public abstract class ItemListActivity<T extends TimetableItem> extends Navigati
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    /**
-     * @return a list of items to use when populating the user interface. This can be overridden by
-     * subclasses to specify items to display when filtering a list, for example.
-     */
-    ArrayList<T> getItems() {
+    @NotNull
+    @Override
+    public ArrayList<T> fetchItems() {
         return mDataHandler.getItems(getApplication());
     }
 
-    /**
-     * Instantiates, sets up, and returns the relevant RecyclerView adapter.
-     * The setup process may involve setting properties, adding listeners, etc.
-     *
-     * @return the setup RecyclerView adapter, relevant to the subclass' items type.
-     */
-    abstract RecyclerView.Adapter setupAdapter();
-
-    /**
-     * Sorts the list of items being displayed.
-     */
-    abstract void sortList();
-
-    /**
-     * Updates the list with any modified or removed data. If there is none to display, the
-     * placeholder layout is shown instead.
-     *
-     * @see #getItems()
-     * @see #sortList()
-     * @see #refreshPlaceholderStatus()
-     */
-    void refreshList() {
+    @Override
+    public void updateList() {
         mItems.clear();
-        mItems.addAll(getItems());
+        mItems.addAll(fetchItems());
         sortList();
         mAdapter.notifyDataSetChanged();
         refreshPlaceholderStatus();
     }
 
-    /**
-     * Displays the placeholder layout if the list of items is empty, otherwise the list is
-     * displayed and the placeholder is not shown.
-     *
-     * @see #getPlaceholderView()
-     */
-    void refreshPlaceholderStatus() {
+    @Override
+    public void refreshPlaceholderStatus() {
         if (mItems.isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
             mPlaceholderLayout.setVisibility(View.VISIBLE);
@@ -188,14 +148,6 @@ public abstract class ItemListActivity<T extends TimetableItem> extends Navigati
             mPlaceholderLayout.setVisibility(View.GONE);
         }
     }
-
-    /**
-     * @return the view used as the placeholder layout for the subclass activity.
-     *
-     * @see #refreshPlaceholderStatus()
-     */
-    abstract View getPlaceholderView();
-
 
     @Override
     protected Toolbar getSelfToolbar() {

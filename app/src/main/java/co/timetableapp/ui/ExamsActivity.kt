@@ -35,14 +35,14 @@ class ExamsActivity : ItemListActivity<Exam>() {
     private var mHeaders: ArrayList<String?>? = null
     private var mShowPast = false
 
-    internal override fun instantiateDataHandler() = ExamHandler(this)
+    override fun instantiateDataHandler() = ExamHandler(this)
 
-    internal override fun onFabButtonClick() {
+    override fun onFabButtonClick() {
         val intent = Intent(this, ExamEditActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT)
     }
 
-    internal override fun setupAdapter(): RecyclerView.Adapter<*> {
+    override fun setupAdapter(): RecyclerView.Adapter<*> {
         val adapter = ExamsAdapter(this, mHeaders, mItems)
         adapter.setOnEntryClickListener { view, position ->
             val intent = Intent(this, ExamDetailActivity::class.java)
@@ -63,12 +63,12 @@ class ExamsActivity : ItemListActivity<Exam>() {
         return adapter
     }
 
-    internal override fun setupList() {
+    override fun setupList() {
         mHeaders = ArrayList<String?>()
         super.setupList()
     }
 
-    internal override fun sortList() {
+    override fun sortList() {
         Collections.sort(mItems) { e1, e2 ->
             val dateTime1 = e1.makeDateTimeObject()
             val dateTime2 = e2.makeDateTimeObject()
@@ -129,7 +129,7 @@ class ExamsActivity : ItemListActivity<Exam>() {
         mItems.addAll(exams)
     }
 
-    internal override fun getPlaceholderView() = UiUtils.makePlaceholderView(
+    override fun getPlaceholderView() = UiUtils.makePlaceholderView(
             this,
             R.drawable.ic_assessment_black_24dp,
             if (mShowPast) R.string.placeholder_exams_past else R.string.placeholder_exams,
@@ -143,7 +143,7 @@ class ExamsActivity : ItemListActivity<Exam>() {
 
         if (requestCode == REQUEST_CODE_EXAM_EDIT) {
             if (resultCode == RESULT_OK) {
-                refreshList()
+                updateList()
             }
         }
     }
@@ -169,7 +169,7 @@ class ExamsActivity : ItemListActivity<Exam>() {
                     }
                 }
 
-                refreshList()
+                updateList()
             }
         }
         return super.onOptionsItemSelected(item)

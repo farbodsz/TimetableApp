@@ -58,7 +58,7 @@ class ClassesActivity : ItemListActivity<Class>() {
         return adapter
     }
 
-    override fun getItems() =
+    override fun fetchItems() =
             (mDataHandler as ClassHandler).getCurrentClasses(application, mShowAll)
 
     override fun sortList() {
@@ -83,7 +83,7 @@ class ClassesActivity : ItemListActivity<Class>() {
 
         if (requestCode == REQUEST_CODE_CLASS_DETAIL) {
             if (resultCode == RESULT_OK) {
-                refreshList()
+                updateList()
             }
         }
     }
@@ -101,7 +101,7 @@ class ClassesActivity : ItemListActivity<Class>() {
             R.id.action_show_all -> {
                 item.isChecked = !mShowAll
                 mShowAll = !mShowAll
-                refreshList()
+                updateList()
             }
         }
         return super.onOptionsItemSelected(item)
