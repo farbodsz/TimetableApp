@@ -26,23 +26,11 @@
             <include layout="@layout/info_bar" />
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:clipToPadding="false"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="@dimen/content_vertical_padding"
-            android:paddingBottom="@dimen/fab_padding"
-            android:paddingLeft="@dimen/content_lateral_padding"
-            android:paddingRight="@dimen/content_lateral_padding" />
-
         <FrameLayout
-            android:visibility="gone"
-            android:id="@+id/placeholder"
+            android:id="@+id/fragment_container"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="wrap_content" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
@@ -52,7 +40,6 @@
             android:layout_margin="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
     </android.support.design.widget.CoordinatorLayout>
 
     <include layout="@layout/navigation_drawer"/>
