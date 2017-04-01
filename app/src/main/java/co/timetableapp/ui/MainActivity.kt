@@ -1,8 +1,10 @@
 package co.timetableapp.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -12,6 +14,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +42,15 @@ import org.threeten.bp.format.DateTimeFormatter
  */
 class MainActivity : NavigationDrawerActivity() {
 
+    companion object {
+
+        private const val LOG_TAG = "MainActivity"
+
+        private const val REQUEST_CODE_ITEM_DETAIL = 1
+
+        @JvmStatic private var sFab: FloatingActionButton? = null
+    }
+
     private var mViewPager: ViewPager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +61,8 @@ class MainActivity : NavigationDrawerActivity() {
     }
 
     private fun setupLayout() {
+        setupFab()
+
         mViewPager = findViewById(R.id.viewPager) as ViewPager
         mViewPager!!.adapter = PagerAdapter(supportFragmentManager)
 
@@ -60,6 +74,23 @@ class MainActivity : NavigationDrawerActivity() {
         mViewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
 
         tabLayout.setupWithViewPager(mViewPager)
+    }
+
+    private fun setupFab() {
+        sFab = findViewById(R.id.fab) as FloatingActionButton
+        sFab!!.setOnClickListener {
+            val intent = Intent(this, AssignmentDetailActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        supportFragmentManager.fragments.forEach {
+            // To update content in each fragment
+            it.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     override fun getSelfToolbar() = findViewById(R.id.toolbar) as Toolbar
@@ -97,36 +128,44 @@ class MainActivity : NavigationDrawerActivity() {
      */
     class TodayFragment : Fragment() {
 
-        private val mAllAssignments: ArrayList<Assignment> by lazy {
-            AssignmentHandler(context).getItems(activity.application)
-        }
+        private var mSectionContainer: LinearLayout? = null
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater!!.inflate(R.layout.fragment_home_main, container, false)
 
-            setupLayout(rootView)
+            mSectionContainer = rootView.findViewById(R.id.section_container) as LinearLayout
+            setupLayout()
 
             return rootView
         }
 
-        private fun setupLayout(rootView: View) {
+        override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+            super.setUserVisibleHint(isVisibleToUser)
+
+            if (isVisibleToUser) {
+                sFab!!.show()
+            } else {
+                sFab!!.hide()
+            }
+        }
+
+        private fun setupLayout() {
             val timetableId = (activity.application as TimetableApplication).currentTimetable!!.id
 
-            val sectionContainer = rootView.findViewById(R.id.section_container) as LinearLayout
             val inflater = LayoutInflater.from(context)
 
-            val classesSection = SectionUi.Builder(context, sectionContainer)
+            val classesSection = SectionUi.Builder(context, mSectionContainer!!)
                     .setTitle(R.string.title_activity_classes)
                     .build()
             addClassesCards(classesSection.containerView, inflater, getClassesToday())
 
-            sectionContainer.addView(classesSection.view)
+            mSectionContainer!!.addView(classesSection.view)
 
             val assignments = getAssignmentsToday()
             val overdueAssignments = getOverdueAssignments()
             if (assignments.isNotEmpty() || overdueAssignments.isNotEmpty()) {
-                val assignmentsSection = SectionUi.Builder(context, sectionContainer)
+                val assignmentsSection = SectionUi.Builder(context, mSectionContainer!!)
                         .setTitle(R.string.title_activity_assignments)
                         .build()
 
@@ -139,17 +178,17 @@ class MainActivity : NavigationDrawerActivity() {
                     addAssignmentCards(assignmentsSection.containerView, inflater, assignments)
                 }
 
-                sectionContainer.addView(assignmentsSection.view)
+                mSectionContainer!!.addView(assignmentsSection.view)
             }
 
             val exams = getExamsToday(timetableId)
             if (exams.isNotEmpty()) {
-                val examsSection = SectionUi.Builder(context, sectionContainer)
+                val examsSection = SectionUi.Builder(context, mSectionContainer!!)
                         .setTitle(R.string.title_activity_exams)
                         .build()
                 addExamsCards(examsSection.containerView, inflater, exams)
 
-                sectionContainer.addView(examsSection.view)
+                mSectionContainer!!.addView(examsSection.view)
             }
         }
 
@@ -177,7 +216,7 @@ class MainActivity : NavigationDrawerActivity() {
             val today = LocalDate.now()
             val assignmentsToday = ArrayList<Assignment>()
 
-            mAllAssignments.forEach {
+            AssignmentHandler(context).getItems(activity.application).forEach {
                 if (it.dueDate == today) {
                     assignmentsToday.add(it)
                 }
@@ -189,7 +228,7 @@ class MainActivity : NavigationDrawerActivity() {
         private fun getOverdueAssignments(): ArrayList<Assignment> {
             val overdueAssignments = ArrayList<Assignment>()
 
-            mAllAssignments.forEach {
+            AssignmentHandler(context).getItems(activity.application).forEach {
                 if (it.isOverdue()) {
                     overdueAssignments.add(it)
                 }
@@ -293,14 +332,15 @@ class MainActivity : NavigationDrawerActivity() {
                 }
 
                 setOnClickListener {
-                    val intent = if (numOverdue == 1) {
-                        Intent(activity, AssignmentDetailActivity::class.java)
-                                .putExtra(ItemDetailActivity.EXTRA_ITEM, overdueAssignments[0])
+                    if (numOverdue == 1) {
+                        val intent = Intent(activity, AssignmentDetailActivity::class.java).putExtra(
+                                ItemDetailActivity.EXTRA_ITEM, overdueAssignments[0])
+                        startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
                     } else {
-                        Intent(activity, AssignmentsActivity::class.java)
-                                .putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO)
+                        val intent = Intent(activity, AssignmentsActivity::class.java).putExtra(
+                                AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO)
+                        startActivity(intent)
                     }
-                    startActivity(intent)
                 }
             }
 
@@ -326,7 +366,7 @@ class MainActivity : NavigationDrawerActivity() {
                     setOnClickListener {
                         val intent = Intent(activity, AssignmentDetailActivity::class.java)
                         intent.putExtra(ItemDetailActivity.EXTRA_ITEM, assignment)
-                        startActivity(intent)
+                        startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
                     }
                 }
 
@@ -364,37 +404,51 @@ class MainActivity : NavigationDrawerActivity() {
                 container.addView(card)
             }
         }
+
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
+
+            if (requestCode == REQUEST_CODE_ITEM_DETAIL) {
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.d(LOG_TAG, "TodayFragment: received activity result - refreshing lists")
+                    mSectionContainer!!.removeAllViews()
+                    setupLayout()
+                }
+            }
+        }
     }
 
     class UpcomingFragment : Fragment() {
+
+        private var mSectionContainer: LinearLayout? = null
 
         override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater!!.inflate(R.layout.fragment_home_main, container, false)
 
-            setupLayout(rootView)
+            mSectionContainer = rootView.findViewById(R.id.section_container) as LinearLayout
+            setupLayout()
 
             return rootView
         }
 
-        private fun setupLayout(rootView: View) {
-            val sectionContainer = rootView.findViewById(R.id.section_container) as LinearLayout
+        private fun setupLayout() {
             val inflater = LayoutInflater.from(context)
 
-            val assignmentSection = SectionUi.Builder(context, sectionContainer)
+            val assignmentSection = SectionUi.Builder(context, mSectionContainer!!)
                     .setTitle(R.string.title_activity_assignments)
                     .build()
             addAssignmentCards(assignmentSection.containerView, inflater, getUpcomingAssignments())
-            sectionContainer.addView(assignmentSection.view)
+            mSectionContainer!!.addView(assignmentSection.view)
 
             val exams = getUpcomingExams()
             if (exams.isNotEmpty()) {
-                val examsSection = SectionUi.Builder(context, sectionContainer)
+                val examsSection = SectionUi.Builder(context, mSectionContainer!!)
                         .setTitle(R.string.title_activity_exams)
                         .build()
                 addExamCards(examsSection.containerView, inflater, exams)
 
-                sectionContainer.addView(examsSection.view)
+                mSectionContainer!!.addView(examsSection.view)
             }
         }
 
@@ -461,7 +515,7 @@ class MainActivity : NavigationDrawerActivity() {
                     setOnClickListener {
                         val intent = Intent(context, AssignmentDetailActivity::class.java)
                         intent.putExtra(ItemDetailActivity.EXTRA_ITEM, assignment)
-                        startActivity(intent)
+                        startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
                     }
                 }
 
@@ -502,6 +556,18 @@ class MainActivity : NavigationDrawerActivity() {
                 }
 
                 container.addView(card)
+            }
+        }
+
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
+
+            if (requestCode == REQUEST_CODE_ITEM_DETAIL) {
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.d(LOG_TAG, "UpcomingFragment: received activity result - refreshing lists")
+                    mSectionContainer!!.removeAllViews()
+                    setupLayout()
+                }
             }
         }
     }
