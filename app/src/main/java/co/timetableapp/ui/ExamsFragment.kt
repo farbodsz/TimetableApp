@@ -131,7 +131,7 @@ class ExamsFragment : ItemListFragment<Exam>() {
         mHeaders!!.addAll(headers)
 
         mItems!!.clear()
-        mItems!!.addAll(exams) // FIXME compile-time error: exam should be non-null
+        mItems!!.addAll(exams)
     }
 
     override fun getPlaceholderView() = UiUtils.makePlaceholderView(
@@ -176,6 +176,7 @@ class ExamsFragment : ItemListFragment<Exam>() {
                 updateList()
             }
         }
-        return super.onOptionsItemSelected(item)    }
+        return super.onOptionsItemSelected(item)
+    }
 
 }

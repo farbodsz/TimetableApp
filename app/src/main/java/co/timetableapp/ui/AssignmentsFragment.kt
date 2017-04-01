@@ -122,7 +122,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
         override fun getMovementFlags(recyclerView: RecyclerView,
                                       viewHolder: RecyclerView.ViewHolder): Int {
             val position = viewHolder.adapterPosition
-            val isHeader = mItems!![position] == null // TODO mItems should be ArrayList<Assignment?>?
+            val isHeader = mItems!![position] == null
 
             val swipeFlags = if (isHeader)
                 0
@@ -208,7 +208,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
                     .setAction(R.string.action_undo) {
                         if (mRemovedHeader != null) {
                             mHeaders!!.add(mRemovedAssignmentPos - 1, mRemovedHeader!!)
-                            mItems!!.add(mRemovedAssignmentPos - 1, null) // FIXME compile-time error: assignment should be non-null
+                            mItems!!.add(mRemovedAssignmentPos - 1, null)
                             mAdapter!!.notifyItemInserted(mRemovedAssignmentPos - 1)
                         }
 
@@ -314,7 +314,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
         mHeaders!!.addAll(headers)
 
         mItems!!.clear()
-        mItems!!.addAll(assignments) // FIXME compile-time error: assignment should be non-null
+        mItems!!.addAll(assignments)
     }
 
     override fun getPlaceholderView(): View {
