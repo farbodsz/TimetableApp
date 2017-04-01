@@ -59,6 +59,12 @@ public abstract class ItemListFragment<T extends TimetableItem> extends Fragment
 
     private View mRootView;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,

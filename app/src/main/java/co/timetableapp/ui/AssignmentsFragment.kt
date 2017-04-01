@@ -360,6 +360,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
         // Do not show the menu in DISPLAY_TODO mode
         if (mMode != DISPLAY_TODO) {
             inflater!!.inflate(R.menu.menu_assignments, menu)

@@ -154,6 +154,7 @@ class ExamsFragment : ItemListFragment<Exam>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
         inflater!!.inflate(R.menu.menu_assignments, menu)
         menu!!.findItem(R.id.action_show_past).title = getString(R.string.action_show_past_exams)
     }

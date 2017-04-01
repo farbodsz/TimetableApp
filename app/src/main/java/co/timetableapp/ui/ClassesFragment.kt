@@ -92,6 +92,7 @@ class ClassesFragment : ItemListFragment<Class>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
         inflater!!.inflate(R.menu.menu_classes, menu)
         UiUtils.tintMenuIcons(activity, menu!!, R.id.action_manage_subjects)
     }
