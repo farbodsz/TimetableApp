@@ -39,7 +39,7 @@ class TimetablesFragment : Fragment() {
     private var mTimetables: ArrayList<Timetable>? = null
 
     private var mAdapter: TimetablesAdapter? = null
-    private val mDataHandler = TimetableHandler(activity)
+    private var mDataHandler: TimetableHandler? = null
 
     private var mRootView: View? = null
 
@@ -47,6 +47,7 @@ class TimetablesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         mRootView = inflater!!.inflate(R.layout.fragment_content_list, container, false)
 
+        mDataHandler = TimetableHandler(activity)
         setupLayout()
 
         return mRootView
@@ -63,7 +64,7 @@ class TimetablesFragment : Fragment() {
     }
 
     private fun setupList() {
-        mTimetables = mDataHandler.getAllItems()
+        mTimetables = mDataHandler!!.getAllItems()
         sortList()
 
         mAdapter = TimetablesAdapter(activity, mTimetables, activity.findViewById(R.id.coordinatorLayout))
@@ -83,24 +84,25 @@ class TimetablesFragment : Fragment() {
             ActivityCompat.startActivityForResult(activity, intent, REQUEST_CODE_TIMETABLE_EDIT, bundle)
         }
 
-        val recyclerView = activity.findViewById(R.id.recyclerView) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.addItemDecoration(
-                DividerItemDecoration(activity, DividerItemDecoration.VERTICAL_LIST))
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = mAdapter
+        val recyclerView = mRootView!!.findViewById(R.id.recyclerView) as RecyclerView
+        with(recyclerView) {
+            layoutManager = LinearLayoutManager(activity)
+            addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL_LIST))
+            setHasFixedSize(true)
+            adapter = mAdapter
+        }
     }
 
     private fun sortList() = mTimetables!!.sort()
 
     private fun refreshList() {
         mTimetables!!.clear()
-        mTimetables!!.addAll(mDataHandler.getAllItems())
+        mTimetables!!.addAll(mDataHandler!!.getAllItems())
         sortList()
         mAdapter!!.notifyDataSetChanged()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_CODE_TIMETABLE_EDIT) {
