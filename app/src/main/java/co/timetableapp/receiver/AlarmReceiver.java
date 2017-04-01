@@ -33,9 +33,9 @@ import co.timetableapp.framework.ClassTime;
 import co.timetableapp.framework.Color;
 import co.timetableapp.framework.Exam;
 import co.timetableapp.framework.Subject;
-import co.timetableapp.ui.AssignmentsActivity;
-import co.timetableapp.ui.ExamsActivity;
 import co.timetableapp.ui.MainActivity;
+import co.timetableapp.ui.assignments.AssignmentsActivity;
+import co.timetableapp.ui.exams.ExamsActivity;
 
 /**
  * Invoked when receiving an alarm - i.e. when a notification needs to be displayed.
