@@ -1,5 +1,6 @@
-package co.timetableapp.model
+package co.timetableapp.ui.classes
 
+import co.timetableapp.model.ClassTime
 import org.threeten.bp.LocalTime
 import java.util.*
 

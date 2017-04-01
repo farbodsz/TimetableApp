@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
 import co.timetableapp.model.ClassTime;
-import co.timetableapp.model.ClassTimeGroup;
 import co.timetableapp.model.Timetable;
 import co.timetableapp.util.TextUtilsKt;
 

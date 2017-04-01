@@ -42,7 +42,6 @@ import co.timetableapp.data.handler.SubjectHandler;
 import co.timetableapp.model.Class;
 import co.timetableapp.model.ClassDetail;
 import co.timetableapp.model.ClassTime;
-import co.timetableapp.model.ClassTimeGroup;
 import co.timetableapp.model.Color;
 import co.timetableapp.model.Subject;
 import co.timetableapp.model.Timetable;
