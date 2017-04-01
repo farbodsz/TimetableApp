@@ -1,4 +1,4 @@
-package co.timetableapp.util
+package co.timetableapp.ui.components
 
 import android.content.Context
 import android.support.annotation.StringRes
@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import co.timetableapp.R
-import co.timetableapp.util.SectionUi.Builder
+import co.timetableapp.ui.components.SectionUi.Builder
 
 /**
  * This class represents a section in the user interface and is used to generate the interface

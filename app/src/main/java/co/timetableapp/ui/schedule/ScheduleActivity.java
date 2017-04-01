@@ -32,10 +32,10 @@ import co.timetableapp.framework.Class;
 import co.timetableapp.framework.ClassDetail;
 import co.timetableapp.framework.ClassTime;
 import co.timetableapp.framework.Timetable;
-import co.timetableapp.ui.DividerItemDecoration;
-import co.timetableapp.ui.DynamicPagerAdapter;
 import co.timetableapp.ui.base.NavigationDrawerActivity;
 import co.timetableapp.ui.classes.ClassDetailActivity;
+import co.timetableapp.ui.components.DividerItemDecoration;
+import co.timetableapp.ui.components.DynamicPagerAdapter;
 import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.UiUtils;
 

@@ -1,4 +1,4 @@
-package co.timetableapp.ui;
+package co.timetableapp.ui.components;
 
 /*
  * Copyright (C) 2014 The Android Open Source Project

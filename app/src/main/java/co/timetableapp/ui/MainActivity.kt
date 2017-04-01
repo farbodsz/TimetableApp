@@ -34,9 +34,9 @@ import co.timetableapp.ui.assignments.AssignmentsActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.classes.ClassDetailActivity
+import co.timetableapp.ui.components.SectionUi
 import co.timetableapp.ui.exams.ExamDetailActivity
 import co.timetableapp.util.DateUtils
-import co.timetableapp.util.SectionUi
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 

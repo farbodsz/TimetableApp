@@ -1,4 +1,4 @@
-package co.timetableapp.ui
+package co.timetableapp.ui.components
 
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
