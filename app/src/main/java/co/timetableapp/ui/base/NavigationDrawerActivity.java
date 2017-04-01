@@ -16,11 +16,11 @@ import android.view.View;
 
 import co.timetableapp.R;
 import co.timetableapp.ui.MainActivity;
-import co.timetableapp.ui.SettingsActivity;
 import co.timetableapp.ui.assignments.AssignmentsActivity;
 import co.timetableapp.ui.classes.ClassesActivity;
 import co.timetableapp.ui.exams.ExamsActivity;
 import co.timetableapp.ui.schedule.ScheduleActivity;
+import co.timetableapp.ui.settings.SettingsActivity;
 import co.timetableapp.ui.subjects.SubjectsActivity;
 import co.timetableapp.ui.timetables.TimetablesActivity;
 

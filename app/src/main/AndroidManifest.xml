@@ -112,7 +112,7 @@
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name=".ui.settings.SettingsActivity"
             android:label="@string/action_settings"
             android:theme="@style/Timetable.TranslucentStatus" />
 
