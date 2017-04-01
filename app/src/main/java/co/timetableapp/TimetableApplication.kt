@@ -29,7 +29,7 @@ class TimetableApplication : Application() {
         currentTimetable = PrefUtils.getCurrentTimetable(this)
     }
 
-    fun setCurrentTimetable(context: Context, timetable: Timetable?) {
+    fun setCurrentTimetable(context: Context, timetable: Timetable) {
         currentTimetable = timetable
         NotificationUtils.refreshAlarms(context, this)
     }

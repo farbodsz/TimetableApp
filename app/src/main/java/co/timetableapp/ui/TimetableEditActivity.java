@@ -403,9 +403,7 @@ public class TimetableEditActivity extends ItemEditActivity<Timetable>
                         mDataHandler.deleteItemWithReferences(mItem.getId());
 
                         // After the timetable has been deleted, change the current timetable
-                        int highestId = mDataHandler.getHighestItemId();
-                        Timetable newCurrentTimetable =
-                                Timetable.create(getBaseContext(), highestId);
+                        Timetable newCurrentTimetable = mDataHandler.getAllItems().get(0);
 
                         TimetableApplication application = (TimetableApplication) getApplication();
                         application.setCurrentTimetable(getBaseContext(), newCurrentTimetable);
