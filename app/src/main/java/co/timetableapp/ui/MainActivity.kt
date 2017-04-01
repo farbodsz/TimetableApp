@@ -29,6 +29,12 @@ import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.ExamsSchema
 import co.timetableapp.framework.*
+import co.timetableapp.ui.assignments.AssignmentDetailActivity
+import co.timetableapp.ui.assignments.AssignmentsActivity
+import co.timetableapp.ui.base.ItemDetailActivity
+import co.timetableapp.ui.base.NavigationDrawerActivity
+import co.timetableapp.ui.classes.ClassDetailActivity
+import co.timetableapp.ui.exams.ExamDetailActivity
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.SectionUi
 import org.threeten.bp.LocalDate

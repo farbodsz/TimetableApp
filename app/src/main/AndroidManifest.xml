@@ -42,73 +42,73 @@
             android:theme="@style/Timetable.TranslucentStatus" />
 
         <activity
-            android:name=".ui.ScheduleActivity"
+            android:name=".ui.schedule.ScheduleActivity"
             android:label="@string/title_activity_schedule"
             android:theme="@style/Timetable.TranslucentStatus" />
 
         <activity
-            android:name=".ui.ClassesActivity"
+            android:name=".ui.classes.ClassesActivity"
             android:label="@string/title_activity_classes"
             android:theme="@style/Timetable.TranslucentStatus" />
 
         <activity
-            android:name=".ui.ClassDetailActivity"
+            android:name=".ui.classes.ClassDetailActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.ClassEditActivity"
+            android:name=".ui.classes.ClassEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.ClassTimeEditActivity"
+            android:name=".ui.classes.ClassTimeEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
-            android:name=".ui.AssignmentsActivity"
+            android:name=".ui.assignments.AssignmentsActivity"
             android:label="@string/title_activity_assignments"
             android:theme="@style/Timetable.TranslucentStatus" />
 
         <activity
-            android:name=".ui.AssignmentDetailActivity"
+            android:name=".ui.assignments.AssignmentDetailActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.AssignmentEditActivity"
+            android:name=".ui.assignments.AssignmentEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.ExamsActivity"
+            android:name=".ui.exams.ExamsActivity"
             android:label="@string/title_activity_exams"
             android:theme="@style/Timetable.TranslucentStatus" />
 
         <activity
-            android:name=".ui.ExamDetailActivity"
+            android:name=".ui.exams.ExamDetailActivity"
             android:theme="@style/Timetable" />
 
         <activity
-            android:name=".ui.ExamEditActivity"
+            android:name=".ui.exams.ExamEditActivity"
             android:theme="@style/Timetable" />
 
         <activity
-            android:name=".ui.SubjectsActivity"
+            android:name=".ui.subjects.SubjectsActivity"
             android:label="@string/title_activity_subjects"
             android:theme="@style/Timetable.TranslucentStatus" />
 
         <activity
-            android:name=".ui.SubjectEditActivity"
+            android:name=".ui.subjects.SubjectEditActivity"
             android:theme="@style/Timetable"/>
 
         <activity
-            android:name=".ui.TimetablesActivity"
+            android:name=".ui.timetables.TimetablesActivity"
             android:label="@string/title_activity_timetables"
             android:theme="@style/Timetable.TranslucentStatus" />
 
         <activity
-            android:name=".ui.TimetableEditActivity"
+            android:name=".ui.timetables.TimetableEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
-            android:name=".ui.TermEditActivity"
+            android:name=".ui.timetables.TermEditActivity"
             android:theme="@style/Timetable.EditItem"/>
 
         <activity

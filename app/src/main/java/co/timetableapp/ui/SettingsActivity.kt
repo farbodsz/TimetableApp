@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar
 import co.timetableapp.BuildConfig
 import co.timetableapp.R
 import co.timetableapp.licenses.LicensesActivity
+import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.util.NotificationUtils
 import co.timetableapp.util.PrefUtils
 import org.threeten.bp.LocalTime
@@ -147,11 +148,11 @@ class SettingsActivity : NavigationDrawerActivity() {
 
     }
 
+    override fun getSelfNavDrawerItem() = NAVDRAWER_ITEM_SETTINGS
+
     override fun getSelfToolbar() = findViewById(R.id.toolbar) as Toolbar
 
     override fun getSelfDrawerLayout() = findViewById(R.id.drawerLayout) as DrawerLayout
-
-    override fun getSelfNavDrawerItem() = NavigationDrawerActivity.NAVDRAWER_ITEM_SETTINGS
 
     override fun getSelfNavigationView() = findViewById(R.id.navigationView) as NavigationView
 
