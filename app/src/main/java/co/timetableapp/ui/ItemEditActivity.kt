@@ -20,7 +20,7 @@ import co.timetableapp.util.UiUtils
  * supplied to this activity (i.e. [EXTRA_ITEM] will be null).
  *
  * @see ItemDetailActivity
- * @see ItemListActivity
+ * @see ItemListFragment
  */
 abstract class ItemEditActivity<T : BaseItem> : AppCompatActivity() {
 
