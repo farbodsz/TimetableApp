@@ -34,7 +34,7 @@ import co.timetableapp.ui.assignments.AssignmentsActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.classes.ClassDetailActivity
-import co.timetableapp.ui.components.SectionUi
+import co.timetableapp.ui.components.SectionGroup
 import co.timetableapp.ui.exams.ExamDetailActivity
 import co.timetableapp.util.DateUtils
 import org.threeten.bp.LocalDate
@@ -161,7 +161,7 @@ class MainActivity : NavigationDrawerActivity() {
 
             val inflater = LayoutInflater.from(context)
 
-            val classesSection = SectionUi.Builder(context, mSectionContainer!!)
+            val classesSection = SectionGroup.Builder(context, mSectionContainer!!)
                     .setTitle(R.string.title_activity_classes)
                     .build()
             addClassesCards(classesSection.containerView, inflater, getClassesToday())
@@ -171,7 +171,7 @@ class MainActivity : NavigationDrawerActivity() {
             val assignments = getAssignmentsToday()
             val overdueAssignments = getOverdueAssignments()
             if (assignments.isNotEmpty() || overdueAssignments.isNotEmpty()) {
-                val assignmentsSection = SectionUi.Builder(context, mSectionContainer!!)
+                val assignmentsSection = SectionGroup.Builder(context, mSectionContainer!!)
                         .setTitle(R.string.title_activity_assignments)
                         .build()
 
@@ -189,7 +189,7 @@ class MainActivity : NavigationDrawerActivity() {
 
             val exams = getExamsToday(timetableId)
             if (exams.isNotEmpty()) {
-                val examsSection = SectionUi.Builder(context, mSectionContainer!!)
+                val examsSection = SectionGroup.Builder(context, mSectionContainer!!)
                         .setTitle(R.string.title_activity_exams)
                         .build()
                 addExamsCards(examsSection.containerView, inflater, exams)
@@ -441,7 +441,7 @@ class MainActivity : NavigationDrawerActivity() {
         private fun setupLayout() {
             val inflater = LayoutInflater.from(context)
 
-            val assignmentSection = SectionUi.Builder(context, mSectionContainer!!)
+            val assignmentSection = SectionGroup.Builder(context, mSectionContainer!!)
                     .setTitle(R.string.title_activity_assignments)
                     .build()
             addAssignmentCards(assignmentSection.containerView, inflater, getUpcomingAssignments())
@@ -449,7 +449,7 @@ class MainActivity : NavigationDrawerActivity() {
 
             val exams = getUpcomingExams()
             if (exams.isNotEmpty()) {
-                val examsSection = SectionUi.Builder(context, mSectionContainer!!)
+                val examsSection = SectionGroup.Builder(context, mSectionContainer!!)
                         .setTitle(R.string.title_activity_exams)
                         .build()
                 addExamCards(examsSection.containerView, inflater, exams)

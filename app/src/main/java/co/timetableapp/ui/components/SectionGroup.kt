@@ -9,15 +9,15 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import co.timetableapp.R
-import co.timetableapp.ui.components.SectionUi.Builder
+import co.timetableapp.ui.components.SectionGroup.Builder
 
 /**
  * This class represents a section in the user interface and is used to generate the interface
  * dynamically.
- * The [Builder] class must be used to create a [SectionUi].
+ * The [Builder] class must be used to create a [SectionGroup].
  */
 @Suppress("unused")
-class SectionUi private constructor(val view: View) {
+class SectionGroup private constructor(val view: View) {
 
     /**
      * @return the [FrameLayout] containing all the views for the header of the section.
@@ -30,7 +30,7 @@ class SectionUi private constructor(val view: View) {
     val containerView: LinearLayout = view.findViewById(R.id.container) as LinearLayout
 
     /**
-     * This builder class must be used to create a [SectionUi].
+     * This builder class must be used to create a [SectionGroup].
      * Builder methods can be used to customize the header of the section.
      */
     class Builder(private val mContext: Context, private val mRoot: ViewGroup) {
@@ -64,7 +64,7 @@ class SectionUi private constructor(val view: View) {
             return this
         }
 
-        fun build(): SectionUi {
+        fun build(): SectionGroup {
             val inflater = LayoutInflater.from(mContext)
 
             val sectionHeader = inflater.inflate(R.layout.item_section, mRoot, false)
@@ -89,7 +89,7 @@ class SectionUi private constructor(val view: View) {
                 }
             }
 
-            return SectionUi(sectionHeader)
+            return SectionGroup(sectionHeader)
         }
     }
 
