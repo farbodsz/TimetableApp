@@ -43,6 +43,11 @@ class TimetablesFragment : Fragment() {
 
     private var mRootView: View? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         mRootView = inflater!!.inflate(R.layout.fragment_content_list, container, false)
@@ -113,6 +118,7 @@ class TimetablesFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
         inflater!!.inflate(R.menu.menu_timetables, menu)
     }
 
