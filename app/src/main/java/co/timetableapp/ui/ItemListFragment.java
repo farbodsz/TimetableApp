@@ -28,7 +28,8 @@ import co.timetableapp.framework.TimetableItem;
  *
  * @param <T> the type of list items to be displayed
  *
- * @see ItemListActivity
+ * @see ItemDetailActivity
+ * @see ItemEditActivity
  */
 public abstract class ItemListFragment<T extends TimetableItem> extends Fragment
         implements ItemListImpl<T> {

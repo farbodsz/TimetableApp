@@ -30,7 +30,7 @@ interface ItemListImpl<T : TimetableItem> {
      * sorting this and displaying it.
      *
      * This includes fetching the items, sorting the list, and setting up the adapter and
-     * [android.support.v7.widget.RecyclerView].
+     * [RecyclerView].
      *
      * @see fetchItems
      * @see sortList

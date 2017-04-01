@@ -12,11 +12,6 @@ import co.timetableapp.framework.Assignment;
 /**
  * An activity for displaying a list of assignments to the user.
  *
- * Assignments can be displayed in two formats: {@link #DISPLAY_TODO} and
- * {@link #DISPLAY_ALL_UPCOMING}. In the former, only incomplete assignments will be displayed; in
- * the latter, only assignments that are due in the future (regardless of completion) and overdue
- * assignments will be shown.
- *
  * @see Assignment
  * @see AssignmentsFragment
  * @see AssignmentDetailActivity

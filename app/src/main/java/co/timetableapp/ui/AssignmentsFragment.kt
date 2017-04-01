@@ -17,6 +17,8 @@ import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.AssignmentHandler
 import co.timetableapp.framework.Assignment
+import co.timetableapp.ui.AssignmentsFragment.Companion.DISPLAY_ALL_UPCOMING
+import co.timetableapp.ui.AssignmentsFragment.Companion.DISPLAY_TODO
 import co.timetableapp.ui.adapter.AssignmentsAdapter
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
@@ -25,6 +27,10 @@ import java.util.*
 
 /**
  * A fragment for displaying a list of assignments to the user.
+ *
+ * Assignments can be displayed in two formats: [DISPLAY_TODO] and [DISPLAY_ALL_UPCOMING].
+ * In the former, only incomplete assignments will be displayed; in the latter, only assignments
+ * that are due in the future (regardless of completion) and overdue assignments will be shown.
  *
  * @see Assignment
  * @see AssignmentsActivity
