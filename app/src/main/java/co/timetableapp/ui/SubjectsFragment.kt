@@ -3,7 +3,6 @@ package co.timetableapp.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.RecyclerView
 import co.timetableapp.R
@@ -47,7 +46,7 @@ class SubjectsFragment : ItemListFragment<Subject>() {
                 bundle = options.toBundle()
             }
 
-            ActivityCompat.startActivityForResult(activity, intent, REQUEST_CODE_SUBJECT_DETAIL, bundle)
+            startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL, bundle)
         }
 
         return adapter

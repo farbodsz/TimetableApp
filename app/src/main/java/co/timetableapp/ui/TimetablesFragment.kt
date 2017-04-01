@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -86,7 +85,7 @@ class TimetablesFragment : Fragment() {
                 bundle = options.toBundle()
             }
 
-            ActivityCompat.startActivityForResult(activity, intent, REQUEST_CODE_TIMETABLE_EDIT, bundle)
+            startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT, bundle)
         }
 
         val recyclerView = mRootView!!.findViewById(R.id.recyclerView) as RecyclerView

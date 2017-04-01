@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -108,11 +107,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
                 bundle = options.toBundle()
             }
 
-            ActivityCompat.startActivityForResult(
-                    activity,
-                    intent,
-                    REQUEST_CODE_ASSIGNMENT_DETAIL,
-                    bundle)
+            startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL, bundle)
         }
 
         return adapter
