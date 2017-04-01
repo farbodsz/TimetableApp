@@ -11,11 +11,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
-import co.timetableapp.framework.Class;
-import co.timetableapp.framework.ClassDetail;
-import co.timetableapp.framework.ClassTime;
-import co.timetableapp.framework.Color;
-import co.timetableapp.framework.Subject;
+import co.timetableapp.model.Class;
+import co.timetableapp.model.ClassDetail;
+import co.timetableapp.model.ClassTime;
+import co.timetableapp.model.Color;
+import co.timetableapp.model.Subject;
 
 class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder> {
 

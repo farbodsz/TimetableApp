@@ -9,7 +9,7 @@ import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.SubjectsSchema
 import co.timetableapp.data.schema.TermsSchema
 import co.timetableapp.data.schema.TimetablesSchema
-import co.timetableapp.framework.Timetable
+import co.timetableapp.model.Timetable
 import co.timetableapp.util.NotificationUtils
 
 class TimetableHandler(context: Context) : DataHandler<Timetable>(context) {

@@ -6,7 +6,7 @@ import android.provider.BaseColumns
  * The schema for the 'terms' table, containing constants for the column names and an SQLite create
  * statement.
  *
- * @see co.timetableapp.framework.Term
+ * @see co.timetableapp.model.Term
  */
 object TermsSchema : BaseColumns {
 

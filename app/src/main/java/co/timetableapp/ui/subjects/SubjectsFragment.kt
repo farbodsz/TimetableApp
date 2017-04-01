@@ -7,7 +7,7 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.RecyclerView
 import co.timetableapp.R
 import co.timetableapp.data.handler.SubjectHandler
-import co.timetableapp.framework.Subject
+import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.UiUtils

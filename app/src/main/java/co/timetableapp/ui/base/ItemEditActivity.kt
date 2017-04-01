@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import co.timetableapp.R
-import co.timetableapp.framework.BaseItem
+import co.timetableapp.model.BaseItem
 import co.timetableapp.ui.base.ItemEditActivity.Companion.EXTRA_ITEM
 import co.timetableapp.util.UiUtils
 

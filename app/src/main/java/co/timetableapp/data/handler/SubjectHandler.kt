@@ -8,7 +8,7 @@ import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.ClassesSchema
 import co.timetableapp.data.schema.ExamsSchema
 import co.timetableapp.data.schema.SubjectsSchema
-import co.timetableapp.framework.Subject
+import co.timetableapp.model.Subject
 
 class SubjectHandler(context: Context) : TimetableItemHandler<Subject>(context) {
 

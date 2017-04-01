@@ -6,7 +6,7 @@ import android.database.Cursor
 import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.ClassDetailsSchema
-import co.timetableapp.framework.ClassDetail
+import co.timetableapp.model.ClassDetail
 import java.util.*
 
 class ClassDetailHandler(context: Context) : DataHandler<ClassDetail>(context) {

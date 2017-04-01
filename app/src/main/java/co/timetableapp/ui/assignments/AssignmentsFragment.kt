@@ -15,7 +15,7 @@ import android.view.*
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.AssignmentHandler
-import co.timetableapp.framework.Assignment
+import co.timetableapp.model.Assignment
 import co.timetableapp.ui.assignments.AssignmentsFragment.Companion.DISPLAY_ALL_UPCOMING
 import co.timetableapp.ui.assignments.AssignmentsFragment.Companion.DISPLAY_TODO
 import co.timetableapp.ui.base.ItemDetailActivity

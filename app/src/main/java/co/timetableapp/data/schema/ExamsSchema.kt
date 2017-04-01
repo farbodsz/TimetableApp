@@ -6,7 +6,7 @@ import android.provider.BaseColumns
  * The schema for the 'exams' table, containing constants for the column names and an SQLite create
  * statement.
  *
- * @see co.timetableapp.framework.Exam
+ * @see co.timetableapp.model.Exam
  */
 object ExamsSchema : BaseColumns {
 

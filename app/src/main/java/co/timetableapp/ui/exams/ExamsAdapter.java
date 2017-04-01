@@ -13,9 +13,9 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
-import co.timetableapp.framework.Color;
-import co.timetableapp.framework.Exam;
-import co.timetableapp.framework.Subject;
+import co.timetableapp.model.Color;
+import co.timetableapp.model.Exam;
+import co.timetableapp.model.Subject;
 
 public class ExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

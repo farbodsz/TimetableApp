@@ -10,9 +10,9 @@ import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.ClassTimesSchema
-import co.timetableapp.framework.Class
-import co.timetableapp.framework.ClassDetail
-import co.timetableapp.framework.ClassTime
+import co.timetableapp.model.Class
+import co.timetableapp.model.ClassDetail
+import co.timetableapp.model.ClassTime
 import co.timetableapp.receiver.AlarmReceiver
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.PrefUtils

@@ -1,4 +1,4 @@
-package co.timetableapp.framework
+package co.timetableapp.model
 
 import android.app.Activity
 import android.content.Context

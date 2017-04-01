@@ -6,7 +6,7 @@ import android.provider.BaseColumns
  * The schema for the 'subjects' table, containing constants for the column names and an SQLite
  * create statement.
  *
- * @see co.timetableapp.framework.Subject
+ * @see co.timetableapp.model.Subject
  */
 object SubjectsSchema : BaseColumns {
 

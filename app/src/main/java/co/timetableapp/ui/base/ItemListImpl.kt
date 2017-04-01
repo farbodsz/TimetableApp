@@ -3,7 +3,7 @@ package co.timetableapp.ui.base
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import co.timetableapp.data.handler.TimetableItemHandler
-import co.timetableapp.framework.TimetableItem
+import co.timetableapp.model.TimetableItem
 
 /**
  * UI components displaying a list of items should implement this to define behavior specific to the

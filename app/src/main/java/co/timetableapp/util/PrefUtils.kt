@@ -2,7 +2,7 @@ package co.timetableapp.util
 
 import android.content.Context
 import android.preference.PreferenceManager
-import co.timetableapp.framework.Timetable
+import co.timetableapp.model.Timetable
 import org.threeten.bp.LocalTime
 
 object PrefUtils {

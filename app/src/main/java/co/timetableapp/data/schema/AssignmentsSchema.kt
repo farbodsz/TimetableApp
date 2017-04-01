@@ -6,7 +6,7 @@ import android.provider.BaseColumns
  * The schema for the 'assignments' table, containing constants for the column names and the SQLite
  * create statement.
  *
- * @see co.timetableapp.framework.Assignment
+ * @see co.timetableapp.model.Assignment
  */
 object AssignmentsSchema : BaseColumns {
 

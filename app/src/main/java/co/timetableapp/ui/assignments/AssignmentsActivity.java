@@ -7,7 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 
 import co.timetableapp.R;
-import co.timetableapp.framework.Assignment;
+import co.timetableapp.model.Assignment;
 import co.timetableapp.ui.base.NavigationDrawerActivity;
 
 /**

@@ -1,4 +1,4 @@
-package co.timetableapp.framework
+package co.timetableapp.model
 
 import android.os.Parcelable
 

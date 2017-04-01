@@ -6,7 +6,7 @@ import android.provider.BaseColumns
  * The schema for the 'timetables' table, containing constants for the column names and an SQLite
  * create statement.
  *
- * @see co.timetableapp.framework.Timetable
+ * @see co.timetableapp.model.Timetable
  */
 object TimetablesSchema : BaseColumns {
 

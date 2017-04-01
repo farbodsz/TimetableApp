@@ -14,7 +14,7 @@ import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.PortingFragment
 import co.timetableapp.data.handler.TimetableHandler
-import co.timetableapp.framework.Timetable
+import co.timetableapp.model.Timetable
 import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.ui.components.DividerItemDecoration
 import co.timetableapp.util.UiUtils

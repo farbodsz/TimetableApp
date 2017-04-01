@@ -6,7 +6,7 @@ import android.provider.BaseColumns
  * The schema for the 'class_details' table, containing constants for the column names and an
  * SQLite create statement.
  *
- * @see co.timetableapp.framework.ClassDetail
+ * @see co.timetableapp.model.ClassDetail
  */
 object ClassDetailsSchema : BaseColumns {
 

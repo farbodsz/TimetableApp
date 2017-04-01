@@ -12,7 +12,7 @@ import android.view.View
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.ExamHandler
-import co.timetableapp.framework.Exam
+import co.timetableapp.model.Exam
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils

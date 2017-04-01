@@ -7,7 +7,7 @@ import android.util.Log
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.SqliteSeqSchema
-import co.timetableapp.framework.BaseItem
+import co.timetableapp.model.BaseItem
 import java.util.*
 
 /**

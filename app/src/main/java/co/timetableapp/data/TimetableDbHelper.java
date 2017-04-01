@@ -16,7 +16,7 @@ import co.timetableapp.data.schema.SqlHelperKt;
 import co.timetableapp.data.schema.SubjectsSchema;
 import co.timetableapp.data.schema.TermsSchema;
 import co.timetableapp.data.schema.TimetablesSchema;
-import co.timetableapp.framework.Class;
+import co.timetableapp.model.Class;
 
 public final class TimetableDbHelper extends SQLiteOpenHelper {
 

@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import co.timetableapp.data.schema.ExamsSchema
-import co.timetableapp.framework.Exam
+import co.timetableapp.model.Exam
 import co.timetableapp.receiver.AlarmReceiver
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.PrefUtils

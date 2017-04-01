@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.handler.ClassTimeHandler;
-import co.timetableapp.framework.ClassDetail;
-import co.timetableapp.framework.ClassTime;
-import co.timetableapp.framework.Timetable;
+import co.timetableapp.model.ClassDetail;
+import co.timetableapp.model.ClassTime;
+import co.timetableapp.model.Timetable;
 import co.timetableapp.util.PrefUtils;
 import co.timetableapp.util.TextUtilsKt;
 

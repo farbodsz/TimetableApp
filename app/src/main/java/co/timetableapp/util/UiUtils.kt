@@ -17,7 +17,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import co.timetableapp.R
-import co.timetableapp.framework.Color
+import co.timetableapp.model.Color
 
 object UiUtils {
 

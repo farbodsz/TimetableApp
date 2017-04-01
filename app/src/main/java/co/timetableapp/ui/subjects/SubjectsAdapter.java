@@ -11,8 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
-import co.timetableapp.framework.Color;
-import co.timetableapp.framework.Subject;
+import co.timetableapp.model.Color;
+import co.timetableapp.model.Subject;
 
 public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.SubjectViewHolder> {
 

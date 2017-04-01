@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
-import co.timetableapp.framework.Timetable;
+import co.timetableapp.model.Timetable;
 
 class TimetablesAdapter extends RecyclerView.Adapter<TimetablesAdapter.TimetablesViewHolder> {
 

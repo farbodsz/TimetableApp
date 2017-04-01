@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import co.timetableapp.R;
 import co.timetableapp.data.handler.TimetableItemHandler;
-import co.timetableapp.framework.TimetableItem;
+import co.timetableapp.model.TimetableItem;
 
 /**
  * A fragment providing default behavior for displaying a list of items.

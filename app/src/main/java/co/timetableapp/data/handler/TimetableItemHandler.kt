@@ -5,7 +5,7 @@ import android.content.Context
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
-import co.timetableapp.framework.TimetableItem
+import co.timetableapp.model.TimetableItem
 import java.util.*
 
 /**

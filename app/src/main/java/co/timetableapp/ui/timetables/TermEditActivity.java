@@ -16,8 +16,8 @@ import org.threeten.bp.format.DateTimeFormatter;
 import co.timetableapp.R;
 import co.timetableapp.data.handler.TermHandler;
 import co.timetableapp.data.handler.TimetableHandler;
-import co.timetableapp.framework.Term;
-import co.timetableapp.framework.Timetable;
+import co.timetableapp.model.Term;
+import co.timetableapp.model.Timetable;
 import co.timetableapp.ui.base.ItemEditActivity;
 import co.timetableapp.util.TextUtilsKt;
 

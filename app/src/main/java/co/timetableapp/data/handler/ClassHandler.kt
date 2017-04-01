@@ -8,7 +8,7 @@ import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.AssignmentsSchema
 import co.timetableapp.data.schema.ClassesSchema
-import co.timetableapp.framework.Class
+import co.timetableapp.model.Class
 
 class ClassHandler(context: Context) : TimetableItemHandler<Class>(context) {
 

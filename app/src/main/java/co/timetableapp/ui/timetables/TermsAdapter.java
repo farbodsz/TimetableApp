@@ -11,7 +11,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
-import co.timetableapp.framework.Term;
+import co.timetableapp.model.Term;
 
 class TermsAdapter extends RecyclerView.Adapter<TermsAdapter.TermsViewHolder> {
 

@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
-import co.timetableapp.framework.ClassTime;
-import co.timetableapp.framework.ClassTimeGroup;
-import co.timetableapp.framework.Timetable;
+import co.timetableapp.model.ClassTime;
+import co.timetableapp.model.ClassTimeGroup;
+import co.timetableapp.model.Timetable;
 import co.timetableapp.util.TextUtilsKt;
 
 class ClassTimesAdapter extends RecyclerView.Adapter<ClassTimesAdapter.ClassTimesViewHolder> {

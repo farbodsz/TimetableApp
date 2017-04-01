@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
-import co.timetableapp.framework.Color;
+import co.timetableapp.model.Color;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ColorViewHolder> {

@@ -10,8 +10,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import co.timetableapp.R
 import co.timetableapp.data.handler.ClassHandler
-import co.timetableapp.framework.Class
-import co.timetableapp.framework.Subject
+import co.timetableapp.model.Class
+import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.ui.subjects.SubjectsActivity

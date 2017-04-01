@@ -8,10 +8,10 @@ import co.timetableapp.R
 import co.timetableapp.data.handler.ClassDetailHandler
 import co.timetableapp.data.handler.ClassHandler
 import co.timetableapp.data.handler.ClassTimeHandler
-import co.timetableapp.framework.Class
-import co.timetableapp.framework.ClassTime
-import co.timetableapp.framework.Color
-import co.timetableapp.framework.Subject
+import co.timetableapp.model.Class
+import co.timetableapp.model.ClassTime
+import co.timetableapp.model.Color
+import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.util.UiUtils

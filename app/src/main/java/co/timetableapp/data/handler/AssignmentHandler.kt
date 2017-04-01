@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import co.timetableapp.data.schema.AssignmentsSchema
-import co.timetableapp.framework.Assignment
+import co.timetableapp.model.Assignment
 
 class AssignmentHandler(context: Context) : TimetableItemHandler<Assignment>(context) {
 

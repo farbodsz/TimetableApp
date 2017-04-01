@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import co.timetableapp.data.schema.TermsSchema
-import co.timetableapp.framework.Term
+import co.timetableapp.model.Term
 
 class TermHandler(context: Context) : TimetableItemHandler<Term>(context) {
 

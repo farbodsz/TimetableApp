@@ -13,10 +13,10 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
-import co.timetableapp.framework.Assignment;
-import co.timetableapp.framework.Class;
-import co.timetableapp.framework.Color;
-import co.timetableapp.framework.Subject;
+import co.timetableapp.model.Assignment;
+import co.timetableapp.model.Class;
+import co.timetableapp.model.Color;
+import co.timetableapp.model.Subject;
 
 public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

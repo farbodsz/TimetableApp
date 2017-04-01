@@ -6,7 +6,7 @@ import android.provider.BaseColumns
  * The schema for the 'class_times' table, containing constants for the column names and an SQLite
  * create statement.
  *
- * @see co.timetableapp.framework.ClassTime
+ * @see co.timetableapp.model.ClassTime
  */
 object ClassTimesSchema : BaseColumns {
 

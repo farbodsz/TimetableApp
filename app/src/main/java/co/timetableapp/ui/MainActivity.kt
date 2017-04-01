@@ -28,7 +28,7 @@ import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.ExamsSchema
-import co.timetableapp.framework.*
+import co.timetableapp.model.*
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.assignments.AssignmentsActivity
 import co.timetableapp.ui.base.ItemDetailActivity

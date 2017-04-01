@@ -10,7 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import co.timetableapp.R
 import co.timetableapp.data.handler.TimetableItemHandler
-import co.timetableapp.framework.TimetableItem
+import co.timetableapp.model.TimetableItem
 import co.timetableapp.ui.base.ItemDetailActivity.Companion.EXTRA_ITEM
 import co.timetableapp.util.UiUtils
 

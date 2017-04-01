@@ -1,4 +1,4 @@
-package co.timetableapp.framework
+package co.timetableapp.model
 
 /**
  * Data classes that are part of a timetable should implement this.

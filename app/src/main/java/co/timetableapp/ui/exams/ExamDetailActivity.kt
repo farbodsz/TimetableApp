@@ -7,9 +7,9 @@ import android.view.View
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.ExamHandler
-import co.timetableapp.framework.Color
-import co.timetableapp.framework.Exam
-import co.timetableapp.framework.Subject
+import co.timetableapp.model.Color
+import co.timetableapp.model.Exam
+import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.util.UiUtils

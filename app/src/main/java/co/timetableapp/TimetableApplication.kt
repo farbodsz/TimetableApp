@@ -3,7 +3,7 @@ package co.timetableapp
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import co.timetableapp.framework.Timetable
+import co.timetableapp.model.Timetable
 import co.timetableapp.util.NotificationUtils
 import co.timetableapp.util.PrefUtils
 import com.jakewharton.threetenabp.AndroidThreeTen
