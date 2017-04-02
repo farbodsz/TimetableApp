@@ -335,14 +335,9 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
                 R.string.placeholder_assignments_upcoming_subtitle
         }
 
-        val drawableRes = if (mShowPast)
-            R.drawable.ic_assignment_black_24dp
-        else
-            R.drawable.ic_assignment_turned_in_black_24dp
-
         return UiUtils.makePlaceholderView(
                 activity,
-                drawableRes,
+                R.drawable.ic_homework_black_24dp,
                 titleRes,
                 R.color.mdu_blue_400,
                 R.color.mdu_white,
