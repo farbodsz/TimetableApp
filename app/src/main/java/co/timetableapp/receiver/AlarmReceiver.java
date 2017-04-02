@@ -60,25 +60,34 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     private static final String EXTRA_NOTIFICATION_TYPE = "extra_notification_type";
 
     /**
-     * The identifier used for showing the notification for assignments.
+     * The identifier used for showing the notification for assignments due the following day.
      *
-     * There is only one identifier because the user gets one (repeated) notification for all
-     * assignments.
+     * There is only one identifier because the user gets one (repeated) notification that shows
+     * all assignments due the following day.
      */
     public static final int ASSIGNMENTS_NOTIFICATION_ID = 1;
 
     /**
-     * Represents the three different possible categories of notification in this app: notifications
-     * for a class, assignment, or exam.
+     * The identifier used for showing the notification for overdue assignments.
      *
-     * This is because notifications are displayed differently for each of the three categories.
+     * There is only one identifier because the user gets one (repeated) notification that shows
+     * all assignments that are overdue.
      */
-    @IntDef({Type.CLASS, Type.ASSIGNMENT, Type.EXAM})
+    public static final int ASSIGNMENTS_OVERDUE_NOTIFICATION_ID = 2;
+
+    /**
+     * Represents the different possible categories of notification in this app: notifications for
+     * a class, assignment (upcoming and overdue), or exam.
+     *
+     * We use this since notifications are displayed differently for each of the three categories.
+     */
+    @IntDef({Type.CLASS, Type.ASSIGNMENT, Type.ASSIGNMENT_OVERDUE, Type.EXAM})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {
         int CLASS = 1;
         int ASSIGNMENT = 2;
-        int EXAM = 3;
+        int ASSIGNMENT_OVERDUE = 3;
+        int EXAM = 4;
     }
 
     private AlarmManager mAlarmManager;
@@ -118,29 +127,28 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 break;
 
             case Type.ASSIGNMENT:
-                ArrayList<Assignment> assignments = new AssignmentHandler(context).getItems(
-                        (TimetableApplication) context.getApplicationContext());
+            case Type.ASSIGNMENT_OVERDUE:
+                boolean checkingOverdue = notificationType == Type.ASSIGNMENT_OVERDUE;
+
+                ArrayList<Assignment> assignments = new AssignmentHandler(context)
+                        .getItems((TimetableApplication) context.getApplicationContext());
 
                 int count = 0;
+
                 for (Assignment assignment : assignments) {
-                    if (assignment.isOverdue()) {
+                    boolean addToCount;
+                    if (checkingOverdue) {
+                        addToCount = assignment.isOverdue();
+                    } else {
+                        addToCount = !assignment.isComplete() &&
+                                assignment.getDueDate().minusDays(1).equals(LocalDate.now());
+                    }
+
+                    if (addToCount) {
                         count++;
                     }
                 }
-                boolean hasOverdue = count != 0;
 
-                // Go through incomplete assignments if none are overdue
-                if (!hasOverdue) {
-                    for (Assignment assignment : assignments) {
-                        if (!assignment.isComplete()
-                                && assignment.getDueDate().minusDays(1).equals(LocalDate.now())) {
-                            // Add incomplete assignments due tomorrow
-                            count++;
-                        }
-                    }
-                }
-
-                // Don't show a notification if there aren't overdue or incomplete assignments
                 if (count == 0) {
                     return;
                 }
@@ -148,11 +156,14 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 intent = new Intent(context, AssignmentsActivity.class);
                 intent.putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO);
 
-                int pluralRes = hasOverdue ?
-                        R.plurals.notification_overdue_assignments :
-                        R.plurals.notification_incomplete_assignments;
+                int pluralRes = checkingOverdue
+                        ? R.plurals.notification_overdue_assignments
+                        : R.plurals.notification_incomplete_assignments;
 
-                contentTitle = context.getResources().getQuantityString(pluralRes, count, count);
+                contentTitle = context.getResources().getQuantityString(
+                        pluralRes,
+                        count,
+                        count);
                 drawableRes = R.drawable.ic_assignment_white_24dp;
                 contentText = "";
                 tickerText = contentTitle;
