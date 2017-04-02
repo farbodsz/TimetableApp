@@ -39,7 +39,7 @@
         <item
             android:id="@+id/navigation_item_manage_timetables"
             android:title="@string/title_activity_timetables"
-            android:icon="@drawable/ic_more_horiz_black_24dp"/>
+            android:icon="@drawable/ic_timetable_black_24dp"/>
         <item
             android:id="@+id/navigation_item_settings"
             android:title="@string/action_settings"
