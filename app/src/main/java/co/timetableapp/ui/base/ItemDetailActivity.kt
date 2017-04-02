@@ -46,7 +46,7 @@ abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {
          *
          * @see onMenuEditClick
          */
-        @JvmStatic protected val REQUEST_CODE_ITEM_EDIT = 1
+        internal const val REQUEST_CODE_ITEM_EDIT = 1
     }
 
     /**
