@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -105,7 +104,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         Intent intent;
 
         String contentTitle, contentText, tickerText;
-        @DrawableRes int drawableRes;
 
         switch (notificationType) {
             case Type.CLASS:
@@ -121,7 +119,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 intent = new Intent(context, MainActivity.class);
 
                 contentTitle = classSubject.getName();
-                drawableRes = R.drawable.ic_class_white_24dp;
                 contentText = makeClassText(classDetail, classTime);
                 tickerText = classSubject.getName() + " class starting in 5 minutes";
                 break;
@@ -164,7 +161,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                         pluralRes,
                         count,
                         count);
-                drawableRes = R.drawable.ic_assignment_white_24dp;
                 contentText = "";
                 tickerText = contentTitle;
                 break;
@@ -180,7 +176,6 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 intent = new Intent(context, ExamsActivity.class);
 
                 contentTitle = examSubject.getName() + ": " + exam.getModuleName() + " exam";
-                drawableRes = R.drawable.ic_assessment_white_24dp;
                 contentText = makeExamText(exam);
                 tickerText = examSubject.getName() + " exam starting in 30 minutes";
                 break;
@@ -198,8 +193,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentTitle(contentTitle)
-                .setSmallIcon(drawableRes)
                 .setContentText(contentText)
+                .setSmallIcon(R.drawable.ic_class_black_24dp)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setColor(colorArgb)
