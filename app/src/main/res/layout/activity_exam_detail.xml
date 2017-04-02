@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        app:srcCompat="@drawable/ic_date_range_black_24dp"
+                        app:srcCompat="@drawable/ic_event_black_24dp"
                         style="@style/Widget.Timetable.ItemIcon" />
 
                     <TextView
