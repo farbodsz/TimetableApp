@@ -194,7 +194,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
-                .setSmallIcon(R.drawable.ic_class_black_24dp)
+                .setSmallIcon(R.drawable.ic_class_notification)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setColor(colorArgb)
