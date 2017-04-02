@@ -2,6 +2,7 @@ package co.timetableapp.ui.exams
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.TextView
@@ -31,7 +32,7 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
 
     override fun onNullExtras() {
         val intent = Intent(this, ExamEditActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE_ITEM_EDIT)
+        ActivityCompat.startActivityForResult(this, intent, REQUEST_CODE_ITEM_EDIT, null)
     }
 
     override fun setupLayout() {
@@ -84,7 +85,7 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
     override fun onMenuEditClick() {
         val intent = Intent(this, ExamEditActivity::class.java)
         intent.putExtra(ItemEditActivity.EXTRA_ITEM, mItem)
-        startActivityForResult(intent, REQUEST_CODE_ITEM_EDIT)
+        ActivityCompat.startActivityForResult(this, intent, REQUEST_CODE_ITEM_EDIT, null)
     }
 
     override fun cancelAndClose() {

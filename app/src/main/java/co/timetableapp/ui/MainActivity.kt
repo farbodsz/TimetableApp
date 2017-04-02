@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -86,7 +87,7 @@ class MainActivity : NavigationDrawerActivity() {
         sFab = findViewById(R.id.fab) as FloatingActionButton
         sFab!!.setOnClickListener {
             val intent = Intent(this, AssignmentDetailActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
+            ActivityCompat.startActivityForResult(this, intent, REQUEST_CODE_ITEM_DETAIL, null)
         }
     }
 

@@ -3,6 +3,7 @@ package co.timetableapp.ui.assignments
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Typeface
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.widget.SeekBar
@@ -33,7 +34,7 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
 
     override fun onNullExtras() {
         val intent = Intent(this, AssignmentEditActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE_ITEM_EDIT)
+        ActivityCompat.startActivityForResult(this, intent, REQUEST_CODE_ITEM_EDIT, null)
     }
 
     override fun setupLayout() {
@@ -101,7 +102,7 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
     override fun onMenuEditClick() {
         val intent = Intent(this, AssignmentEditActivity::class.java)
         intent.putExtra(AssignmentEditActivity.EXTRA_ASSIGNMENT, mItem)
-        startActivityForResult(intent, REQUEST_CODE_ITEM_EDIT)
+        ActivityCompat.startActivityForResult(this, intent, REQUEST_CODE_ITEM_EDIT, null)
     }
 
     override fun cancelAndClose() {

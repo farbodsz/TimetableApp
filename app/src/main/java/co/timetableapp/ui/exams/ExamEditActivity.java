@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -163,7 +164,11 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(
                                         ExamEditActivity.this, SubjectEditActivity.class);
-                                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
+                                ActivityCompat.startActivityForResult(
+                                        ExamEditActivity.this,
+                                        intent,
+                                        REQUEST_CODE_SUBJECT_DETAIL,
+                                        null);
                             }
                         });
 
