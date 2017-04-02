@@ -74,7 +74,8 @@ object NotificationUtils {
     }
 
     /**
-     * Changes the time that assignment notifications are shown at.
+     * Changes the time that upcoming assignment notifications and overdue assignment notifications
+     * are shown at.
      */
     @JvmStatic
     fun setAssignmentAlarmTime(context: Context, time: LocalTime) {
@@ -86,15 +87,29 @@ object NotificationUtils {
                 AlarmReceiver.Type.ASSIGNMENT,
                 AlarmReceiver.ASSIGNMENTS_NOTIFICATION_ID)
 
+        AlarmReceiver().cancelAlarm(
+                context,
+                AlarmReceiver.Type.ASSIGNMENT_OVERDUE,
+                AlarmReceiver.ASSIGNMENTS_OVERDUE_NOTIFICATION_ID)
+
         // Repeat every day
         val repeatInterval: Long = 86400000
 
         // Remind every day at the specified time
         val reminderStartTime = LocalDateTime.of(LocalDate.now(), time)
-        AlarmReceiver().setRepeatingAlarm(context,
+
+        AlarmReceiver().setRepeatingAlarm(
+                context,
                 AlarmReceiver.Type.ASSIGNMENT,
                 DateUtils.asCalendar(reminderStartTime),
                 AlarmReceiver.ASSIGNMENTS_NOTIFICATION_ID,
+                repeatInterval)
+
+        AlarmReceiver().setRepeatingAlarm(
+                context,
+                AlarmReceiver.Type.ASSIGNMENT_OVERDUE,
+                DateUtils.asCalendar(reminderStartTime),
+                AlarmReceiver.ASSIGNMENTS_OVERDUE_NOTIFICATION_ID,
                 repeatInterval)
     }
 
