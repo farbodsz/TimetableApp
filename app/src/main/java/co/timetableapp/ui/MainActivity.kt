@@ -62,7 +62,7 @@ class MainActivity : NavigationDrawerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_tabs)
 
         setupLayout()
     }
@@ -85,6 +85,7 @@ class MainActivity : NavigationDrawerActivity() {
 
     private fun setupFab() {
         sFab = findViewById(R.id.fab) as FloatingActionButton
+        sFab!!.setImageResource(R.drawable.ic_homework_black_24dp)
         sFab!!.setOnClickListener {
             val intent = Intent(this, AssignmentDetailActivity::class.java)
             ActivityCompat.startActivityForResult(this, intent, REQUEST_CODE_ITEM_DETAIL, null)
