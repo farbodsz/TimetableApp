@@ -126,7 +126,7 @@ class MainActivity : NavigationDrawerActivity() {
                 0 -> R.string.tab_today
                 1 -> R.string.tab_upcoming
                 else -> throw IllegalArgumentException("invalid position: $position")
-            })
+            }).toUpperCase()  // since we are using a style where textAllCaps="false"
         }
 
     }

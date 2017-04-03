@@ -10,9 +10,13 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ImageSpan
 import co.timetableapp.R
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.exams.ExamsFragment
+
 
 /**
  * An activity for displaying the user's agenda - upcoming assignments, exams, etc.
@@ -69,11 +73,19 @@ class AgendaActivity : NavigationDrawerActivity() {
         }
 
         override fun getPageTitle(position: Int): CharSequence {
-            return getString(when (position) {
-                0 -> R.string.title_activity_assignments
-                1 -> R.string.title_activity_exams
+            val drawableRes = when (position) {
+                0 -> R.drawable.ic_homework_white_24dp
+                1 -> R.drawable.ic_assessment_white_24dp
                 else -> throw IllegalArgumentException("invalid position: $position")
-            })
+            }
+
+            val drawable = resources.getDrawable(drawableRes)
+            drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+
+            val spannableString = SpannableString(" ")
+            val imageSpan = ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM)
+            spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            return spannableString
         }
 
     }

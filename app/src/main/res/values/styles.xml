@@ -34,6 +34,14 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
     </style>
 
+    <style name="Widget.Timetable.TabLayout.NonCaps" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/TextAppearance.Timetable.TabLayout.NonCaps</item>
+    </style>
+
+    <style name="TextAppearance.Timetable.TabLayout.NonCaps" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
     <style name="Widget.Timetable.Button" parent="Widget.AppCompat.Button.Borderless" />
 
     <style name="Widget.Timetable.Button.Light">
