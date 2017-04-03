@@ -9,6 +9,7 @@
     <string name="title_activity_class_edit">Edit Class</string>
     <string name="title_activity_class_time_new">New Time</string>
     <string name="title_activity_class_time_edit">Edit Time</string>
+    <string name="title_activity_agenda">Agenda</string>
     <string name="title_activity_todo">Things to-do</string>
     <string name="title_activity_assignments">Assignments</string>
     <string name="title_activity_assignment_new">New Assignment</string>

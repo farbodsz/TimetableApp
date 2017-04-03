@@ -64,6 +64,11 @@
             android:theme="@style/Timetable.EditItem"/>
 
         <activity
+            android:name=".ui.assignments.AgendaActivity"
+            android:label="@string/title_activity_agenda"
+            android:theme="@style/Timetable.TranslucentStatus" />
+
+        <activity
             android:name=".ui.assignments.AssignmentsActivity"
             android:label="@string/title_activity_assignments"
             android:theme="@style/Timetable.TranslucentStatus" />

@@ -16,6 +16,7 @@ import android.view.View;
 
 import co.timetableapp.R;
 import co.timetableapp.ui.MainActivity;
+import co.timetableapp.ui.assignments.AgendaActivity;
 import co.timetableapp.ui.assignments.AssignmentsActivity;
 import co.timetableapp.ui.classes.ClassesActivity;
 import co.timetableapp.ui.exams.ExamsActivity;
@@ -36,6 +37,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity {
     protected static final int NAVDRAWER_ITEM_CLASSES = R.id.navigation_item_classes;
     protected static final int NAVDRAWER_ITEM_SUBJECTS = R.id.navigation_item_subjects;
     protected static final int NAVDRAWER_ITEM_TODO = R.id.navigation_item_todo;
+    protected static final int NAVDRAWER_ITEM_AGENDA = R.id.navigation_item_agenda;
     protected static final int NAVDRAWER_ITEM_ASSIGNMENTS = R.id.navigation_item_assignments;
     protected static final int NAVDRAWER_ITEM_EXAMS = R.id.navigation_item_exams;
     protected static final int NAVDRAWER_ITEM_MANAGE_TIMETABLES = R.id.navigation_item_manage_timetables;
@@ -172,6 +174,9 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity {
             case NAVDRAWER_ITEM_TODO:
                 intent = new Intent(this, AssignmentsActivity.class);
                 intent.putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO);
+                break;
+            case NAVDRAWER_ITEM_AGENDA:
+                intent = new Intent(this, AgendaActivity.class);
                 break;
             case NAVDRAWER_ITEM_ASSIGNMENTS:
                 intent = new Intent(this, AssignmentsActivity.class);
