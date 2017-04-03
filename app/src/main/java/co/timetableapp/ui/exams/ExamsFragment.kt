@@ -138,7 +138,8 @@ class ExamsFragment : ItemListFragment<Exam>() {
     override fun getPlaceholderView() = UiUtils.makePlaceholderView(
             activity,
             R.drawable.ic_assessment_black_24dp,
-            if (mShowPast) R.string.placeholder_exams_past else R.string.placeholder_exams)
+            if (mShowPast) R.string.placeholder_exams_past else R.string.placeholder_exams,
+            subtitleRes = if (mShowPast) R.string.placeholder_exams_past_subtitle else R.string.placeholder_exams_subtitle)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
