@@ -339,11 +339,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
                 activity,
                 R.drawable.ic_homework_black_24dp,
                 titleRes,
-                R.color.mdu_blue_400,
-                R.color.mdu_white,
-                R.color.mdu_white,
-                true,
-                subtitleRes)
+                subtitleRes = subtitleRes)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
