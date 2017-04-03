@@ -121,9 +121,9 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 intent = new Intent(context, MainActivity.class);
 
                 contentTitle = classSubject.getName();
-                drawableRes = R.drawable.ic_class_white_24dp;
                 contentText = makeClassText(classDetail, classTime);
                 tickerText = classSubject.getName() + " class starting in 5 minutes";
+                drawableRes = R.drawable.ic_class_notification;
                 break;
 
             case Type.ASSIGNMENT:
@@ -164,9 +164,9 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                         pluralRes,
                         count,
                         count);
-                drawableRes = R.drawable.ic_assignment_white_24dp;
                 contentText = "";
                 tickerText = contentTitle;
+                drawableRes = R.drawable.ic_homework_notification;
                 break;
 
             case Type.EXAM:
@@ -180,9 +180,9 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 intent = new Intent(context, ExamsActivity.class);
 
                 contentTitle = examSubject.getName() + ": " + exam.getModuleName() + " exam";
-                drawableRes = R.drawable.ic_assessment_white_24dp;
                 contentText = makeExamText(exam);
                 tickerText = examSubject.getName() + " exam starting in 30 minutes";
+                drawableRes = R.drawable.ic_assessment_notification;
                 break;
 
             default:
