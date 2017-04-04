@@ -1,5 +1,6 @@
 package co.timetableapp.ui.assignments
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
@@ -9,14 +10,16 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ImageSpan
+import android.view.Menu
+import android.view.MenuItem
 import co.timetableapp.R
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.exams.ExamsFragment
-
 
 /**
  * An activity for displaying the user's agenda - upcoming assignments, exams, etc.
@@ -24,6 +27,9 @@ import co.timetableapp.ui.exams.ExamsFragment
 class AgendaActivity : NavigationDrawerActivity() {
 
     private var mViewPager: ViewPager? = null
+
+    private var mShowCompleted = false
+    private var mShowPast = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +58,43 @@ class AgendaActivity : NavigationDrawerActivity() {
         tabLayout.setupWithViewPager(mViewPager)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_agenda, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            R.id.action_filter -> {
+                showFilterDialog()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showFilterDialog() {
+        val multiChoiceListener = DialogInterface.OnMultiChoiceClickListener { _, which, isChecked ->
+            when (which) {
+                0 -> mShowCompleted = isChecked
+                1 -> mShowPast = isChecked
+                else -> throw UnsupportedOperationException("expected position: 0")
+            }
+        }
+
+        AlertDialog.Builder(this)
+                .setTitle(R.string.action_filter)
+                .setMultiChoiceItems(
+                        R.array.filter_checkable_options,
+                        booleanArrayOf(mShowCompleted, mShowPast),
+                        multiChoiceListener)
+                .setPositiveButton(R.string.action_filter, { _, _ ->
+                    supportFragmentManager.fragments.forEach {
+                        (it as OnFilterChangeListener).onFilterChange(mShowCompleted, mShowPast)
+                    }
+                })
+                .show()
+    }
+
     override fun getSelfNavDrawerItem() = NAVDRAWER_ITEM_AGENDA
 
     override fun getSelfToolbar() = findViewById(R.id.toolbar) as Toolbar
@@ -59,6 +102,20 @@ class AgendaActivity : NavigationDrawerActivity() {
     override fun getSelfDrawerLayout() = findViewById(R.id.drawerLayout) as DrawerLayout
 
     override fun getSelfNavigationView() = findViewById(R.id.navigationView) as NavigationView
+
+    /**
+     * Interface definition for a callback to be invoked when the agenda filter has been updated.
+     *
+     * This should be implemented in fragments to define what happens when the filter changes.
+     */
+    interface OnFilterChangeListener {
+
+        /**
+         * Callback method to be invoked when the agenda filter has been updated.
+         */
+        fun onFilterChange(showCompleted: Boolean, showPast: Boolean)
+
+    }
 
     private inner class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 

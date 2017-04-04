@@ -5,14 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.RecyclerView
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.model.Exam
+import co.timetableapp.ui.assignments.AgendaActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
@@ -30,7 +26,7 @@ import kotlin.collections.ArrayList
  * @see ExamDetailActivity
  * @see ExamEditActivity
  */
-class ExamsFragment : ItemListFragment<Exam>() {
+class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
         private const val REQUEST_CODE_EXAM_EDIT = 1
@@ -139,7 +135,10 @@ class ExamsFragment : ItemListFragment<Exam>() {
             activity,
             R.drawable.ic_assessment_black_24dp,
             if (mShowPast) R.string.placeholder_exams_past else R.string.placeholder_exams,
-            subtitleRes = if (mShowPast) R.string.placeholder_exams_past_subtitle else R.string.placeholder_exams_subtitle)
+            subtitleRes = if (mShowPast)
+                R.string.placeholder_exams_past_subtitle
+            else
+                R.string.placeholder_exams_subtitle)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -151,31 +150,9 @@ class ExamsFragment : ItemListFragment<Exam>() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater!!.inflate(R.menu.menu_assignments, menu)
-        menu!!.findItem(R.id.action_show_past).title = getString(R.string.action_show_past_exams)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
-            R.id.action_show_past -> {
-                mShowPast = !mShowPast
-                item.isChecked = mShowPast
-
-                with(activity.findViewById(R.id.text_infoBar) as TextView) {
-                    if (mShowPast) {
-                        visibility = View.VISIBLE
-                        text = getString(R.string.showing_past_exams)
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
-
-                updateList()
-            }
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onFilterChange(showCompleted: Boolean, showPast: Boolean) {
+        mShowPast = showPast
+        updateList()
     }
 
 }

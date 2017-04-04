@@ -11,8 +11,9 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.*
-import android.widget.TextView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import co.timetableapp.R
 import co.timetableapp.data.handler.AssignmentHandler
 import co.timetableapp.model.Assignment
@@ -37,7 +38,7 @@ import java.util.*
  * @see AssignmentDetailActivity
  * @see AssignmentEditActivity
  */
-class AssignmentsFragment : ItemListFragment<Assignment>() {
+class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
 
@@ -352,31 +353,9 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        // Do not show the menu in DISPLAY_TODO mode
-        if (mMode != DISPLAY_TODO) {
-            inflater!!.inflate(R.menu.menu_assignments, menu)
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
-            R.id.action_show_past -> {
-                mShowPast = !mShowPast
-                item.isChecked = mShowPast
-
-                val textView = activity.findViewById(R.id.text_infoBar) as TextView
-                if (mShowPast) {
-                    textView.visibility = View.VISIBLE
-                    textView.text = getString(R.string.showing_past_assignments)
-                } else {
-                    textView.visibility = View.GONE
-                }
-                updateList()
-            }
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onFilterChange(showCompleted: Boolean, showPast: Boolean) {
+        mShowPast = showPast
+        updateList()
     }
 
 }
