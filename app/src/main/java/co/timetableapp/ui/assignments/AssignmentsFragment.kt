@@ -60,11 +60,10 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
         const val DISPLAY_ALL_UPCOMING = AssignmentsActivity.DISPLAY_ALL_UPCOMING
     }
 
-    private var mMode: Int = DISPLAY_ALL_UPCOMING
-
     private var mHeaders: ArrayList<String?>? = null
 
-    private var mShowPast = false
+    private var mShowCompleted = AgendaActivity.DEFAULT_SHOW_COMPLETED
+    private var mShowPast = AgendaActivity.DEFAULT_SHOW_PAST
 
     override fun instantiateDataHandler() = AssignmentHandler(activity)
 
@@ -75,12 +74,10 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
     }
 
     private fun determineDisplayMode() {
-        if (mMode != 0) {
-            return
-        }
-
         val extras = arguments
-        mMode = extras?.getInt(ARGUMENT_MODE) ?: DISPLAY_ALL_UPCOMING
+        val mode = extras?.getInt(ARGUMENT_MODE) ?: DISPLAY_ALL_UPCOMING
+
+        mShowCompleted = mode == DISPLAY_ALL_UPCOMING
     }
 
     override fun onFabButtonClick() {
@@ -155,7 +152,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
             mDataHandler!!.replaceItem(assignment.id, assignment)
 
             // Do not completely remove the item if we're not in DISPLAY_TODO mode
-            if (mMode != DISPLAY_TODO) {
+            if (mShowCompleted) {
                 // We should remove and add back the item so the 'done' background goes away
                 // and the item gets updated
                 mItems!!.removeAt(position)
@@ -167,8 +164,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
 
                 Snackbar.make(activity.findViewById(R.id.coordinatorLayout),
                         R.string.message_assignment_completed,
-                        Snackbar.LENGTH_SHORT)
-                        .setAction(R.string.action_undo) {
+                        Snackbar.LENGTH_SHORT).setAction(R.string.action_undo) {
                             val removedAssignment = mRemovedAssignment
                             removedAssignment!!.completionProgress = mRemovedCompletionProgress
 
@@ -283,7 +279,9 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
             val dueDate = assignment.dueDate
             val timePeriodId: Int
 
-            if (mMode == DISPLAY_ALL_UPCOMING && assignment.isPastAndDone() && mShowPast) {
+            if (mShowPast && assignment.isPastAndDone()) {
+                // Show everything in the past and completed (mShowCompleted is irrelevant here)
+
                 timePeriodId =
                         Integer.parseInt(dueDate.year.toString() + dueDate.monthValue.toString())
 
@@ -297,19 +295,24 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
 
                 currentTimePeriod = timePeriodId
 
-            } else if (mMode == DISPLAY_ALL_UPCOMING && !assignment.isPastAndDone()
-                    && !mShowPast || mMode == DISPLAY_TODO && !assignment.isComplete()) {
-                timePeriodId = DateUtils.getDatePeriodId(dueDate)
+            } else if (!mShowPast && (assignment.isOverdue() || assignment.isUpcoming())) {
 
-                if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                    headers.add(DateUtils.makeHeaderName(activity, timePeriodId))
-                    assignments.add(null)
+                // If we're showing completed items, show everything.
+                // Otherwise, only show incomplete items.
+                if (mShowCompleted || !assignment.isComplete()) {
+
+                    timePeriodId = DateUtils.getDatePeriodId(dueDate)
+
+                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                        headers.add(DateUtils.makeHeaderName(activity, timePeriodId))
+                        assignments.add(null)
+                    }
+
+                    headers.add(null)
+                    assignments.add(assignment)
+
+                    currentTimePeriod = timePeriodId
                 }
-
-                headers.add(null)
-                assignments.add(assignment)
-
-                currentTimePeriod = timePeriodId
             }
         }
 
@@ -326,14 +329,14 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
         else
             R.string.placeholder_assignments_title
 
-        val subtitleRes: Int
-        if (mMode == DISPLAY_TODO) {
-            subtitleRes = R.string.placeholder_assignments_todo_subtitle
-        } else {
-            subtitleRes = if (mShowPast)
+        val subtitleRes = if (mShowCompleted) {
+            if (mShowPast) {
                 R.string.placeholder_assignments_past_subtitle
-            else
+            } else {
                 R.string.placeholder_assignments_upcoming_subtitle
+            }
+        } else {
+            R.string.placeholder_assignments_todo_subtitle
         }
 
         return UiUtils.makePlaceholderView(
@@ -354,6 +357,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
     }
 
     override fun onFilterChange(showCompleted: Boolean, showPast: Boolean) {
+        mShowCompleted = showCompleted
         mShowPast = showPast
         updateList()
     }

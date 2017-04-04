@@ -26,10 +26,15 @@ import co.timetableapp.ui.exams.ExamsFragment
  */
 class AgendaActivity : NavigationDrawerActivity() {
 
+    companion object {
+        const val DEFAULT_SHOW_COMPLETED = true
+        const val DEFAULT_SHOW_PAST = false
+    }
+
     private var mViewPager: ViewPager? = null
 
-    private var mShowCompleted = false
-    private var mShowPast = false
+    private var mShowCompleted = DEFAULT_SHOW_COMPLETED
+    private var mShowPast = DEFAULT_SHOW_PAST
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

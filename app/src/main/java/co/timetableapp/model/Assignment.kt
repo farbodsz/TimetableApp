@@ -93,9 +93,13 @@ class Assignment(override val id: Int, override val timetableId: Int, val classI
 
     fun isComplete() = completionProgress == 100
 
-    fun isOverdue() = !isComplete() && dueDate.isBefore(LocalDate.now())
+    fun isOverdue() = !isComplete() && isInPast()
 
-    fun isPastAndDone() = dueDate.isBefore(LocalDate.now()) && completionProgress == 100
+    private fun isInPast() = dueDate.isBefore(LocalDate.now())
+
+    fun isPastAndDone() = isInPast() && isComplete()
+
+    fun isUpcoming() = !isInPast()
 
     override fun compareTo(other: Assignment): Int {
         // Sorting order is due dates then titles
