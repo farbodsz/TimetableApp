@@ -34,7 +34,7 @@ import java.util.*
  * that are due in the future (regardless of completion) and overdue assignments will be shown.
  *
  * @see Assignment
- * @see AssignmentsActivity
+ * @see AgendaActivity
  * @see AssignmentDetailActivity
  * @see AssignmentEditActivity
  */
@@ -45,19 +45,31 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
         private const val REQUEST_CODE_ASSIGNMENT_DETAIL = 1
 
         /**
-         * @see AssignmentsActivity.EXTRA_MODE
+         * The intent extra key for the display mode of the assignments.
+         *
+         * This should be either [DISPLAY_TODO] or [DISPLAY_ALL_UPCOMING]. If the data passed with
+         * this key is null, [DISPLAY_ALL_UPCOMING] will be used by default.
          */
-        const val ARGUMENT_MODE = AssignmentsActivity.EXTRA_MODE
+        const val ARGUMENT_MODE = "extra_mode"
 
         /**
-         * @see AssignmentsActivity.DISPLAY_TODO
+         * Suggests that only incomplete assignments will be shown in the list.
+         *
+         * It is specified by passing it through an intent extra with the [ARGUMENT_MODE] key.
+         *
+         * @see DISPLAY_ALL_UPCOMING
          */
-        const val DISPLAY_TODO = AssignmentsActivity.DISPLAY_TODO
+        const val DISPLAY_TODO = 1
 
         /**
-         * @see AssignmentsActivity.DISPLAY_ALL_UPCOMING
+         * Suggests that only assignments due in the future and overdue assignments will be shown in
+         * the list.
+         *
+         * It is specified by passing it through an intent extra with the [ARGUMENT_MODE] key.
+         *
+         * @see DISPLAY_TODO
          */
-        const val DISPLAY_ALL_UPCOMING = AssignmentsActivity.DISPLAY_ALL_UPCOMING
+        const val DISPLAY_ALL_UPCOMING = 2
     }
 
     private var mHeaders: ArrayList<String?>? = null

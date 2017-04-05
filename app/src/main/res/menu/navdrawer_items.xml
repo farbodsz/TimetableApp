@@ -14,9 +14,9 @@
             android:title="@string/title_activity_schedule"
             android:icon="@drawable/ic_today_black_24dp"/>
         <item
-            android:id="@+id/navigation_item_todo"
-            android:title="@string/title_activity_todo"
-            android:icon="@drawable/ic_assignment_late_black_24dp" />
+            android:id="@+id/navigation_item_agenda"
+            android:title="@string/title_activity_agenda"
+            android:icon="@drawable/ic_view_agenda_black_24dp" />
         <item
             android:id="@+id/navigation_item_classes"
             android:title="@string/title_activity_classes"
@@ -25,18 +25,6 @@
             android:id="@+id/navigation_item_subjects"
             android:title="@string/title_activity_subjects"
             android:icon="@drawable/ic_list_black_24dp"/>
-        <item
-            android:id="@+id/navigation_item_agenda"
-            android:title="@string/title_activity_agenda"
-            android:icon="@drawable/ic_view_agenda_black_24dp" />
-        <item
-            android:id="@+id/navigation_item_assignments"
-            android:title="@string/title_activity_assignments"
-            android:icon="@drawable/ic_homework_black_24dp" />
-        <item
-            android:id="@+id/navigation_item_exams"
-            android:title="@string/title_activity_exams"
-            android:icon="@drawable/ic_assessment_black_24dp"/>
     </group>
 
     <group android:id="@+id/navigation_group_3" android:checkableBehavior="single">

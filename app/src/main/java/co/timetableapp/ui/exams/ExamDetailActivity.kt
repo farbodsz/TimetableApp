@@ -20,7 +20,7 @@ import org.threeten.bp.format.DateTimeFormatter
  * Shows the details of an exam.
  *
  * @see Exam
- * @see ExamsActivity
+ * @see ExamsFragment
  * @see ExamEditActivity
  * @see ItemDetailActivity
  */

@@ -10,11 +10,10 @@
     <string name="title_activity_class_time_new">New Time</string>
     <string name="title_activity_class_time_edit">Edit Time</string>
     <string name="title_activity_agenda">Agenda</string>
-    <string name="title_activity_todo">Things to-do</string>
-    <string name="title_activity_assignments">Assignments</string>
+    <string name="title_assignments">Assignments</string>
     <string name="title_activity_assignment_new">New Assignment</string>
     <string name="title_activity_assignment_edit">Edit Assignment</string>
-    <string name="title_activity_exams">Exams</string>
+    <string name="title_exams">Exams</string>
     <string name="title_activity_exam_new">New Exam</string>
     <string name="title_activity_exam_edit">Edit Exam</string>
     <string name="title_subjects">Subjects</string>

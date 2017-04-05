@@ -30,8 +30,8 @@ import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.ExamsSchema
 import co.timetableapp.model.*
+import co.timetableapp.ui.assignments.AgendaActivity
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
-import co.timetableapp.ui.assignments.AssignmentsActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.classes.ClassDetailActivity
@@ -174,7 +174,7 @@ class MainActivity : NavigationDrawerActivity() {
             val overdueAssignments = getOverdueAssignments()
             if (assignments.isNotEmpty() || overdueAssignments.isNotEmpty()) {
                 val assignmentsSection = SectionGroup.Builder(context, mSectionContainer!!)
-                        .setTitle(R.string.title_activity_assignments)
+                        .setTitle(R.string.title_assignments)
                         .build()
 
                 if (overdueAssignments.isNotEmpty()) {
@@ -192,7 +192,7 @@ class MainActivity : NavigationDrawerActivity() {
             val exams = getExamsToday(timetableId)
             if (exams.isNotEmpty()) {
                 val examsSection = SectionGroup.Builder(context, mSectionContainer!!)
-                        .setTitle(R.string.title_activity_exams)
+                        .setTitle(R.string.title_exams)
                         .build()
                 addExamsCards(examsSection.containerView, inflater, exams)
 
@@ -341,12 +341,11 @@ class MainActivity : NavigationDrawerActivity() {
 
                 setOnClickListener {
                     if (numOverdue == 1) {
-                        val intent = Intent(activity, AssignmentDetailActivity::class.java).putExtra(
-                                ItemDetailActivity.EXTRA_ITEM, overdueAssignments[0])
+                        val intent = Intent(activity, AssignmentDetailActivity::class.java)
+                                .putExtra(ItemDetailActivity.EXTRA_ITEM, overdueAssignments[0])
                         startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
                     } else {
-                        val intent = Intent(activity, AssignmentsActivity::class.java).putExtra(
-                                AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO)
+                        val intent = Intent(activity, AgendaActivity::class.java)
                         startActivity(intent)
                     }
                 }
@@ -444,7 +443,7 @@ class MainActivity : NavigationDrawerActivity() {
             val inflater = LayoutInflater.from(context)
 
             val assignmentSection = SectionGroup.Builder(context, mSectionContainer!!)
-                    .setTitle(R.string.title_activity_assignments)
+                    .setTitle(R.string.title_assignments)
                     .build()
             addAssignmentCards(assignmentSection.containerView, inflater, getUpcomingAssignments())
             mSectionContainer!!.addView(assignmentSection.view)
@@ -452,7 +451,7 @@ class MainActivity : NavigationDrawerActivity() {
             val exams = getUpcomingExams()
             if (exams.isNotEmpty()) {
                 val examsSection = SectionGroup.Builder(context, mSectionContainer!!)
-                        .setTitle(R.string.title_activity_exams)
+                        .setTitle(R.string.title_exams)
                         .build()
                 addExamCards(examsSection.containerView, inflater, exams)
 

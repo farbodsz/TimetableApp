@@ -22,7 +22,7 @@ import kotlin.collections.ArrayList
  * A fragment for displaying a list of exams to the user.
  *
  * @see Exam
- * @see ExamsActivity
+ * @see AgendaActivity
  * @see ExamDetailActivity
  * @see ExamEditActivity
  */
