@@ -27,7 +27,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
@@ -282,12 +281,7 @@ public class TimetableEditActivity extends ItemEditActivity<Timetable>
     }
 
     private void sortList() {
-        Collections.sort(mTerms, new Comparator<Term>() {
-            @Override
-            public int compare(Term t1, Term t2) {
-                return t1.getStartDate().compareTo(t2.getStartDate());
-            }
-        });
+        Collections.sort(mTerms);
     }
 
     private void refreshList() {
