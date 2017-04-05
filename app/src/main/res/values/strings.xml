@@ -9,11 +9,11 @@
     <string name="title_activity_class_edit">Edit Class</string>
     <string name="title_activity_class_time_new">New Time</string>
     <string name="title_activity_class_time_edit">Edit Time</string>
-    <string name="title_activity_todo">Things to-do</string>
-    <string name="title_activity_assignments">Assignments</string>
+    <string name="title_activity_agenda">Agenda</string>
+    <string name="title_assignments">Assignments</string>
     <string name="title_activity_assignment_new">New Assignment</string>
     <string name="title_activity_assignment_edit">Edit Assignment</string>
-    <string name="title_activity_exams">Exams</string>
+    <string name="title_exams">Exams</string>
     <string name="title_activity_exam_new">New Exam</string>
     <string name="title_activity_exam_edit">Edit Exam</string>
     <string name="title_subjects">Subjects</string>
@@ -159,18 +159,19 @@
     <string name="action_done">Done</string>
     <string name="action_edit">Edit</string>
     <string name="action_export">Export timetable app data</string>
+    <string name="action_filter">Filter</string>
     <string name="action_import">Import timetable app data</string>
     <string name="action_new">New</string>
     <string name="action_show_all">Show all</string>
-    <string name="action_show_past_assignments">Show past assignments</string>
-    <string name="action_show_past_exams">Show past exams</string>
     <string name="action_settings">Settings</string>
     <string name="action_today">Today</string>
     <string name="action_undo">Undo</string>
     <string name="action_view_week">View week</string>
 
-    <string name="showing_past_assignments">Showing past assignments</string>
-    <string name="showing_past_exams">Showing past exams</string>
+    <string-array name="filter_checkable_options">
+        <item>Show completed</item>
+        <item>Show past</item>
+    </string-array>
 
     <string name="dialog_import_warning_title">Replace app data?</string>
     <string name="dialog_import_warning_message">
@@ -250,8 +251,10 @@
     <string name="placeholder_assignments_upcoming_subtitle">You don\'t have any upcoming assignments</string>
     <string name="placeholder_assignments_todo_subtitle">You don\'t have anything to complete</string>
     <string name="placeholder_assignments_past_subtitle">You haven\'t completed any assignments yet</string>
-    <string name="placeholder_exams">You don\'t have any upcoming exams</string>
-    <string name="placeholder_exams_past">You haven\'t sat any exams yet</string>
+    <string name="placeholder_exams">All done!</string>
+    <string name="placeholder_exams_subtitle">You don\'t have any upcoming exams</string>
+    <string name="placeholder_exams_past">No exams</string>
+    <string name="placeholder_exams_past_subtitle">You haven\'t sat any exams yet</string>
 
     <string name="empty_placeholder_text">No content to display here</string>
 

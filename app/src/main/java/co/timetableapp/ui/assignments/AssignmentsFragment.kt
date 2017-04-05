@@ -11,8 +11,9 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.*
-import android.widget.TextView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import co.timetableapp.R
 import co.timetableapp.data.handler.AssignmentHandler
 import co.timetableapp.model.Assignment
@@ -33,37 +34,48 @@ import java.util.*
  * that are due in the future (regardless of completion) and overdue assignments will be shown.
  *
  * @see Assignment
- * @see AssignmentsActivity
+ * @see AgendaActivity
  * @see AssignmentDetailActivity
  * @see AssignmentEditActivity
  */
-class AssignmentsFragment : ItemListFragment<Assignment>() {
+class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
 
         private const val REQUEST_CODE_ASSIGNMENT_DETAIL = 1
 
         /**
-         * @see AssignmentsActivity.EXTRA_MODE
+         * The intent extra key for the display mode of the assignments.
+         *
+         * This should be either [DISPLAY_TODO] or [DISPLAY_ALL_UPCOMING]. If the data passed with
+         * this key is null, [DISPLAY_ALL_UPCOMING] will be used by default.
          */
-        const val ARGUMENT_MODE = AssignmentsActivity.EXTRA_MODE
+        const val ARGUMENT_MODE = "extra_mode"
 
         /**
-         * @see AssignmentsActivity.DISPLAY_TODO
+         * Suggests that only incomplete assignments will be shown in the list.
+         *
+         * It is specified by passing it through an intent extra with the [ARGUMENT_MODE] key.
+         *
+         * @see DISPLAY_ALL_UPCOMING
          */
-        const val DISPLAY_TODO = AssignmentsActivity.DISPLAY_TODO
+        const val DISPLAY_TODO = 1
 
         /**
-         * @see AssignmentsActivity.DISPLAY_ALL_UPCOMING
+         * Suggests that only assignments due in the future and overdue assignments will be shown in
+         * the list.
+         *
+         * It is specified by passing it through an intent extra with the [ARGUMENT_MODE] key.
+         *
+         * @see DISPLAY_TODO
          */
-        const val DISPLAY_ALL_UPCOMING = AssignmentsActivity.DISPLAY_ALL_UPCOMING
+        const val DISPLAY_ALL_UPCOMING = 2
     }
-
-    private var mMode: Int = DISPLAY_ALL_UPCOMING
 
     private var mHeaders: ArrayList<String?>? = null
 
-    private var mShowPast = false
+    private var mShowCompleted = AgendaActivity.DEFAULT_SHOW_COMPLETED
+    private var mShowPast = AgendaActivity.DEFAULT_SHOW_PAST
 
     override fun instantiateDataHandler() = AssignmentHandler(activity)
 
@@ -74,12 +86,10 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
     }
 
     private fun determineDisplayMode() {
-        if (mMode != 0) {
-            return
-        }
-
         val extras = arguments
-        mMode = extras?.getInt(ARGUMENT_MODE) ?: DISPLAY_ALL_UPCOMING
+        val mode = extras?.getInt(ARGUMENT_MODE) ?: DISPLAY_ALL_UPCOMING
+
+        mShowCompleted = mode == DISPLAY_ALL_UPCOMING
     }
 
     override fun onFabButtonClick() {
@@ -154,7 +164,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
             mDataHandler!!.replaceItem(assignment.id, assignment)
 
             // Do not completely remove the item if we're not in DISPLAY_TODO mode
-            if (mMode != DISPLAY_TODO) {
+            if (mShowCompleted) {
                 // We should remove and add back the item so the 'done' background goes away
                 // and the item gets updated
                 mItems!!.removeAt(position)
@@ -166,8 +176,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
 
                 Snackbar.make(activity.findViewById(R.id.coordinatorLayout),
                         R.string.message_assignment_completed,
-                        Snackbar.LENGTH_SHORT)
-                        .setAction(R.string.action_undo) {
+                        Snackbar.LENGTH_SHORT).setAction(R.string.action_undo) {
                             val removedAssignment = mRemovedAssignment
                             removedAssignment!!.completionProgress = mRemovedCompletionProgress
 
@@ -278,7 +287,9 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
             val dueDate = assignment.dueDate
             val timePeriodId: Int
 
-            if (mMode == DISPLAY_ALL_UPCOMING && assignment.isPastAndDone() && mShowPast) {
+            if (mShowPast && assignment.isPastAndDone()) {
+                // Show everything in the past and completed (mShowCompleted is irrelevant here)
+
                 timePeriodId =
                         Integer.parseInt(dueDate.year.toString() + dueDate.monthValue.toString())
 
@@ -292,19 +303,24 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
 
                 currentTimePeriod = timePeriodId
 
-            } else if (mMode == DISPLAY_ALL_UPCOMING && !assignment.isPastAndDone()
-                    && !mShowPast || mMode == DISPLAY_TODO && !assignment.isComplete()) {
-                timePeriodId = DateUtils.getDatePeriodId(dueDate)
+            } else if (!mShowPast && (assignment.isOverdue() || assignment.isUpcoming())) {
 
-                if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                    headers.add(DateUtils.makeHeaderName(activity, timePeriodId))
-                    assignments.add(null)
+                // If we're showing completed items, show everything.
+                // Otherwise, only show incomplete items.
+                if (mShowCompleted || !assignment.isComplete()) {
+
+                    timePeriodId = DateUtils.getDatePeriodId(dueDate)
+
+                    if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
+                        headers.add(DateUtils.makeHeaderName(activity, timePeriodId))
+                        assignments.add(null)
+                    }
+
+                    headers.add(null)
+                    assignments.add(assignment)
+
+                    currentTimePeriod = timePeriodId
                 }
-
-                headers.add(null)
-                assignments.add(assignment)
-
-                currentTimePeriod = timePeriodId
             }
         }
 
@@ -321,25 +337,21 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
         else
             R.string.placeholder_assignments_title
 
-        val subtitleRes: Int
-        if (mMode == DISPLAY_TODO) {
-            subtitleRes = R.string.placeholder_assignments_todo_subtitle
-        } else {
-            subtitleRes = if (mShowPast)
+        val subtitleRes = if (mShowCompleted) {
+            if (mShowPast) {
                 R.string.placeholder_assignments_past_subtitle
-            else
+            } else {
                 R.string.placeholder_assignments_upcoming_subtitle
+            }
+        } else {
+            R.string.placeholder_assignments_todo_subtitle
         }
 
         return UiUtils.makePlaceholderView(
                 activity,
                 R.drawable.ic_homework_black_24dp,
                 titleRes,
-                R.color.mdu_blue_400,
-                R.color.mdu_white,
-                R.color.mdu_white,
-                true,
-                subtitleRes)
+                subtitleRes = subtitleRes)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -352,31 +364,10 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        // Do not show the menu in DISPLAY_TODO mode
-        if (mMode != DISPLAY_TODO) {
-            inflater!!.inflate(R.menu.menu_assignments, menu)
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
-            R.id.action_show_past -> {
-                mShowPast = !mShowPast
-                item.isChecked = mShowPast
-
-                val textView = activity.findViewById(R.id.text_infoBar) as TextView
-                if (mShowPast) {
-                    textView.visibility = View.VISIBLE
-                    textView.text = getString(R.string.showing_past_assignments)
-                } else {
-                    textView.visibility = View.GONE
-                }
-                updateList()
-            }
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onFilterChange(showCompleted: Boolean, showPast: Boolean) {
+        mShowCompleted = showCompleted
+        mShowPast = showPast
+        updateList()
     }
 
 }

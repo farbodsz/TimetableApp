@@ -16,9 +16,8 @@ import android.view.View;
 
 import co.timetableapp.R;
 import co.timetableapp.ui.MainActivity;
-import co.timetableapp.ui.assignments.AssignmentsActivity;
+import co.timetableapp.ui.assignments.AgendaActivity;
 import co.timetableapp.ui.classes.ClassesActivity;
-import co.timetableapp.ui.exams.ExamsActivity;
 import co.timetableapp.ui.schedule.ScheduleActivity;
 import co.timetableapp.ui.settings.SettingsActivity;
 import co.timetableapp.ui.subjects.SubjectsActivity;
@@ -33,11 +32,9 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity {
 
     protected static final int NAVDRAWER_ITEM_HOME = R.id.navigation_item_home;
     protected static final int NAVDRAWER_ITEM_SCHEDULE = R.id.navigation_item_schedule;
+    protected static final int NAVDRAWER_ITEM_AGENDA = R.id.navigation_item_agenda;
     protected static final int NAVDRAWER_ITEM_CLASSES = R.id.navigation_item_classes;
     protected static final int NAVDRAWER_ITEM_SUBJECTS = R.id.navigation_item_subjects;
-    protected static final int NAVDRAWER_ITEM_TODO = R.id.navigation_item_todo;
-    protected static final int NAVDRAWER_ITEM_ASSIGNMENTS = R.id.navigation_item_assignments;
-    protected static final int NAVDRAWER_ITEM_EXAMS = R.id.navigation_item_exams;
     protected static final int NAVDRAWER_ITEM_MANAGE_TIMETABLES = R.id.navigation_item_manage_timetables;
     protected static final int NAVDRAWER_ITEM_SETTINGS = R.id.navigation_item_settings;
     protected static final int NAVDRAWER_ITEM_INVALID = -1;
@@ -163,21 +160,14 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity {
             case NAVDRAWER_ITEM_SCHEDULE:
                 intent = new Intent(this, ScheduleActivity.class);
                 break;
+            case NAVDRAWER_ITEM_AGENDA:
+                intent = new Intent(this, AgendaActivity.class);
+                break;
             case NAVDRAWER_ITEM_CLASSES:
                 intent = new Intent(this, ClassesActivity.class);
                 break;
             case NAVDRAWER_ITEM_SUBJECTS:
                 intent = new Intent(this, SubjectsActivity.class);
-                break;
-            case NAVDRAWER_ITEM_TODO:
-                intent = new Intent(this, AssignmentsActivity.class);
-                intent.putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO);
-                break;
-            case NAVDRAWER_ITEM_ASSIGNMENTS:
-                intent = new Intent(this, AssignmentsActivity.class);
-                break;
-            case NAVDRAWER_ITEM_EXAMS:
-                intent = new Intent(this, ExamsActivity.class);
                 break;
             case NAVDRAWER_ITEM_MANAGE_TIMETABLES:
                 intent = new Intent(this, TimetablesActivity.class);

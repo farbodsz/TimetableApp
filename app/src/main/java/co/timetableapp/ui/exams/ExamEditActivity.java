@@ -44,7 +44,6 @@ import co.timetableapp.util.UiUtils;
 /**
  * Allows the user to edit an {@link Exam}.
  *
- * @see ExamsActivity
  * @see ExamDetailActivity
  * @see ItemEditActivity
  */

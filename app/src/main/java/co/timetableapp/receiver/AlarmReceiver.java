@@ -34,8 +34,7 @@ import co.timetableapp.model.Color;
 import co.timetableapp.model.Exam;
 import co.timetableapp.model.Subject;
 import co.timetableapp.ui.MainActivity;
-import co.timetableapp.ui.assignments.AssignmentsActivity;
-import co.timetableapp.ui.exams.ExamsActivity;
+import co.timetableapp.ui.assignments.AgendaActivity;
 
 /**
  * Invoked when receiving an alarm - i.e. when a notification needs to be displayed.
@@ -153,8 +152,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                     return;
                 }
 
-                intent = new Intent(context, AssignmentsActivity.class);
-                intent.putExtra(AssignmentsActivity.EXTRA_MODE, AssignmentsActivity.DISPLAY_TODO);
+                intent = new Intent(context, AgendaActivity.class);
 
                 int pluralRes = checkingOverdue
                         ? R.plurals.notification_overdue_assignments
@@ -177,7 +175,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 assert examSubject != null;
 
                 color = new Color(examSubject.getColorId());
-                intent = new Intent(context, ExamsActivity.class);
+                intent = new Intent(context, AgendaActivity.class);
 
                 contentTitle = examSubject.getName() + ": " + exam.getModuleName() + " exam";
                 contentText = makeExamText(exam);

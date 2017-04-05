@@ -39,13 +39,12 @@ import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
 
 /**
- * Invoked and displayed to the user to edit the details of an assignment.
+ * Allows the user to edit the details of an {@link Assignment}.
  *
  * It can also be called to create a new assignment. If so, it will be started by
  * {@link AssignmentDetailActivity} and no data will be passed to this activity (i.e.
  * {@link #EXTRA_ASSIGNMENT} will be null).
  *
- * @see Assignment
  * @see AssignmentDetailActivity
  */
 public class AssignmentEditActivity extends AppCompatActivity {
