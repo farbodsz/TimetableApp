@@ -57,7 +57,7 @@ class SubjectsFragment : ItemListFragment<Subject>() {
 
     override fun getPlaceholderView() = UiUtils.makePlaceholderView(
             activity,
-            R.drawable.ic_list_black_24dp,
+            R.drawable.ic_school_black_24dp,
             R.string.placeholder_subjects,
             R.color.mdu_blue_400,
             R.color.mdu_white,
