@@ -261,14 +261,10 @@ class AssignmentsFragment : ItemListFragment<Assignment>() {
     })
 
     override fun sortList() {
-        Collections.sort(mItems) { a1, a2 ->
-            val dueDate1 = a1.dueDate
-            val dueDate2 = a2.dueDate
-            if (mShowPast) {
-                dueDate2.compareTo(dueDate1)
-            } else {
-                dueDate1.compareTo(dueDate2)
-            }
+        if (mShowPast) {
+            mItems!!.sortWith(Assignment.COMPARATOR_REVERSE_DUE_DATE)
+        } else {
+            mItems!!.sort()
         }
 
         val headers = ArrayList<String?>()

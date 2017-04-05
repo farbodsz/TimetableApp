@@ -26,7 +26,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
@@ -130,13 +129,7 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
 
                 final ArrayList<Subject> subjects =
                         new SubjectHandler(ExamEditActivity.this).getItems(getApplication());
-
-                Collections.sort(subjects, new Comparator<Subject>() {
-                    @Override
-                    public int compare(Subject o1, Subject o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
+                Collections.sort(subjects);
 
                 SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
                 adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {

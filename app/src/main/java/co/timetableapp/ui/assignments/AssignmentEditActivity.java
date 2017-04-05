@@ -24,7 +24,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
@@ -137,16 +136,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 final ArrayList<Class> classes =
                         new ClassHandler(AssignmentEditActivity.this).getItems(getApplication());
 
-                Collections.sort(classes, new Comparator<Class>() {
-                    @Override
-                    public int compare(Class o1, Class o2) {
-                        Subject s1 = Subject.create(getBaseContext(), o1.getSubjectId());
-                        Subject s2 = Subject.create(getBaseContext(), o2.getSubjectId());
-                        assert s1 != null;
-                        assert s2 != null;
-                        return s1.getName().compareTo(s2.getName());
-                    }
-                });
+                Collections.sort(classes, new Class.NaturalSortComparator(getBaseContext()));
 
                 ClassesAdapter adapter = new ClassesAdapter(getBaseContext(), classes);
                 adapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {

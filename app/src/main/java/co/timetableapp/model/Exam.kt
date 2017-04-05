@@ -29,6 +29,11 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
     companion object {
 
         /**
+         * @see ReverseDateTimeComparator
+         */
+        @JvmField val COMPARATOR_REVERSE_DATE_TIME = ReverseDateTimeComparator()
+
+        /**
          * Constructs an [Exam] using column values from the cursor provided
          *
          * @param cursor a query of the exams table
@@ -152,6 +157,17 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
         dest?.writeString(seat)
         dest?.writeString(room)
         dest?.writeInt(if (resit) 1 else 0)
+    }
+
+    /**
+     * Defines a sorting order for exams, first being sorted in reverse by date and time (so that
+     * when viewing past exams, the most recent is shown first).
+     */
+    class ReverseDateTimeComparator : Comparator<Exam> {
+
+        override fun compare(o1: Exam?, o2: Exam?): Int {
+            return o2!!.makeDateTimeObject().compareTo(o1!!.makeDateTimeObject())
+        }
     }
 
 }

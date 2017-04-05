@@ -23,7 +23,6 @@ import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
@@ -136,16 +135,7 @@ public class ScheduleActivity extends NavigationDrawerActivity {
                     continue;
                 }
 
-                Collections.sort(classTimes, new Comparator<ClassTime>() {
-                    @Override
-                    public int compare(ClassTime t1, ClassTime t2) {
-                        int startTimeComparison = t1.getStartTime().compareTo(t2.getStartTime());
-                        if (startTimeComparison == 0) {
-                            return t1.getEndTime().compareTo(t2.getEndTime());
-                        }
-                        return startTimeComparison;
-                    }
-                });
+                Collections.sort(classTimes);
 
                 ScheduleAdapter adapter = new ScheduleAdapter(this, classTimes);
                 adapter.setOnEntryClickListener(new ScheduleAdapter.OnEntryClickListener() {

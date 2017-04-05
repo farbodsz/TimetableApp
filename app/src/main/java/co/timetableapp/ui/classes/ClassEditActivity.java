@@ -170,12 +170,7 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
 
                 final ArrayList<Subject> subjects =
                         new SubjectHandler(ClassEditActivity.this).getItems(getApplication());
-                Collections.sort(subjects, new Comparator<Subject>() {
-                    @Override
-                    public int compare(Subject subject, Subject t1) {
-                        return subject.getName().compareTo(t1.getName());
-                    }
-                });
+                Collections.sort(subjects);
 
                 SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
                 adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {

@@ -143,4 +143,17 @@ class Class(override val id: Int, override val timetableId: Int, val subjectId: 
         dest?.writeSerializable(endDate)
     }
 
+    /**
+     * Defines the natural sorting order for classes.
+     * This could not be implemented using [Comparable] since it requires context.
+     */
+    class NaturalSortComparator(private val context: Context) : Comparator<Class> {
+
+        override fun compare(o1: Class?, o2: Class?): Int {
+            val subject1 = Subject.create(context, o1!!.subjectId)!!
+            val subject2 = Subject.create(context, o2!!.subjectId)!!
+            return subject1.compareTo(subject2)
+        }
+    }
+
 }

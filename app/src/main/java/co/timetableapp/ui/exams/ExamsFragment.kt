@@ -19,8 +19,6 @@ import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * A fragment for displaying a list of exams to the user.
@@ -74,14 +72,10 @@ class ExamsFragment : ItemListFragment<Exam>() {
     }
 
     override fun sortList() {
-        Collections.sort(mItems) { e1, e2 ->
-            val dateTime1 = e1.makeDateTimeObject()
-            val dateTime2 = e2.makeDateTimeObject()
-            if (mShowPast) {
-                dateTime2.compareTo(dateTime1)
-            } else {
-                dateTime1.compareTo(dateTime2)
-            }
+        if (mShowPast) {
+            mItems!!.sortWith(Exam.COMPARATOR_REVERSE_DATE_TIME)
+        } else {
+            mItems!!.sort()
         }
 
         val headers = ArrayList<String?>()

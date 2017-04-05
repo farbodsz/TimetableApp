@@ -31,6 +31,11 @@ class Assignment(override val id: Int, override val timetableId: Int, val classI
     companion object {
 
         /**
+         * @see ReverseDueDateComparator
+         */
+        @JvmField val COMPARATOR_REVERSE_DUE_DATE = ReverseDueDateComparator()
+
+        /**
          * Constructs an [Assignment] using column values from the cursor provided
          *
          * @param cursor a query of the assignments table
@@ -117,6 +122,23 @@ class Assignment(override val id: Int, override val timetableId: Int, val classI
         dest?.writeString(detail)
         dest?.writeSerializable(dueDate)
         dest?.writeInt(completionProgress)
+    }
+
+    /**
+     * Defines a sorting order for assignments, first being sorted in reverse by date (so that when
+     * viewing past assignments, the most recent is shown first), then lexicographically.
+     */
+    class ReverseDueDateComparator : Comparator<Assignment> {
+
+        override fun compare(o1: Assignment?, o2: Assignment?): Int {
+            // Sorting order is reverse due dates then titles
+            val dateComparison = o2!!.dueDate.compareTo(o1!!.dueDate)
+            return if (dateComparison == 0) {
+                o1.title.compareTo(o2.title)
+            } else {
+                dateComparison
+            }
+        }
     }
   
 }
