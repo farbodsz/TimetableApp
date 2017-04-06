@@ -2,7 +2,6 @@ package co.timetableapp.ui.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,14 +80,6 @@ public abstract class ItemListFragment<T extends TimetableItem> extends Fragment
     @Override
     public void setupLayout() {
         setupList();
-
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onFabButtonClick();
-            }
-        });
 
         mPlaceholderLayout = (FrameLayout) mRootView.findViewById(R.id.placeholder);
         refreshPlaceholderStatus();

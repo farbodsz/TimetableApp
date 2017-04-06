@@ -39,14 +39,31 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            app:srcCompat="@drawable/ic_add_black_24dp"
-            android:tint="@color/mdu_white"
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fabMenu"
+            style="@style/Widget.Timetable.FabMenu"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_assignment"
+                android:src="@drawable/ic_fab_homework_white"
+                app:fab_label="@string/title_activity_assignment_new"
+                style="@style/Widget.Timetable.Fab.Mini"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_exam"
+                android:src="@drawable/ic_fab_assessment_white"
+                android:tint="@color/mdu_grey_600"
+                app:fab_label="@string/title_activity_exam_new"
+                style="@style/Widget.Timetable.Fab.Mini"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </com.github.clans.fab.FloatingActionMenu>
     </android.support.design.widget.CoordinatorLayout>
 
     <include layout="@layout/navigation_drawer"/>

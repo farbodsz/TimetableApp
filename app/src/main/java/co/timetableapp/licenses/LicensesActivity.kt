@@ -46,6 +46,10 @@ class LicensesActivity : AppCompatActivity() {
                 "The Android Open Source Project",
                 ApacheLicense()))
 
+        mLibraries.add(Library("FloatingActionButton",
+                "https://github.com/Clans/FloatingActionButton",
+                "Dmytro Tarianyk",
+                ApacheLicense()))
         mLibraries.add(Library("ThreeTenABP",
                 "https://github.com/JakeWharton/ThreeTenABP",
                 "JakeWharton",

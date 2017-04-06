@@ -4,10 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -38,6 +36,7 @@ import co.timetableapp.ui.classes.ClassDetailActivity
 import co.timetableapp.ui.components.SectionGroup
 import co.timetableapp.ui.exams.ExamDetailActivity
 import co.timetableapp.util.DateUtils
+import com.github.clans.fab.FloatingActionButton
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -54,8 +53,6 @@ class MainActivity : NavigationDrawerActivity() {
         private const val LOG_TAG = "MainActivity"
 
         private const val REQUEST_CODE_ITEM_DETAIL = 1
-
-        @JvmStatic private var sFab: FloatingActionButton? = null
     }
 
     private var mViewPager: ViewPager? = null
@@ -84,11 +81,16 @@ class MainActivity : NavigationDrawerActivity() {
     }
 
     private fun setupFab() {
-        sFab = findViewById(R.id.fab) as FloatingActionButton
-        sFab!!.setImageResource(R.drawable.ic_homework_black_24dp)
-        sFab!!.setOnClickListener {
+        val fabAssignment = findViewById(R.id.fab_assignment) as FloatingActionButton
+        fabAssignment.setOnClickListener {
             val intent = Intent(this, AssignmentDetailActivity::class.java)
-            ActivityCompat.startActivityForResult(this, intent, REQUEST_CODE_ITEM_DETAIL, null)
+            startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
+        }
+
+        val fabExam = findViewById(R.id.fab_exam) as FloatingActionButton
+        fabExam.setOnClickListener {
+            val intent = Intent(this, ExamDetailActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
         }
     }
 
@@ -146,16 +148,6 @@ class MainActivity : NavigationDrawerActivity() {
             setupLayout()
 
             return rootView
-        }
-
-        override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-            super.setUserVisibleHint(isVisibleToUser)
-
-            if (isVisibleToUser) {
-                sFab!!.show()
-            } else {
-                sFab!!.hide()
-            }
         }
 
         private fun setupLayout() {

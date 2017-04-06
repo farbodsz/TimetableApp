@@ -3,7 +3,6 @@ package co.timetableapp.ui.timetables
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
@@ -61,8 +60,7 @@ class TimetablesFragment : Fragment() {
     private fun setupLayout() {
         setupList()
 
-        val fab = activity.findViewById(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener {
+        activity.findViewById(R.id.fab).setOnClickListener {
             val intent = Intent(activity, TimetableEditActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT)
         }

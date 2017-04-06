@@ -5,6 +5,8 @@
     <color name="theme_primary_dark">@color/mdu_blue_700</color>
     <color name="theme_accent">@color/mdu_pink_a200</color>
 
+    <color name="theme_accent_highlight">@color/mdu_pink_400</color>
+
     <color name="window_background">#FFF5F5F5</color>
 
     <color name="item_done_background">#0F9D58</color>

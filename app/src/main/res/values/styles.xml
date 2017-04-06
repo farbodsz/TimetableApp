@@ -20,6 +20,20 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="Widget.Timetable.FabMenu">
+        <item name="menu_colorNormal">@color/theme_accent</item>
+        <item name="menu_colorPressed">@color/theme_accent_highlight</item>
+    </style>
+
+    <style name="Widget.Timetable.Fab">
+        <item name="fab_colorNormal">@color/theme_accent</item>
+        <item name="fab_colorPressed">@color/theme_accent_highlight</item>
+    </style>
+
+    <style name="Widget.Timetable.Fab.Mini">
+        <item name="fab_size">mini</item>
+    </style>
+
     <style name="Widget.Timetable" parent="android:Widget" />
 
     <style name="Widget.Timetable.Toolbar">

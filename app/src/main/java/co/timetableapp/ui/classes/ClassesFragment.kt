@@ -36,9 +36,16 @@ class ClassesFragment : ItemListFragment<Class>() {
 
     override fun instantiateDataHandler() = ClassHandler(activity)
 
-    override fun onFabButtonClick() {
-        val intent = Intent(activity, ClassEditActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL)
+    override fun setupLayout() {
+        super.setupLayout()
+        setupFab()
+    }
+
+    private fun setupFab() {
+        activity.findViewById(R.id.fab).setOnClickListener {
+            val intent = Intent(activity, ClassEditActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL)
+        }
     }
 
     override fun setupAdapter(): RecyclerView.Adapter<*> {
