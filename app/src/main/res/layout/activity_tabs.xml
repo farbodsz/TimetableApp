@@ -51,7 +51,7 @@
                 android:id="@+id/fab_assignment"
                 android:src="@drawable/ic_fab_homework_white"
                 app:fab_label="@string/title_activity_assignment_new"
-                style="@style/Widget.Timetable.FabMini"
+                style="@style/Widget.Timetable.Fab.Mini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -60,7 +60,7 @@
                 android:src="@drawable/ic_fab_assessment_white"
                 android:tint="@color/mdu_grey_600"
                 app:fab_label="@string/title_activity_exam_new"
-                style="@style/Widget.Timetable.FabMini"
+                style="@style/Widget.Timetable.Fab.Mini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </com.github.clans.fab.FloatingActionMenu>

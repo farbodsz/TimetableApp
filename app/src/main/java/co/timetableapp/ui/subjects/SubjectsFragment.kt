@@ -33,8 +33,7 @@ class SubjectsFragment : ItemListFragment<Subject>() {
     }
 
     private fun setupFab() {
-        val fab = activity.findViewById(R.id.fab)
-        fab.setOnClickListener {
+        activity.findViewById(R.id.fab).setOnClickListener {
             val intent = Intent(activity, SubjectEditActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL)
         }

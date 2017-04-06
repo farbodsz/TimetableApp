@@ -42,8 +42,7 @@ class ClassesFragment : ItemListFragment<Class>() {
     }
 
     private fun setupFab() {
-        val fab = activity.findViewById(R.id.fab)
-        fab.setOnClickListener {
+        activity.findViewById(R.id.fab).setOnClickListener {
             val intent = Intent(activity, ClassEditActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_CLASS_DETAIL)
         }

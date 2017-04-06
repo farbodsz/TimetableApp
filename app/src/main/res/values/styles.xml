@@ -25,9 +25,12 @@
         <item name="menu_colorPressed">@color/theme_accent_highlight</item>
     </style>
 
-    <style name="Widget.Timetable.FabMini">
+    <style name="Widget.Timetable.Fab">
         <item name="fab_colorNormal">@color/theme_accent</item>
         <item name="fab_colorPressed">@color/theme_accent_highlight</item>
+    </style>
+
+    <style name="Widget.Timetable.Fab.Mini">
         <item name="fab_size">mini</item>
     </style>
 
