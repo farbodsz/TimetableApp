@@ -23,6 +23,7 @@ import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
+import com.github.clans.fab.FloatingActionMenu
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
@@ -101,6 +102,8 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
         activity.findViewById(R.id.fab_assignment).setOnClickListener {
             val intent = Intent(activity, AssignmentDetailActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL)
+
+            (activity.findViewById(R.id.fabMenu) as FloatingActionMenu).close(false)
         }
     }
 

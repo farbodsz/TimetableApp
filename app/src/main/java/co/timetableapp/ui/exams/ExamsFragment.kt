@@ -13,6 +13,7 @@ import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
+import com.github.clans.fab.FloatingActionMenu
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -45,6 +46,8 @@ class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeLis
         activity.findViewById(R.id.fab_exam).setOnClickListener {
             val intent = Intent(activity, ExamEditActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT)
+
+            (activity.findViewById(R.id.fabMenu) as FloatingActionMenu).close(false)
         }
     }
 
