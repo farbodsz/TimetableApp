@@ -15,9 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import co.timetableapp.R;
-import co.timetableapp.ui.MainActivity;
 import co.timetableapp.ui.assignments.AgendaActivity;
 import co.timetableapp.ui.classes.ClassesActivity;
+import co.timetableapp.ui.home.MainActivity;
 import co.timetableapp.ui.schedule.ScheduleActivity;
 import co.timetableapp.ui.settings.SettingsActivity;
 import co.timetableapp.ui.subjects.SubjectsActivity;

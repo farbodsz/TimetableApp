@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.PortingFragment
-import co.timetableapp.ui.MainActivity
+import co.timetableapp.ui.home.MainActivity
 
 /**
  * This activity is the launcher activity. It redirects to [MainActivity] if the user already has

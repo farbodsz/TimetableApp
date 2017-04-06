@@ -37,7 +37,7 @@
             android:theme="@style/Timetable" />
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.home.MainActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/Timetable.TranslucentStatus" />
 

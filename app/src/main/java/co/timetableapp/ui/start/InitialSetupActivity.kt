@@ -23,7 +23,7 @@ import co.timetableapp.data.handler.SubjectHandler
 import co.timetableapp.data.handler.TimetableHandler
 import co.timetableapp.model.Subject
 import co.timetableapp.model.Timetable
-import co.timetableapp.ui.MainActivity
+import co.timetableapp.ui.home.MainActivity
 import co.timetableapp.util.PrefUtils
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter

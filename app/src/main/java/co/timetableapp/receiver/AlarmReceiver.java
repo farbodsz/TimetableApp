@@ -33,8 +33,8 @@ import co.timetableapp.model.ClassTime;
 import co.timetableapp.model.Color;
 import co.timetableapp.model.Exam;
 import co.timetableapp.model.Subject;
-import co.timetableapp.ui.MainActivity;
 import co.timetableapp.ui.assignments.AgendaActivity;
+import co.timetableapp.ui.home.MainActivity;
 
 /**
  * Invoked when receiving an alarm - i.e. when a notification needs to be displayed.
