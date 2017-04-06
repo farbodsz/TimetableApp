@@ -41,6 +41,14 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
         return values
     }
 
+    override fun addItem(item: Exam) {
+        super.addItem(item)
+
+        if (!item.isInPast()) {
+            addAlarmForExam(context, item)
+        }
+    }
+
     override fun deleteItem(itemId: Int) {
         super.deleteItem(itemId)
 

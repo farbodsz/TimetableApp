@@ -106,6 +106,8 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
 
     fun hasRoom() = room.trim().isNotEmpty()
 
+    fun isInPast() = makeDateTimeObject().isBefore(LocalDateTime.now())
+
     /**
      * @return the displayed name for the exam, consisting of the subject name and exam module
      * name if it exists

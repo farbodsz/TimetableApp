@@ -14,7 +14,6 @@ import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
 import com.github.clans.fab.FloatingActionMenu
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
 /**
@@ -95,7 +94,7 @@ class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeLis
             val examDate = exam.date
             val timePeriodId: Int
 
-            if (exam.makeDateTimeObject().isBefore(LocalDateTime.now())) {
+            if (exam.isInPast()) {
                 if (mShowPast) {
                     timePeriodId = Integer.parseInt(examDate.year.toString() +
                             examDate.monthValue.toString())
