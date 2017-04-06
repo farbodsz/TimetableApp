@@ -21,11 +21,6 @@ internal interface ItemListImpl<T : TimetableItem> {
     fun setupLayout()
 
     /**
-     * Defines the actions for when the floating action button is clicked.
-     */
-    fun onFabButtonClick()
-
-    /**
      * Populates the items list with data from the database table for the current timetable, before
      * sorting this and displaying it.
      *

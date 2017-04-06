@@ -23,6 +23,7 @@ import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
+import com.github.clans.fab.FloatingActionButton
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
@@ -92,9 +93,17 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
         mShowCompleted = mode == DISPLAY_ALL_UPCOMING
     }
 
-    override fun onFabButtonClick() {
-        val intent = Intent(activity, AssignmentDetailActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL)
+    override fun setupLayout() {
+        super.setupLayout()
+        setupFab()
+    }
+
+    private fun setupFab() {
+        val fab = activity.findViewById(R.id.fab_assignment) as FloatingActionButton
+        fab.setOnClickListener {
+            val intent = Intent(activity, AssignmentDetailActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL)
+        }
     }
 
     override fun setupList() {

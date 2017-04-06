@@ -27,9 +27,17 @@ class SubjectsFragment : ItemListFragment<Subject>() {
 
     override fun instantiateDataHandler() = SubjectHandler(activity)
 
-    override fun onFabButtonClick() {
-        val intent = Intent(activity, SubjectEditActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL)
+    override fun setupLayout() {
+        super.setupLayout()
+        setupFab()
+    }
+
+    private fun setupFab() {
+        val fab = activity.findViewById(R.id.fab)
+        fab.setOnClickListener {
+            val intent = Intent(activity, SubjectEditActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL)
+        }
     }
 
     override fun setupAdapter(): RecyclerView.Adapter<*> {
