@@ -173,7 +173,8 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
             mDataHandler!!.replaceItem(assignment.id, assignment)
 
             // Don't remove the item from the list if we're showing completed items
-            if (mShowCompleted) {
+            // But overdue items should get removed from the list
+            if (mShowCompleted && assignment.isUpcoming()) {
                 updateCompletedAssignment(position)
                 return
             }
