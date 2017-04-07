@@ -146,21 +146,20 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
             val position = viewHolder.adapterPosition
             val isHeader = mItems!![position] == null
 
-            val swipeFlags = if (isHeader)
-                0
-            else
-                ItemTouchHelper.START or ItemTouchHelper.END
+            val swipeFlags = if (isHeader) {
+                0  // don't allow swiping for headers
+            } else {
+                ItemTouchHelper.START or ItemTouchHelper.END  // list items can be swiped left/right
+            }
 
             return makeMovementFlags(0, swipeFlags)
         }
 
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder): Boolean {
-            return false
-        }
+                            target: RecyclerView.ViewHolder) = false
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            var position = viewHolder.adapterPosition
+            val position = viewHolder.adapterPosition
 
             val assignment = mItems!![position]
 
@@ -173,31 +172,60 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
             assignment.completionProgress = 100
             mDataHandler!!.replaceItem(assignment.id, assignment)
 
-            // Do not completely remove the item if we're not in DISPLAY_TODO mode
+            // Don't remove the item from the list if we're showing completed items
             if (mShowCompleted) {
-                // We should remove and add back the item so the 'done' background goes away
-                // and the item gets updated
-                mItems!!.removeAt(position)
-                mAdapter!!.notifyItemRemoved(position)
-                mItems!!.add(position, mRemovedAssignment!!)
-                mAdapter!!.notifyItemInserted(position)
-
-                val finalPos = position
-
-                Snackbar.make(activity.findViewById(R.id.coordinatorLayout),
-                        R.string.message_assignment_completed,
-                        Snackbar.LENGTH_SHORT).setAction(R.string.action_undo) {
-                            val removedAssignment = mRemovedAssignment
-                            removedAssignment!!.completionProgress = mRemovedCompletionProgress
-
-                            mDataHandler!!.replaceItem(removedAssignment.id, removedAssignment)
-
-                            mItems!![finalPos] = removedAssignment
-                            mAdapter!!.notifyItemChanged(finalPos)
-                        }
-                        .show()
+                updateCompletedAssignment(position)
                 return
             }
+
+            removeCompletedAssignment(position)
+
+            // No need to refresh the list now, but check if it's empty and needs a placeholder
+            refreshPlaceholderStatus()
+        }
+
+        /**
+         * Removes and adds back the list item so that the 'done' background goes away and the item
+         * content gets updated, after the user swipes the item off the screen.
+         *
+         * To the user, it seems that the item does *not* get removed from the list.
+         *
+         * @param position the adapter position of the item represented by the ViewHolder
+         */
+        private fun updateCompletedAssignment(position: Int) {
+            mItems!!.removeAt(position)
+            mAdapter!!.notifyItemRemoved(position)
+            mItems!!.add(position, mRemovedAssignment!!)
+            mAdapter!!.notifyItemInserted(position)
+
+            val finalPos = position
+
+            val undoListener = View.OnClickListener {
+                val removedAssignment = mRemovedAssignment
+                removedAssignment!!.completionProgress = mRemovedCompletionProgress
+
+                mDataHandler!!.replaceItem(removedAssignment.id, removedAssignment)
+
+                mItems!![finalPos] = removedAssignment
+                mAdapter!!.notifyItemChanged(finalPos)
+            }
+
+            Snackbar.make(
+                    activity.findViewById(R.id.coordinatorLayout),
+                    R.string.message_assignment_completed,
+                    Snackbar.LENGTH_SHORT
+            ).setAction(R.string.action_undo, undoListener).show()
+        }
+
+        /**
+         * Removes the list item after it has been swiped off the screen by the user.
+         *
+         * @param positionParam the adapter position of the item represented by the ViewHolder. Note
+         *          that this is only used to assign a `position` variable, as parameters in Kotlin
+         *          are effectively `final`.
+         */
+        private fun removeCompletedAssignment(positionParam: Int) {
+            var position = positionParam
 
             // Check if assignment is only one in date group
             if (mItems!![position - 1] == null
@@ -222,32 +250,31 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
             mItems!!.removeAt(position)
             mAdapter!!.notifyItemRemoved(position)
 
+            val undoListener = View.OnClickListener {
+                if (mRemovedHeader != null) {
+                    mHeaders!!.add(mRemovedAssignmentPos - 1, mRemovedHeader!!)
+                    mItems!!.add(mRemovedAssignmentPos - 1, null)
+                    mAdapter!!.notifyItemInserted(mRemovedAssignmentPos - 1)
+                }
+
+                val removedAssignment = mRemovedAssignment
+                removedAssignment!!.completionProgress = mRemovedCompletionProgress
+
+                mHeaders!!.add(mRemovedAssignmentPos, null)
+                mItems!!.add(mRemovedAssignmentPos, removedAssignment)
+                mAdapter!!.notifyItemInserted(mRemovedAssignmentPos)
+
+                mDataHandler!!.replaceItem(removedAssignment.id, removedAssignment)
+
+                refreshPlaceholderStatus()
+            }
+
             // Show a Snackbar with the undo action
-            Snackbar.make(activity.findViewById(R.id.coordinatorLayout),
+            Snackbar.make(
+                    activity.findViewById(R.id.coordinatorLayout),
                     R.string.message_assignment_completed,
-                    Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.action_undo) {
-                        if (mRemovedHeader != null) {
-                            mHeaders!!.add(mRemovedAssignmentPos - 1, mRemovedHeader!!)
-                            mItems!!.add(mRemovedAssignmentPos - 1, null)
-                            mAdapter!!.notifyItemInserted(mRemovedAssignmentPos - 1)
-                        }
-
-                        val removedAssignment = mRemovedAssignment
-                        removedAssignment!!.completionProgress = mRemovedCompletionProgress
-
-                        mHeaders!!.add(mRemovedAssignmentPos, null)
-                        mItems!!.add(mRemovedAssignmentPos, removedAssignment)
-                        mAdapter!!.notifyItemInserted(mRemovedAssignmentPos)
-
-                        mDataHandler!!.replaceItem(removedAssignment.id, removedAssignment)
-
-                        refreshPlaceholderStatus()
-                    }
-                    .show()
-
-            // No need to refresh the list now, but check if it's empty and needs a placeholder
-            refreshPlaceholderStatus()
+                    Snackbar.LENGTH_SHORT
+            ).setAction(R.string.action_undo, undoListener).show()
         }
 
         override fun onChildDraw(c: Canvas, recyclerView: RecyclerView,
