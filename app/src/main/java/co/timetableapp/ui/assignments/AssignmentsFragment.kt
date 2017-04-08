@@ -149,7 +149,9 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
             val swipeFlags = if (isHeader) {
                 0  // don't allow swiping for headers
             } else {
-                ItemTouchHelper.START or ItemTouchHelper.END  // list items can be swiped left/right
+                // Items can be swiped left to right but not the other way in order to avoid
+                // confusion with the tab swipe gesture
+                ItemTouchHelper.END
             }
 
             return makeMovementFlags(0, swipeFlags)
