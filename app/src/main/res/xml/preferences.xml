@@ -22,6 +22,11 @@
     <PreferenceCategory
         android:title="@string/prefCategory_notifications">
 
+        <SwitchPreference
+            android:key="pref_enable_class_notifications"
+            android:title="@string/pref_classNotificationToggle"
+            android:defaultValue="true" />
+
         <EditTextPreference
             android:key="pref_class_notification_time"
             android:title="@string/pref_classNotificationTime"
@@ -30,10 +35,20 @@
             android:dialogMessage="@string/pref_classNotificationTime_dialogMessage"
             android:defaultValue="5" />
 
+        <SwitchPreference
+            android:key="pref_enable_assignment_notifications"
+            android:title="@string/pref_assignmentNotificationToggle"
+            android:defaultValue="true" />
+
         <Preference
             android:key="pref_assignment_notification_time"
             android:title="@string/pref_assignmentNotificationTime"
             android:summary="@string/pref_assignmentNotificationTime_summary" />
+
+        <SwitchPreference
+            android:key="pref_enable_exam_notifications"
+            android:title="@string/pref_examNotificationToggle"
+            android:defaultValue="true" />
 
         <EditTextPreference
             android:key="pref_exam_notification_time"
