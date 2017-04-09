@@ -25,6 +25,7 @@ class SettingsFragment : PreferenceFragment() {
 
         setupDefaultLessonDurationPref()
 
+        setupNotificationSwitches()
         setupAssignmentNotificationPref()
         setupClassNotificationPref()
         setupExamNotificationPref()
@@ -81,6 +82,38 @@ class SettingsFragment : PreferenceFragment() {
             PrefUtils.setAssignmentNotificationTime(activity, newTime)
 
         }, initialHour, initialMinute, true).show()
+    }
+
+    private fun setupNotificationSwitches() {
+        val classSwitch = findPreference(PrefUtils.PREF_ENABLE_CLASS_NOTIFICATIONS)
+        classSwitch.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue == false) {
+                NotificationUtils.cancelClassAlarms(activity)
+            } else {
+                NotificationUtils.addCurrentClassAlarms(activity, activity.application)
+            }
+            true
+        }
+
+        val assignmentSwitch = findPreference(PrefUtils.PREF_ENABLE_ASSIGNMENT_NOTIFICATIONS)
+        assignmentSwitch.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue == false) {
+                NotificationUtils.cancelAssignmentAlarms(activity)
+            } else {
+                NotificationUtils.setAssignmentAlarms(activity)
+            }
+            true
+        }
+
+        val examSwitch = findPreference(PrefUtils.PREF_ENABLE_EXAM_NOTIFICATIONS)
+        examSwitch.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue == false) {
+                NotificationUtils.cancelExamAlarms(activity)
+            } else {
+                NotificationUtils.addCurrentExamAlarms(activity, activity.application)
+            }
+            true
+        }
     }
 
     private fun setupClassNotificationPref() {

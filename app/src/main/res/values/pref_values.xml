@@ -17,11 +17,13 @@
 
     <string name="prefCategory_notifications">Notifications</string>
 
+    <string name="pref_assignmentNotificationToggle">Enable assignment notifications</string>
     <string name="pref_assignmentNotificationTime">Incomplete assignments</string>
     <string name="pref_assignmentNotificationTime_summary">
         You\'ll be notified of incomplete or overdue assignments the day before it\'s due at %1$s
     </string>
 
+    <string name="pref_classNotificationToggle">Enable class notifications</string>
     <string name="pref_classNotificationTime">Classes</string>
     <string name="pref_classNotificationTime_summary">
         You\'ll get notifications for your classes %1$d minutes before they start
@@ -30,6 +32,7 @@
         Be reminded of classes X minutes before they start.
     </string>
 
+    <string name="pref_examNotificationToggle">Enable exam notifications</string>
     <string name="pref_examNotificationTime">Exams</string>
     <string name="pref_examNotificationTime_summary">
         You\'ll receive exam notifications %1$d minutes before they start

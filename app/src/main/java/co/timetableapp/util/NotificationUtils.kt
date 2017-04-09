@@ -25,7 +25,7 @@ object NotificationUtils {
      *
      * @see refreshClassAlarms
      * @see refreshExamAlarms
-     * @see NotificationUtils.setAssignmentAlarmTime
+     * @see NotificationUtils.setAssignmentAlarms
      */
     @JvmStatic
     fun refreshAlarms(context: Context, application: TimetableApplication) {
@@ -34,7 +34,7 @@ object NotificationUtils {
         refreshClassAlarms(context, application)
         refreshExamAlarms(context, application)
 
-        NotificationUtils.setAssignmentAlarmTime(
+        NotificationUtils.setAssignmentAlarms(
                 context, PrefUtils.getAssignmentNotificationTime(context))
     }
 
@@ -58,7 +58,7 @@ object NotificationUtils {
      */
     @JvmStatic
     fun cancelClassAlarms(context: Context) {
-        Log.v(LOG_TAG, "Cancelling all class time alarms")
+        Log.i(LOG_TAG, "Cancelling all class time alarms")
         ClassTimeHandler(context).getAllItems().forEach {
             AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.CLASS, it.id)
         }
@@ -71,7 +71,7 @@ object NotificationUtils {
      */
     @JvmStatic
     fun addCurrentClassAlarms(context: Context, application: Application) {
-        Log.v(LOG_TAG, "Adding class time alarms for the current timetable")
+        Log.i(LOG_TAG, "Adding class time alarms for the current timetable")
         ClassTimeHandler(context).getItems(application).forEach {
             ClassTimeHandler.addAlarmsForClassTime(context, application, it)
         }
@@ -98,7 +98,7 @@ object NotificationUtils {
      */
     @JvmStatic
     fun cancelExamAlarms(context: Context) {
-        Log.v(LOG_TAG, "Cancelling all exam alarms")
+        Log.i(LOG_TAG, "Cancelling all exam alarms")
         ExamHandler(context).getAllItems().forEach {
             AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.EXAM, it.id)
         }
@@ -111,7 +111,7 @@ object NotificationUtils {
      */
     @JvmStatic
     fun addCurrentExamAlarms(context: Context, application: Application) {
-        Log.v(LOG_TAG, "Adding exam alarms for the current timetable")
+        Log.i(LOG_TAG, "Adding exam alarms for the current timetable")
         ExamHandler(context).getItems(application).forEach { exam ->
             val examInPastToday =
                     exam.date.isEqual(LocalDate.now()) && exam.startTime.isAfter(LocalTime.now())
@@ -128,9 +128,11 @@ object NotificationUtils {
      *
      * @see cancelAssignmentAlarms
      */
+    @JvmOverloads
     @JvmStatic
-    fun setAssignmentAlarmTime(context: Context, time: LocalTime) {
-        Log.d(LOG_TAG, "Setting the alarm notification time to $time")
+    fun setAssignmentAlarms(context: Context,
+                            time: LocalTime = PrefUtils.getAssignmentNotificationTime(context)) {
+        Log.i(LOG_TAG, "Setting the alarm notification time to $time...")
 
         // Cancel the current time
         cancelAssignmentAlarms(context)
@@ -140,6 +142,8 @@ object NotificationUtils {
 
         // Remind every day at the specified time
         val reminderStartTime = LocalDateTime.of(LocalDate.now(), time)
+
+        Log.i(LOG_TAG, "Setting new assignment repeating alarms")
 
         AlarmReceiver().setRepeatingAlarm(
                 context,
@@ -159,10 +163,12 @@ object NotificationUtils {
     /**
      * Cancels assignment alarms/notifications (both incomplete and overdue notifications).
      *
-     * @see setAssignmentAlarmTime
+     * @see setAssignmentAlarms
      */
     @JvmStatic
     fun cancelAssignmentAlarms(context: Context) {
+        Log.i(LOG_TAG, "Cancelling assignment alarms")
+
         AlarmReceiver().cancelAlarm(
                 context,
                 AlarmReceiver.Type.ASSIGNMENT,

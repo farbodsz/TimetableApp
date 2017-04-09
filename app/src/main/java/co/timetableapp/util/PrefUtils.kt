@@ -52,6 +52,15 @@ object PrefUtils {
     }
 
 
+    const val PREF_ENABLE_ASSIGNMENT_NOTIFICATIONS = "pref_enable_assignment_notifications"
+
+    @JvmStatic
+    fun getAssignmentNotificationsEnabled(context: Context): Boolean {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        return sp.getBoolean(PREF_ENABLE_ASSIGNMENT_NOTIFICATIONS, true)
+    }
+
+
     const val PREF_ASSIGNMENT_NOTIFICATION_TIME = "pref_assignment_notification_time"
 
     @JvmStatic
@@ -65,7 +74,16 @@ object PrefUtils {
     fun setAssignmentNotificationTime(context: Context, time: LocalTime) {
         val sp = PreferenceManager.getDefaultSharedPreferences(context)
         sp.edit().putString(PREF_ASSIGNMENT_NOTIFICATION_TIME, time.toString()).apply()
-        NotificationUtils.setAssignmentAlarmTime(context, time)
+        NotificationUtils.setAssignmentAlarms(context, time)
+    }
+
+
+    const val PREF_ENABLE_CLASS_NOTIFICATIONS = "pref_enable_class_notifications"
+
+    @JvmStatic
+    fun getClassNotificationsEnabled(context: Context): Boolean {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        return sp.getBoolean(PREF_ENABLE_CLASS_NOTIFICATIONS, true)
     }
 
 
@@ -84,6 +102,15 @@ object PrefUtils {
     fun getExamNotificationTime(context: Context): Int {
         val sp = PreferenceManager.getDefaultSharedPreferences(context)
         return sp.getString(PREF_EXAM_NOTIFICATION_TIME, "30").toInt()
+    }
+
+
+    const val PREF_ENABLE_EXAM_NOTIFICATIONS = "pref_enable_exam_notifications"
+
+    @JvmStatic
+    fun getExamNotificationsEnabled(context: Context): Boolean {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        return sp.getBoolean(PREF_ENABLE_EXAM_NOTIFICATIONS, true)
     }
 
 }
