@@ -208,7 +208,10 @@ class TodayFragment : Fragment() {
             assignmentText.visibility = View.GONE
         } else {
             assignmentText.visibility = View.VISIBLE
-            assignmentText.text = getString(R.string.class_card_assignment_text, numberDue)
+            assignmentText.text = resources.getQuantityString(
+                    R.plurals.class_card_assignment_text,
+                    numberDue,
+                    numberDue)
         }
     }
 
