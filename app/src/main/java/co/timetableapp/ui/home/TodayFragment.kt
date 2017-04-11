@@ -138,6 +138,7 @@ class TodayFragment : Fragment() {
                                 classTimes: ArrayList<ClassTime>) {
         if (classTimes.isEmpty()) {
             val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
+            (card.findViewById(R.id.placeholder_text) as TextView).setText(R.string.no_classes_today)
             container.addView(card)
             return
         }
