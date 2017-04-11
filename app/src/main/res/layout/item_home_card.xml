@@ -63,9 +63,10 @@
         <TextView
             android:id="@+id/assignment_text"
             tools:text="0 out of 1"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textAllCaps="true"
             android:textColor="?colorAccent"
+            android:fontFamily="sans-serif-condensed"
             android:background="@drawable/rounded_corner"
             android:layout_gravity="end"
             android:layout_width="wrap_content"

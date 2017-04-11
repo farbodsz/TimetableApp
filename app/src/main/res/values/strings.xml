@@ -35,7 +35,7 @@
 
     <string name="no_classes_today">No classes today!</string>
 
-    <string name="class_card_assignment_text">%1$d due</string>
+    <string name="class_card_assignment_text">%1$d task due</string>
 
     <plurals name="assignments_overdue_text">
         <item quantity="one">1 assignment overdue</item>
