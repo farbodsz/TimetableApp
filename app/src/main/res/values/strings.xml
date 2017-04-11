@@ -25,6 +25,7 @@
     <string name="title_activity_timetable_edit">Edit Timetable</string>
     <string name="title_activity_term_new">New Term</string>
     <string name="title_activity_term_edit">Edit Term</string>
+    <string name="title_other_notices">Other notices</string>
     
     <string name="title_license">License</string>
     <string name="title_licenses">Licenses</string>
@@ -40,6 +41,8 @@
     <string name="home_card_assignments_placeholder">No assignments due for the next 3 days!</string>
     <string name="home_card_exams_title">Upcoming exams</string>
     <string name="home_card_exams_action">View all exams</string>
+
+    <string name="class_card_assignment_text">%1$d due</string>
 
     <plurals name="assignments_overdue_text">
         <item quantity="one">1 assignment overdue</item>
