@@ -44,6 +44,19 @@ class TodayFragment : Fragment() {
 
     private var mSectionContainer: LinearLayout? = null
 
+    private val mAssignmentsToday: ArrayList<Assignment> by lazy {
+        val today = LocalDate.now()
+        val assignmentsToday = ArrayList<Assignment>()
+
+        AssignmentHandler(context).getItems(activity.application).forEach {
+            if (it.dueDate == today) {
+                assignmentsToday.add(it)
+            }
+        }
+
+        assignmentsToday
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.fragment_home_main, container, false)
@@ -67,10 +80,17 @@ class TodayFragment : Fragment() {
         mSectionContainer!!.addView(classesSection.view)
 
         val overdueAssignments = getOverdueAssignments()
-        if (overdueAssignments.isNotEmpty()) {
+        if (mAssignmentsToday.isNotEmpty() || overdueAssignments.isNotEmpty()) {
             val otherSection = SectionGroup.Builder(context, mSectionContainer!!)
                     .setTitle(R.string.title_other_notices)
                     .build()
+
+            if (mAssignmentsToday.isNotEmpty()) {
+                // After removing assignments due for all classes today, there may be additional
+                // assignments not for a class today, but nonetheless due today. These will be
+                // displayed here.
+                addAssignmentCards(otherSection.containerView, inflater, mAssignmentsToday)
+            }
 
             if (overdueAssignments.isNotEmpty()) {
                 addOverdueAssignmentsCard(otherSection.containerView, inflater, overdueAssignments)
@@ -143,8 +163,6 @@ class TodayFragment : Fragment() {
             return
         }
 
-        val assignmentsToday = getAssignmentsToday()
-
         for (classTime in classTimes.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
@@ -171,7 +189,7 @@ class TodayFragment : Fragment() {
                 (findViewById(R.id.subtitle) as TextView).text = classDetailBuilder.toString()
                 (findViewById(R.id.times) as TextView).text = classTimesText
 
-                setupAssignmentText(this, assignmentsToday, cls)
+                setupAssignmentText(this, cls)
 
                 setOnClickListener {
                     val intent = Intent(activity, ClassDetailActivity::class.java)
@@ -184,23 +202,18 @@ class TodayFragment : Fragment() {
         }
     }
 
-    private fun getAssignmentsToday(): ArrayList<Assignment> {
-        val today = LocalDate.now()
-        val assignmentsToday = ArrayList<Assignment>()
-
-        AssignmentHandler(context).getItems(activity.application).forEach {
-            if (it.dueDate == today) {
-                assignmentsToday.add(it)
-            }
-        }
-
-        return assignmentsToday
-    }
-
-    private fun setupAssignmentText(card: View, assignmentsToday: ArrayList<Assignment>,
-                                    cls: Class) {
+    private fun setupAssignmentText(card: View, cls: Class) {
         val assignmentText = card.findViewById(R.id.assignment_text) as TextView
-        val classAssignments = getAssignmentsForClass(assignmentsToday, cls)
+        val classAssignments = getAssignmentsForClass(mAssignmentsToday, cls)
+
+        /*
+         * To make filtering the list faster for next time, we'll remove the assignments for this
+         * class from the list.
+         *
+         * This is also helpful as we want to display other assignments due today on separate cards
+         * (i.e. assignments not related to a class today).
+         */
+        mAssignmentsToday.removeAll(classAssignments)
 
         val numberDue = classAssignments.size
 
@@ -271,6 +284,33 @@ class TodayFragment : Fragment() {
         }
 
         container.addView(card)
+    }
+
+    private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
+                                   assignments: ArrayList<Assignment>) {
+        for (assignment in assignments.sorted()) {
+            val card = inflater.inflate(R.layout.item_home_card_no_date, container, false)
+
+            val cls = Class.create(context, assignment.classId)!!
+            val subject = Subject.create(context, cls.subjectId)!!
+            val color = Color(subject.colorId)
+
+            with(card) {
+                findViewById(R.id.color).setBackgroundColor(
+                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+
+                (findViewById(R.id.title) as TextView).text = assignment.title
+                (findViewById(R.id.subtitle) as TextView).text = cls.makeName(subject)
+
+                setOnClickListener {
+                    val intent = Intent(activity, AssignmentDetailActivity::class.java)
+                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, assignment)
+                    startActivityForResult(intent, MainActivity.REQUEST_CODE_ITEM_DETAIL)
+                }
+            }
+
+            container.addView(card)
+        }
     }
 
     private fun addExamsCards(container: ViewGroup, inflater: LayoutInflater,
