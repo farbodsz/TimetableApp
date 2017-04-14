@@ -87,7 +87,7 @@ public class ScheduleActivity extends NavigationDrawerActivity {
 
         if (!timetable.isValidToday()) {
             View placeholder = UiUtils.makePlaceholderView(this,
-                    R.drawable.ic_today_black_24dp, R.string.home_card_classes_placeholder);
+                    R.drawable.ic_today_black_24dp, R.string.no_classes_today);
             mPagerAdapter.addViewWithTitle(
                     placeholder, getString(R.string.title_activity_schedule));
             return;
@@ -129,7 +129,7 @@ public class ScheduleActivity extends NavigationDrawerActivity {
 
                 if (classTimes.isEmpty()) {
                     View placeholder = UiUtils.makePlaceholderView(this,
-                            R.drawable.ic_today_black_24dp, R.string.home_card_classes_placeholder);
+                            R.drawable.ic_today_black_24dp, R.string.no_classes_today);
                     mPagerAdapter.addViewWithTitle(placeholder, tabTitle);
                     daysCount++;
                     continue;

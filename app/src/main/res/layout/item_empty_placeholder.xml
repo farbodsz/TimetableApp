@@ -9,6 +9,7 @@
     android:layout_height="96dp">
 
     <TextView
+        android:id="@+id/placeholder_text"
         android:text="@string/empty_placeholder_text"
         android:textSize="18sp"
         android:textStyle="italic"

@@ -27,21 +27,19 @@
     <string name="title_activity_timetable_edit">Edit Timetable</string>
     <string name="title_activity_term_new">New Term</string>
     <string name="title_activity_term_edit">Edit Term</string>
-
+    <string name="title_other_notices">Other notices</string>
     <string name="title_license">License</string>
     <string name="title_licenses">Licenses</string>
 
     <string name="tab_today">Today</string>
     <string name="tab_upcoming">Upcoming</string>
 
-    <string name="home_card_classes_title">Agenda</string>
-    <string name="home_card_classes_action">Open schedule</string>
-    <string name="home_card_classes_placeholder">No classes today!</string>
-    <string name="home_card_assignments_title">Assignments</string>
-    <string name="home_card_assignments_action">View all assignments</string>
-    <string name="home_card_assignments_placeholder">No assignments due for the next 3 days!</string>
-    <string name="home_card_exams_title">Upcoming exams</string>
-    <string name="home_card_exams_action">View all exams</string>
+    <string name="no_classes_today">No classes today!</string>
+
+    <plurals name="class_card_assignment_text">
+        <item quantity="one">%1$d task due</item>
+        <item quantity="other">%1$d tasks due</item>
+    </plurals>
 
     <plurals name="assignments_overdue_text">
         <item quantity="one">1 assignment overdue</item>
