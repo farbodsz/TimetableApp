@@ -23,7 +23,6 @@ import co.timetableapp.ui.components.SectionGroup
 import co.timetableapp.ui.events.EventEditActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
 import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
 /**
@@ -138,11 +137,10 @@ class UpcomingFragment : Fragment() {
      */
     private fun getUpcomingAssignments(): ArrayList<Assignment> {
         val upcomingAssignments = ArrayList<Assignment>()
-        val now = LocalDate.now()
-        val upperDate = now.plusWeeks(1)
+        val upperDate = LocalDate.now().plusWeeks(1)
 
         AssignmentHandler(context).getItems(activity.application).forEach {
-            if (it.dueDate.isAfter(now) && it.dueDate.isBefore(upperDate)) {
+            if (it.isUpcoming() && it.dueDate.isBefore(upperDate)) {
                 upcomingAssignments.add(it)
             }
         }
@@ -197,11 +195,10 @@ class UpcomingFragment : Fragment() {
 
     private fun getUpcomingEvents(): ArrayList<Event> {
         val upcomingEvents = ArrayList<Event>()
-        val now = LocalDateTime.now()
-        val upperDate = now.plusWeeks(1)
+        val upperDate = LocalDate.now().plusWeeks(1)
 
         EventHandler(context).getItems(activity.application).forEach {
-            if (it.startTime.isAfter(now) && it.startTime.isBefore(upperDate)) {
+            if (it.isUpcoming() && it.startTime.toLocalDate().isBefore(upperDate)) {
                 upcomingEvents.add(it)
             }
         }

@@ -21,7 +21,7 @@ import org.threeten.bp.LocalTime
  */
 class Event(override val id: Int, override val timetableId: Int, val title: String,
             val detail: String, val startTime: LocalDateTime,
-            val endTime: LocalDateTime) : TimetableItem, Parcelable, Comparable<Event> {
+            val endTime: LocalDateTime) : TimetableItem, DateItem, Comparable<Event> {
 
     companion object {
 
@@ -98,6 +98,8 @@ class Event(override val id: Int, override val timetableId: Int, val title: Stri
             source.readString(),
             source.readSerializable() as LocalDateTime,
             source.readSerializable() as LocalDateTime)
+
+    override fun isInPast() = startTime.isBefore(LocalDateTime.now())
 
     override fun compareTo(other: Event) = startTime.compareTo(other.startTime)
 

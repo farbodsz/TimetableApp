@@ -113,10 +113,9 @@ object NotificationUtils {
     fun addCurrentExamAlarms(context: Context, application: Application) {
         Log.i(LOG_TAG, "Adding exam alarms for the current timetable")
         ExamHandler(context).getItems(application).forEach { exam ->
-            val examInPastToday =
-                    exam.date.isEqual(LocalDate.now()) && exam.startTime.isAfter(LocalTime.now())
+            val examInPastToday = exam.date.isEqual(LocalDate.now()) && exam.isInPast()
 
-            if (exam.date.isAfter(LocalDate.now()) || examInPastToday) {
+            if (exam.isUpcoming() || examInPastToday) {
                 ExamHandler.addAlarmForExam(context, exam)
             }
         }
