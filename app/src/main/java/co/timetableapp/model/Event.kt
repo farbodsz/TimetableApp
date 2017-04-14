@@ -1,11 +1,11 @@
-package com.satsumasoftware.timetable.framework
+package co.timetableapp.model
 
 import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-import com.satsumasoftware.timetable.db.TimetableDbHelper
-import com.satsumasoftware.timetable.db.schema.EventsSchema
+import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.schema.EventsSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -68,7 +68,7 @@ class Event(override val id: Int, override val timetableId: Int, val title: Stri
                     arrayOf(eventId.toString()),
                     null, null, null)
             cursor.moveToFirst()
-            val event = Event.from(cursor)
+            val event = from(cursor)
             cursor.close()
             return event
         }

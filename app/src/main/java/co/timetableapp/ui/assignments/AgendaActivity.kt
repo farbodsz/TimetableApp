@@ -19,6 +19,7 @@ import android.view.Menu
 import android.view.MenuItem
 import co.timetableapp.R
 import co.timetableapp.ui.base.NavigationDrawerActivity
+import co.timetableapp.ui.events.EventsFragment
 import co.timetableapp.ui.exams.ExamsFragment
 
 /**
@@ -124,12 +125,13 @@ class AgendaActivity : NavigationDrawerActivity() {
 
     private inner class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        override fun getCount() = 2
+        override fun getCount() = 3
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> AssignmentsFragment()
                 1 -> ExamsFragment()
+                2 -> EventsFragment()
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
         }
@@ -138,6 +140,7 @@ class AgendaActivity : NavigationDrawerActivity() {
             val drawableRes = when (position) {
                 0 -> R.drawable.ic_homework_white_24dp
                 1 -> R.drawable.ic_assessment_white_24dp
+                2 -> R.drawable.ic_event_white_24dp
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
 

@@ -1,12 +1,12 @@
-package com.satsumasoftware.timetable.db.handler
+package co.timetableapp.data.handler
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import com.satsumasoftware.timetable.db.schema.EventsSchema
-import com.satsumasoftware.timetable.framework.Event
-import com.satsumasoftware.timetable.receiver.AlarmReceiver
-import com.satsumasoftware.timetable.util.DateUtils
+import co.timetableapp.data.schema.EventsSchema
+import co.timetableapp.model.Event
+import co.timetableapp.receiver.AlarmReceiver
+import co.timetableapp.util.DateUtils
 
 class EventHandler(context: Context) : TimetableItemHandler<Event>(context) {
 
@@ -17,6 +17,8 @@ class EventHandler(context: Context) : TimetableItemHandler<Event>(context) {
     override val timetableIdCol = EventsSchema.COL_TIMETABLE_ID
 
     override fun createFromCursor(cursor: Cursor) = Event.from(cursor)
+
+    override fun createFromId(id: Int) = Event.create(context, id)
 
     override fun propertiesAsContentValues(item: Event): ContentValues {
         val values = ContentValues()

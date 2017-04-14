@@ -35,7 +35,6 @@ import co.timetableapp.model.Event;
 import co.timetableapp.model.Exam;
 import co.timetableapp.model.Subject;
 import co.timetableapp.ui.assignments.AgendaActivity;
-import co.timetableapp.ui.events.EventsActivity;
 import co.timetableapp.ui.home.MainActivity;
 
 /**
@@ -194,13 +193,13 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 Event event = Event.create(context, id);
 
                 color = new Color(19);
-                intent = new Intent(context, EventsActivity.class); // TODO put EventsActivity in AgendaActivity
+                intent = new Intent(context, AgendaActivity.class);
 
                 contentTitle = event.getTitle();
                 contentText = event.getStartTime().toLocalTime() + " - " +
                         event.getEndTime().toLocalTime();
                 tickerText = event.getTitle() + " starting in 30 minutes";
-                drawableRes = R.drawable.ic_assessment_notification; // TODO add an event icon and use that
+                drawableRes = R.drawable.ic_event_notification;
                 // TODO create string resource for this depending on customizable reminder time
                 break;
 

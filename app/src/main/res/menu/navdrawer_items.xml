@@ -25,10 +25,6 @@
             android:id="@+id/navigation_item_subjects"
             android:title="@string/title_activity_subjects"
             android:icon="@drawable/ic_school_black_24dp" />
-        <item
-            android:id="@+id/navigation_item_events"
-            android:title="@string/title_activity_events"
-            android:icon="@drawable/ic_event_black_24dp" />
     </group>
 
     <group android:id="@+id/navigation_group_3" android:checkableBehavior="single">

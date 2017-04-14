@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.ui.adapter;
+package co.timetableapp.ui.events;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.framework.Color;
-import com.satsumasoftware.timetable.framework.Event;
-
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+
+import co.timetableapp.R;
+import co.timetableapp.model.Color;
+import co.timetableapp.model.Event;
 
 public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -98,7 +98,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return mEvents.get(position) == null ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM;
     }
 
-    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+    private class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         TextView mText;
 
@@ -108,7 +108,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mTitle, mDates, mTimes;
 

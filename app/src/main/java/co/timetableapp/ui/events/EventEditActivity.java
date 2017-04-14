@@ -1,64 +1,41 @@
-package com.satsumasoftware.timetable.ui;
+package co.timetableapp.ui.events;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.satsumasoftware.timetable.R;
-import com.satsumasoftware.timetable.TimetableApplication;
-import com.satsumasoftware.timetable.db.handler.EventHandler;
-import com.satsumasoftware.timetable.framework.Event;
-import com.satsumasoftware.timetable.framework.Exam;
-import com.satsumasoftware.timetable.framework.Timetable;
-import com.satsumasoftware.timetable.util.TextUtilsKt;
-import com.satsumasoftware.timetable.util.UiUtils;
-
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import co.timetableapp.R;
+import co.timetableapp.TimetableApplication;
+import co.timetableapp.data.handler.EventHandler;
+import co.timetableapp.model.Event;
+import co.timetableapp.model.Timetable;
+import co.timetableapp.ui.base.ItemEditActivity;
+import co.timetableapp.util.TextUtilsKt;
+
 /**
- * Invoked and displayed to the user for editing the details of an event.
+ * Allows the user to edit an {@link Event}
  *
- * Currently, it is also responsible for showing the details, since there is no activity dedicated
- * to merely displaying the details (like in {@link AssignmentDetailActivity}).
- *
- * It can also be called to create a new event. If so, there will be no intent extra data supplied
- * to this activity (i.e. {@link #EXTRA_EVENT} will be null).
- *
- * @see Exam
- * @see ExamsActivity
+ * @see EventsFragment
+ * @see ItemEditActivity
  */
-public class EventEditActivity extends AppCompatActivity {
+public class EventEditActivity extends ItemEditActivity<Event> {
 
-    /**
-     * The key for the {@link Event} passed through an intent extra.
-     *
-     * It should be null if we're creating a new exam.
-     */
-    static final String EXTRA_EVENT = "extra_event";
-
-    private Event mEvent;
-
-    private boolean mIsNew;
-
-    private EventHandler mEventHandler = new EventHandler(this);
+    private EventHandler mDataHandler = new EventHandler(this);
 
     private EditText mEditTextTitle;
     private EditText mEditTextDetail;
@@ -70,44 +47,25 @@ public class EventEditActivity extends AppCompatActivity {
     private TextView mStartTimeText, mEndTimeText;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_edit);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mEvent = extras.getParcelable(EXTRA_EVENT);
-        }
-        mIsNew = mEvent == null;
-
-        int titleResId = mIsNew ? R.string.title_activity_event_new :
-                R.string.title_activity_event_edit;
-        getSupportActionBar().setTitle(getResources().getString(titleResId));
-
-        toolbar.setNavigationIcon(UiUtils.tintDrawable(this, R.drawable.ic_close_black_24dp));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleCloseAction();
-            }
-        });
-
-        setupLayout();
+    protected int getLayoutResource() {
+        return R.layout.activity_event_edit;
     }
 
-    private void setupLayout() {
+    @Override
+    protected int getTitleRes(boolean isNewItem) {
+        return isNewItem ? R.string.title_activity_event_new : R.string.title_activity_event_edit;
+    }
+
+    @Override
+    protected void setupLayout() {
         mEditTextTitle = (EditText) findViewById(R.id.editText_title);
         if (!mIsNew) {
-            mEditTextTitle.setText(mEvent.getTitle());
+            mEditTextTitle.setText(mItem.getTitle());
         }
 
         mEditTextDetail = (EditText) findViewById(R.id.editText_detail);
         if (!mIsNew) {
-            mEditTextTitle.setText(mEvent.getTitle());
+            mEditTextTitle.setText(mItem.getTitle());
         }
 
         setupDateText();
@@ -119,7 +77,7 @@ public class EventEditActivity extends AppCompatActivity {
         mDateText = (TextView) findViewById(R.id.textView_date);
 
         if (!mIsNew) {
-            mEventDate = mEvent.getStartTime().toLocalDate();
+            mEventDate = mItem.getStartTime().toLocalDate();
             updateDateText();
         }
 
@@ -157,7 +115,7 @@ public class EventEditActivity extends AppCompatActivity {
         mStartTimeText = (TextView) findViewById(R.id.textView_start_time);
 
         if (!mIsNew) {
-            mStartTime = mEvent.getStartTime().toLocalTime();
+            mStartTime = mItem.getStartTime().toLocalTime();
             updateTimeTexts();
         }
 
@@ -186,7 +144,7 @@ public class EventEditActivity extends AppCompatActivity {
         mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
 
         if (!mIsNew) {
-            mEndTime = mEvent.getEndTime().toLocalTime();
+            mEndTime = mItem.getEndTime().toLocalTime();
             updateTimeTexts();
         }
 
@@ -224,45 +182,7 @@ public class EventEditActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item_edit, menu);
-        UiUtils.tintMenuIcons(this, menu, R.id.action_done);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mIsNew) {
-            menu.findItem(R.id.action_delete).setVisible(false);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                handleDoneAction();
-                break;
-            case R.id.action_delete:
-                handleDeleteAction();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        handleCloseAction();
-    }
-
-    private void handleCloseAction() {
-        setResult(Activity.RESULT_CANCELED);
-        supportFinishAfterTransition();
-    }
-
-    private void handleDoneAction() {
+    protected void handleDoneAction() {
         String newTitle = mEditTextTitle.getText().toString();
         newTitle = TextUtilsKt.title(newTitle);
 
@@ -286,12 +206,12 @@ public class EventEditActivity extends AppCompatActivity {
             return;
         }
 
-        int id = mIsNew ? mEventHandler.getHighestItemId() + 1 : mEvent.getId();
+        int id = mIsNew ? mDataHandler.getHighestItemId() + 1 : mItem.getId();
 
         Timetable timetable = ((TimetableApplication) getApplication()).getCurrentTimetable();
         assert timetable != null;
 
-        mEvent = new Event(
+        mItem = new Event(
                 id,
                 timetable.getId(),
                 newTitle,
@@ -300,9 +220,9 @@ public class EventEditActivity extends AppCompatActivity {
                 LocalDateTime.of(mEventDate, mEndTime));
 
         if (mIsNew) {
-            mEventHandler.addItem(mEvent);
+            mDataHandler.addItem(mItem);
         } else {
-            mEventHandler.replaceItem(mEvent.getId(), mEvent);
+            mDataHandler.replaceItem(mItem.getId(), mItem);
         }
 
         Intent intent = new Intent();
@@ -310,14 +230,15 @@ public class EventEditActivity extends AppCompatActivity {
         supportFinishAfterTransition();
     }
 
-    private void handleDeleteAction() {
+    @Override
+    protected void handleDeleteAction() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.delete_exam)
                 .setMessage(R.string.delete_confirmation)
                 .setPositiveButton(R.string.action_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mEventHandler.deleteItem(mEvent.getId());
+                        mDataHandler.deleteItem(mItem.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

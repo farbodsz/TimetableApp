@@ -1,4 +1,4 @@
-package com.satsumasoftware.timetable.db.schema
+package co.timetableapp.data.schema
 
 import android.provider.BaseColumns
 
@@ -29,7 +29,7 @@ object EventsSchema : BaseColumns {
     /**
      * An SQLite statement which creates the 'events' table upon execution.
 
-     * @see com.satsumasoftware.timetable.db.TimetableDbHelper
+     * @see co.timetableapp.data.TimetableDbHelper
      */
     internal const val SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
             BaseColumns._ID + INTEGER_TYPE + PRIMARY_KEY_AUTOINCREMENT + COMMA_SEP +

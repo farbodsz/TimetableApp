@@ -85,11 +85,6 @@
             android:theme="@style/Timetable" />
 
         <activity
-            android:name=".ui.events.EventsActivity"
-            android:label="@string/title_activity_events"
-            android:theme="@style/Timetable.TranslucentStatus" />
-
-        <activity
             android:name=".ui.events.EventEditActivity"
             android:theme="@style/Timetable"/>
 

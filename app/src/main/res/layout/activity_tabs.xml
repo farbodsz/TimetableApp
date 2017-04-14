@@ -63,6 +63,15 @@
                 style="@style/Widget.Timetable.Fab.Mini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_event"
+                android:src="@drawable/ic_fab_event_white"
+                android:tint="@color/mdu_grey_600"
+                app:fab_label="@string/title_activity_event_new"
+                style="@style/Widget.Timetable.Fab.Mini"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </com.github.clans.fab.FloatingActionMenu>
     </android.support.design.widget.CoordinatorLayout>
 
