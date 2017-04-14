@@ -1,11 +1,15 @@
 package co.timetableapp.data;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import org.threeten.bp.LocalDate;
+
+import java.util.ArrayList;
 
 import co.timetableapp.data.schema.AssignmentsSchema;
 import co.timetableapp.data.schema.ClassDetailsSchema;
@@ -22,7 +26,7 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
 
     private static TimetableDbHelper sInstance;
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     static final String DATABASE_NAME = "Timetable.db";
 
     private static final String LOG_TAG = "TimetableDbHelper";
@@ -92,6 +96,57 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
                         ClassesSchema.COL_END_DATE_YEAR + SqlHelperKt.INTEGER_TYPE +
                         " DEFAULT " + defaultDate.getYear());
+
+            case 3:
+                // Rename the corrupt database
+                String oldTableName = "classes_old";
+                db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " RENAME TO " + oldTableName);
+
+                // Go through the corrupt classes table and store rows into an ArrayList but
+                // ignoring rows with duplicate id values.
+                ArrayList<Integer> ids = new ArrayList<>();
+                ArrayList<Class> classes = new ArrayList<>();
+
+                Cursor cursor = getReadableDatabase().query(
+                        oldTableName, null, null, null, null, null, null);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    Class cls = Class.from(cursor);
+                    if (!ids.contains(cls.getId())) {
+                        ids.add(cls.getId());
+                        classes.add(cls);
+                    }
+                    cursor.moveToNext();
+                }
+                Log.d(LOG_TAG, "Keeping " + ids.size() + " out of " + cursor.getCount() + " rows");
+                cursor.close();
+
+                // Create the new table and insert the stored rows
+                db.execSQL(ClassesSchema.SQL_CREATE);
+                Log.d(LOG_TAG, "Created a new classes table: " + ClassesSchema.TABLE_NAME);
+
+                for (Class item : classes) {
+                    ContentValues values = new ContentValues();
+                    values.put(ClassesSchema._ID, item.getId());
+                    values.put(ClassesSchema.COL_TIMETABLE_ID, item.getTimetableId());
+                    values.put(ClassesSchema.COL_SUBJECT_ID, item.getSubjectId());
+                    values.put(ClassesSchema.COL_MODULE_NAME, item.getModuleName());
+                    values.put(ClassesSchema.COL_START_DATE_DAY_OF_MONTH,
+                            item.getStartDate().getDayOfMonth());
+                    values.put(ClassesSchema.COL_START_DATE_MONTH,
+                            item.getStartDate().getMonthValue());
+                    values.put(ClassesSchema.COL_START_DATE_YEAR, item.getStartDate().getYear());
+                    values.put(ClassesSchema.COL_END_DATE_DAY_OF_MONTH,
+                            item.getEndDate().getDayOfMonth());
+                    values.put(ClassesSchema.COL_END_DATE_MONTH, item.getEndDate().getMonthValue());
+                    values.put(ClassesSchema.COL_END_DATE_YEAR, item.getEndDate().getYear());
+
+                    db.insert(ClassesSchema.TABLE_NAME, null, values);
+                    Log.d(LOG_TAG, "Inserted class of id " + item.getId() + " to the new table");
+                }
+
+                db.execSQL("DROP TABLE " + oldTableName);
+                Log.d(LOG_TAG, "Deleted the corrupt classes table: " + oldTableName);
                 break;
 
             default:
