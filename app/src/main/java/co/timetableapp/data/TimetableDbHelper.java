@@ -107,8 +107,7 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
                 ArrayList<Integer> ids = new ArrayList<>();
                 ArrayList<Class> classes = new ArrayList<>();
 
-                Cursor cursor = getReadableDatabase().query(
-                        oldTableName, null, null, null, null, null, null);
+                Cursor cursor = db.query(oldTableName, null, null, null, null, null, null);
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     Class cls = Class.from(cursor);
