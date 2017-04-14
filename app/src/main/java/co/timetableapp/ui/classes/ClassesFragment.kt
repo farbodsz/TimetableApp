@@ -1,9 +1,11 @@
 package co.timetableapp.ui.classes
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuInflater
@@ -105,13 +107,29 @@ class ClassesFragment : ItemListFragment<Class>() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
-            R.id.action_show_all -> {
-                item.isChecked = !mShowAll
-                mShowAll = !mShowAll
-                updateList()
+            R.id.action_filter -> {
+                showFilterDialog()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showFilterDialog() {
+        val multiChoiceListener = DialogInterface.OnMultiChoiceClickListener { _, which, isChecked ->
+            when (which) {
+                0 -> mShowAll = isChecked
+                else -> throw UnsupportedOperationException("expected position: 0")
+            }
+        }
+
+        AlertDialog.Builder(activity)
+                .setTitle(R.string.action_filter)
+                .setMultiChoiceItems(
+                        R.array.filter_classes_options,
+                        booleanArrayOf(mShowAll),
+                        multiChoiceListener)
+                .setPositiveButton(R.string.action_filter, { _, _ -> updateList() })
+                .show()
     }
 
 }
