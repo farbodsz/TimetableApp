@@ -88,7 +88,7 @@ public abstract class ItemListFragment<T extends TimetableItem> extends Fragment
     @Override
     public void setupList() {
         assert mDataHandler != null;
-        mItems = mDataHandler.getItems(getActivity().getApplication());
+        mItems = fetchItems();
         sortList();
 
         mAdapter = setupAdapter();
