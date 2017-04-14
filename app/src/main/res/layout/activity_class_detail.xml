@@ -41,6 +41,7 @@
                 android:layout_height="wrap_content">
 
                 <FrameLayout
+                    android:id="@+id/viewGroup_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -58,9 +59,11 @@
                         android:layout_marginRight="@dimen/mdu_keyline_1" />
                 </FrameLayout>
 
-                <include layout="@layout/divider" />
+                <include layout="@layout/divider"
+                    android:id="@+id/divider_location" />
 
                 <FrameLayout
+                    android:id="@+id/viewGroup_teacher"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -78,7 +81,8 @@
                         android:layout_marginRight="@dimen/mdu_keyline_1" />
                 </FrameLayout>
 
-                <include layout="@layout/divider" />
+                <include layout="@layout/divider"
+                    android:id="@+id/divider_teacher" />
 
                 <FrameLayout
                     android:layout_width="match_parent"

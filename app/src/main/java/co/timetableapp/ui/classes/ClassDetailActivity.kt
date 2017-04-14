@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.Toolbar
+import android.view.View
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.ClassDetailHandler
@@ -61,14 +62,10 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
             allClassTimes.addAll(ClassTimeHandler.getClassTimesForDetail(this, classDetail.id))
         }
 
-        val locationText = findViewById(R.id.textView_location) as TextView
-        locationText.text = locationBuilder.toString().removeSuffix("\n")
-
-        val teacherText = findViewById(R.id.textView_teacher) as TextView
-        teacherText.text = teacherBuilder.toString().removeSuffix("\n")
-
-        val classTimesText = findViewById(R.id.textView_times) as TextView
-        classTimesText.text = produceClassTimesText(allClassTimes)
+        displayData(
+                locationBuilder.toString().removeSuffix("\n"),
+                teacherBuilder.toString().removeSuffix("\n"),
+                produceClassTimesText(allClassTimes))
     }
 
     private fun setupToolbar(subject: Subject) {
@@ -112,6 +109,34 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         }
 
         return stringBuilder.toString().removeSuffix("\n")
+    }
+
+    /**
+     * Sets the text on the TextViews for the class data.
+     * Appropriate parts of the UI will not be displayed (i.e. when there is no text for an item).
+     *
+     * @param locations text to be displayed for the class locations
+     * @param teachers text to be displayed for the teachers of the class
+     * @param classTimes text to be displayed for the class times
+     */
+    private fun displayData(locations: String, teachers: String, classTimes: String) {
+        val locationVisibility = if (locations.isEmpty()) View.GONE else View.VISIBLE
+        findViewById(R.id.viewGroup_location).visibility = locationVisibility
+        findViewById(R.id.divider_location).visibility = locationVisibility
+        if (locations.isNotEmpty()) {
+            (findViewById(R.id.textView_location) as TextView).text = locations
+        }
+
+        val teacherVisibility = if (teachers.isEmpty()) View.GONE else View.VISIBLE
+        findViewById(R.id.viewGroup_teacher).visibility = teacherVisibility
+        findViewById(R.id.divider_teacher).visibility = teacherVisibility
+        if (teachers.isNotEmpty()) {
+            (findViewById(R.id.textView_teacher) as TextView).text = teachers
+        }
+
+        // No need to check if it's empty - all class details must have a class time
+        val textViewTimes = findViewById(R.id.textView_times) as TextView
+        textViewTimes.text = classTimes
     }
 
     override fun onMenuEditClick() {
