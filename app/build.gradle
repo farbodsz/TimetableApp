@@ -1,6 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+// Version code/name information
+def versionMajor = 1
+def versionMinor = 1
+def versionPatch = 2
+def versionBuild = 9
+def versionBuildNameSuffix = ""
+
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
@@ -9,8 +16,8 @@ android {
         applicationId "co.timetableapp"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 1129
-        versionName "1.1.2"
+        versionCode versionMajor * 1000 + versionMinor * 100 + versionPatch * 10 + versionBuild
+        versionName "$versionMajor.$versionMinor.$versionPatch" + versionBuildNameSuffix
 
         vectorDrawables.useSupportLibrary = true
     }
