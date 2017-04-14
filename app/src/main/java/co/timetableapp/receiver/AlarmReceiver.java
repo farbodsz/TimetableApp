@@ -34,7 +34,7 @@ import co.timetableapp.model.Color;
 import co.timetableapp.model.Event;
 import co.timetableapp.model.Exam;
 import co.timetableapp.model.Subject;
-import co.timetableapp.ui.assignments.AgendaActivity;
+import co.timetableapp.ui.agenda.AgendaActivity;
 import co.timetableapp.ui.home.MainActivity;
 
 /**

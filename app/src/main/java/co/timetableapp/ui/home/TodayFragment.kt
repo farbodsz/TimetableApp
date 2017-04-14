@@ -21,7 +21,7 @@ import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.ExamsSchema
 import co.timetableapp.model.*
-import co.timetableapp.ui.assignments.AgendaActivity
+import co.timetableapp.ui.agenda.AgendaActivity
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.classes.ClassDetailActivity

@@ -1,4 +1,4 @@
-package co.timetableapp.ui.events
+package co.timetableapp.ui.agenda
 
 import android.app.Activity
 import android.content.Intent
@@ -8,9 +8,10 @@ import android.support.v7.widget.RecyclerView
 import co.timetableapp.R
 import co.timetableapp.data.handler.EventHandler
 import co.timetableapp.model.Event
-import co.timetableapp.ui.assignments.AgendaActivity
 import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.ui.base.ItemListFragment
+import co.timetableapp.ui.events.EventEditActivity
+import co.timetableapp.ui.events.EventsAdapter
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
 import com.github.clans.fab.FloatingActionMenu

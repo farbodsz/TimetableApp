@@ -1,4 +1,4 @@
-package co.timetableapp.ui.assignments
+package co.timetableapp.ui.agenda
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -19,11 +19,13 @@ import android.view.Menu
 import android.view.MenuItem
 import co.timetableapp.R
 import co.timetableapp.ui.base.NavigationDrawerActivity
-import co.timetableapp.ui.events.EventsFragment
-import co.timetableapp.ui.exams.ExamsFragment
 
 /**
  * An activity for displaying the user's agenda - upcoming assignments, exams, etc.
+ *
+ * @see AssignmentsFragment
+ * @see ExamsFragment
+ * @see EventsFragment
  */
 class AgendaActivity : NavigationDrawerActivity() {
 

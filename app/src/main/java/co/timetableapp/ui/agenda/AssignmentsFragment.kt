@@ -1,4 +1,4 @@
-package co.timetableapp.ui.assignments
+package co.timetableapp.ui.agenda
 
 import android.app.Activity
 import android.content.Intent
@@ -17,8 +17,10 @@ import android.view.ViewGroup
 import co.timetableapp.R
 import co.timetableapp.data.handler.AssignmentHandler
 import co.timetableapp.model.Assignment
-import co.timetableapp.ui.assignments.AssignmentsFragment.Companion.DISPLAY_ALL_UPCOMING
-import co.timetableapp.ui.assignments.AssignmentsFragment.Companion.DISPLAY_TODO
+import co.timetableapp.ui.agenda.AssignmentsFragment.Companion.DISPLAY_ALL_UPCOMING
+import co.timetableapp.ui.agenda.AssignmentsFragment.Companion.DISPLAY_TODO
+import co.timetableapp.ui.assignments.AssignmentDetailActivity
+import co.timetableapp.ui.assignments.AssignmentsAdapter
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
@@ -37,7 +39,7 @@ import java.util.*
  * @see Assignment
  * @see AgendaActivity
  * @see AssignmentDetailActivity
- * @see AssignmentEditActivity
+ * @see co.timetableapp.ui.assignments.AssignmentEditActivity
  */
 class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFilterChangeListener {
 

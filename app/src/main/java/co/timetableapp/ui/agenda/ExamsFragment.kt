@@ -1,4 +1,4 @@
-package co.timetableapp.ui.exams
+package co.timetableapp.ui.agenda
 
 import android.app.Activity
 import android.content.Intent
@@ -8,9 +8,11 @@ import android.support.v7.widget.RecyclerView
 import co.timetableapp.R
 import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.model.Exam
-import co.timetableapp.ui.assignments.AgendaActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
+import co.timetableapp.ui.exams.ExamDetailActivity
+import co.timetableapp.ui.exams.ExamEditActivity
+import co.timetableapp.ui.exams.ExamsAdapter
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
 import com.github.clans.fab.FloatingActionMenu

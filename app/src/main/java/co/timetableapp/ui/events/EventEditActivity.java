@@ -24,6 +24,7 @@ import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.handler.EventHandler;
 import co.timetableapp.model.Event;
 import co.timetableapp.model.Timetable;
+import co.timetableapp.ui.agenda.EventsFragment;
 import co.timetableapp.ui.base.ItemEditActivity;
 import co.timetableapp.util.TextUtilsKt;
 
