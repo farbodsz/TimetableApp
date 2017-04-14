@@ -14,7 +14,6 @@ import co.timetableapp.model.Class
 import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
-import co.timetableapp.ui.subjects.SubjectsActivity
 import co.timetableapp.util.UiUtils
 import java.util.*
 
@@ -102,14 +101,10 @@ class ClassesFragment : ItemListFragment<Class>() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater!!.inflate(R.menu.menu_classes, menu)
-        UiUtils.tintMenuIcons(activity, menu!!, R.id.action_manage_subjects)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
-            R.id.action_manage_subjects ->
-                startActivity(Intent(activity, SubjectsActivity::class.java))
-
             R.id.action_show_all -> {
                 item.isChecked = !mShowAll
                 mShowAll = !mShowAll
