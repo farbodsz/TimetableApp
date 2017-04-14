@@ -31,6 +31,7 @@ import co.timetableapp.model.Class;
 import co.timetableapp.model.ClassDetail;
 import co.timetableapp.model.ClassTime;
 import co.timetableapp.model.Color;
+import co.timetableapp.model.Event;
 import co.timetableapp.model.Exam;
 import co.timetableapp.model.Subject;
 import co.timetableapp.ui.assignments.AgendaActivity;
@@ -63,6 +64,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
      *
      * There is only one identifier because the user gets one (repeated) notification that shows
      * all assignments due the following day.
+     *
+     * @see #ASSIGNMENTS_OVERDUE_NOTIFICATION_ID
      */
     public static final int ASSIGNMENTS_NOTIFICATION_ID = 1;
 
@@ -71,22 +74,25 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
      *
      * There is only one identifier because the user gets one (repeated) notification that shows
      * all assignments that are overdue.
+     *
+     * @see #ASSIGNMENTS_NOTIFICATION_ID
      */
     public static final int ASSIGNMENTS_OVERDUE_NOTIFICATION_ID = 2;
 
     /**
      * Represents the different possible categories of notification in this app: notifications for
-     * a class, assignment (upcoming and overdue), or exam.
+     * a class, assignment (upcoming and overdue), exam, or event.
      *
-     * We use this since notifications are displayed differently for each of the three categories.
+     * We use this to display notifications differently for each of the categories.
      */
-    @IntDef({Type.CLASS, Type.ASSIGNMENT, Type.ASSIGNMENT_OVERDUE, Type.EXAM})
+    @IntDef({Type.CLASS, Type.ASSIGNMENT, Type.ASSIGNMENT_OVERDUE, Type.EXAM, Type.EVENT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {
         int CLASS = 1;
         int ASSIGNMENT = 2;
         int ASSIGNMENT_OVERDUE = 3;
         int EXAM = 4;
+        int EVENT = 5;
     }
 
     private AlarmManager mAlarmManager;
@@ -181,6 +187,20 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 contentText = makeExamText(exam);
                 tickerText = examSubject.getName() + " exam starting in 30 minutes";
                 drawableRes = R.drawable.ic_assessment_notification;
+                break;
+
+            case Type.EVENT:
+                Event event = Event.create(context, id);
+
+                color = new Color(19);
+                intent = new Intent(context, AgendaActivity.class);
+
+                contentTitle = event.getTitle();
+                contentText = event.getStartTime().toLocalTime() + " - " +
+                        event.getEndTime().toLocalTime();
+                tickerText = event.getTitle() + " starting in 30 minutes";
+                drawableRes = R.drawable.ic_event_notification;
+                // TODO create string resource for this depending on customizable reminder time
                 break;
 
             default:
