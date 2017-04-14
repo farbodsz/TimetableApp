@@ -29,6 +29,7 @@ class SettingsFragment : PreferenceFragment() {
         setupAssignmentNotificationPref()
         setupClassNotificationPref()
         setupExamNotificationPref()
+        setupEventNotificationPref()
 
         setupAboutPrefs()
     }
@@ -114,6 +115,16 @@ class SettingsFragment : PreferenceFragment() {
             }
             true
         }
+
+        val eventSwitch = findPreference(PrefUtils.PREF_ENABLE_EVENT_NOTIFICATIONS)
+        eventSwitch.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue == false) {
+                NotificationUtils.cancelEventAlarms(activity)
+            } else {
+                NotificationUtils.addCurrentEventAlarms(activity, activity.application)
+            }
+            true
+        }
     }
 
     private fun setupClassNotificationPref() {
@@ -148,6 +159,24 @@ class SettingsFragment : PreferenceFragment() {
             val minsBefore = newValue as String
             updateSummaryText(minsBefore.toInt())
             NotificationUtils.refreshExamAlarms(activity, activity.application)
+            true
+        }
+    }
+
+    private fun setupEventNotificationPref() {
+        val eventNotificationPref = findPreference(PrefUtils.PREF_EVENT_NOTIFICATION_TIME)
+
+        fun updateSummaryText(minsBefore: Int) {
+            eventNotificationPref.summary =
+                    getString(R.string.pref_eventNotificationTime_summary, minsBefore)
+        }
+
+        updateSummaryText(PrefUtils.getEventNotificationTime(activity))
+
+        eventNotificationPref.setOnPreferenceChangeListener { _, newValue ->
+            val minsBefore = newValue as String
+            updateSummaryText(minsBefore.toInt())
+            NotificationUtils.refreshEventAlarms(activity, activity.application)
             true
         }
     }

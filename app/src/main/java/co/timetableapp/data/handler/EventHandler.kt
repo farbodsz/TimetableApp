@@ -7,6 +7,7 @@ import co.timetableapp.data.schema.EventsSchema
 import co.timetableapp.model.Event
 import co.timetableapp.receiver.AlarmReceiver
 import co.timetableapp.util.DateUtils
+import co.timetableapp.util.PrefUtils
 
 class EventHandler(context: Context) : TimetableItemHandler<Event>(context) {
 
@@ -43,7 +44,7 @@ class EventHandler(context: Context) : TimetableItemHandler<Event>(context) {
 
     override fun addItem(item: Event) {
         super.addItem(item)
-        addAlarmForEvent(item)
+        addAlarmForEvent(context, item)
     }
 
     override fun deleteItem(itemId: Int) {
@@ -51,12 +52,17 @@ class EventHandler(context: Context) : TimetableItemHandler<Event>(context) {
         AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.EVENT, itemId)
     }
 
-    private fun addAlarmForEvent(event: Event) {
-        val remindTime = event.startTime.minusMinutes(30) // TODO make this customizable
-        AlarmReceiver().setAlarm(context,
-                AlarmReceiver.Type.EVENT,
-                DateUtils.asCalendar(remindTime),
-                event.id)
+    companion object {
+        @JvmStatic
+        fun addAlarmForEvent(context: Context, event: Event) {
+            val minsBefore = PrefUtils.getEventNotificationTime(context).toLong()
+            val remindTime = event.startTime.minusMinutes(minsBefore)
+
+            AlarmReceiver().setAlarm(context,
+                    AlarmReceiver.Type.EVENT,
+                    DateUtils.asCalendar(remindTime),
+                    event.id)
+        }
     }
 
 }

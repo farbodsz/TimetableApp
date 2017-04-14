@@ -41,6 +41,15 @@
         Be reminded of exams X minutes before they start.
     </string>
 
+    <string name="pref_eventNotificationToggle">Enable event notifications</string>
+    <string name="pref_eventNotificationTime">Events</string>
+    <string name="pref_eventNotificationTime_summary">
+        You\'ll receive event notifications %1$d minutes before they start
+    </string>
+    <string name="pref_eventNotificationTime_dialogMessage">
+        Be reminded of events X minutes before they start.
+    </string>
+
 
     <string name="prefCategory_about">About</string>
 

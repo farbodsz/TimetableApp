@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.handler.ClassTimeHandler
+import co.timetableapp.data.handler.EventHandler
 import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.receiver.AlarmReceiver
 import org.threeten.bp.LocalDate
@@ -177,6 +178,51 @@ object NotificationUtils {
                 context,
                 AlarmReceiver.Type.ASSIGNMENT_OVERDUE,
                 AlarmReceiver.ASSIGNMENTS_OVERDUE_NOTIFICATION_ID)
+    }
+
+    /**
+     * Cancels event alarms from all timetables and adds back alarms for the current timetable.
+     *
+     * @see cancelEventAlarms
+     * @see addCurrentEventAlarms
+     */
+    @JvmStatic
+    fun refreshEventAlarms(context: Context, application: Application) {
+        Log.i(LOG_TAG, "Refreshing event alarms...")
+
+        cancelEventAlarms(context)
+        addCurrentEventAlarms(context, application)
+    }
+
+    /**
+     * Cancels all event alarms (from all timetables).
+     *
+     * @see addCurrentEventAlarms
+     */
+    @JvmStatic
+    fun cancelEventAlarms(context: Context) {
+        Log.i(LOG_TAG, "Cancelling all event alarms")
+        EventHandler(context).getAllItems().forEach {
+            AlarmReceiver().cancelAlarm(context, AlarmReceiver.Type.EVENT, it.id)
+        }
+    }
+
+    /**
+     * Sets event alarms (only for those that belong to the current timetable).
+     *
+     * @see cancelEventAlarms
+     */
+    @JvmStatic
+    fun addCurrentEventAlarms(context: Context, application: Application) {
+        Log.i(LOG_TAG, "Adding event alarms for the current timetable")
+        EventHandler(context).getItems(application).forEach { event ->
+            val examInPastToday =
+                    event.startTime.toLocalDate().isEqual(LocalDate.now()) && event.isInPast()
+
+            if (event.isUpcoming() || examInPastToday) {
+                EventHandler.addAlarmForEvent(context, event)
+            }
+        }
     }
 
 }

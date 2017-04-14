@@ -57,6 +57,19 @@
             android:inputType="number"
             android:dialogMessage="@string/pref_examNotificationTime_dialogMessage"
             android:defaultValue="30" />
+
+        <SwitchPreference
+            android:key="pref_enable_event_notifications"
+            android:title="@string/pref_eventNotificationToggle"
+            android:defaultValue="true" />
+
+        <EditTextPreference
+            android:key="pref_event_notification_time"
+            android:title="@string/pref_eventNotificationTime"
+            android:summary="@string/pref_eventNotificationTime_summary"
+            android:inputType="number"
+            android:dialogMessage="@string/pref_eventNotificationTime_dialogMessage"
+            android:defaultValue="30" />
     </PreferenceCategory>
 
     <PreferenceCategory
