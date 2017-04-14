@@ -333,7 +333,7 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
         }
 
         if (mExamDate == null) {
-            Snackbar.make(findViewById(R.id.rootView), R.string.message_exam_date_required,
+            Snackbar.make(findViewById(R.id.rootView), R.string.message_date_required,
                     Snackbar.LENGTH_SHORT).show();
             return;
         }

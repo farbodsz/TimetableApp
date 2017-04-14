@@ -20,12 +20,15 @@
     <string name="title_activity_subjects">Manage subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
+    <string name="title_activity_events">Events</string>
+    <string name="title_activity_event_new">New Event</string>
+    <string name="title_activity_event_edit">Edit Event</string>
     <string name="title_activity_timetables">Manage timetables</string>
     <string name="title_activity_timetable_new">New Timetable</string>
     <string name="title_activity_timetable_edit">Edit Timetable</string>
     <string name="title_activity_term_new">New Term</string>
     <string name="title_activity_term_edit">Edit Term</string>
-    
+
     <string name="title_license">License</string>
     <string name="title_licenses">Licenses</string>
 
@@ -85,6 +88,7 @@
 
     <string name="property_days">Days</string>
     <string name="property_weeks">Weeks</string>
+    <string name="property_date">Date</string>
     <string name="property_start_time">Start Time</string>
     <string name="property_end_time">End Time</string>
     <string name="message_days_required">You need to choose at least one day</string>
@@ -122,7 +126,7 @@
     <string name="property_duration">Duration</string>
     <string name="property_seat">Seat</string>
     <string name="property_resit">Resit</string>
-    <string name="message_exam_date_required">You must choose an exam date</string>
+    <string name="message_date_required">You must choose a date</string>
     <string name="message_exam_time_required">You must enter an exam time</string>
     <string name="message_exam_duration_required">You must select an exam duration</string>
 
@@ -138,6 +142,7 @@
     <string name="delete_assignment">Delete assignment</string>
     <string name="delete_class">Delete class</string>
     <string name="delete_exam">Delete exam</string>
+    <string name="delete_event">Delete event</string>
     <string name="delete_subject">Delete subject</string>
     <string name="delete_timetable">Delete timetable</string>
 
@@ -248,6 +253,7 @@
         Make sure you have entered all required inputs before moving on.
     </string>
 
+    <!-- TODO simplify strings here and remove redundant ones -->
     <string name="placeholder_subjects">You haven\'t added any subjects yet</string>
     <string name="placeholder_classes">You haven\'t added any classes yet</string>
     <string name="placeholder_assignments_title">All done!</string>
@@ -259,6 +265,10 @@
     <string name="placeholder_exams_subtitle">You don\'t have any upcoming exams</string>
     <string name="placeholder_exams_past">No exams</string>
     <string name="placeholder_exams_past_subtitle">You haven\'t sat any exams yet</string>
+    <string name="placeholder_events">No events</string>
+    <string name="placeholder_events_subtitle">You don\'t have any upcoming events</string>
+    <string name="placeholder_events_past">No events</string>
+    <string name="placeholder_events_past_subtitle">You haven\'t attended any events yet</string>
 
     <string name="empty_placeholder_text">No content to display here</string>
 

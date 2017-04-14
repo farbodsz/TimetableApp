@@ -53,15 +53,15 @@
 
         <activity
             android:name=".ui.classes.ClassDetailActivity"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.classes.ClassEditActivity"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.classes.ClassTimeEditActivity"
-            android:theme="@style/Timetable.EditItem"/>
+            android:theme="@style/Timetable.EditItem" />
 
         <activity
             android:name=".ui.assignments.AgendaActivity"
@@ -70,11 +70,11 @@
 
         <activity
             android:name=".ui.assignments.AssignmentDetailActivity"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.assignments.AssignmentEditActivity"
-            android:theme="@style/Timetable"/>
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.exams.ExamDetailActivity"
@@ -83,6 +83,15 @@
         <activity
             android:name=".ui.exams.ExamEditActivity"
             android:theme="@style/Timetable" />
+
+        <activity
+            android:name=".ui.events.EventsActivity"
+            android:label="@string/title_activity_events"
+            android:theme="@style/Timetable.TranslucentStatus" />
+
+        <activity
+            android:name=".ui.events.EventEditActivity"
+            android:theme="@style/Timetable"/>
 
         <activity
             android:name=".ui.subjects.SubjectsActivity"
@@ -104,7 +113,7 @@
 
         <activity
             android:name=".ui.timetables.TermEditActivity"
-            android:theme="@style/Timetable.EditItem"/>
+            android:theme="@style/Timetable.EditItem" />
 
         <activity
             android:name=".ui.settings.SettingsActivity"
