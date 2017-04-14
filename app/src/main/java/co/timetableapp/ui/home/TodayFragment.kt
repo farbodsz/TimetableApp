@@ -174,7 +174,9 @@ class TodayFragment : Fragment() {
                     classTime.startTime.toString() + "\n" + classTime.endTime.toString()
 
             val classDetailBuilder = StringBuilder()
-            classDetailBuilder.append(classDetail.formatLocationName())
+            classDetail.formatLocationName()?.let {
+                classDetailBuilder.append(it)
+            }
             if (classDetail.hasTeacher()) {
                 classDetailBuilder.append(" \u2022 ")
                         .append(classDetail.teacher)
