@@ -168,9 +168,13 @@
     <string name="action_undo">Undo</string>
     <string name="action_view_week">View week</string>
 
-    <string-array name="filter_checkable_options">
+    <string-array name="filter_agenda_options">
         <item>Show completed</item>
         <item>Show past</item>
+    </string-array>
+
+    <string-array name="filter_classes_options">
+        <item>Show all classes (including non-current)</item>
     </string-array>
 
     <string name="dialog_import_warning_title">Replace app data?</string>

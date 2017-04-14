@@ -89,7 +89,7 @@ class AgendaActivity : NavigationDrawerActivity() {
         AlertDialog.Builder(this)
                 .setTitle(R.string.action_filter)
                 .setMultiChoiceItems(
-                        R.array.filter_checkable_options,
+                        R.array.filter_agenda_options,
                         booleanArrayOf(mShowCompleted, mShowPast),
                         multiChoiceListener)
                 .setPositiveButton(R.string.action_filter, { _, _ ->
