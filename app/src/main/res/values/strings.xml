@@ -20,6 +20,7 @@
     <string name="title_activity_subjects">Manage subjects</string>
     <string name="title_activity_subject_new">New Subject</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
+    <string name="title_events">Events</string>
     <string name="title_activity_event_new">New Event</string>
     <string name="title_activity_event_edit">Edit Event</string>
     <string name="title_activity_timetables">Manage timetables</string>

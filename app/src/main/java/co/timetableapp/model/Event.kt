@@ -26,6 +26,11 @@ class Event(override val id: Int, override val timetableId: Int, val title: Stri
     companion object {
 
         /**
+         * The color to use when displaying events in lists.
+         */
+        @JvmField val DEFAULT_COLOR = Color(19) // blue-grey
+
+        /**
          * @see ReverseDateTimeComparator
          */
         @JvmField val COMPARATOR_REVERSE_DATE_TIME = ReverseDateTimeComparator()

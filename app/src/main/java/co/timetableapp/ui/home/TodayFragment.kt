@@ -16,6 +16,7 @@ import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.handler.AssignmentHandler
 import co.timetableapp.data.handler.ClassTimeHandler
+import co.timetableapp.data.handler.EventHandler
 import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
@@ -69,45 +70,21 @@ class TodayFragment : Fragment() {
 
     private fun setupLayout() {
         val timetableId = (activity.application as TimetableApplication).currentTimetable!!.id
-
         val inflater = LayoutInflater.from(context)
 
+        setupClassSection(inflater)
+        setupExamSection(inflater, timetableId)
+        setupEventSection(inflater)
+        setupAssignmentSection(inflater)
+    }
+
+    private fun setupClassSection(inflater: LayoutInflater) {
         val classesSection = SectionGroup.Builder(context, mSectionContainer!!)
                 .setTitle(R.string.title_activity_classes)
                 .build()
         addClassesCards(classesSection.containerView, inflater, getClassesToday())
 
         mSectionContainer!!.addView(classesSection.view)
-
-        val overdueAssignments = getOverdueAssignments()
-        if (mAssignmentsToday.isNotEmpty() || overdueAssignments.isNotEmpty()) {
-            val otherSection = SectionGroup.Builder(context, mSectionContainer!!)
-                    .setTitle(R.string.title_other_notices)
-                    .build()
-
-            if (mAssignmentsToday.isNotEmpty()) {
-                // After removing assignments due for all classes today, there may be additional
-                // assignments not for a class today, but nonetheless due today. These will be
-                // displayed here.
-                addAssignmentCards(otherSection.containerView, inflater, mAssignmentsToday)
-            }
-
-            if (overdueAssignments.isNotEmpty()) {
-                addOverdueAssignmentsCard(otherSection.containerView, inflater, overdueAssignments)
-            }
-
-            mSectionContainer!!.addView(otherSection.view)
-        }
-
-        val exams = getExamsToday(timetableId)
-        if (exams.isNotEmpty()) {
-            val examsSection = SectionGroup.Builder(context, mSectionContainer!!)
-                    .setTitle(R.string.title_exams)
-                    .build()
-            addExamsCards(examsSection.containerView, inflater, exams)
-
-            mSectionContainer!!.addView(examsSection.view)
-        }
     }
 
     private fun getClassesToday(): ArrayList<ClassTime> {
@@ -129,31 +106,6 @@ class TodayFragment : Fragment() {
         return classesToday
     }
 
-    private fun getOverdueAssignments(): ArrayList<Assignment> {
-        val overdueAssignments = ArrayList<Assignment>()
-
-        AssignmentHandler(context).getItems(activity.application).forEach {
-            if (it.isOverdue()) {
-                overdueAssignments.add(it)
-            }
-        }
-
-        return overdueAssignments
-    }
-
-    private fun getExamsToday(timetableId: Int): ArrayList<Exam> {
-        val today = LocalDate.now()
-
-        val query = Query.Builder()
-                .addFilter(Filters.equal(ExamsSchema.COL_TIMETABLE_ID, timetableId.toString()))
-                .addFilter(Filters.equal(ExamsSchema.COL_DATE_DAY_OF_MONTH, today.dayOfMonth.toString()))
-                .addFilter(Filters.equal(ExamsSchema.COL_DATE_MONTH, today.monthValue.toString()))
-                .addFilter(Filters.equal(ExamsSchema.COL_DATE_YEAR, today.year.toString()))
-                .build()
-
-        return ExamHandler(activity).getAllItems(query)
-    }
-
     private fun addClassesCards(container: ViewGroup, inflater: LayoutInflater,
                                 classTimes: ArrayList<ClassTime>) {
         if (classTimes.isEmpty()) {
@@ -171,8 +123,7 @@ class TodayFragment : Fragment() {
             val subject = Subject.create(context, cls.subjectId)!!
             val color = Color(subject.colorId)
 
-            val classTimesText =
-                    classTime.startTime.toString() + "\n" + classTime.endTime.toString()
+            val classTimesText = "${classTime.startTime}\n${classTime.endTime}"
 
             val classDetailBuilder = StringBuilder()
             classDetail.formatLocationName()?.let {
@@ -235,6 +186,95 @@ class TodayFragment : Fragment() {
         val classAssignments = ArrayList<Assignment>()
         assignments.filterTo(classAssignments) { it.classId == cls.id }
         return classAssignments
+    }
+
+    private fun setupExamSection(inflater: LayoutInflater, timetableId: Int) {
+        val exams = getExamsToday(timetableId)
+        if (exams.isNotEmpty()) {
+            val examsSection = SectionGroup.Builder(context, mSectionContainer!!)
+                    .setTitle(R.string.title_exams)
+                    .build()
+            addExamsCards(examsSection.containerView, inflater, exams)
+
+            mSectionContainer!!.addView(examsSection.view)
+        }
+    }
+
+    private fun getExamsToday(timetableId: Int): ArrayList<Exam> {
+        val today = LocalDate.now()
+
+        val query = Query.Builder()
+                .addFilter(Filters.equal(ExamsSchema.COL_TIMETABLE_ID, timetableId.toString()))
+                .addFilter(Filters.equal(ExamsSchema.COL_DATE_DAY_OF_MONTH, today.dayOfMonth.toString()))
+                .addFilter(Filters.equal(ExamsSchema.COL_DATE_MONTH, today.monthValue.toString()))
+                .addFilter(Filters.equal(ExamsSchema.COL_DATE_YEAR, today.year.toString()))
+                .build()
+
+        return ExamHandler(activity).getAllItems(query)
+    }
+
+    private fun addExamsCards(container: ViewGroup, inflater: LayoutInflater,
+                              exams: ArrayList<Exam>) {
+        for (exam in exams.sorted()) {
+            val card = inflater.inflate(R.layout.item_home_card, container, false)
+
+            val subject = Subject.create(context, exam.subjectId)!!
+            val color = Color(subject.colorId)
+
+            val endTime = exam.startTime.plusMinutes(exam.duration.toLong())
+            val timesText = "${exam.startTime}\n$endTime"
+
+            with(card) {
+                findViewById(R.id.color).setBackgroundColor(
+                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+
+                (findViewById(R.id.title) as TextView).text = exam.makeName(subject)
+
+                (findViewById(R.id.times) as TextView).text = timesText
+
+                setOnClickListener {
+                    val intent = Intent(activity, ExamDetailActivity::class.java)
+                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, exam)
+                    startActivity(intent)
+                }
+            }
+
+            container.addView(card)
+        }
+    }
+
+    private fun setupAssignmentSection(inflater: LayoutInflater) {
+        val overdueAssignments = getOverdueAssignments()
+        if (mAssignmentsToday.isNotEmpty() || overdueAssignments.isNotEmpty()) {
+            val otherSection = SectionGroup.Builder(context, mSectionContainer!!)
+                    .setTitle(R.string.title_other_notices)
+                    .build()
+
+            if (mAssignmentsToday.isNotEmpty()) {
+                // After removing assignments due for all classes today, there may be additional
+                // assignments not for a class today, but nonetheless due today. These will be
+                // displayed here.
+                addAssignmentCards(otherSection.containerView, inflater, mAssignmentsToday)
+            }
+
+            if (overdueAssignments.isNotEmpty()) {
+                addOverdueAssignmentsCard(otherSection.containerView, inflater, overdueAssignments)
+            }
+
+            mSectionContainer!!.addView(otherSection.view)
+        }
+    }
+
+    private fun getOverdueAssignments(): ArrayList<Assignment> {
+        val overdueAssignments = ArrayList<Assignment>()
+
+        AssignmentHandler(context).getItems(activity.application).forEach {
+            if (it.isOverdue()) {
+                overdueAssignments.add(it)
+            }
+        }
+
+        return overdueAssignments
     }
 
     private fun addOverdueAssignmentsCard(container: ViewGroup, inflater: LayoutInflater,
@@ -315,29 +355,43 @@ class TodayFragment : Fragment() {
         }
     }
 
-    private fun addExamsCards(container: ViewGroup, inflater: LayoutInflater,
-                              exams: ArrayList<Exam>) {
-        for (exam in exams.sorted()) {
+    private fun setupEventSection(inflater: LayoutInflater) {
+        val events = getEventsToday() as ArrayList<Event>
+        if (events.isNotEmpty()) {
+            val eventsSection = SectionGroup.Builder(context, mSectionContainer!!)
+                    .setTitle(R.string.title_events)
+                    .build()
+            addEventsCards(eventsSection.containerView, inflater, events)
+            mSectionContainer!!.addView(eventsSection.view)
+        }
+    }
+
+    private fun getEventsToday(): List<Event> {
+        val today = LocalDate.now()
+        return EventHandler(activity).getItems(activity.application).filter {
+            it.startTime.toLocalDate() == today
+        }
+    }
+
+    private fun addEventsCards(container: ViewGroup, inflater: LayoutInflater,
+                               events: ArrayList<Event>) {
+        for (event in events.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
-            val subject = Subject.create(context, exam.subjectId)!!
-            val color = Color(subject.colorId)
-
-            val endTime = exam.startTime.plusMinutes(exam.duration.toLong())
-            val timesText =
-                    exam.startTime.toString() + "\n" + endTime.toString()
+            val timesText = "${event.startTime.toLocalTime()}\n${event.endTime.toLocalTime()}"
 
             with(card) {
-                findViewById(R.id.color).setBackgroundColor(
-                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+                findViewById(R.id.color).setBackgroundColor(ContextCompat.getColor(
+                        context,
+                        Event.DEFAULT_COLOR.getPrimaryColorResId(context)))
 
-                (findViewById(R.id.title) as TextView).text = exam.makeName(subject)
+                (findViewById(R.id.title) as TextView).text = event.title
 
                 (findViewById(R.id.times) as TextView).text = timesText
 
                 setOnClickListener {
                     val intent = Intent(activity, ExamDetailActivity::class.java)
-                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, exam)
+                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, event)
                     startActivity(intent)
                 }
             }
