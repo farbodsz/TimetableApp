@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+apply plugin: 'org.jetbrains.dokka'
+
 // Version code/name information
 def versionMajor = 1
 def versionMinor = 1
@@ -53,4 +55,16 @@ dependencies {
     compile 'com.satsuware.lib:usefulviews:2.3.6'
     compile 'com.satsuware.lib:mdutils:1.2.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
+}
+
+dokka {
+    moduleName = 'app'
+    outputFormat = 'html'
+    outputDirectory = "$rootDir/doc"
+    linkMapping {
+        dir = "src/main/java"
+        url = "https://github.com/FarbodSalamat-Zadeh/TimetableApp/tree/master/app/src/main/java"
+        suffix = "#L"
+    }
+    sourceDirs = files('src/main/java')
 }
