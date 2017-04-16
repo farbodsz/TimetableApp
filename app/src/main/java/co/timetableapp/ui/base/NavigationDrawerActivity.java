@@ -123,7 +123,7 @@ public abstract class NavigationDrawerActivity extends AppCompatActivity {
             }
         };
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         mDrawerToggle.syncState();
     }

@@ -146,7 +146,7 @@ class AgendaActivity : NavigationDrawerActivity() {
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
 
-            val drawable = resources.getDrawable(drawableRes)
+            val drawable = ContextCompat.getDrawable(this@AgendaActivity, drawableRes)
             drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
 
             val spannableString = SpannableString(" ")
