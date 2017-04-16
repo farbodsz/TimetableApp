@@ -6,7 +6,7 @@ import android.provider.BaseColumns
  * The schema for the 'events' table, containing constants for the column names and an SQLite create
  * statement.
 
- * @see com.satsumasoftware.timetable.framework.Event
+ * @see co.timetableapp.model.Event
  */
 object EventsSchema : BaseColumns {
 

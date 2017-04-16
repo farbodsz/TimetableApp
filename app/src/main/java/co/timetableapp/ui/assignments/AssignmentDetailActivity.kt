@@ -22,7 +22,7 @@ import org.threeten.bp.format.DateTimeFormatter
  * Shows the details of an assignment.
  *
  * @see Assignment
- * @see AssignmentsFragment
+ * @see co.timetableapp.ui.agenda.AssignmentsFragment
  * @see AssignmentEditActivity
  * @see ItemDetailActivity
  */
