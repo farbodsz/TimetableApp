@@ -14,7 +14,7 @@ import android.widget.Toast
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.handler.TimetableHandler
-import java.util.*
+import co.timetableapp.model.BaseItem
 
 /**
  * A worker fragment to handle import and export actions. It displays warning dialogs, verifies the
@@ -231,7 +231,7 @@ class PortingFragment : Fragment() {
 
     private fun setNewCurrentTimetable() {
         val timetables = TimetableHandler(context).getAllItems()
-        Collections.sort(timetables, { o1, o2 -> o1.id - o2.id })
+        timetables.sortWith(BaseItem.ItemIdComparator())
 
         val newCurrent = timetables[0]
         (activity.application as TimetableApplication).setCurrentTimetable(context, newCurrent)

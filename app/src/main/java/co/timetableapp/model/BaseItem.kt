@@ -12,4 +12,15 @@ interface BaseItem : Parcelable {
      */
     val id: Int
 
+    /**
+     * Specifies a sorting order based on the integer identifiers of a [BaseItem].
+     * They would be sorted from lowest id to highest id.
+     *
+     * @see id
+     */
+    class ItemIdComparator : Comparator<BaseItem> {
+
+        override fun compare(o1: BaseItem?, o2: BaseItem?) = o1!!.id.compareTo(o2!!.id)
+    }
+
 }
