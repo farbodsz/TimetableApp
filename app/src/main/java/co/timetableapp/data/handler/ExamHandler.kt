@@ -44,7 +44,7 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
     override fun addItem(item: Exam) {
         super.addItem(item)
 
-        if (!item.isInPast()) {
+        if (item.isUpcoming()) {
             addAlarmForExam(context, item)
         }
     }
