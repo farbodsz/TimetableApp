@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import java.util.*
 
+@Suppress("unused")
 class DynamicPagerAdapter : PagerAdapter() {
 
     private val views = ArrayList<View>()
