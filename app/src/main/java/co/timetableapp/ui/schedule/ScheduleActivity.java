@@ -33,7 +33,6 @@ import co.timetableapp.model.ClassTime;
 import co.timetableapp.model.Timetable;
 import co.timetableapp.ui.base.NavigationDrawerActivity;
 import co.timetableapp.ui.classes.ClassDetailActivity;
-import co.timetableapp.ui.components.DividerItemDecoration;
 import co.timetableapp.ui.components.DynamicPagerAdapter;
 import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.UiUtils;
@@ -167,8 +166,6 @@ public class ScheduleActivity extends NavigationDrawerActivity {
                 RecyclerView recyclerView = new RecyclerView(this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setHasFixedSize(true);
-                recyclerView.addItemDecoration(new DividerItemDecoration(
-                        this, DividerItemDecoration.VERTICAL_LIST));
                 recyclerView.setAdapter(adapter);
 
                 mPagerAdapter.addViewWithTitle(recyclerView, tabTitle);

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
@@ -15,7 +16,6 @@ import co.timetableapp.data.PortingFragment
 import co.timetableapp.data.handler.TimetableHandler
 import co.timetableapp.model.Timetable
 import co.timetableapp.ui.base.ItemEditActivity
-import co.timetableapp.ui.components.DividerItemDecoration
 import co.timetableapp.util.UiUtils
 import java.util.*
 
@@ -89,8 +89,11 @@ class TimetablesFragment : Fragment() {
 
         val recyclerView = mRootView!!.findViewById(R.id.recyclerView) as RecyclerView
         with(recyclerView) {
-            layoutManager = LinearLayoutManager(activity)
-            addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL_LIST))
+            val linearLayoutManager = LinearLayoutManager(activity)
+            layoutManager = linearLayoutManager
+            val dividerDecoration = DividerItemDecoration(activity, linearLayoutManager.orientation)
+            addItemDecoration(dividerDecoration)
+
             setHasFixedSize(true)
             adapter = mAdapter
         }
