@@ -55,6 +55,10 @@ class EventHandler(context: Context) : TimetableItemHandler<Event>(context) {
     companion object {
         @JvmStatic
         fun addAlarmForEvent(context: Context, event: Event) {
+            if (!PrefUtils.getEventNotificationsEnabled(context)) {
+                return // don't set alarm if event notifications disabled
+            }
+
             val minsBefore = PrefUtils.getEventNotificationTime(context).toLong()
             val remindTime = event.startTime.minusMinutes(minsBefore)
 

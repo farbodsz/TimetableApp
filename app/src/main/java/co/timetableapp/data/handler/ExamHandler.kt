@@ -58,6 +58,10 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
     companion object {
         @JvmStatic
         fun addAlarmForExam(context: Context, exam: Exam) {
+            if (!PrefUtils.getExamNotificationsEnabled(context)) {
+                return // don't set alarm if exam notifications disabled
+            }
+
             val minsBefore = PrefUtils.getExamNotificationTime(context).toLong()
             val remindDate = exam.makeDateTimeObject().minusMinutes(minsBefore)
 
