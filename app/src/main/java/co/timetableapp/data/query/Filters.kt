@@ -24,8 +24,8 @@ object Filters {
                             vararg moreFilters: Filter): Filter {
         var sql: String = "${filter1.sqlStatement} $sqlKeyword ${filter2.sqlStatement}"
 
-        for (filter in moreFilters) {
-            sql = "$sql $sqlKeyword ${filter.sqlStatement}"
+        for ((sqlStatement) in moreFilters) {
+            sql = "$sql $sqlKeyword $sqlStatement"
         }
 
         return Filter(sql)

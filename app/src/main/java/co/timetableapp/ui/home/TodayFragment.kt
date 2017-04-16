@@ -115,15 +115,15 @@ class TodayFragment : Fragment() {
             return
         }
 
-        for (classTime in classTimes.sorted()) {
+        for ((_, _, classDetailId, _, _, startTime, endTime) in classTimes.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
-            val classDetail = ClassDetail.create(context, classTime.classDetailId)
+            val classDetail = ClassDetail.create(context, classDetailId)
             val cls = Class.create(context, classDetail.classId)!!
             val subject = Subject.create(context, cls.subjectId)!!
             val color = Color(subject.colorId)
 
-            val classTimesText = "${classTime.startTime}\n${classTime.endTime}"
+            val classTimesText = "$startTime\n$endTime"
 
             val classDetailBuilder = StringBuilder()
             classDetail.formatLocationName()?.let {
