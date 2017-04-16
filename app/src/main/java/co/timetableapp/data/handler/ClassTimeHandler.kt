@@ -68,6 +68,11 @@ class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(conte
         @JvmStatic
         fun addAlarmsForClassTime(context: Context, application: Application,
                                   classTime: ClassTime) {
+            // Don't add an alarm if the user has disabled them
+            if (!PrefUtils.getClassNotificationsEnabled(context)) {
+                return
+            }
+
             // First, try to find a suitable start date for the alarms
 
             var possibleDate = if (classTime.day != LocalDate.now().dayOfWeek ||
