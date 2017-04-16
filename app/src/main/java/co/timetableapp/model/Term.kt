@@ -20,8 +20,13 @@ import org.threeten.bp.LocalDate
  * @property startDate the start date of this term
  * @property endDate the end date of this term
  */
-class Term(override val id: Int, override val timetableId: Int, val name: String,
-           val startDate: LocalDate, val endDate: LocalDate) : TimetableItem, Comparable<Term> {
+data class Term(
+        override val id: Int,
+        override val timetableId: Int,
+        val name: String,
+        val startDate: LocalDate,
+        val endDate: LocalDate
+) : TimetableItem, Comparable<Term> {
 
     init {
         if (startDate.isAfter(endDate)) {

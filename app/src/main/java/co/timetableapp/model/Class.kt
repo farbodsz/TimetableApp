@@ -20,9 +20,14 @@ import org.threeten.bp.LocalDate
  * @property startDate the class' start date (optional)
  * @property endDate the class' end date (optional)
  */
-class Class(override val id: Int, override val timetableId: Int, val subjectId: Int,
-            val moduleName: String, val startDate: LocalDate,
-            val endDate: LocalDate) : TimetableItem {
+data class Class(
+        override val id: Int,
+        override val timetableId: Int,
+        val subjectId: Int,
+        val moduleName: String,
+        val startDate: LocalDate,
+        val endDate: LocalDate
+) : TimetableItem {
 
     init {
         if (hasStartEndDates() && startDate.isAfter(endDate)) {

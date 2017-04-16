@@ -14,8 +14,13 @@ import co.timetableapp.data.schema.SubjectsSchema
  * @property abbreviation an optional abbreviation for the subject (e.g. Ma, CS, Mus)
  * @property colorId the identifier of the [Color] used when displaying this subject
  */
-class Subject(override val id: Int, override val timetableId: Int, var name: String,
-              var abbreviation: String, var colorId: Int) : TimetableItem, Comparable<Subject> {
+data class Subject(
+        override val id: Int,
+        override val timetableId: Int,
+        var name: String,
+        var abbreviation: String,
+        var colorId: Int
+) : TimetableItem, Comparable<Subject> {
 
     companion object {
 

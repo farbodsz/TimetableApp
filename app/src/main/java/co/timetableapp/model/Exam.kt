@@ -22,10 +22,18 @@ import org.threeten.bp.LocalTime
  * @property room an optional string value denoting the room the candidate would be in for this exam
  * @property resit a boolean value indicating whether or not the exam is a resit
  */
-class Exam(override val id: Int, override val timetableId: Int, val subjectId: Int,
-           val moduleName: String, val date: LocalDate, val startTime: LocalTime, val duration: Int,
-           val seat: String, val room: String,
-           val resit: Boolean) : TimetableItem, DateItem, Comparable<Exam> {
+data class Exam(
+        override val id: Int,
+        override val timetableId: Int,
+        val subjectId: Int,
+        val moduleName: String,
+        val date: LocalDate,
+        val startTime: LocalTime,
+        val duration: Int,
+        val seat: String,
+        val room: String,
+        val resit: Boolean
+) : TimetableItem, DateItem, Comparable<Exam> {
 
     companion object {
 

@@ -12,7 +12,7 @@ import android.support.annotation.ColorRes
  *
  * @property id An identifier used to represent one of 19 material design colors.
  */
-class Color(val id: Int) {
+data class Color(val id: Int) {
 
     // TODO sealed classes?
 

@@ -19,9 +19,14 @@ import org.threeten.bp.LocalTime
  * @property startTime the starting time and date
  * @property endTime the ending time and date
  */
-class Event(override val id: Int, override val timetableId: Int, val title: String,
-            val detail: String, val startTime: LocalDateTime,
-            val endTime: LocalDateTime) : TimetableItem, DateItem, Comparable<Event> {
+data class Event(
+        override val id: Int,
+        override val timetableId: Int,
+        val title: String,
+        val detail: String,
+        val startTime: LocalDateTime,
+        val endTime: LocalDateTime
+) : TimetableItem, DateItem, Comparable<Event> {
 
     companion object {
 

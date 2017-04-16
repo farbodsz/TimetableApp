@@ -27,8 +27,13 @@ import org.threeten.bp.format.DateTimeFormatter
  * @property startDate the first day this timetable is applicable for
  * @property endDate the last day this timetable is applicable for
  */
-class Timetable(override val id: Int, val name: String, val startDate: LocalDate,
-                val endDate: LocalDate, val weekRotations: Int) : BaseItem, Comparable<Timetable> {
+data class Timetable(
+        override val id: Int,
+        val name: String,
+        val startDate: LocalDate,
+        val endDate: LocalDate,
+        val weekRotations: Int
+) : BaseItem, Comparable<Timetable> {
 
     init {
         if (startDate.isAfter(endDate)) {

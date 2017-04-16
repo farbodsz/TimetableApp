@@ -18,9 +18,15 @@ import org.threeten.bp.LocalDate
  * @property completionProgress an integer from 0-100 (like a percentage) indicating how complete
  *      the assignment is (100 indicating fully complete)
  */
-class Assignment(override val id: Int, override val timetableId: Int, val classId: Int,
-                 val title: String, val detail: String, val dueDate: LocalDate,
-                 var completionProgress: Int) : DateItem, TimetableItem, Comparable<Assignment> {
+data class Assignment(
+        override val id: Int,
+        override val timetableId: Int,
+        val classId: Int,
+        val title: String,
+        val detail: String,
+        val dueDate: LocalDate,
+        var completionProgress: Int
+) : TimetableItem, DateItem, Comparable<Assignment> {
 
     init {
         if (completionProgress !in 0..100) {

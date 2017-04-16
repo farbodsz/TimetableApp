@@ -33,9 +33,15 @@ import org.threeten.bp.LocalTime
  * @property startTime a start time of the class
  * @property endTime an end time of the class
  */
-class ClassTime(override val id: Int, override val timetableId: Int, val classDetailId: Int,
-                val day: DayOfWeek, val weekNumber: Int, val startTime: LocalTime,
-                val endTime: LocalTime) : TimetableItem, Comparable<ClassTime> {
+data class ClassTime(
+        override val id: Int,
+        override val timetableId: Int,
+        val classDetailId: Int,
+        val day: DayOfWeek,
+        val weekNumber: Int,
+        val startTime: LocalTime,
+        val endTime: LocalTime
+) : TimetableItem, Comparable<ClassTime> {
 
     init {
         if (startTime.isAfter(endTime)) {

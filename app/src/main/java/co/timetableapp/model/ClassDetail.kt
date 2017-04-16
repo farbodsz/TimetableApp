@@ -21,8 +21,13 @@ import co.timetableapp.data.schema.ClassDetailsSchema
  * @property building an optional name of the building where the class takes place
  * @property teacher an optional name of the teacher for the class
  */
-class ClassDetail(override val id: Int, val classId: Int, val room: String, val building: String,
-                  val teacher: String) : BaseItem {
+data class ClassDetail(
+        override val id: Int,
+        val classId: Int,
+        val room: String,
+        val building: String,
+        val teacher: String
+) : BaseItem {
 
     companion object {
 
