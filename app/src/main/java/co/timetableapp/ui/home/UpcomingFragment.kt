@@ -13,11 +13,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.AssignmentHandler
+import co.timetableapp.data.handler.EventHandler
 import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.model.*
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.ItemDetailActivity
+import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.ui.components.SectionGroup
+import co.timetableapp.ui.events.EventEditActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
@@ -51,12 +54,12 @@ class UpcomingFragment : Fragment() {
     private fun setupLayout() {
         val inflater = LayoutInflater.from(context)
 
-        val assignmentSection = SectionGroup.Builder(context, mSectionContainer!!)
-                .setTitle(R.string.title_assignments)
-                .build()
-        addAssignmentCards(assignmentSection.containerView, inflater, getUpcomingAssignments())
-        mSectionContainer!!.addView(assignmentSection.view)
+        setupExamSection(inflater)
+        setupAssignmentSection(inflater)
+        setupEventSection(inflater)
+    }
 
+    private fun setupExamSection(inflater: LayoutInflater) {
         val exams = getUpcomingExams()
         if (exams.isNotEmpty()) {
             val examsSection = SectionGroup.Builder(context, mSectionContainer!!)
@@ -66,23 +69,6 @@ class UpcomingFragment : Fragment() {
 
             mSectionContainer!!.addView(examsSection.view)
         }
-    }
-
-    /**
-     * @return a list of assignments due between today's date and next week.
-     */
-    private fun getUpcomingAssignments(): ArrayList<Assignment> {
-        val upcomingAssignments = ArrayList<Assignment>()
-        val now = LocalDate.now()
-        val upperDate = now.plusWeeks(1)
-
-        AssignmentHandler(context).getItems(activity.application).forEach {
-            if (it.dueDate.isAfter(now) && it.dueDate.isBefore(upperDate)) {
-                upcomingAssignments.add(it)
-            }
-        }
-
-        return upcomingAssignments
     }
 
     /**
@@ -102,8 +88,68 @@ class UpcomingFragment : Fragment() {
         return upcomingExams
     }
 
+    private fun addExamCards(container: ViewGroup, inflater: LayoutInflater,
+                             exams: ArrayList<Exam>) {
+        if (exams.isEmpty()) {
+            val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
+            container.addView(card)
+            return
+        }
+
+        for (exam in exams.sorted()) {
+            val card = inflater.inflate(R.layout.item_home_card, container, false)
+
+            val subject = Subject.create(context, exam.subjectId)!!
+            val color = Color(subject.colorId)
+
+            val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
+            val datesText = exam.makeDateTimeObject().format(formatter).toUpperCase()
+
+            with(card) {
+                findViewById(R.id.color).setBackgroundColor(
+                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+
+                (findViewById(R.id.title) as TextView).text = exam.makeName(subject)
+                (findViewById(R.id.subtitle) as TextView).text = exam.formatLocationText()
+                (findViewById(R.id.times) as TextView).text = datesText
+
+                setOnClickListener {
+                    val intent = Intent(activity, ExamDetailActivity::class.java)
+                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, exam)
+                    startActivity(intent)
+                }
+            }
+
+            container.addView(card)
+        }
+    }
+
+    private fun setupAssignmentSection(inflater: LayoutInflater) {
+        val assignmentSection = SectionGroup.Builder(context, mSectionContainer!!)
+                .setTitle(R.string.title_assignments)
+                .build()
+        addAssignmentCards(assignmentSection.containerView, inflater, getUpcomingAssignments())
+        mSectionContainer!!.addView(assignmentSection.view)
+    }
+
+    /**
+     * @return a list of assignments due between today's date and next week.
+     */
+    private fun getUpcomingAssignments(): ArrayList<Assignment> {
+        val upcomingAssignments = ArrayList<Assignment>()
+        val upperDate = LocalDate.now().plusWeeks(1)
+
+        AssignmentHandler(context).getItems(activity.application).forEach {
+            if (it.isUpcoming() && it.dueDate.isBefore(upperDate)) {
+                upcomingAssignments.add(it)
+            }
+        }
+
+        return upcomingAssignments
+    }
+
     private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
-                                   assignments: ArrayList<Assignment>) {
+                                    assignments: ArrayList<Assignment>) {
         if (assignments.isEmpty()) {
             val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
             container.addView(card)
@@ -139,34 +185,50 @@ class UpcomingFragment : Fragment() {
         }
     }
 
-    private fun addExamCards(container: ViewGroup, inflater: LayoutInflater,
-                             exams: ArrayList<Exam>) {
-        if (exams.isEmpty()) {
-            val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
-            container.addView(card)
+    private fun setupEventSection(inflater: LayoutInflater) {
+        val assignmentSection = SectionGroup.Builder(context, mSectionContainer!!)
+                .setTitle(R.string.title_events)
+                .build()
+        addEventCards(assignmentSection.containerView, inflater, getUpcomingEvents())
+        mSectionContainer!!.addView(assignmentSection.view)
+    }
+
+    private fun getUpcomingEvents(): ArrayList<Event> {
+        val upcomingEvents = ArrayList<Event>()
+        val upperDate = LocalDate.now().plusWeeks(1)
+
+        EventHandler(context).getItems(activity.application).forEach {
+            if (it.isUpcoming() && it.startTime.toLocalDate().isBefore(upperDate)) {
+                upcomingEvents.add(it)
+            }
+        }
+
+        return upcomingEvents
+    }
+
+    private fun addEventCards(container: ViewGroup, inflater: LayoutInflater,
+                              events: ArrayList<Event>) {
+        if (events.isEmpty()) {
             return
         }
 
-        for (exam in exams.sorted()) {
+        for (event in events.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
-            val subject = Subject.create(context, exam.subjectId)!!
-            val color = Color(subject.colorId)
-
             val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
-            val datesText = exam.makeDateTimeObject().format(formatter).toUpperCase()
+            val datesText = event.startTime.format(formatter).toUpperCase()
 
             with(card) {
-                findViewById(R.id.color).setBackgroundColor(
-                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
+                findViewById(R.id.color).setBackgroundColor(ContextCompat.getColor(
+                        context,
+                        Event.DEFAULT_COLOR.getPrimaryColorResId(context)))
 
-                (findViewById(R.id.title) as TextView).text = exam.makeName(subject)
-                (findViewById(R.id.subtitle) as TextView).text = exam.formatLocationText()
+                (findViewById(R.id.title) as TextView).text = event.title
                 (findViewById(R.id.times) as TextView).text = datesText
 
                 setOnClickListener {
-                    val intent = Intent(activity, ExamDetailActivity::class.java)
-                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, exam)
+                    val intent = Intent(activity, EventEditActivity::class.java) // TODO use EventDetailActivity once added
+                    intent.putExtra(ItemEditActivity.EXTRA_ITEM, event) // TODO and then ItemDetailActivity here
                     startActivity(intent)
                 }
             }

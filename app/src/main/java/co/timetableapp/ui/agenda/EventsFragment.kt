@@ -79,14 +79,10 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
     }
 
     override fun sortList() {
-        Collections.sort(mItems) { e1, e2 ->
-            val dateTime1 = e1.startTime
-            val dateTime2 = e2.startTime
-            if (mShowPast) {
-                dateTime2.compareTo(dateTime1)
-            } else {
-                dateTime1.compareTo(dateTime2)
-            }
+        if (mShowPast) {
+            mItems!!.sortWith(Event.COMPARATOR_REVERSE_DATE_TIME)
+        } else {
+            mItems!!.sort()
         }
 
         val headers = ArrayList<String?>()

@@ -24,7 +24,8 @@ import org.threeten.bp.LocalTime
  */
 class Exam(override val id: Int, override val timetableId: Int, val subjectId: Int,
            val moduleName: String, val date: LocalDate, val startTime: LocalTime, val duration: Int,
-           val seat: String, val room: String, val resit: Boolean) : TimetableItem, Comparable<Exam> {
+           val seat: String, val room: String,
+           val resit: Boolean) : TimetableItem, DateItem, Comparable<Exam> {
 
     companion object {
 
@@ -106,7 +107,7 @@ class Exam(override val id: Int, override val timetableId: Int, val subjectId: I
 
     fun hasRoom() = room.trim().isNotEmpty()
 
-    fun isInPast() = makeDateTimeObject().isBefore(LocalDateTime.now())
+    override fun isInPast() = makeDateTimeObject().isBefore(LocalDateTime.now())
 
     /**
      * @return the displayed name for the exam, consisting of the subject name and exam module

@@ -21,9 +21,19 @@ import org.threeten.bp.LocalTime
  */
 class Event(override val id: Int, override val timetableId: Int, val title: String,
             val detail: String, val startTime: LocalDateTime,
-            val endTime: LocalDateTime) : TimetableItem, Parcelable {
+            val endTime: LocalDateTime) : TimetableItem, DateItem, Comparable<Event> {
 
     companion object {
+
+        /**
+         * The color to use when displaying events in lists.
+         */
+        @JvmField val DEFAULT_COLOR = Color(19) // blue-grey
+
+        /**
+         * @see ReverseDateTimeComparator
+         */
+        @JvmField val COMPARATOR_REVERSE_DATE_TIME = ReverseDateTimeComparator()
 
         /**
          * Constructs an Event using column values from the cursor provided
@@ -89,6 +99,10 @@ class Event(override val id: Int, override val timetableId: Int, val title: Stri
             source.readSerializable() as LocalDateTime,
             source.readSerializable() as LocalDateTime)
 
+    override fun isInPast() = startTime.isBefore(LocalDateTime.now())
+
+    override fun compareTo(other: Event) = startTime.compareTo(other.startTime)
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
@@ -98,6 +112,17 @@ class Event(override val id: Int, override val timetableId: Int, val title: Stri
         dest?.writeString(detail)
         dest?.writeSerializable(startTime)
         dest?.writeSerializable(endTime)
+    }
+
+    /**
+     * Defines a sorting order for events, first being sorted in reverse by date and time (so that
+     * when viewing past events, the most recent is shown first).
+     */
+    class ReverseDateTimeComparator : Comparator<Event> {
+
+        override fun compare(o1: Event?, o2: Event?): Int {
+            return o2!!.startTime.compareTo(o1!!.startTime)
+        }
     }
 
 }

@@ -13,7 +13,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
-import co.timetableapp.model.Color;
 import co.timetableapp.model.Event;
 
 public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -116,9 +115,10 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
             itemView.setOnClickListener(this);
 
-            // TODO: don't use hardcoded Color(19) - use Kotlin sealed class or constants
             itemView.findViewById(R.id.color).setBackgroundColor(
-                    ContextCompat.getColor(mContext, new Color(19).getPrimaryColorResId(mContext)));
+                    ContextCompat.getColor(
+                            mContext,
+                            Event.DEFAULT_COLOR.getPrimaryColorResId(mContext)));
 
             mTitle = (TextView) itemView.findViewById(R.id.text1);
             ((TextView) itemView.findViewById(R.id.text2)).setText("");

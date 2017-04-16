@@ -14,6 +14,8 @@ import android.support.annotation.ColorRes
  */
 class Color(val id: Int) {
 
+    // TODO sealed classes?
+
     val name: String
         get() = when(id) {
             1 -> "red"

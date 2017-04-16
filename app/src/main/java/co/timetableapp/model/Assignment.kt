@@ -20,7 +20,7 @@ import org.threeten.bp.LocalDate
  */
 class Assignment(override val id: Int, override val timetableId: Int, val classId: Int,
                  val title: String, val detail: String, val dueDate: LocalDate,
-                 var completionProgress: Int) : TimetableItem, Comparable<Assignment> {
+                 var completionProgress: Int) : DateItem, TimetableItem, Comparable<Assignment> {
 
     init {
         if (completionProgress !in 0..100) {
@@ -100,11 +100,9 @@ class Assignment(override val id: Int, override val timetableId: Int, val classI
 
     fun isOverdue() = !isComplete() && isInPast()
 
-    private fun isInPast() = dueDate.isBefore(LocalDate.now())
+    override fun isInPast() = dueDate.isBefore(LocalDate.now())
 
     fun isPastAndDone() = isInPast() && isComplete()
-
-    fun isUpcoming() = !isInPast()
 
     override fun compareTo(other: Assignment): Int {
         // Sorting order is due dates then titles
