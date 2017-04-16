@@ -13,11 +13,9 @@ import android.view.MenuItem
 import co.timetableapp.R
 import co.timetableapp.data.handler.ClassHandler
 import co.timetableapp.model.Class
-import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.UiUtils
-import java.util.*
 
 /**
  * A fragment for displaying a list of classes to the user.
@@ -73,13 +71,7 @@ class ClassesFragment : ItemListFragment<Class>() {
     override fun fetchItems() =
             (mDataHandler as ClassHandler).getCurrentClasses(activity.application, mShowAll)
 
-    override fun sortList() {
-        Collections.sort(mItems) { c1, c2 ->
-            val s1 = Subject.create(activity, c1.subjectId)!!
-            val s2 = Subject.create(activity, c2.subjectId)!!
-            s1.name.compareTo(s2.name)
-        }
-    }
+    override fun sortList() = mItems!!.sortWith(Class.NaturalSortComparator(activity))
 
     override fun getPlaceholderView() = UiUtils.makePlaceholderView(
             activity,
