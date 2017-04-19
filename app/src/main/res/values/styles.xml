@@ -43,6 +43,12 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
+    <style name="Widget.Timetable.Toolbar.Extended">
+        <item name="android:layout_marginLeft">@dimen/mdu_keyline_2_minus_16dp</item>
+        <item name="android:layout_marginRight">@dimen/mdu_keyline_1</item>
+        <item name="android:paddingBottom">@dimen/mdu_padding_normal</item>
+    </style>
+
     <style name="Widget.Timetable.Toolbar.Light">
         <item name="android:theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
