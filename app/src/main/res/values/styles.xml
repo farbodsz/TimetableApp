@@ -74,6 +74,15 @@
         <item name="android:contentDescription">@null</item>
     </style>
 
+    <style name="Widget.Timetable.EditText" />
+
+    <style name="Widget.Timetable.EditText.Item">
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:paddingTop">@dimen/mdu_padding_normal</item>
+        <item name="android:paddingBottom">@dimen/mdu_padding_normal</item>
+    </style>
+
     <style name="Widget.Timetable.TextView" />
 
     <style name="Widget.Timetable.TextView.Item">
