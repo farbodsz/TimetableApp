@@ -66,7 +66,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
 
         mEditTextDetail = (EditText) findViewById(R.id.editText_detail);
         if (!mIsNew) {
-            mEditTextTitle.setText(mItem.getTitle());
+            mEditTextDetail.setText(mItem.getDetail());
         }
 
         setupDateText();
