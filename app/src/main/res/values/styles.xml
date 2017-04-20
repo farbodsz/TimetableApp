@@ -106,4 +106,8 @@
         <item name="android:background">?selectableItemBackground</item>
     </style>
 
+    <style name="Widget.Timetable.LightAccent">
+        <item name="colorAccent">@color/mdu_text_white_secondary</item>
+    </style>
+
 </resources>

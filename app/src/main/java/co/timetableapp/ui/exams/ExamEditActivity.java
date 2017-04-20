@@ -175,7 +175,12 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
         mSubjectText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
 
         Color color = new Color(mSubject.getColorId());
-        UiUtils.setBarColors(color, this, mToolbar);
+        UiUtils.setBarColors(
+                color,
+                this,
+                mToolbar,
+                findViewById(R.id.appBarLayout),
+                findViewById(R.id.toolbar_container));
     }
 
     private void setupDateText() {
