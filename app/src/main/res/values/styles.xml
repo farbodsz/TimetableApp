@@ -46,6 +46,7 @@
     <style name="Widget.Timetable.Toolbar.Extended">
         <item name="android:layout_marginLeft">@dimen/mdu_keyline_2_minus_16dp</item>
         <item name="android:layout_marginRight">@dimen/mdu_keyline_1</item>
+        <item name="android:paddingTop">@dimen/mdu_padding_normal</item>
         <item name="android:paddingBottom">@dimen/mdu_padding_normal</item>
     </style>
 
