@@ -180,6 +180,9 @@
         <item>Show all classes (including non-current)</item>
     </string-array>
 
+    <string name="class_detail">Class detail</string>
+    <string name="view_all">View all</string>
+
     <string name="dialog_import_warning_title">Replace app data?</string>
     <string name="dialog_import_warning_message">
         Importing will result in all current app data being lost! The app will instead be loaded

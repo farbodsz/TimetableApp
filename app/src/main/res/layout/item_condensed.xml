@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/mdu_spacing_normal"
+    android:paddingBottom="@dimen/mdu_spacing_normal"
+    android:paddingLeft="@dimen/mdu_keyline_1"
+    android:paddingRight="@dimen/mdu_keyline_1">
+
+    <!-- TODO: include this -->
+    <include layout="@layout/item_color"
+        android:visibility="gone"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            tools:text="Name of item"
+            android:textColor="@color/mdu_text_black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            tools:text="Subject name or time"
+            android:textColor="@color/mdu_text_black_secondary"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dp" />
+    </LinearLayout>
+</FrameLayout>
