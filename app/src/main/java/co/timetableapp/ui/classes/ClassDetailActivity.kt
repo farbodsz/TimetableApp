@@ -2,7 +2,6 @@ package co.timetableapp.ui.classes
 
 import android.app.Activity
 import android.content.Intent
-import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.Toolbar
 import android.view.View
@@ -60,8 +59,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        val ctl = findViewById(R.id.collapsingToolbarLayout) as CollapsingToolbarLayout
-        ctl.title = mItem!!.makeName(subject)
+        supportActionBar!!.title = mItem!!.makeName(subject)
 
         val color = Color(subject.colorId)
         UiUtils.setBarColors(color, this, toolbar)
