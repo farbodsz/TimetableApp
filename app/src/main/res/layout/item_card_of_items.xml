@@ -17,12 +17,10 @@
             tools:text="@string/title_assignments"
             android:textColor="@color/mdu_black"
             android:textSize="16sp"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/card_padding" />
-
-        <include layout="@layout/divider"
-            android:id="@+id/divider_title" />
 
         <LinearLayout
             android:id="@+id/container"

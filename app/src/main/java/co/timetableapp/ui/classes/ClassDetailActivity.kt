@@ -3,6 +3,7 @@ package co.timetableapp.ui.classes
 import android.app.Activity
 import android.content.Intent
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.LinearLayout
@@ -35,6 +36,8 @@ import org.threeten.bp.format.DateTimeFormatter
  */
 class ClassDetailActivity : ItemDetailActivity<Class>() {
 
+    private var mColor: Color? = null
+
     override fun initializeDataHandler() = ClassHandler(this)
 
     override fun getLayoutResource() = R.layout.activity_class_detail
@@ -47,6 +50,10 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
     override fun setupLayout() {
         setupToolbar()
         setupClassDetailCard()
+
+        findViewById(R.id.main_card).setBackgroundColor(
+                ContextCompat.getColor(this, mColor!!.getLightAccentColorRes(this)))
+
         setupRelatedItemCards()
     }
 
@@ -61,8 +68,8 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
 
         supportActionBar!!.title = mItem!!.makeName(subject)
 
-        val color = Color(subject.colorId)
-        UiUtils.setBarColors(color, this, toolbar)
+        mColor = Color(subject.colorId)
+        UiUtils.setBarColors(mColor!!, this, toolbar)
     }
 
     /**
@@ -138,14 +145,12 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
     private fun setClassDetailTexts(locations: String, teachers: String, classTimes: String) {
         val locationVisibility = if (locations.isEmpty()) View.GONE else View.VISIBLE
         findViewById(R.id.viewGroup_location).visibility = locationVisibility
-        findViewById(R.id.divider_location).visibility = locationVisibility
         if (locations.isNotEmpty()) {
             (findViewById(R.id.textView_location) as TextView).text = locations
         }
 
         val teacherVisibility = if (teachers.isEmpty()) View.GONE else View.VISIBLE
         findViewById(R.id.viewGroup_teacher).visibility = teacherVisibility
-        findViewById(R.id.divider_teacher).visibility = teacherVisibility
         if (teachers.isNotEmpty()) {
             (findViewById(R.id.textView_teacher) as TextView).text = teachers
         }
@@ -165,6 +170,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         val assignmentsCard = CardOfItems.Builder(this, cardContainer)
                 .setTitle(R.string.title_assignments)
                 .setItems(createAssignmentItems())
+                .setItemsIconResource(R.drawable.ic_homework_black_24dp)
                 .setButtonProperties(R.string.view_all, View.OnClickListener {
                     startActivity(Intent(this@ClassDetailActivity, AgendaActivity::class.java))
                 })
@@ -175,6 +181,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         val examsCard = CardOfItems.Builder(this, cardContainer)
                 .setTitle(R.string.title_exams)
                 .setItems(createExamItems())
+                .setItemsIconResource(R.drawable.ic_assessment_black_24dp)
                 .setButtonProperties(R.string.view_all, View.OnClickListener {
                     startActivity(Intent(this@ClassDetailActivity, AgendaActivity::class.java))
                 })

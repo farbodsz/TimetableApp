@@ -11,20 +11,11 @@
     android:layout_marginRight="@dimen/content_lateral_padding">
 
     <LinearLayout
+        android:id="@+id/main_card"
         android:orientation="vertical"
+        tools:background="?colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/title"
-            android:text="@string/class_detail"
-            android:textColor="@color/mdu_black"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/card_padding" />
-
-        <include layout="@layout/divider" />
 
         <FrameLayout
             android:id="@+id/viewGroup_location"
@@ -32,21 +23,20 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:tint="@color/mdu_white"
                 app:srcCompat="@drawable/ic_room_black_24dp"
                 style="@style/Widget.Timetable.ItemIcon" />
 
             <TextView
                 android:id="@+id/textView_location"
                 tools:text="M002, Building A\nA120, Building X\nRoom 14"
+                android:textColor="@color/mdu_text_white"
                 style="@style/Widget.Timetable.TextView.Item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/mdu_keyline_2"
                 android:paddingRight="@dimen/mdu_keyline_1" />
         </FrameLayout>
-
-        <include layout="@layout/divider"
-            android:id="@+id/divider_location" />
 
         <FrameLayout
             android:id="@+id/viewGroup_teacher"
@@ -54,12 +44,14 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:tint="@color/mdu_white"
                 app:srcCompat="@drawable/ic_person_black_24dp"
                 style="@style/Widget.Timetable.ItemIcon" />
 
             <TextView
                 android:id="@+id/textView_teacher"
                 tools:text="Mr Bob\nMrs Smith"
+                android:textColor="@color/mdu_text_white"
                 style="@style/Widget.Timetable.TextView.Item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,20 +59,19 @@
                 android:paddingRight="@dimen/mdu_keyline_1" />
         </FrameLayout>
 
-        <include layout="@layout/divider"
-            android:id="@+id/divider_teacher" />
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:tint="@color/mdu_white"
                 app:srcCompat="@drawable/ic_access_time_black_24dp"
                 style="@style/Widget.Timetable.ItemIcon" />
 
             <TextView
                 android:id="@+id/textView_times"
                 tools:text="Mon, Tue, Wed 15:00\nThu, Fri:\t17:00"
+                android:textColor="@color/mdu_text_white"
                 style="@style/Widget.Timetable.TextView.Item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

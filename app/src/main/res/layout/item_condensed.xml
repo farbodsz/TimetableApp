@@ -5,21 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/mdu_spacing_normal"
-    android:paddingBottom="@dimen/mdu_spacing_normal"
-    android:paddingLeft="@dimen/mdu_keyline_1"
-    android:paddingRight="@dimen/mdu_keyline_1">
+    android:paddingBottom="@dimen/mdu_spacing_normal">
 
-    <!-- TODO: include this -->
-    <include layout="@layout/item_color"
-        android:visibility="gone"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center_vertical" />
+    <ImageView
+        android:id="@+id/icon"
+        tools:background="@drawable/ic_homework_black_24dp"
+        style="@style/Widget.Timetable.ItemIcon" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/mdu_keyline_2"
+        android:paddingRight="@dimen/mdu_keyline_1">
 
         <TextView
             android:id="@+id/title"

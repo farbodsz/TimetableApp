@@ -1,18 +1,18 @@
 package co.timetableapp.ui.components
 
 import android.content.Context
+import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.model.Color
 import co.timetableapp.ui.components.CardOfItems.Builder
-import de.hdodenhof.circleimageview.CircleImageView
 
 /**
  * This class can be used to create a View of a card displaying a list of sub-items inside.
@@ -45,6 +45,7 @@ class CardOfItems private constructor(val view: View) {
 
         private var mTitle: String? = null
         private var mItems: ArrayList<CardItem>? = null
+        @DrawableRes private var mItemsIconRes: Int? = null
         private var mButtonText: String? = null
         private var mButtonClickListener: View.OnClickListener? = null
 
@@ -60,6 +61,14 @@ class CardOfItems private constructor(val view: View) {
 
         fun setItems(items: ArrayList<CardItem>): Builder {
             mItems = items
+            return this
+        }
+
+        /**
+         * Sets the drawable to use as the icon for all items displayed in the list on the card.
+         */
+        fun setItemsIconResource(@DrawableRes drawableRes: Int): Builder {
+            mItemsIconRes = drawableRes
             return this
         }
 
@@ -120,13 +129,9 @@ class CardOfItems private constructor(val view: View) {
                     (findViewById(R.id.title) as TextView).text = it.title
                     (findViewById(R.id.subtitle) as TextView).text = it.subtitle
 
-                    val colorView = findViewById(R.id.imageView) as CircleImageView
-                    if (it.color == null) {
-                        colorView.visibility = View.GONE
-                    } else {
-                        colorView.setBackgroundColor(ContextCompat.getColor(
-                                mContext,
-                                it.color.getPrimaryColorResId(mContext)))
+                    val imageView = findViewById(R.id.icon) as ImageView
+                    mItemsIconRes?.let {
+                        imageView.setImageResource(it)
                     }
                 }
 
