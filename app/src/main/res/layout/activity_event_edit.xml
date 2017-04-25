@@ -51,11 +51,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/mdu_spacing_normal"
-        android:layout_marginLeft="@dimen/content_lateral_padding"
-        android:layout_marginRight="@dimen/content_lateral_padding"
-        android:paddingBottom="@dimen/mdu_padding_normal">
+        android:layout_height="wrap_content">
 
         <FrameLayout
             android:layout_width="match_parent"

@@ -31,9 +31,7 @@
             android:id="@+id/card_container"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/content_lateral_padding"
-            android:paddingRight="@dimen/content_lateral_padding">
+            android:layout_height="wrap_content">
 
             <include layout="@layout/item_card_class_detail" />
 
