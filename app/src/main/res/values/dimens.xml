@@ -16,6 +16,8 @@
 
     <integer name="subject_color_dialog_columns">5</integer>
 
+    <dimen name="extended_toolbar_height">156dp</dimen>
+
     <!-- Card dimensions, per Material Design guidelines -->
     <dimen name="card_text_primary_title">24sp</dimen>
     <dimen name="card_text_primary_title_medium">19sp</dimen>
