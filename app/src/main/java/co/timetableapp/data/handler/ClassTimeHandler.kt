@@ -140,7 +140,7 @@ class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(conte
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
                 val classTime = ClassTime.from(cursor)
-                val classDetail = ClassDetail.create(activity, classTime.classDetailId)
+                val classDetail = ClassDetail.create(activity, classTime.classDetailId)!!
                 val cls = Class.create(activity, classDetail.classId)!!
 
                 if (!cls.hasStartEndDates() || date == null) {

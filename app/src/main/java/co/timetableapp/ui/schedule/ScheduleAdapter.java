@@ -39,6 +39,8 @@ class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewH
         ClassTime classTime = mClassTimes.get(position);
 
         ClassDetail classDetail = ClassDetail.create(mContext, classTime.getClassDetailId());
+        assert classDetail != null;
+
         Class cls = Class.create(mContext, classDetail.getClassId());
         assert cls != null;
 

@@ -143,6 +143,8 @@ public class ScheduleActivity extends NavigationDrawerActivity {
                         ClassTime classTime = classTimes.get(position);
                         ClassDetail classDetail = ClassDetail.create(
                                 getBaseContext(), classTime.getClassDetailId());
+                        assert classDetail != null;
+
                         Class cls = Class.create(getBaseContext(), classDetail.getClassId());
 
                         Intent intent = new Intent(ScheduleActivity.this, ClassDetailActivity.class);

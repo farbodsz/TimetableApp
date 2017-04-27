@@ -116,6 +116,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
             case Type.CLASS:
                 ClassTime classTime = ClassTime.create(context, id);
                 ClassDetail classDetail = ClassDetail.create(context, classTime.getClassDetailId());
+                assert classDetail != null;
+
                 Class cls = Class.create(context, classDetail.getClassId());
                 assert cls != null;
 

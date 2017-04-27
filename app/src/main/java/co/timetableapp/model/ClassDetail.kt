@@ -48,7 +48,7 @@ data class ClassDetail(
         }
 
         @JvmStatic
-        fun create(context: Context, classDetailId: Int): ClassDetail {
+        fun create(context: Context, classDetailId: Int): ClassDetail? {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ClassDetailsSchema.TABLE_NAME,

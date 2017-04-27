@@ -96,7 +96,7 @@ class TodayFragment : Fragment() {
         ClassTimeHandler(activity).getItems(activity.application).forEach {
             if (it.day == today && it.weekNumber == weekNumber) {
                 val classDetail = ClassDetail.create(context, it.classDetailId)
-                val cls = Class.create(context, classDetail.classId)!!
+                val cls = Class.create(context, classDetail!!.classId)!!
                 if (cls.isCurrent()) {
                     classesToday.add(it)
                 }
@@ -118,7 +118,7 @@ class TodayFragment : Fragment() {
         for ((_, _, classDetailId, _, _, startTime, endTime) in classTimes.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
-            val classDetail = ClassDetail.create(context, classDetailId)
+            val classDetail = ClassDetail.create(context, classDetailId)!!
             val cls = Class.create(context, classDetail.classId)!!
             val subject = Subject.create(context, cls.subjectId)!!
             val color = Color(subject.colorId)
