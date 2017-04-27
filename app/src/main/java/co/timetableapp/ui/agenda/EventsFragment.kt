@@ -10,7 +10,7 @@ import co.timetableapp.data.handler.EventHandler
 import co.timetableapp.model.Event
 import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.ui.base.ItemListFragment
-import co.timetableapp.ui.events.EventEditActivity
+import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.events.EventsAdapter
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
@@ -24,7 +24,7 @@ import java.util.*
  *
  * @see Event
  * @see AgendaActivity
- * @see EventEditActivity
+ * @see EventDetailActivity
  */
 class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeListener {
 
@@ -45,7 +45,7 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
 
     private fun setupFab() {
         activity.findViewById(R.id.fab_event).setOnClickListener {
-            val intent = Intent(activity, EventEditActivity::class.java)
+            val intent = Intent(activity, EventDetailActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_EVENT_EDIT)
 
             (activity.findViewById(R.id.fabMenu) as FloatingActionMenu).close(false)
@@ -55,7 +55,7 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
     override fun setupAdapter(): RecyclerView.Adapter<*> {
         val adapter = EventsAdapter(activity, mHeaders, mItems)
         adapter.setOnEntryClickListener { view, position ->
-            val intent = Intent(activity, EventEditActivity::class.java)
+            val intent = Intent(activity, EventDetailActivity::class.java)
             intent.putExtra(ItemEditActivity.EXTRA_ITEM, mItems!![position])
 
             var bundle: Bundle? = null

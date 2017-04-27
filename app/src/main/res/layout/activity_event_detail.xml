@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.events.EventDetailActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/extended_toolbar_height">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Widget.Timetable.Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="pin" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/mdu_keyline_2"
+                android:layout_marginRight="@dimen/mdu_keyline_1"
+                android:layout_marginBottom="@dimen/mdu_padding_normal"
+                android:layout_gravity="bottom">
+
+                <TextView
+                    android:id="@+id/title"
+                    tools:text="Event Title"
+                    android:textSize="22sp"
+                    android:textColor="@color/mdu_text_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:transitionName="@string/transition_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_event_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <TextView
+                    android:id="@+id/textView_date"
+                    tools:text="Monday 13th March 2017"
+                    style="@style/Widget.Timetable.TextView.Item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/mdu_keyline_2"
+                    android:layout_marginRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_access_time_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <TextView
+                    android:id="@+id/textView_times"
+                    tools:text="13:00 - 14:30"
+                    style="@style/Widget.Timetable.TextView.Item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/mdu_keyline_2"
+                    android:layout_marginRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_event_note_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <TextView
+                    android:id="@+id/textView_notes"
+                    tools:text="Some notes about the exam.\nHere's another line."
+                    style="@style/Widget.Timetable.TextView.Item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/mdu_keyline_2"
+                    android:layout_marginRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

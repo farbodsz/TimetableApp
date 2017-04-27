@@ -72,7 +72,7 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
                 setTypeface(null, Typeface.NORMAL)
                 setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black))
             } else {
-                text = getString(R.string.placeholder_detail_empty)
+                text = getString(R.string.placeholder_notes_empty)
 
                 setTypeface(null, Typeface.ITALIC)
                 setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black_secondary))

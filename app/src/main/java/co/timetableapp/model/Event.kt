@@ -23,9 +23,9 @@ data class Event(
         override val id: Int,
         override val timetableId: Int,
         val title: String,
-        val detail: String,
-        val startTime: LocalDateTime,
-        val endTime: LocalDateTime
+        val detail: String,  // TODO rename property to "notes"
+        val startTime: LocalDateTime,  // TODO rename to "startDateTime"
+        val endTime: LocalDateTime  // TODO rename to "endDateTime"
 ) : TimetableItem, DateItem, Comparable<Event> {
 
     companion object {
@@ -103,6 +103,10 @@ data class Event(
             source.readString(),
             source.readSerializable() as LocalDateTime,
             source.readSerializable() as LocalDateTime)
+
+    fun hasDifferentStartEndDates() = startTime.toLocalDate() != endTime.toLocalDate()
+
+    fun hasNotes() = detail.isNotEmpty()
 
     override fun isInPast() = startTime.isBefore(LocalDateTime.now())
 
