@@ -56,6 +56,11 @@ data class ClassDetail(
                     "${ClassDetailsSchema._ID}=?",
                     arrayOf(classDetailId.toString()),
                     null, null, null)
+
+            if (cursor.count == 0) {
+                return null
+            }
+
             cursor.moveToFirst()
             val classDetail = ClassDetail.from(cursor)
             cursor.close()
