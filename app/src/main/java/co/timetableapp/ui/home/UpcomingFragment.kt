@@ -18,9 +18,8 @@ import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.model.*
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.ItemDetailActivity
-import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.ui.components.SectionGroup
-import co.timetableapp.ui.events.EventEditActivity
+import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
@@ -198,7 +197,7 @@ class UpcomingFragment : Fragment() {
         val upperDate = LocalDate.now().plusWeeks(1)
 
         EventHandler(context).getItems(activity.application).forEach {
-            if (it.isUpcoming() && it.startTime.toLocalDate().isBefore(upperDate)) {
+            if (it.isUpcoming() && it.startDateTime.toLocalDate().isBefore(upperDate)) {
                 upcomingEvents.add(it)
             }
         }
@@ -216,7 +215,7 @@ class UpcomingFragment : Fragment() {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
             val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
-            val datesText = event.startTime.format(formatter).toUpperCase()
+            val datesText = event.startDateTime.format(formatter).toUpperCase()
 
             with(card) {
                 findViewById(R.id.color).setBackgroundColor(ContextCompat.getColor(
@@ -227,8 +226,8 @@ class UpcomingFragment : Fragment() {
                 (findViewById(R.id.times) as TextView).text = datesText
 
                 setOnClickListener {
-                    val intent = Intent(activity, EventEditActivity::class.java) // TODO use EventDetailActivity once added
-                    intent.putExtra(ItemEditActivity.EXTRA_ITEM, event) // TODO and then ItemDetailActivity here
+                    val intent = Intent(activity, EventDetailActivity::class.java)
+                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, event)
                     startActivity(intent)
                 }
             }

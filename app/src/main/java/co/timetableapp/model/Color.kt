@@ -41,6 +41,9 @@ data class Color(val id: Int) {
         }
 
     @ColorRes
+    fun getLightAccentColorRes(context: Context) = getColor(context, "mdu_${name}_a200")
+
+    @ColorRes
     fun getPrimaryColorResId(context: Context) = getColor(context, "mdu_${name}_500")
 
     @ColorRes

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/mdu_spacing_normal"
+    android:layout_marginBottom="@dimen/mdu_spacing_normal"
+    android:layout_marginLeft="@dimen/content_lateral_padding"
+    android:layout_marginRight="@dimen/content_lateral_padding">
+
+    <LinearLayout
+        android:id="@+id/main_card"
+        android:orientation="vertical"
+        tools:background="?colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/viewGroup_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:tint="@color/mdu_white"
+                app:srcCompat="@drawable/ic_room_black_24dp"
+                style="@style/Widget.Timetable.ItemIcon" />
+
+            <TextView
+                android:id="@+id/textView_location"
+                tools:text="M002, Building A\nA120, Building X\nRoom 14"
+                android:textColor="@color/mdu_text_white"
+                style="@style/Widget.Timetable.TextView.Item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/mdu_keyline_2"
+                android:paddingRight="@dimen/mdu_keyline_1" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/viewGroup_teacher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:tint="@color/mdu_white"
+                app:srcCompat="@drawable/ic_person_black_24dp"
+                style="@style/Widget.Timetable.ItemIcon" />
+
+            <TextView
+                android:id="@+id/textView_teacher"
+                tools:text="Mr Bob\nMrs Smith"
+                android:textColor="@color/mdu_text_white"
+                style="@style/Widget.Timetable.TextView.Item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/mdu_keyline_2"
+                android:paddingRight="@dimen/mdu_keyline_1" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:tint="@color/mdu_white"
+                app:srcCompat="@drawable/ic_access_time_black_24dp"
+                style="@style/Widget.Timetable.ItemIcon" />
+
+            <TextView
+                android:id="@+id/textView_times"
+                tools:text="Mon, Tue, Wed 15:00\nThu, Fri:\t17:00"
+                android:textColor="@color/mdu_text_white"
+                style="@style/Widget.Timetable.TextView.Item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/mdu_keyline_2"
+                android:layout_marginRight="@dimen/mdu_keyline_1" />
+        </FrameLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

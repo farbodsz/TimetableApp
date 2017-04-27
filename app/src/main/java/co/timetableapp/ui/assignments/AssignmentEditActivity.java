@@ -206,7 +206,12 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 getBaseContext(), R.color.mdu_text_black));
 
         Color color = new Color(subject.getColorId());
-        UiUtils.setBarColors(color, this, mToolbar);
+        UiUtils.setBarColors(
+                color,
+                this,
+                mToolbar,
+                findViewById(R.id.appBarLayout),
+                findViewById(R.id.toolbar_container));
     }
 
     private void updateDateText() {

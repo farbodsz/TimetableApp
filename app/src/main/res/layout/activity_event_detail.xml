@@ -3,10 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.exams.ExamDetailActivity">
+    tools:context=".ui.events.EventDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -35,7 +34,7 @@
 
                 <TextView
                     android:id="@+id/title"
-                    tools:text="Exam Title"
+                    tools:text="Event Title"
                     android:textSize="22sp"
                     android:textColor="@color/mdu_text_white"
                     android:layout_width="wrap_content"
@@ -83,7 +82,7 @@
 
                 <TextView
                     android:id="@+id/textView_times"
-                    tools:text="13:00 - 14:30 (90 mins)"
+                    tools:text="13:00 - 14:30"
                     style="@style/Widget.Timetable.TextView.Item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,72 +90,25 @@
                     android:layout_marginRight="@dimen/mdu_keyline_1" />
             </FrameLayout>
 
-            <include layout="@layout/divider"
-                android:id="@+id/location_divider" />
+            <include layout="@layout/divider" />
 
             <FrameLayout
-                android:id="@+id/viewGroup_seat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    app:srcCompat="@drawable/ic_event_seat_black_24dp"
+                    app:srcCompat="@drawable/ic_event_note_black_24dp"
                     style="@style/Widget.Timetable.ItemIcon" />
 
                 <TextView
-                    android:id="@+id/textView_seat"
-                    tools:text="J17"
+                    android:id="@+id/textView_notes"
+                    tools:text="Some notes about the exam.\nHere's another line."
                     style="@style/Widget.Timetable.TextView.Item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/mdu_keyline_2"
                     android:layout_marginRight="@dimen/mdu_keyline_1" />
             </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/viewGroup_room"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    app:srcCompat="@drawable/ic_room_black_24dp"
-                    style="@style/Widget.Timetable.ItemIcon" />
-
-                <TextView
-                    android:id="@+id/textView_room"
-                    tools:text="Main Hall"
-                    style="@style/Widget.Timetable.TextView.Item"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/mdu_keyline_2"
-                    android:layout_marginRight="@dimen/mdu_keyline_1" />
-            </FrameLayout>
-
-            <LinearLayout
-                android:id="@+id/viewGroup_resit"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <include layout="@layout/divider" />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        app:srcCompat="@drawable/ic_restore_page_black_24dp"
-                        style="@style/Widget.Timetable.ItemIcon" />
-
-                    <TextView
-                        tools:text="@string/property_resit"
-                        style="@style/Widget.Timetable.TextView.Item"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/mdu_keyline_2"
-                        android:layout_marginRight="@dimen/mdu_keyline_1" />
-                </FrameLayout>
-            </LinearLayout>
 
             <include layout="@layout/divider" />
         </LinearLayout>

@@ -15,17 +15,17 @@ import org.threeten.bp.LocalTime
  * For example, a meeting with a tutor, a sporting event, etc.
  *
  * @property title the event's title
- * @property detail additional notes and details for the event
- * @property startTime the starting time and date
- * @property endTime the ending time and date
+ * @property notes additional notes and details for the event
+ * @property startDateTime the starting time and date
+ * @property endDateTime the ending time and date
  */
 data class Event(
         override val id: Int,
         override val timetableId: Int,
         val title: String,
-        val detail: String,
-        val startTime: LocalDateTime,
-        val endTime: LocalDateTime
+        val notes: String,
+        val startDateTime: LocalDateTime,
+        val endDateTime: LocalDateTime
 ) : TimetableItem, DateItem, Comparable<Event> {
 
     companion object {
@@ -104,9 +104,13 @@ data class Event(
             source.readSerializable() as LocalDateTime,
             source.readSerializable() as LocalDateTime)
 
-    override fun isInPast() = startTime.isBefore(LocalDateTime.now())
+    fun hasDifferentStartEndDates() = startDateTime.toLocalDate() != endDateTime.toLocalDate()
 
-    override fun compareTo(other: Event) = startTime.compareTo(other.startTime)
+    fun hasNotes() = notes.isNotEmpty()
+
+    override fun isInPast() = startDateTime.isBefore(LocalDateTime.now())
+
+    override fun compareTo(other: Event) = startDateTime.compareTo(other.startDateTime)
 
     override fun describeContents() = 0
 
@@ -114,9 +118,9 @@ data class Event(
         dest?.writeInt(id)
         dest?.writeInt(timetableId)
         dest?.writeString(title)
-        dest?.writeString(detail)
-        dest?.writeSerializable(startTime)
-        dest?.writeSerializable(endTime)
+        dest?.writeString(notes)
+        dest?.writeSerializable(startDateTime)
+        dest?.writeSerializable(endDateTime)
     }
 
     /**
@@ -126,7 +130,7 @@ data class Event(
     class ReverseDateTimeComparator : Comparator<Event> {
 
         override fun compare(o1: Event?, o2: Event?): Int {
-            return o2!!.startTime.compareTo(o1!!.startTime)
+            return o2!!.startDateTime.compareTo(o1!!.startDateTime)
         }
     }
 

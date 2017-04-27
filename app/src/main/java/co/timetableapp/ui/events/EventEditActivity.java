@@ -66,7 +66,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
 
         mEditTextDetail = (EditText) findViewById(R.id.editText_detail);
         if (!mIsNew) {
-            mEditTextTitle.setText(mItem.getTitle());
+            mEditTextDetail.setText(mItem.getNotes());
         }
 
         setupDateText();
@@ -78,7 +78,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
         mDateText = (TextView) findViewById(R.id.textView_date);
 
         if (!mIsNew) {
-            mEventDate = mItem.getStartTime().toLocalDate();
+            mEventDate = mItem.getStartDateTime().toLocalDate();
             updateDateText();
         }
 
@@ -116,7 +116,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
         mStartTimeText = (TextView) findViewById(R.id.textView_start_time);
 
         if (!mIsNew) {
-            mStartTime = mItem.getStartTime().toLocalTime();
+            mStartTime = mItem.getStartDateTime().toLocalTime();
             updateTimeTexts();
         }
 
@@ -145,7 +145,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
         mEndTimeText = (TextView) findViewById(R.id.textView_end_time);
 
         if (!mIsNew) {
-            mEndTime = mItem.getEndTime().toLocalTime();
+            mEndTime = mItem.getEndDateTime().toLocalTime();
             updateTimeTexts();
         }
 

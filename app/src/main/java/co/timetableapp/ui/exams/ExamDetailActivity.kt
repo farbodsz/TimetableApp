@@ -76,7 +76,7 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
         val subject = Subject.create(this, mItem!!.subjectId)!!
-        supportActionBar!!.title = mItem!!.makeName(subject)
+        (findViewById(R.id.title) as TextView).text = mItem!!.makeName(subject)
 
         val color = Color(subject.colorId)
         UiUtils.setBarColors(color, this, toolbar)

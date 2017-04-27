@@ -27,17 +27,17 @@ class EventHandler(context: Context) : TimetableItemHandler<Event>(context) {
             put(EventsSchema._ID, item.id)
             put(EventsSchema.COL_TIMETABLE_ID, item.timetableId)
             put(EventsSchema.COL_TITLE, item.title)
-            put(EventsSchema.COL_DETAIL, item.detail)
-            put(EventsSchema.COL_START_DATE_DAY_OF_MONTH, item.startTime.dayOfMonth)
-            put(EventsSchema.COL_START_DATE_MONTH, item.startTime.monthValue)
-            put(EventsSchema.COL_START_DATE_YEAR, item.startTime.year)
-            put(EventsSchema.COL_START_TIME_HRS, item.startTime.hour)
-            put(EventsSchema.COL_START_TIME_MINS, item.startTime.minute)
-            put(EventsSchema.COL_END_DATE_DAY_OF_MONTH, item.endTime.dayOfMonth)
-            put(EventsSchema.COL_END_DATE_MONTH, item.endTime.monthValue)
-            put(EventsSchema.COL_END_DATE_YEAR, item.endTime.year)
-            put(EventsSchema.COL_END_TIME_HRS, item.endTime.hour)
-            put(EventsSchema.COL_END_TIME_MINS, item.endTime.minute)
+            put(EventsSchema.COL_DETAIL, item.notes)
+            put(EventsSchema.COL_START_DATE_DAY_OF_MONTH, item.startDateTime.dayOfMonth)
+            put(EventsSchema.COL_START_DATE_MONTH, item.startDateTime.monthValue)
+            put(EventsSchema.COL_START_DATE_YEAR, item.startDateTime.year)
+            put(EventsSchema.COL_START_TIME_HRS, item.startDateTime.hour)
+            put(EventsSchema.COL_START_TIME_MINS, item.startDateTime.minute)
+            put(EventsSchema.COL_END_DATE_DAY_OF_MONTH, item.endDateTime.dayOfMonth)
+            put(EventsSchema.COL_END_DATE_MONTH, item.endDateTime.monthValue)
+            put(EventsSchema.COL_END_DATE_YEAR, item.endDateTime.year)
+            put(EventsSchema.COL_END_TIME_HRS, item.endDateTime.hour)
+            put(EventsSchema.COL_END_TIME_MINS, item.endDateTime.minute)
         }
         return values
     }
@@ -60,7 +60,7 @@ class EventHandler(context: Context) : TimetableItemHandler<Event>(context) {
             }
 
             val minsBefore = PrefUtils.getEventNotificationTime(context).toLong()
-            val remindTime = event.startTime.minusMinutes(minsBefore)
+            val remindTime = event.startDateTime.minusMinutes(minsBefore)
 
             AlarmReceiver().setAlarm(context,
                     AlarmReceiver.Type.EVENT,

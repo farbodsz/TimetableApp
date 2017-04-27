@@ -1,102 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.assignments.AssignmentDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/Widget.Timetable.Toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/content_vertical_padding"
-        android:paddingBottom="@dimen/mdu_padding_normal"
-        android:clipToPadding="false">
-
-        <android.support.v7.widget.CardView
-            android:transitionName="@string/transition_1"
+        <android.support.design.widget.CollapsingToolbarLayout
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/content_lateral_padding"
-            android:layout_marginRight="@dimen/content_lateral_padding">
+            android:layout_height="@dimen/extended_toolbar_height">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Widget.Timetable.Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="pin" />
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/mdu_keyline_2"
+                android:layout_marginRight="@dimen/mdu_keyline_1"
+                android:layout_marginBottom="@dimen/mdu_padding_normal"
+                android:layout_gravity="bottom">
+
+                <TextView
+                    android:id="@+id/title"
+                    tools:text="Assignment Title"
+                    android:textSize="22sp"
+                    android:textColor="@color/mdu_text_white"
+                    android:layout_marginBottom="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/subtitle"
+                    tools:text="Subject"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/mdu_text_white_secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:transitionName="@string/transition_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <FrameLayout
+                <ImageView
+                    app:srcCompat="@drawable/ic_event_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <TextView
+                    android:id="@+id/textView_date"
+                    tools:text="25 April 2017"
+                    style="@style/Widget.Timetable.TextView.Item"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        app:srcCompat="@drawable/ic_event_black_24dp"
-                        style="@style/Widget.Timetable.ItemIcon" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/mdu_keyline_2" />
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_track_changes_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="72dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/mdu_keyline_2"
+                    android:layout_marginRight="@dimen/mdu_keyline_1">
+
                     <TextView
-                        android:id="@+id/textView_date"
-                        style="@style/Widget.Timetable.TextView.Item"
+                        android:id="@+id/textView_progress"
+                        tools:text="50% Complete"
+                        android:textColor="@color/mdu_text_black"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="@dimen/mdu_spacing_micro"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/mdu_keyline_2"/>
-                </FrameLayout>
+                        android:layout_height="wrap_content" />
 
-                <include layout="@layout/divider" />
+                    <SeekBar
+                        android:id="@+id/seekBar"
+                        tools:progress="50"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </FrameLayout>
 
-                <FrameLayout
+            <include layout="@layout/divider" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_event_note_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <TextView
+                    android:id="@+id/textView_detail"
+                    tools:text="Some notes about the assignment.\nHere's another line."
+                    style="@style/Widget.Timetable.TextView.Item"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        app:srcCompat="@drawable/ic_track_changes_black_24dp"
-                        style="@style/Widget.Timetable.ItemIcon" />
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="72dp"
-                        android:gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/mdu_keyline_2"
-                        android:layout_marginRight="@dimen/mdu_keyline_1">
-                        <TextView
-                            android:id="@+id/textView_progress"
-                            android:text="50% Complete"
-                            android:textColor="@color/mdu_text_black"
-                            android:textSize="16sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                        <SeekBar
-                            android:id="@+id/seekBar"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                </FrameLayout>
-
-                <include layout="@layout/divider" />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        app:srcCompat="@drawable/ic_event_note_black_24dp"
-                        style="@style/Widget.Timetable.ItemIcon" />
-                    <TextView
-                        android:id="@+id/textView_detail"
-                        style="@style/Widget.Timetable.TextView.Item"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/mdu_keyline_2"
-                        android:layout_marginRight="@dimen/mdu_keyline_1_minus_8dp" />
-                </FrameLayout>
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-    </ScrollView>
-</LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/mdu_keyline_2"
+                    android:layout_marginRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+            <include layout="@layout/divider" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

@@ -68,20 +68,20 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         holder.mTitle.setText(event.getTitle());
 
-        boolean isOneDay = event.getStartTime().toLocalDate()
-                .equals(event.getEndTime().toLocalDate());
+        boolean isOneDay = event.getStartDateTime().toLocalDate()
+                .equals(event.getEndDateTime().toLocalDate());
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM uu");
 
         StringBuilder dateBuilder = new StringBuilder();
-        dateBuilder.append(event.getStartTime().format(dateFormatter));
+        dateBuilder.append(event.getStartDateTime().format(dateFormatter));
         if (!isOneDay) {
             dateBuilder.append(" - ")
-                    .append(event.getEndTime().format(dateFormatter));
+                    .append(event.getEndDateTime().format(dateFormatter));
         }
 
-        String timesText = event.getStartTime().toLocalTime().toString() + " - " +
-                event.getEndTime().toLocalTime().toString();
+        String timesText = event.getStartDateTime().toLocalTime().toString() + " - " +
+                event.getEndDateTime().toLocalTime().toString();
 
         holder.mDates.setText(dateBuilder.toString());
         holder.mTimes.setText(timesText);

@@ -72,7 +72,7 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
                 setTypeface(null, Typeface.NORMAL)
                 setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black))
             } else {
-                text = getString(R.string.placeholder_detail_empty)
+                text = getString(R.string.placeholder_notes_empty)
 
                 setTypeface(null, Typeface.ITALIC)
                 setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black_secondary))
@@ -90,10 +90,11 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         val cls = Class.create(this, mItem!!.classId)!!
         val subject = Subject.create(this, cls.subjectId)!!
 
-        with(supportActionBar!!) {
-            title = mItem!!.title
-            subtitle = subject.name
-        }
+        val textViewTitle = findViewById(R.id.title) as TextView
+        textViewTitle.text = mItem!!.title
+
+        val textViewSubtitle = findViewById(R.id.subtitle) as TextView
+        textViewSubtitle.text = subject.name
 
         val color = Color(subject.colorId)
         UiUtils.setBarColors(color, this, toolbar)

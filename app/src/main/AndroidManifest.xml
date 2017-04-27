@@ -85,8 +85,12 @@
             android:theme="@style/Timetable" />
 
         <activity
-            android:name=".ui.events.EventEditActivity"
+            android:name=".ui.events.EventDetailActivity"
             android:theme="@style/Timetable"/>
+
+        <activity
+            android:name=".ui.events.EventEditActivity"
+            android:theme="@style/Timetable" />
 
         <activity
             android:name=".ui.subjects.SubjectsActivity"

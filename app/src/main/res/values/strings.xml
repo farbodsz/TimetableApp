@@ -113,8 +113,8 @@
     <string name="message_title_required">You must enter a title</string>
     <string name="message_class_required">You must choose a class</string>
     <string name="message_due_date_required">You must select a due date</string>
-    <string name="placeholder_detail_empty">
-        It looks like you haven\'t entered any details for this assignment.
+    <string name="placeholder_notes_empty">
+        It looks like you haven\'t entered any additional notes here.
     </string>
 
     <string name="message_assignment_completed">Marked one item as complete</string>
@@ -179,6 +179,9 @@
     <string-array name="filter_classes_options">
         <item>Show all classes (including non-current)</item>
     </string-array>
+
+    <string name="class_detail">Class detail</string>
+    <string name="view_all">View all</string>
 
     <string name="dialog_import_warning_title">Replace app data?</string>
     <string name="dialog_import_warning_message">

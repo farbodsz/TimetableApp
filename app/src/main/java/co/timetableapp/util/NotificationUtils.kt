@@ -217,7 +217,7 @@ object NotificationUtils {
         Log.i(LOG_TAG, "Adding event alarms for the current timetable")
         EventHandler(context).getItems(application).forEach { event ->
             val examInPastToday =
-                    event.startTime.toLocalDate().isEqual(LocalDate.now()) && event.isInPast()
+                    event.startDateTime.toLocalDate().isEqual(LocalDate.now()) && event.isInPast()
 
             if (event.isUpcoming() || examInPastToday) {
                 EventHandler.addAlarmForEvent(context, event)
