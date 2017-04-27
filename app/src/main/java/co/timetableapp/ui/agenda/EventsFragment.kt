@@ -93,7 +93,7 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
         for (i in mItems!!.indices) {
             val event = mItems!![i]
 
-            val eventDate = event.startTime
+            val eventDate = event.startDateTime
             val timePeriodId: Int
 
             if (eventDate.isBefore(LocalDateTime.now())) {

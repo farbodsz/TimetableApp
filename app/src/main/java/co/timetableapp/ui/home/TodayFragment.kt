@@ -369,7 +369,7 @@ class TodayFragment : Fragment() {
     private fun getEventsToday(): List<Event> {
         val today = LocalDate.now()
         return EventHandler(activity).getItems(activity.application).filter {
-            it.startTime.toLocalDate() == today
+            it.startDateTime.toLocalDate() == today
         }
     }
 
@@ -378,7 +378,7 @@ class TodayFragment : Fragment() {
         for (event in events.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
-            val timesText = "${event.startTime.toLocalTime()}\n${event.endTime.toLocalTime()}"
+            val timesText = "${event.startDateTime.toLocalTime()}\n${event.endDateTime.toLocalTime()}"
 
             with(card) {
                 findViewById(R.id.color).setBackgroundColor(ContextCompat.getColor(

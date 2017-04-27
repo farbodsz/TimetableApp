@@ -196,8 +196,8 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 intent = new Intent(context, AgendaActivity.class);
 
                 contentTitle = event.getTitle();
-                contentText = event.getStartTime().toLocalTime() + " - " +
-                        event.getEndTime().toLocalTime();
+                contentText = event.getStartDateTime().toLocalTime() + " - " +
+                        event.getEndDateTime().toLocalTime();
                 tickerText = event.getTitle() + " starting in 30 minutes";
                 drawableRes = R.drawable.ic_event_notification;
                 // TODO create string resource for this depending on customizable reminder time

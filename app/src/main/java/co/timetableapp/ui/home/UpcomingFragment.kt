@@ -197,7 +197,7 @@ class UpcomingFragment : Fragment() {
         val upperDate = LocalDate.now().plusWeeks(1)
 
         EventHandler(context).getItems(activity.application).forEach {
-            if (it.isUpcoming() && it.startTime.toLocalDate().isBefore(upperDate)) {
+            if (it.isUpcoming() && it.startDateTime.toLocalDate().isBefore(upperDate)) {
                 upcomingEvents.add(it)
             }
         }
@@ -215,7 +215,7 @@ class UpcomingFragment : Fragment() {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
             val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
-            val datesText = event.startTime.format(formatter).toUpperCase()
+            val datesText = event.startDateTime.format(formatter).toUpperCase()
 
             with(card) {
                 findViewById(R.id.color).setBackgroundColor(ContextCompat.getColor(

@@ -58,17 +58,17 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
 
         val textView = findViewById(R.id.textView_date) as TextView
         textView.text = if (mItem!!.hasDifferentStartEndDates()) {
-            "${mItem!!.startTime.format(dateFormatter)} - ${mItem!!.endTime.format(dateFormatter)}"
+            "${mItem!!.startDateTime.format(dateFormatter)} - ${mItem!!.endDateTime.format(dateFormatter)}"
         } else {
-            mItem!!.startTime.format(dateFormatter)
+            mItem!!.startDateTime.format(dateFormatter)
         }
     }
 
     private fun setupTimeText() {
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
-        val timeText = mItem!!.startTime.format(timeFormatter) + " - " +
-                mItem!!.endTime.format(timeFormatter)
+        val timeText = mItem!!.startDateTime.format(timeFormatter) + " - " +
+                mItem!!.endDateTime.format(timeFormatter)
         (findViewById(R.id.textView_times) as TextView).text = timeText
     }
 
@@ -76,7 +76,7 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
         val notesText = findViewById(R.id.textView_notes) as TextView
         with(notesText) {
             if (mItem!!.hasNotes()) {
-                text = mItem!!.detail
+                text = mItem!!.notes
 
                 setTypeface(null, Typeface.NORMAL)
                 setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black))
