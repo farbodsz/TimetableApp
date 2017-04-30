@@ -35,7 +35,7 @@ class ClassDetailHandler(context: Context) : DataHandler<ClassDetail>(context) {
         super.deleteItemWithReferences(itemId)
 
         ClassTimeHandler.getClassTimesForDetail(context, itemId).forEach {
-            ClassHandler(context).deleteItemWithReferences(it.id)
+            ClassTimeHandler(context).deleteItemWithReferences(it.id)
         }
     }
 
