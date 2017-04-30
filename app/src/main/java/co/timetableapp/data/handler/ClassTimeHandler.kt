@@ -6,17 +6,13 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import co.timetableapp.TimetableApplication
-import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.query.Filters
 import co.timetableapp.data.query.Query
 import co.timetableapp.data.schema.ClassTimesSchema
-import co.timetableapp.model.Class
-import co.timetableapp.model.ClassDetail
 import co.timetableapp.model.ClassTime
 import co.timetableapp.receiver.AlarmReceiver
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.PrefUtils
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -117,44 +113,6 @@ class ClassTimeHandler(context: Context) : TimetableItemHandler<ClassTime>(conte
                             ClassTimesSchema.COL_CLASS_DETAIL_ID, classDetailId.toString()))
                     .build()
             return ClassTimeHandler(context).getAllItems(classTimesQuery)
-        }
-
-        @JvmOverloads
-        @JvmStatic
-        fun getClassTimesForDay(activity: Activity, dayOfWeek: DayOfWeek, weekNumber: Int,
-                                date: LocalDate? = null): ArrayList<ClassTime> {
-            val classTimes = ArrayList<ClassTime>()
-
-            val timetable = (activity.application as TimetableApplication).currentTimetable!!
-
-            val dbHelper = TimetableDbHelper.getInstance(activity)
-            val cursor = dbHelper.readableDatabase.query(
-                    ClassTimesSchema.TABLE_NAME,
-                    null,
-                    "${ClassTimesSchema.COL_TIMETABLE_ID}=? AND ${ClassTimesSchema.COL_DAY}=? " +
-                            "AND ${ClassTimesSchema.COL_WEEK_NUMBER}=?",
-                    arrayOf(timetable.id.toString(), dayOfWeek.value.toString(),
-                            weekNumber.toString()),
-                    null, null, null)
-
-            cursor.moveToFirst()
-            while (!cursor.isAfterLast) {
-                val classTime = ClassTime.from(cursor)
-                val classDetail = ClassDetail.create(activity, classTime.classDetailId)!!
-                val cls = Class.create(activity, classDetail.classId)!!
-
-                if (!cls.hasStartEndDates() || date == null) {
-                    classTimes.add(classTime)
-
-                } else if (!cls.startDate.isAfter(date) && !cls.endDate.isBefore(date)) {
-                    classTimes.add(classTime)
-                }
-
-                cursor.moveToNext()
-            }
-            cursor.close()
-
-            return classTimes
         }
 
     }
