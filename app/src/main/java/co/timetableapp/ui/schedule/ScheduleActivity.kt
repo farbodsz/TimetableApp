@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
@@ -255,26 +254,19 @@ class ScheduleActivity : NavigationDrawerActivity() {
         if (requestCode == REQUEST_CODE_CLASS_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 setupTabContent()
-                goToNow()
             }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_schedule, menu)
-        UiUtils.tintMenuIcons(this, menu!!, R.id.action_today, R.id.action_view_week)
+        UiUtils.tintMenuIcons(this, menu!!, R.id.action_today)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.action_today -> goToNow()
-            R.id.action_view_week -> {
-                Snackbar.make(
-                        findViewById(R.id.drawerLayout),
-                        "Week view coming soon",
-                        Snackbar.LENGTH_SHORT).show()
-            }
         }
 
         return super.onOptionsItemSelected(item)
