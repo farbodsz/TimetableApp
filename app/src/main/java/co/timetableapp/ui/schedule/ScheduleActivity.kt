@@ -238,9 +238,18 @@ class ScheduleActivity : NavigationDrawerActivity() {
 
         val classTimes = ArrayList<ClassTime>()
 
-        ClassTimeHandler(this).getAllItems(query).forEach {
-            val classDetail = ClassDetail.create(this, it.classDetailId)!!
-            val cls = Class.create(this, classDetail.classId)!!
+        for (it in ClassTimeHandler(this).getAllItems(query)) {
+            val classDetail = ClassDetail.create(this, it.classDetailId)
+            if (classDetail == null) {
+                Log.e(LOG_TAG, "Class detail is null - the item will not be added to the list.")
+                continue
+            }
+
+            val cls = Class.create(this, classDetail.classId)
+            if (cls == null) {
+                Log.e(LOG_TAG, "Class is null - the item will not be added to the list")
+                continue
+            }
 
             if (cls.isCurrent(date)) {
                 classTimes.add(it)
