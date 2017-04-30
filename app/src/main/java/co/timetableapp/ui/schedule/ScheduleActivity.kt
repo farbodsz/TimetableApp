@@ -81,6 +81,8 @@ class ScheduleActivity : NavigationDrawerActivity() {
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white))
         tabLayout.setupWithViewPager(mViewPager)
+
+        goToNow()
     }
 
     private fun setupTabContent() {
