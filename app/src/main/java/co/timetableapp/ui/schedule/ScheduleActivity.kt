@@ -86,9 +86,9 @@ class ScheduleActivity : NavigationDrawerActivity() {
     private fun setupTabContent() {
         mPagerAdapter!!.removeAllViews(mViewPager!!)
 
-        val timetable = (application as TimetableApplication).currentTimetable!!
+        val currentTimetable = (application as TimetableApplication).currentTimetable!!
 
-        if (!timetable.isValidToday()) {
+        if (!currentTimetable.isValidToday()) {
             showEmptySchedulePlaceholder()
             return
         }
@@ -98,15 +98,16 @@ class ScheduleActivity : NavigationDrawerActivity() {
 
         var daysCount = 0
 
-        for (weekNumber in 1..timetable.weekRotations) {
+        for (weekNumber in 1..currentTimetable.weekRotations) {
             for (dayOfWeek in DayOfWeek.values()) {
 
                 val thisDay = getTabDate(today, todayTabIndex, daysCount)
                 Log.v(LOG_TAG, "Finding lessons for " + thisDay.toString())
 
-                val tabTitle = makeTabName(dayOfWeek, timetable, weekNumber)
+                val tabTitle = makeTabName(dayOfWeek, currentTimetable, weekNumber)
 
-                val classTimes = getClassTimesForDay(dayOfWeek, weekNumber, thisDay)
+                val classTimes =
+                        getClassTimesForDay(currentTimetable, dayOfWeek, weekNumber, thisDay)
 
                 if (classTimes.isEmpty()) {
                     // Show a placeholder if there aren't any classes to display for this day
@@ -221,8 +222,11 @@ class ScheduleActivity : NavigationDrawerActivity() {
     /**
      * @return a list of [ClassTime]s for a particular day
      */
-    fun getClassTimesForDay(dayOfWeek: DayOfWeek, weekNumber: Int, date: LocalDate): ArrayList<ClassTime> {
-        val timetableId = (application as TimetableApplication).currentTimetable!!.id
+    fun getClassTimesForDay(currentTimetable: Timetable,
+                            dayOfWeek: DayOfWeek,
+                            weekNumber: Int,
+                            date: LocalDate): ArrayList<ClassTime> {
+        val timetableId = currentTimetable.id
 
         val query = Query.Builder()
                 .addFilter(Filters.equal(ClassTimesSchema.COL_TIMETABLE_ID, timetableId.toString()))
