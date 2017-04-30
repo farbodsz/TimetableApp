@@ -115,15 +115,21 @@ data class Class(
     fun hasStartEndDates() = startDate != NO_DATE && endDate != NO_DATE
 
     /**
-     * @return false if the class' start and end dates are in the past or the future. This would be
-     * used when displaying a list of classes - most of the time, the user would only want to see
-     * their current classes.
+     * Finds whether a [date] is within the class' date range (from its optional [startDate] and
+     * [endDate] properties).
      *
-     * @see startDate
-     * @see endDate
+     * This can be used to filter a list of classes where the user would only want to see their
+     * current classes.
+     *
+     * @param date  the date used to check against the class' date range. If it is not specified, by
+     *              default it is set to the current date.
+     *
+     * @return true if the [date] is within the class' date range (or if the class doesn't have
+     * start/end dates).
      */
-    fun isCurrent() = if (hasStartEndDates()) {
-        !startDate.isAfter(LocalDate.now()) && !endDate.isBefore(LocalDate.now())
+    @JvmOverloads
+    fun isCurrent(date: LocalDate = LocalDate.now()) = if (hasStartEndDates()) {
+        !startDate.isAfter(date) && !endDate.isBefore(date)
     } else {
         true
     }
