@@ -8,6 +8,7 @@ import android.os.Parcelable
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.ClassTimesSchema
 import co.timetableapp.util.PrefUtils
 import org.threeten.bp.DayOfWeek
@@ -80,7 +81,14 @@ data class ClassTime(
                     endTime)
         }
 
+        /**
+         * Creates a [ClassTime] from the [classTimeId] and corresponding data in the database.
+         *
+         * @throws DataNotFoundException if the database query returns no results
+         * @see from
+         */
         @JvmStatic
+        @Throws(DataNotFoundException::class)
         fun create(context: Context, classTimeId: Int): ClassTime {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
@@ -89,6 +97,12 @@ data class ClassTime(
                     "${ClassTimesSchema._ID}=?",
                     arrayOf(classTimeId.toString()),
                     null, null, null)
+
+            if (cursor.count == 0) {
+                cursor.close()
+                throw DataNotFoundException(this::class.java, classTimeId)
+            }
+
             cursor.moveToFirst()
             val classTime = ClassTime.from(cursor)
             cursor.close()

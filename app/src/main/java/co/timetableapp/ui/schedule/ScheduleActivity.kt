@@ -18,10 +18,6 @@ import android.view.Menu
 import android.view.MenuItem
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
-import co.timetableapp.data.handler.ClassTimeHandler
-import co.timetableapp.data.query.Filters
-import co.timetableapp.data.query.Query
-import co.timetableapp.data.schema.ClassTimesSchema
 import co.timetableapp.model.Class
 import co.timetableapp.model.ClassDetail
 import co.timetableapp.model.ClassTime
@@ -31,6 +27,7 @@ import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.classes.ClassDetailActivity
 import co.timetableapp.ui.components.DynamicPagerAdapter
 import co.timetableapp.util.DateUtils
+import co.timetableapp.util.ScheduleUtils
 import co.timetableapp.util.UiUtils
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
@@ -108,8 +105,12 @@ class ScheduleActivity : NavigationDrawerActivity() {
 
                 val tabTitle = makeTabName(dayOfWeek, currentTimetable, weekNumber)
 
-                val classTimes =
-                        getClassTimesForDay(currentTimetable, dayOfWeek, weekNumber, thisDay)
+                val classTimes = ScheduleUtils.getClassTimesForDay(
+                        this,
+                        currentTimetable,
+                        dayOfWeek,
+                        weekNumber,
+                        thisDay)
 
                 if (classTimes.isEmpty()) {
                     // Show a placeholder if there aren't any classes to display for this day
@@ -127,9 +128,11 @@ class ScheduleActivity : NavigationDrawerActivity() {
                 val scheduleAdapter = ScheduleAdapter(this, classTimes)
                 scheduleAdapter.setOnEntryClickListener { view, position ->
                     val classTime = classTimes[position]
-                    val classDetail = ClassDetail.create(baseContext, classTime.classDetailId)
 
-                    val cls = Class.create(this, classDetail!!.id)
+                    // Not checking for DataNotFoundException since this would have been handled
+                    // when getting the list of items
+                    val classDetail = ClassDetail.create(baseContext, classTime.classDetailId)
+                    val cls = Class.create(this, classDetail.id)
 
                     val intent = Intent(this, ClassDetailActivity::class.java)
                     intent.putExtra(ItemDetailActivity.EXTRA_ITEM, cls)
@@ -219,44 +222,6 @@ class ScheduleActivity : NavigationDrawerActivity() {
         }
 
         return titleBuilder.toString()
-    }
-
-    /**
-     * @return a list of [ClassTime]s for a particular day
-     */
-    fun getClassTimesForDay(currentTimetable: Timetable,
-                            dayOfWeek: DayOfWeek,
-                            weekNumber: Int,
-                            date: LocalDate): ArrayList<ClassTime> {
-        val timetableId = currentTimetable.id
-
-        val query = Query.Builder()
-                .addFilter(Filters.equal(ClassTimesSchema.COL_TIMETABLE_ID, timetableId.toString()))
-                .addFilter(Filters.equal(ClassTimesSchema.COL_DAY, dayOfWeek.value.toString()))
-                .addFilter(Filters.equal(ClassTimesSchema.COL_WEEK_NUMBER, weekNumber.toString()))
-                .build()
-
-        val classTimes = ArrayList<ClassTime>()
-
-        for (it in ClassTimeHandler(this).getAllItems(query)) {
-            val classDetail = ClassDetail.create(this, it.classDetailId)
-            if (classDetail == null) {
-                Log.e(LOG_TAG, "Class detail is null - the item will not be added to the list.")
-                continue
-            }
-
-            val cls = Class.create(this, classDetail.classId)
-            if (cls == null) {
-                Log.e(LOG_TAG, "Class is null - the item will not be added to the list")
-                continue
-            }
-
-            if (cls.isCurrent(date)) {
-                classTimes.add(it)
-            }
-        }
-
-        return classTimes
     }
 
     private fun goToNow() {

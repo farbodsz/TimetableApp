@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.EventsSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -73,7 +74,14 @@ data class Event(
                     LocalDateTime.of(endDate, endTime))
         }
 
+        /**
+         * Creates an [Event] from the [eventId] and corresponding data in the database.
+         *
+         * @throws DataNotFoundException if the database query returns no results
+         * @see from
+         */
         @JvmStatic
+        @Throws(DataNotFoundException::class)
         fun create(context: Context, eventId: Int): Event {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
@@ -82,6 +90,12 @@ data class Event(
                     "${EventsSchema._ID}=?",
                     arrayOf(eventId.toString()),
                     null, null, null)
+
+            if (cursor.count == 0) {
+                cursor.close()
+                throw DataNotFoundException(this::class.java, eventId)
+            }
+
             cursor.moveToFirst()
             val event = from(cursor)
             cursor.close()

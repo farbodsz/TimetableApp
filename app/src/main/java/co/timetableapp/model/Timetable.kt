@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.TimetablesSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
@@ -78,8 +79,15 @@ data class Timetable(
                     cursor.getInt(cursor.getColumnIndex(TimetablesSchema.COL_WEEK_ROTATIONS)))
         }
 
+        /**
+         * Creates a [Timetable] from the [timetableId] and corresponding data in the database.
+         *
+         * @throws DataNotFoundException if the database query returns no results
+         * @see from
+         */
         @JvmStatic
-        fun create(context: Context, timetableId: Int): Timetable? {
+        @Throws(DataNotFoundException::class)
+        fun create(context: Context, timetableId: Int): Timetable {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     TimetablesSchema.TABLE_NAME,
@@ -87,11 +95,13 @@ data class Timetable(
                     "${TimetablesSchema._ID}=?",
                     arrayOf(timetableId.toString()),
                     null, null, null)
-            cursor.moveToFirst()
+
             if (cursor.count == 0) {
                 cursor.close()
-                return null
+                throw DataNotFoundException(this::class.java, timetableId)
             }
+
+            cursor.moveToFirst()
             val timetable = Timetable.from(cursor)
             cursor.close()
             return timetable

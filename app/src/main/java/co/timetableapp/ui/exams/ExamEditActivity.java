@@ -29,6 +29,7 @@ import java.util.Collections;
 
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
+import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.data.handler.ExamHandler;
 import co.timetableapp.data.handler.SubjectHandler;
 import co.timetableapp.model.Color;
@@ -117,7 +118,11 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
         mSubjectText = (TextView) findViewById(R.id.textView_subject);
 
         if (!mIsNew) {
-            mSubject = Subject.create(this, mItem.getSubjectId());
+            try {
+                mSubject = Subject.create(this, mItem.getSubjectId());
+            } catch (DataNotFoundException e) {
+                e.printStackTrace();
+            }
             updateLinkedSubject();
         }
 

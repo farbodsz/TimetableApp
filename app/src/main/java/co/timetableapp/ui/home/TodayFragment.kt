@@ -15,7 +15,7 @@ import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.handler.AssignmentHandler
-import co.timetableapp.data.handler.ClassTimeHandler
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.handler.EventHandler
 import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.data.query.Filters
@@ -29,6 +29,7 @@ import co.timetableapp.ui.classes.ClassDetailActivity
 import co.timetableapp.ui.components.SectionGroup
 import co.timetableapp.ui.exams.ExamDetailActivity
 import co.timetableapp.util.DateUtils
+import co.timetableapp.util.ScheduleUtils
 import org.threeten.bp.LocalDate
 
 /**
@@ -82,28 +83,15 @@ class TodayFragment : Fragment() {
         val classesSection = SectionGroup.Builder(context, mSectionContainer!!)
                 .setTitle(R.string.title_activity_classes)
                 .build()
-        addClassesCards(classesSection.containerView, inflater, getClassesToday())
+        val classesToday = ScheduleUtils.getClassTimesForDay(
+                activity,
+                (activity.application as TimetableApplication).currentTimetable!!,
+                LocalDate.now().dayOfWeek,
+                DateUtils.findWeekNumber(activity.application),
+                LocalDate.now())
+        addClassesCards(classesSection.containerView, inflater, classesToday)
 
         mSectionContainer!!.addView(classesSection.view)
-    }
-
-    private fun getClassesToday(): ArrayList<ClassTime> {
-        val now = LocalDate.now()
-        val today = now.dayOfWeek
-        val weekNumber = DateUtils.findWeekNumber(activity.application)
-
-        val classesToday = ArrayList<ClassTime>()
-        ClassTimeHandler(activity).getItems(activity.application).forEach {
-            if (it.day == today && it.weekNumber == weekNumber) {
-                val classDetail = ClassDetail.create(context, it.classDetailId)
-                val cls = Class.create(context, classDetail!!.classId)!!
-                if (cls.isCurrent()) {
-                    classesToday.add(it)
-                }
-            }
-        }
-
-        return classesToday
     }
 
     private fun addClassesCards(container: ViewGroup, inflater: LayoutInflater,
@@ -118,9 +106,18 @@ class TodayFragment : Fragment() {
         for ((_, _, classDetailId, _, _, startTime, endTime) in classTimes.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
-            val classDetail = ClassDetail.create(context, classDetailId)!!
-            val cls = Class.create(context, classDetail.classId)!!
-            val subject = Subject.create(context, cls.subjectId)!!
+            // Not catching DataNotFoundException since this would have been checked when getting
+            // the list of classes in getClassesToday()
+            val classDetail = ClassDetail.create(context, classDetailId)
+            val cls = Class.create(context, classDetail.classId)
+
+            val subject = try {
+                Subject.create(context, cls.subjectId)
+            } catch (e: DataNotFoundException) {
+                e.printStackTrace()
+                continue
+            }
+
             val color = Color(subject.colorId)
 
             val classTimesText = "$startTime\n$endTime"
@@ -218,7 +215,14 @@ class TodayFragment : Fragment() {
         for (exam in exams.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
-            val subject = Subject.create(context, exam.subjectId)!!
+            val subject = try {
+                Subject.create(context, exam.subjectId)
+            } catch (e: DataNotFoundException) {
+                // Don't display this item but print the stack trace
+                e.printStackTrace()
+                continue
+            }
+
             val color = Color(subject.colorId)
 
             val endTime = exam.startTime.plusMinutes(exam.duration.toLong())
@@ -333,8 +337,22 @@ class TodayFragment : Fragment() {
         for (assignment in assignments.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card_no_date, container, false)
 
-            val cls = Class.create(context, assignment.classId)!!
-            val subject = Subject.create(context, cls.subjectId)!!
+            val cls = try {
+                Class.create(context, assignment.classId)
+            } catch (e: DataNotFoundException) {
+                // Don't show this item in the database
+                e.printStackTrace()
+                continue
+            }
+
+            val subject = try {
+                Subject.create(context, cls.subjectId)
+            } catch (e: DataNotFoundException) {
+                // Don't show this item in the database
+                e.printStackTrace()
+                continue
+            }
+
             val color = Color(subject.colorId)
 
             with(card) {

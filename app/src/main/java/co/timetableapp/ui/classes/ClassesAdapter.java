@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import co.timetableapp.R;
 import co.timetableapp.data.handler.ClassDetailHandler;
+import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.model.Class;
 import co.timetableapp.model.ClassDetail;
 import co.timetableapp.model.Color;
@@ -38,7 +39,12 @@ public class ClassesAdapter extends RecyclerView.Adapter<ClassesAdapter.ClassesV
     public void onBindViewHolder(ClassesViewHolder holder, int position) {
         Class cls = mClasses.get(position);
 
-        Subject subject = Subject.create(mContext, cls.getSubjectId());
+        Subject subject = null;
+        try {
+            subject = Subject.create(mContext, cls.getSubjectId());
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+        }
         assert subject != null;
 
         holder.mSubject.setText(cls.makeName(subject));
