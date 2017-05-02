@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:theme="@style/Widget.Timetable.LightAccent">
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/editText_title"
                     android:textSize="@dimen/card_text_primary_title"
@@ -42,69 +43,75 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                app:srcCompat="@drawable/ic_class_black_24dp"
-                style="@style/Widget.Timetable.ItemIcon" />
-
-            <TextView
-                android:id="@+id/textView_class"
-                android:text="@string/property_class"
-                style="@style/Widget.Timetable.TextView.Item.Selectable"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/mdu_keyline_2" />
-        </FrameLayout>
+                android:layout_height="wrap_content">
 
-        <include layout="@layout/divider" />
+                <ImageView
+                    app:srcCompat="@drawable/ic_class_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textView_class"
+                    android:text="@string/property_class"
+                    style="@style/Widget.Timetable.TextView.Item.Selectable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/mdu_keyline_2"
+                    android:paddingRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
 
-            <ImageView
-                app:srcCompat="@drawable/ic_event_black_24dp"
-                style="@style/Widget.Timetable.ItemIcon" />
+            <include layout="@layout/divider" />
 
-            <TextView
-                android:id="@+id/textView_date"
-                android:text="@string/property_due_date"
-                style="@style/Widget.Timetable.TextView.Item.Selectable"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/mdu_keyline_2" />
-        </FrameLayout>
+                android:layout_height="wrap_content">
 
-        <include layout="@layout/divider" />
+                <ImageView
+                    app:srcCompat="@drawable/ic_event_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textView_date"
+                    android:text="@string/property_due_date"
+                    style="@style/Widget.Timetable.TextView.Item.Selectable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/mdu_keyline_2"
+                    android:paddingRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
 
-            <ImageView
-                app:srcCompat="@drawable/ic_event_note_black_24dp"
-                style="@style/Widget.Timetable.ItemIcon" />
+            <include layout="@layout/divider" />
 
-            <EditText
-                android:id="@+id/editText_detail"
-                android:hint="@string/property_detail"
-                style="@style/Widget.Timetable.EditText.Item"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/mdu_keyline_2"
-                android:paddingRight="@dimen/mdu_keyline_1" />
-        </FrameLayout>
+                android:layout_height="wrap_content">
 
-        <include layout="@layout/divider" />
+                <ImageView
+                    app:srcCompat="@drawable/ic_event_note_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
 
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/editText_detail"
+                    android:hint="@string/property_detail"
+                    style="@style/Widget.Timetable.EditText.Item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/mdu_keyline_2"
+                    android:paddingRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:theme="@style/Widget.Timetable.LightAccent">
+
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/editText_module"
                     android:inputType="textShortMessage"
@@ -42,150 +43,162 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                app:srcCompat="@drawable/ic_school_black_24dp"
-                style="@style/Widget.Timetable.ItemIcon" />
-
-            <TextView
-                android:id="@+id/textView_subject"
-                android:text="@string/property_subject"
-                style="@style/Widget.Timetable.TextView.Item.Selectable"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/mdu_keyline_2" />
-        </FrameLayout>
+                android:layout_height="wrap_content">
 
-        <include layout="@layout/divider" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                app:srcCompat="@drawable/ic_event_black_24dp"
-                style="@style/Widget.Timetable.ItemIcon" />
-
-            <TextView
-                android:id="@+id/textView_date"
-                android:text="@string/property_exam_date"
-                style="@style/Widget.Timetable.TextView.Item.Selectable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/mdu_keyline_2" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                app:srcCompat="@drawable/ic_access_time_black_24dp"
-                style="@style/Widget.Timetable.ItemIcon" />
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/mdu_keyline_2">
-                <TextView
-                    android:id="@+id/textView_start_time"
-                    android:text="@string/property_start_time"
-                    style="@style/Widget.Timetable.TextView.Item.Selectable"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-                <TextView
-                    android:id="@+id/textView_duration"
-                    android:text="@string/property_duration"
-                    style="@style/Widget.Timetable.TextView.Item.Selectable"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-            </LinearLayout>
-        </FrameLayout>
-
-        <include layout="@layout/divider" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                app:srcCompat="@drawable/ic_event_seat_black_24dp"
-                style="@style/Widget.Timetable.ItemIcon" />
-
-            <EditText
-                android:id="@+id/editText_seat"
-                android:hint="@string/property_seat"
-                android:inputType="textShortMessage"
-                android:maxLines="1"
-                style="@style/Widget.Timetable.EditText.Item"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/mdu_keyline_2" />
-        </FrameLayout>
-
-        <include layout="@layout/divider" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                app:srcCompat="@drawable/ic_room_black_24dp"
-                style="@style/Widget.Timetable.ItemIcon" />
-
-            <EditText
-                android:id="@+id/editText_room"
-                android:hint="@string/property_room"
-                android:inputType="textShortMessage"
-                android:maxLines="1"
-                style="@style/Widget.Timetable.EditText.Item"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/mdu_keyline_2" />
-        </FrameLayout>
-
-        <include layout="@layout/divider" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                app:srcCompat="@drawable/ic_restore_page_black_24dp"
-                style="@style/Widget.Timetable.ItemIcon" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/mdu_keyline_2">
+                <ImageView
+                    app:srcCompat="@drawable/ic_school_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
 
                 <TextView
-                    android:text="@string/property_resit"
-                    android:textColor="@color/mdu_text_black"
+                    android:id="@+id/textView_subject"
+                    android:text="@string/property_subject"
                     style="@style/Widget.Timetable.TextView.Item.Selectable"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/mdu_padding_normal"/>
+                    android:paddingLeft="@dimen/mdu_keyline_2"
+                    android:paddingRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
 
-                <CheckBox
-                    android:id="@+id/checkBox_resit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </FrameLayout>
+            <include layout="@layout/divider" />
 
-        <include layout="@layout/divider" />
-    </LinearLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_event_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <TextView
+                    android:id="@+id/textView_date"
+                    android:text="@string/property_exam_date"
+                    style="@style/Widget.Timetable.TextView.Item.Selectable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/mdu_keyline_2"
+                    android:paddingRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_access_time_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/mdu_keyline_2"
+                    android:paddingRight="@dimen/mdu_keyline_1">
+
+                    <TextView
+                        android:id="@+id/textView_start_time"
+                        android:text="@string/property_start_time"
+                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/textView_duration"
+                        android:text="@string/property_duration"
+                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_event_seat_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <EditText
+                    android:id="@+id/editText_seat"
+                    android:hint="@string/property_seat"
+                    android:inputType="textShortMessage"
+                    android:maxLines="1"
+                    style="@style/Widget.Timetable.EditText.Item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/mdu_keyline_2"
+                    android:paddingRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_room_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <EditText
+                    android:id="@+id/editText_room"
+                    android:hint="@string/property_room"
+                    android:inputType="textShortMessage"
+                    android:maxLines="1"
+                    style="@style/Widget.Timetable.EditText.Item"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/mdu_keyline_2"
+                    android:paddingRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_restore_page_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/mdu_keyline_2">
+
+                    <TextView
+                        android:text="@string/property_resit"
+                        android:textColor="@color/mdu_text_black"
+                        style="@style/Widget.Timetable.TextView.Item.Selectable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/mdu_padding_normal"/>
+
+                    <CheckBox
+                        android:id="@+id/checkBox_resit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>
