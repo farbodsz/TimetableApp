@@ -46,8 +46,8 @@ class ScheduleActivity : NavigationDrawerActivity() {
         private const val REQUEST_CODE_CLASS_DETAIL = 1
     }
 
-    private var mPagerAdapter: DynamicPagerAdapter? = null
-    private var mViewPager: ViewPager? = null
+    private lateinit var mPagerAdapter: DynamicPagerAdapter
+    private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +67,11 @@ class ScheduleActivity : NavigationDrawerActivity() {
         tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
 
         mPagerAdapter = DynamicPagerAdapter()
-
-        mViewPager = findViewById(R.id.viewPager) as ViewPager
-        mViewPager!!.adapter = mPagerAdapter
+        mViewPager.adapter = mPagerAdapter
 
         setupTabContent()
 
-        mViewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.setTabTextColors(
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white))
@@ -83,7 +81,7 @@ class ScheduleActivity : NavigationDrawerActivity() {
     }
 
     private fun setupTabContent() {
-        mPagerAdapter!!.removeAllViews(mViewPager!!)
+        mPagerAdapter.removeAllViews(mViewPager)
 
         val currentTimetable = (application as TimetableApplication).currentTimetable!!
 
@@ -118,7 +116,7 @@ class ScheduleActivity : NavigationDrawerActivity() {
                             this,
                             R.drawable.ic_today_black_24dp,
                             R.string.no_classes_today)
-                    mPagerAdapter!!.addViewWithTitle(placeholder, title = tabTitle)
+                    mPagerAdapter.addViewWithTitle(placeholder, title = tabTitle)
                     daysCount++
                     continue
                 }
@@ -156,7 +154,7 @@ class ScheduleActivity : NavigationDrawerActivity() {
                     adapter = scheduleAdapter
                 }
 
-                mPagerAdapter!!.addViewWithTitle(recyclerView, title = tabTitle)
+                mPagerAdapter.addViewWithTitle(recyclerView, title = tabTitle)
 
                 daysCount++
             }
@@ -173,7 +171,7 @@ class ScheduleActivity : NavigationDrawerActivity() {
                 R.drawable.ic_today_black_24dp,
                 R.string.no_classes_today)
 
-        mPagerAdapter!!.addViewWithTitle(
+        mPagerAdapter.addViewWithTitle(
                 placeholder,
                 title = getString(R.string.title_activity_schedule))
     }
@@ -225,7 +223,7 @@ class ScheduleActivity : NavigationDrawerActivity() {
     }
 
     private fun goToNow() {
-        mViewPager!!.currentItem = getTodayTabIndex()
+        mViewPager.currentItem = getTodayTabIndex()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

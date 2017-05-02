@@ -32,7 +32,7 @@ class MainActivity : NavigationDrawerActivity() {
         internal const val REQUEST_CODE_ITEM_DETAIL = 1
     }
 
-    private var mViewPager: ViewPager? = null
+    private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +44,7 @@ class MainActivity : NavigationDrawerActivity() {
     private fun setupLayout() {
         setupFab()
 
-        mViewPager = findViewById(R.id.viewPager) as ViewPager
-        mViewPager!!.adapter = PagerAdapter(supportFragmentManager)
+        mViewPager.adapter = PagerAdapter(supportFragmentManager)
 
         val tabLayout = findViewById(R.id.tabLayout) as TabLayout
         tabLayout.setTabTextColors(

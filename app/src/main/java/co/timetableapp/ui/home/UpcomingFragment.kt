@@ -39,7 +39,7 @@ class UpcomingFragment : Fragment() {
         private const val LOG_TAG = "UpcomingFragment"
     }
 
-    private var mSectionContainer: LinearLayout? = null
+    private lateinit var mSectionContainer: LinearLayout
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -62,12 +62,12 @@ class UpcomingFragment : Fragment() {
     private fun setupExamSection(inflater: LayoutInflater) {
         val exams = getUpcomingExams()
         if (exams.isNotEmpty()) {
-            val examsSection = SectionGroup.Builder(context, mSectionContainer!!)
+            val examsSection = SectionGroup.Builder(context, mSectionContainer)
                     .setTitle(R.string.title_exams)
                     .build()
             addExamCards(examsSection.containerView, inflater, exams)
 
-            mSectionContainer!!.addView(examsSection.view)
+            mSectionContainer.addView(examsSection.view)
         }
     }
 
@@ -131,11 +131,11 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun setupAssignmentSection(inflater: LayoutInflater) {
-        val assignmentSection = SectionGroup.Builder(context, mSectionContainer!!)
+        val assignmentSection = SectionGroup.Builder(context, mSectionContainer)
                 .setTitle(R.string.title_assignments)
                 .build()
         addAssignmentCards(assignmentSection.containerView, inflater, getUpcomingAssignments())
-        mSectionContainer!!.addView(assignmentSection.view)
+        mSectionContainer.addView(assignmentSection.view)
     }
 
     /**
@@ -201,11 +201,11 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun setupEventSection(inflater: LayoutInflater) {
-        val assignmentSection = SectionGroup.Builder(context, mSectionContainer!!)
+        val assignmentSection = SectionGroup.Builder(context, mSectionContainer)
                 .setTitle(R.string.title_events)
                 .build()
         addEventCards(assignmentSection.containerView, inflater, getUpcomingEvents())
-        mSectionContainer!!.addView(assignmentSection.view)
+        mSectionContainer.addView(assignmentSection.view)
     }
 
     private fun getUpcomingEvents(): ArrayList<Event> {
@@ -258,7 +258,7 @@ class UpcomingFragment : Fragment() {
         if (requestCode == MainActivity.REQUEST_CODE_ITEM_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.d(LOG_TAG, "UpcomingFragment: received activity result - refreshing lists")
-                mSectionContainer!!.removeAllViews()
+                mSectionContainer.removeAllViews()
                 setupLayout()
             }
         }

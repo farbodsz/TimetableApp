@@ -75,7 +75,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
         const val DISPLAY_ALL_UPCOMING = 2
     }
 
-    private var mHeaders: ArrayList<String?>? = null
+    private val mHeaders = ArrayList<String?>()
 
     private var mShowCompleted = AgendaActivity.DEFAULT_SHOW_COMPLETED
     private var mShowPast = AgendaActivity.DEFAULT_SHOW_PAST
@@ -110,7 +110,6 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
     }
 
     override fun setupList() {
-        mHeaders = ArrayList<String?>()
         super.setupList()
         makeItemTouchHelper().attachToRecyclerView(mRecyclerView)
     }
@@ -239,10 +238,10 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
                 val headerPosition = position - 1
 
                 // Store the header we're about to remove for the undo action
-                mRemovedHeader = mHeaders!![headerPosition]
+                mRemovedHeader = mHeaders[headerPosition]
 
                 // Remove the header from both lists
-                mHeaders!!.removeAt(headerPosition)
+                mHeaders.removeAt(headerPosition)
                 mItems!!.removeAt(headerPosition)
                 mAdapter!!.notifyItemRemoved(position)
 
@@ -251,13 +250,13 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
             }
 
             // Remove the assignment from both lists
-            mHeaders!!.removeAt(position)
+            mHeaders.removeAt(position)
             mItems!!.removeAt(position)
             mAdapter!!.notifyItemRemoved(position)
 
             val undoListener = View.OnClickListener {
                 if (mRemovedHeader != null) {
-                    mHeaders!!.add(mRemovedAssignmentPos - 1, mRemovedHeader!!)
+                    mHeaders.add(mRemovedAssignmentPos - 1, mRemovedHeader!!)
                     mItems!!.add(mRemovedAssignmentPos - 1, null)
                     mAdapter!!.notifyItemInserted(mRemovedAssignmentPos - 1)
                 }
@@ -265,7 +264,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
                 val removedAssignment = mRemovedAssignment
                 removedAssignment!!.completionProgress = mRemovedCompletionProgress
 
-                mHeaders!!.add(mRemovedAssignmentPos, null)
+                mHeaders.add(mRemovedAssignmentPos, null)
                 mItems!!.add(mRemovedAssignmentPos, removedAssignment)
                 mAdapter!!.notifyItemInserted(mRemovedAssignmentPos)
 
@@ -366,8 +365,8 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
             }
         }
 
-        mHeaders!!.clear()
-        mHeaders!!.addAll(headers)
+        mHeaders.clear()
+        mHeaders.addAll(headers)
 
         mItems!!.clear()
         mItems!!.addAll(assignments)

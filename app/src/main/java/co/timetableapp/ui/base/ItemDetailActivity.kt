@@ -62,7 +62,9 @@ abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {
 
     protected abstract fun initializeDataHandler(): TimetableItemHandler<T>
 
-    @JvmField protected var mDataHandler: TimetableItemHandler<T>? = null
+    protected val mDataHandler: TimetableItemHandler<T> by lazy {
+        initializeDataHandler()
+    }
 
     /**
      * The layout resource for the activity layout.
@@ -88,8 +90,6 @@ abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutResource())
-
-        mDataHandler = initializeDataHandler()
 
         val extras = intent.extras
         if (extras == null) {
@@ -123,13 +123,13 @@ abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 // Get the edited item (if new, it would have the highest id)
                 val editedItemId = if (mIsNew) {
-                    mDataHandler!!.getHighestItemId()
+                    mDataHandler.getHighestItemId()
                 } else {
                     mItem!!.id
                 }
 
                 try {
-                    mItem = mDataHandler!!.createFromId(editedItemId)
+                    mItem = mDataHandler.createFromId(editedItemId)
                 } catch (e: DataNotFoundException) {
                     Log.d(LOG_TAG, "Item cannot be found - assume it must have been deleted")
                     saveDeleteAndClose()
