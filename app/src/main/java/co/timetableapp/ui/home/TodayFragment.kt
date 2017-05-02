@@ -43,7 +43,7 @@ class TodayFragment : Fragment() {
         private const val LOG_TAG = "TodayFragment"
     }
 
-    private var mSectionContainer: LinearLayout? = null
+    private lateinit var mSectionContainer: LinearLayout
 
     private val mAssignmentsToday: ArrayList<Assignment> by lazy {
         val today = LocalDate.now()
@@ -79,12 +79,12 @@ class TodayFragment : Fragment() {
     }
 
     private fun setupClassSection(inflater: LayoutInflater) {
-        val classesSection = SectionGroup.Builder(context, mSectionContainer!!)
+        val classesSection = SectionGroup.Builder(context, mSectionContainer)
                 .setTitle(R.string.title_activity_classes)
                 .build()
         addClassesCards(classesSection.containerView, inflater, getClassesToday())
 
-        mSectionContainer!!.addView(classesSection.view)
+        mSectionContainer.addView(classesSection.view)
     }
 
     private fun getClassesToday(): ArrayList<ClassTime> {
@@ -191,12 +191,12 @@ class TodayFragment : Fragment() {
     private fun setupExamSection(inflater: LayoutInflater, timetableId: Int) {
         val exams = getExamsToday(timetableId)
         if (exams.isNotEmpty()) {
-            val examsSection = SectionGroup.Builder(context, mSectionContainer!!)
+            val examsSection = SectionGroup.Builder(context, mSectionContainer)
                     .setTitle(R.string.title_exams)
                     .build()
             addExamsCards(examsSection.containerView, inflater, exams)
 
-            mSectionContainer!!.addView(examsSection.view)
+            mSectionContainer.addView(examsSection.view)
         }
     }
 
@@ -246,7 +246,7 @@ class TodayFragment : Fragment() {
     private fun setupAssignmentSection(inflater: LayoutInflater) {
         val overdueAssignments = getOverdueAssignments()
         if (mAssignmentsToday.isNotEmpty() || overdueAssignments.isNotEmpty()) {
-            val otherSection = SectionGroup.Builder(context, mSectionContainer!!)
+            val otherSection = SectionGroup.Builder(context, mSectionContainer)
                     .setTitle(R.string.title_other_notices)
                     .build()
 
@@ -261,7 +261,7 @@ class TodayFragment : Fragment() {
                 addOverdueAssignmentsCard(otherSection.containerView, inflater, overdueAssignments)
             }
 
-            mSectionContainer!!.addView(otherSection.view)
+            mSectionContainer.addView(otherSection.view)
         }
     }
 
@@ -358,11 +358,11 @@ class TodayFragment : Fragment() {
     private fun setupEventSection(inflater: LayoutInflater) {
         val events = getEventsToday() as ArrayList<Event>
         if (events.isNotEmpty()) {
-            val eventsSection = SectionGroup.Builder(context, mSectionContainer!!)
+            val eventsSection = SectionGroup.Builder(context, mSectionContainer)
                     .setTitle(R.string.title_events)
                     .build()
             addEventsCards(eventsSection.containerView, inflater, events)
-            mSectionContainer!!.addView(eventsSection.view)
+            mSectionContainer.addView(eventsSection.view)
         }
     }
 
@@ -406,7 +406,7 @@ class TodayFragment : Fragment() {
         if (requestCode == MainActivity.REQUEST_CODE_ITEM_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.d(LOG_TAG, "TodayFragment: received activity result - refreshing lists")
-                mSectionContainer!!.removeAllViews()
+                mSectionContainer.removeAllViews()
                 setupLayout()
             }
         }

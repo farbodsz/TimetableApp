@@ -33,11 +33,11 @@ import org.threeten.bp.format.DateTimeFormatter
  */
 class InitialSetupActivity : AppCompatActivity() {
 
-    private var mViewPager: ViewPager? = null
-    private var mProgressText: TextView? = null
+    private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
 
-    private var mPrevButton: Button? = null
-    private var mNextButton: Button? = null
+    private lateinit var mProgressText: TextView
+    private lateinit var mPrevButton: Button
+    private lateinit var mNextButton: Button
 
     /**
      * Contains static variables for setting up the timetable.
@@ -62,21 +62,20 @@ class InitialSetupActivity : AppCompatActivity() {
     }
 
     private fun setupLayout() {
-        mViewPager = findViewById(R.id.viewPager) as ViewPager
-        mViewPager!!.adapter = PagerAdapter(supportFragmentManager)
+        mViewPager.adapter = PagerAdapter(supportFragmentManager)
 
         mProgressText = findViewById(R.id.textView_progress) as TextView
         updateProgressText()
 
         mPrevButton = findViewById(R.id.button_previous) as Button
-        mPrevButton!!.setOnClickListener {
+        mPrevButton.setOnClickListener {
             changePage(true)
             updateProgressText()
         }
 
         mNextButton = findViewById(R.id.button_next) as Button
-        mNextButton!!.setOnClickListener {
-            if (mViewPager!!.currentItem == PagerAdapter.PAGE_END) {
+        mNextButton.setOnClickListener {
+            if (mViewPager.currentItem == PagerAdapter.PAGE_END) {
                 saveAndExit()
                 return@setOnClickListener
             }
@@ -92,8 +91,8 @@ class InitialSetupActivity : AppCompatActivity() {
     private fun updateProgressText() {
         // Suppressing lint check for internationalizing text as we're only displaying numbers and
         // a forward slash - no words from any particular language.
-        mProgressText!!.text =
-                (mViewPager!!.currentItem + 1).toString() + " / " + PagerAdapter.PAGES_COUNT
+        mProgressText.text =
+                (mViewPager.currentItem + 1).toString() + " / " + PagerAdapter.PAGES_COUNT
     }
 
     /**
@@ -104,8 +103,8 @@ class InitialSetupActivity : AppCompatActivity() {
      * @see updateButtonNames
      */
     private fun changePage(goBack: Boolean = false) {
-        mViewPager!!.currentItem = if (goBack) {
-            mViewPager!!.currentItem - 1
+        mViewPager.currentItem = if (goBack) {
+            mViewPager.currentItem - 1
 
         } else {
             if (hasMissingInputs()) {
@@ -121,7 +120,7 @@ class InitialSetupActivity : AppCompatActivity() {
                 return
             }
 
-            mViewPager!!.currentItem + 1
+            mViewPager.currentItem + 1
         }
 
         updateButtonNames()
@@ -131,7 +130,7 @@ class InitialSetupActivity : AppCompatActivity() {
      * @return true if there is at least one missing input.
      */
     private fun hasMissingInputs(): Boolean {
-        return when (mViewPager!!.currentItem) {
+        return when (mViewPager.currentItem) {
             PagerAdapter.PAGE_TIMETABLE_NAME -> sName.isNullOrEmpty()
             PagerAdapter.PAGE_TIMETABLE_DATES -> sStartDate == null || sEndDate == null
             PagerAdapter.PAGE_TIMETABLE_SCHEDULING -> sWeekRotations == null
@@ -147,7 +146,7 @@ class InitialSetupActivity : AppCompatActivity() {
      * @return whether there are any invalid inputs (i.e. true for okay inputs, false for invalid).
      */
     private fun checkInvalidInputs(): Boolean {
-        when (mViewPager!!.currentItem) {
+        when (mViewPager.currentItem) {
             PagerAdapter.PAGE_TIMETABLE_DATES -> {
                 if (sStartDate!!.isAfter(sEndDate!!)) {
                     Snackbar.make(
@@ -226,16 +225,16 @@ class InitialSetupActivity : AppCompatActivity() {
      * Changes the names of the buttons from 'Next' to 'Finish' where applicable.
      */
     private fun updateButtonNames() {
-        val currentItem = mViewPager!!.currentItem
+        val currentItem = mViewPager.currentItem
 
-        mNextButton!!.setText(if (currentItem == PagerAdapter.PAGE_END) {
+        mNextButton.setText(if (currentItem == PagerAdapter.PAGE_END) {
             R.string.finish
         } else {
             R.string.next
         })
 
-        mPrevButton!!.isEnabled = currentItem != PagerAdapter.PAGE_TIMETABLE_NAME
-        mPrevButton!!.text = if (currentItem == PagerAdapter.PAGE_TIMETABLE_NAME) {
+        mPrevButton.isEnabled = currentItem != PagerAdapter.PAGE_TIMETABLE_NAME
+        mPrevButton.text = if (currentItem == PagerAdapter.PAGE_TIMETABLE_NAME) {
             ""
         } else {
             getString(R.string.back)

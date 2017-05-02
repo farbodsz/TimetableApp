@@ -113,7 +113,7 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
 
     override fun saveEditsAndClose() {
         // Overwrite db values as completionProgress may have changed
-        mDataHandler!!.replaceItem(mItem!!.id, mItem!!)
+        mDataHandler.replaceItem(mItem!!.id, mItem!!)
 
         setResult(Activity.RESULT_OK) // to reload any changes in AssignmentsActivity
         supportFinishAfterTransition()

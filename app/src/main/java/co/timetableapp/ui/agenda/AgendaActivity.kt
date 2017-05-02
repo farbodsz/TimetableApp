@@ -34,7 +34,7 @@ class AgendaActivity : NavigationDrawerActivity() {
         const val DEFAULT_SHOW_PAST = false
     }
 
-    private var mViewPager: ViewPager? = null
+    private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
 
     private var mShowCompleted = DEFAULT_SHOW_COMPLETED
     private var mShowPast = DEFAULT_SHOW_PAST
@@ -53,15 +53,14 @@ class AgendaActivity : NavigationDrawerActivity() {
     }
 
     private fun setupLayout() {
-        mViewPager = findViewById(R.id.viewPager) as ViewPager
-        mViewPager!!.adapter = PagerAdapter(supportFragmentManager)
+        mViewPager.adapter = PagerAdapter(supportFragmentManager)
 
         val tabLayout = findViewById(R.id.tabLayout) as TabLayout
         tabLayout.setTabTextColors(
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white))
 
-        mViewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
 
         tabLayout.setupWithViewPager(mViewPager)
     }

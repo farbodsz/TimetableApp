@@ -37,10 +37,10 @@ class TimetablesFragment : Fragment() {
 
     private var mTimetables: ArrayList<Timetable>? = null
 
-    private var mAdapter: TimetablesAdapter? = null
-    private var mDataHandler: TimetableHandler? = null
+    private lateinit var mAdapter: TimetablesAdapter
+    private val mDataHandler by lazy { TimetableHandler(activity) }
 
-    private var mRootView: View? = null
+    private lateinit var mRootView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +51,6 @@ class TimetablesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         mRootView = inflater!!.inflate(R.layout.fragment_content_list, container, false)
 
-        mDataHandler = TimetableHandler(activity)
         setupLayout()
 
         return mRootView
@@ -67,11 +66,15 @@ class TimetablesFragment : Fragment() {
     }
 
     private fun setupList() {
-        mTimetables = mDataHandler!!.getAllItems()
+        mTimetables = mDataHandler.getAllItems()
         sortList()
 
-        mAdapter = TimetablesAdapter(activity, mTimetables, activity.findViewById(R.id.coordinatorLayout))
-        mAdapter!!.setOnEntryClickListener { view, position ->
+        mAdapter = TimetablesAdapter(
+                activity,
+                mTimetables,
+                activity.findViewById(R.id.coordinatorLayout))
+
+        mAdapter.setOnEntryClickListener { view, position ->
             val intent = Intent(activity, TimetableEditActivity::class.java)
             intent.putExtra(ItemEditActivity.EXTRA_ITEM, mTimetables!![position])
 
@@ -87,7 +90,7 @@ class TimetablesFragment : Fragment() {
             startActivityForResult(intent, REQUEST_CODE_TIMETABLE_EDIT, bundle)
         }
 
-        val recyclerView = mRootView!!.findViewById(R.id.recyclerView) as RecyclerView
+        val recyclerView = mRootView.findViewById(R.id.recyclerView) as RecyclerView
         with(recyclerView) {
             val linearLayoutManager = LinearLayoutManager(activity)
             layoutManager = linearLayoutManager
@@ -103,9 +106,9 @@ class TimetablesFragment : Fragment() {
 
     private fun refreshList() {
         mTimetables!!.clear()
-        mTimetables!!.addAll(mDataHandler!!.getAllItems())
+        mTimetables!!.addAll(mDataHandler.getAllItems())
         sortList()
-        mAdapter!!.notifyDataSetChanged()
+        mAdapter.notifyDataSetChanged()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

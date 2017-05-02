@@ -36,7 +36,7 @@ import org.threeten.bp.format.DateTimeFormatter
  */
 class ClassDetailActivity : ItemDetailActivity<Class>() {
 
-    private var mColor: Color? = null
+    private lateinit var mColor: Color
 
     override fun initializeDataHandler() = ClassHandler(this)
 
@@ -52,7 +52,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         setupClassDetailCard()
 
         findViewById(R.id.main_card).setBackgroundColor(
-                ContextCompat.getColor(this, mColor!!.getLightAccentColorRes(this)))
+                ContextCompat.getColor(this, mColor.getLightAccentColorRes(this)))
 
         setupRelatedItemCards()
     }
@@ -69,7 +69,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         supportActionBar!!.title = mItem!!.makeName(subject)
 
         mColor = Color(subject.colorId)
-        UiUtils.setBarColors(mColor!!, this, toolbar)
+        UiUtils.setBarColors(mColor, this, toolbar)
     }
 
     /**

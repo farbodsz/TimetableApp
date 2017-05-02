@@ -32,7 +32,7 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
         private const val REQUEST_CODE_EVENT_EDIT = 1
     }
 
-    private var mHeaders: ArrayList<String?>? = null
+    private val mHeaders = ArrayList<String?>()
 
     private var mShowPast = false
 
@@ -71,11 +71,6 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
         }
 
         return adapter
-    }
-
-    override fun setupList() {
-        mHeaders = ArrayList<String?>()
-        super.setupList()
     }
 
     override fun sortList() {
@@ -129,8 +124,8 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
             }
         }
 
-        mHeaders!!.clear()
-        mHeaders!!.addAll(headers)
+        mHeaders.clear()
+        mHeaders.addAll(headers)
 
         mItems!!.clear()
         mItems!!.addAll(events)

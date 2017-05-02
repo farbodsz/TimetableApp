@@ -32,7 +32,7 @@ class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeLis
         private const val REQUEST_CODE_EXAM_EDIT = 1
     }
 
-    private var mHeaders: ArrayList<String?>? = null
+    private val mHeaders = ArrayList<String?>()
 
     private var mShowPast = false
 
@@ -74,7 +74,6 @@ class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeLis
     }
 
     override fun setupList() {
-        mHeaders = ArrayList<String?>()
         super.setupList()
     }
 
@@ -129,8 +128,8 @@ class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeLis
             }
         }
 
-        mHeaders!!.clear()
-        mHeaders!!.addAll(headers)
+        mHeaders.clear()
+        mHeaders.addAll(headers)
 
         mItems!!.clear()
         mItems!!.addAll(exams)
