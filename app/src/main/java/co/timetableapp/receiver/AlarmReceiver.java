@@ -261,7 +261,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     public void setRepeatingAlarm(Context context, @Type int notificationType,
                                   Calendar startDateTime, int itemId, long repeatInterval) {
         boolean isRepeat = repeatInterval != NO_REPEAT_INTERVAL;
-        Log.i(LOG_TAG, isRepeat ?
+        Log.d(LOG_TAG, isRepeat ?
                 "Setting repeating alarm for calendar: " + startDateTime.toString() :
                 "Setting alarm for calendar: " + startDateTime.toString());
 
@@ -302,7 +302,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     }
 
     public void cancelAlarm(Context context, @Type int notificationType, int itemId) {
-        Log.i(LOG_TAG, "Cancelling repeated alarm for an item with id: " + itemId);
+        Log.d(LOG_TAG, "Cancelling repeated alarm for an item with id: " + itemId);
 
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
