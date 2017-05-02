@@ -48,7 +48,7 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        (findViewById(R.id.title) as TextView).text = mItem!!.title
+        (findViewById(R.id.title) as TextView).text = mItem.title
 
         UiUtils.setBarColors(Event.DEFAULT_COLOR, this, toolbar)
     }
@@ -57,26 +57,26 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
         val dateFormatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
 
         val textView = findViewById(R.id.textView_date) as TextView
-        textView.text = if (mItem!!.hasDifferentStartEndDates()) {
-            "${mItem!!.startDateTime.format(dateFormatter)} - ${mItem!!.endDateTime.format(dateFormatter)}"
+        textView.text = if (mItem.hasDifferentStartEndDates()) {
+            "${mItem.startDateTime.format(dateFormatter)} - ${mItem.endDateTime.format(dateFormatter)}"
         } else {
-            mItem!!.startDateTime.format(dateFormatter)
+            mItem.startDateTime.format(dateFormatter)
         }
     }
 
     private fun setupTimeText() {
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
-        val timeText = mItem!!.startDateTime.format(timeFormatter) + " - " +
-                mItem!!.endDateTime.format(timeFormatter)
+        val timeText = mItem.startDateTime.format(timeFormatter) + " - " +
+                mItem.endDateTime.format(timeFormatter)
         (findViewById(R.id.textView_times) as TextView).text = timeText
     }
 
     private fun setupNotesText() {
         val notesText = findViewById(R.id.textView_notes) as TextView
         with(notesText) {
-            if (mItem!!.hasNotes()) {
-                text = mItem!!.notes
+            if (mItem.hasNotes()) {
+                text = mItem.notes
 
                 setTypeface(null, Typeface.NORMAL)
                 setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black))

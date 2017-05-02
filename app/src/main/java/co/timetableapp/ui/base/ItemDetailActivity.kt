@@ -53,7 +53,8 @@ abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {
     /**
      * The item whose details will be displayed in this activity's UI.
      */
-    @JvmField protected var mItem: T? = null
+    protected lateinit var mItem: T
+        private set
 
     /**
      * Whether or not we are creating a new item.
@@ -62,9 +63,7 @@ abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {
 
     protected abstract fun initializeDataHandler(): TimetableItemHandler<T>
 
-    protected val mDataHandler: TimetableItemHandler<T> by lazy {
-        initializeDataHandler()
-    }
+    protected val mDataHandler: TimetableItemHandler<T> by lazy { initializeDataHandler() }
 
     /**
      * The layout resource for the activity layout.
@@ -125,7 +124,7 @@ abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {
                 val editedItemId = if (mIsNew) {
                     mDataHandler.getHighestItemId()
                 } else {
-                    mItem!!.id
+                    mItem.id
                 }
 
                 try {

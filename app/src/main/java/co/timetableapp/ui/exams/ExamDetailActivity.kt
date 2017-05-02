@@ -39,33 +39,33 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
         setupToolbar()
 
         val dateFormatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
-        (findViewById(R.id.textView_date) as TextView).text = mItem!!.date.format(dateFormatter)
+        (findViewById(R.id.textView_date) as TextView).text = mItem.date.format(dateFormatter)
 
         val timeText =
-                "${mItem!!.startTime} - ${mItem!!.startTime.plusMinutes(mItem!!.duration.toLong())}"
+                "${mItem.startTime} - ${mItem.startTime.plusMinutes(mItem.duration.toLong())}"
         (findViewById(R.id.textView_times) as TextView).text = timeText
 
         val seatGroup = findViewById(R.id.viewGroup_seat)
-        if (mItem!!.hasSeat()) {
+        if (mItem.hasSeat()) {
             seatGroup.visibility = View.VISIBLE
-            (findViewById(R.id.textView_seat) as TextView).text = mItem!!.seat
+            (findViewById(R.id.textView_seat) as TextView).text = mItem.seat
         } else {
             seatGroup.visibility = View.GONE
         }
 
         val roomGroup = findViewById(R.id.viewGroup_room)
-        if (mItem!!.hasRoom()) {
+        if (mItem.hasRoom()) {
             roomGroup.visibility = View.VISIBLE
-            (findViewById(R.id.textView_room) as TextView).text = mItem!!.room
+            (findViewById(R.id.textView_room) as TextView).text = mItem.room
         } else {
             roomGroup.visibility = View.GONE
         }
 
         findViewById(R.id.location_divider).visibility =
-                if (!mItem!!.hasRoom() && !mItem!!.hasSeat()) View.GONE else View.VISIBLE
+                if (!mItem.hasRoom() && !mItem.hasSeat()) View.GONE else View.VISIBLE
 
         val viewGroupResit = findViewById(R.id.viewGroup_resit)
-        viewGroupResit.visibility = if (mItem!!.resit) View.VISIBLE else View.GONE
+        viewGroupResit.visibility = if (mItem.resit) View.VISIBLE else View.GONE
     }
 
     private fun setupToolbar() {
@@ -75,8 +75,8 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        val subject = Subject.create(this, mItem!!.subjectId)
-        (findViewById(R.id.title) as TextView).text = mItem!!.makeName(subject)
+        val subject = Subject.create(this, mItem.subjectId)
+        (findViewById(R.id.title) as TextView).text = mItem.makeName(subject)
 
         val color = Color(subject.colorId)
         UiUtils.setBarColors(color, this, toolbar)
