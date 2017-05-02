@@ -41,21 +41,21 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         setupToolbar()
 
         val dateFormatter = DateTimeFormatter.ofPattern("d MMMM uuuu")
-        (findViewById(R.id.textView_date) as TextView).text = mItem!!.dueDate.format(dateFormatter)
+        (findViewById(R.id.textView_date) as TextView).text = mItem.dueDate.format(dateFormatter)
 
         val progressText = findViewById(R.id.textView_progress) as TextView
-        progressText.text = getString(R.string.property_progress, mItem!!.completionProgress)
+        progressText.text = getString(R.string.property_progress, mItem.completionProgress)
 
         val seekBar = findViewById(R.id.seekBar) as SeekBar
         with(seekBar) {
             max = 20 // so it goes up in 5s
-            progress = mItem!!.completionProgress / 5
+            progress = mItem.completionProgress / 5
 
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    mItem!!.completionProgress = progress * 5
+                    mItem.completionProgress = progress * 5
                     progressText.text =
-                            getString(R.string.property_progress, mItem!!.completionProgress)
+                            getString(R.string.property_progress, mItem.completionProgress)
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -66,8 +66,8 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
 
         val detailText = findViewById(R.id.textView_detail) as TextView
         with(detailText) {
-            if (mItem!!.hasDetail()) {
-                text = mItem!!.detail
+            if (mItem.hasDetail()) {
+                text = mItem.detail
 
                 setTypeface(null, Typeface.NORMAL)
                 setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black))
@@ -87,11 +87,11 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        val cls = Class.create(this, mItem!!.classId)
+        val cls = Class.create(this, mItem.classId)
         val subject = Subject.create(this, cls.subjectId)
 
         val textViewTitle = findViewById(R.id.title) as TextView
-        textViewTitle.text = mItem!!.title
+        textViewTitle.text = mItem.title
 
         val textViewSubtitle = findViewById(R.id.subtitle) as TextView
         textViewSubtitle.text = subject.name
@@ -113,7 +113,7 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
 
     override fun saveEditsAndClose() {
         // Overwrite db values as completionProgress may have changed
-        mDataHandler.replaceItem(mItem!!.id, mItem!!)
+        mDataHandler.replaceItem(mItem.id, mItem)
 
         setResult(Activity.RESULT_OK) // to reload any changes in AssignmentsActivity
         supportFinishAfterTransition()

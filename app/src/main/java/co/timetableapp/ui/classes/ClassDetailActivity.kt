@@ -58,7 +58,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
     }
 
     private fun setupToolbar() {
-        val subject = Subject.create(this, mItem!!.subjectId)
+        val subject = Subject.create(this, mItem.subjectId)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -66,7 +66,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        supportActionBar!!.title = mItem!!.makeName(subject)
+        supportActionBar!!.title = mItem.makeName(subject)
 
         mColor = Color(subject.colorId)
         UiUtils.setBarColors(mColor, this, toolbar)
@@ -82,7 +82,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         val allClassTimes = ArrayList<ClassTime>()
 
         // Add locations, teachers, and times to StringBuilders or ArrayLists, with no duplicates
-        ClassDetailHandler.getClassDetailsForClass(this, mItem!!.id).forEach { classDetail ->
+        ClassDetailHandler.getClassDetailsForClass(this, mItem.id).forEach { classDetail ->
             classDetail.formatLocationName()?.let {
                 if (!locationBuilder.contains(it)) {
                     locationBuilder.append(it).append("\n")
@@ -196,7 +196,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         // Get assignments for this class
         val query = Query.Builder()
                 .addFilter(Filters.equal(AssignmentsSchema.COL_TIMETABLE_ID, timetableId.toString()))
-                .addFilter(Filters.equal(AssignmentsSchema.COL_CLASS_ID, mItem!!.id.toString()))
+                .addFilter(Filters.equal(AssignmentsSchema.COL_CLASS_ID, mItem.id.toString()))
                 .build()
 
         // Create items
@@ -220,13 +220,13 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         // Get exams for this class (actually for the subject of the class)
         val query = Query.Builder()
                 .addFilter(Filters.equal(ExamsSchema.COL_TIMETABLE_ID, timetableId.toString()))
-                .addFilter(Filters.equal(ExamsSchema.COL_SUBJECT_ID, mItem!!.subjectId.toString()))
+                .addFilter(Filters.equal(ExamsSchema.COL_SUBJECT_ID, mItem.subjectId.toString()))
                 .build()
 
         // Create items
         val items = ArrayList<CardOfItems.CardItem>()
         val formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
-        val subject = Subject.create(this, mItem!!.subjectId)
+        val subject = Subject.create(this, mItem.subjectId)
         ExamHandler(this).getAllItems(query).forEach {
             if (it.isUpcoming()) {
                 items.add(CardOfItems.CardItem(
