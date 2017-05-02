@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
+import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.model.Class;
 import co.timetableapp.model.ClassDetail;
 import co.timetableapp.model.ClassTime;
@@ -38,13 +39,23 @@ class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleViewH
     public void onBindViewHolder(ScheduleViewHolder holder, int position) {
         ClassTime classTime = mClassTimes.get(position);
 
-        ClassDetail classDetail = ClassDetail.create(mContext, classTime.getClassDetailId());
+        ClassDetail classDetail = null;
+        Class cls = null;
+        try {
+            classDetail = ClassDetail.create(mContext, classTime.getClassDetailId());
+            cls = Class.create(mContext, classDetail.getClassId());
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+        }
         assert classDetail != null;
-
-        Class cls = Class.create(mContext, classDetail.getClassId());
         assert cls != null;
 
-        Subject subject = Subject.create(mContext, cls.getSubjectId());
+        Subject subject = null;
+        try {
+            subject = Subject.create(mContext, cls.getSubjectId());
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+        }
         assert subject != null;
 
         Color color = new Color(subject.getColorId());

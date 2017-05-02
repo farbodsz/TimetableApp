@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.TermsSchema
 import org.threeten.bp.LocalDate
 
@@ -61,8 +62,15 @@ data class Term(
                     endDate)
         }
 
+        /**
+         * Creates a [Term] from the [termId] and corresponding data in the database.
+         *
+         * @throws DataNotFoundException if the database query returns no results
+         * @see from
+         */
         @JvmStatic
-        fun create(context: Context, termId: Int): Term? {
+        @Throws(DataNotFoundException::class)
+        fun create(context: Context, termId: Int): Term {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     TermsSchema.TABLE_NAME,
@@ -70,11 +78,13 @@ data class Term(
                     "${TermsSchema._ID}=?",
                     arrayOf(termId.toString()),
                     null, null, null)
-            cursor.moveToFirst()
+
             if (cursor.count == 0) {
                 cursor.close()
-                return null
+                throw DataNotFoundException(this::class.java, termId)
             }
+
+            cursor.moveToFirst()
             val term = Term.from(cursor)
             cursor.close()
             return term

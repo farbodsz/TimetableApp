@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.ClassDetailsSchema
 
 /**
@@ -47,8 +48,15 @@ data class ClassDetail(
                     cursor.getString(cursor.getColumnIndex(ClassDetailsSchema.COL_TEACHER)))
         }
 
+        /**
+         * Creates a [ClassDetail] from the [classDetailId] and corresponding data in the database.
+         *
+         * @throws DataNotFoundException if the database query returns no results
+         * @see from
+         */
         @JvmStatic
-        fun create(context: Context, classDetailId: Int): ClassDetail? {
+        @Throws(DataNotFoundException::class)
+        fun create(context: Context, classDetailId: Int): ClassDetail {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ClassDetailsSchema.TABLE_NAME,
@@ -58,7 +66,8 @@ data class ClassDetail(
                     null, null, null)
 
             if (cursor.count == 0) {
-                return null
+                cursor.close()
+                throw DataNotFoundException(this::class.java, classDetailId)
             }
 
             cursor.moveToFirst()

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import co.timetableapp.R
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.handler.TimetableItemHandler
 import co.timetableapp.model.TimetableItem
 import co.timetableapp.ui.base.ItemDetailActivity.Companion.EXTRA_ITEM
@@ -126,12 +127,12 @@ abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {
                 } else {
                     mItem!!.id
                 }
-                mItem = mDataHandler!!.createFromId(editedItemId)
 
-                if (mItem == null) {
-                    Log.v(LOG_TAG, "Item is null - assume it must have been deleted")
+                try {
+                    mItem = mDataHandler!!.createFromId(editedItemId)
+                } catch (e: DataNotFoundException) {
+                    Log.d(LOG_TAG, "Item cannot be found - assume it must have been deleted")
                     saveDeleteAndClose()
-                    return
                 }
 
                 if (mIsNew) {

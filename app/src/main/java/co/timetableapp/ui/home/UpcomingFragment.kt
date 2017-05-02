@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.AssignmentHandler
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.handler.EventHandler
 import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.model.*
@@ -98,7 +99,13 @@ class UpcomingFragment : Fragment() {
         for (exam in exams.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
-            val subject = Subject.create(context, exam.subjectId)!!
+            val subject = try {
+                Subject.create(context, exam.subjectId)
+            } catch (e: DataNotFoundException) {
+                e.printStackTrace()
+                continue
+            }
+
             val color = Color(subject.colorId)
 
             val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
@@ -158,8 +165,17 @@ class UpcomingFragment : Fragment() {
         for (assignment in assignments.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
-            val cls = Class.create(context, assignment.classId)!!
-            val subject = Subject.create(context, cls.subjectId)!!
+            // Not checking for DataNotFoundException since this would have been handled when
+            // getting the list of assignments
+            val cls = Class.create(context, assignment.classId)
+
+            val subject = try {
+                Subject.create(context, cls.subjectId)
+            } catch (e: DataNotFoundException) {
+                e.printStackTrace()
+                continue
+            }
+
             val color = Color(subject.colorId)
 
             val formatter = DateTimeFormatter.ofPattern("EEE\nd")

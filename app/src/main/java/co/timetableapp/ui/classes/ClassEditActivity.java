@@ -38,6 +38,7 @@ import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.handler.ClassDetailHandler;
 import co.timetableapp.data.handler.ClassHandler;
 import co.timetableapp.data.handler.ClassTimeHandler;
+import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.data.handler.SubjectHandler;
 import co.timetableapp.model.Class;
 import co.timetableapp.model.ClassDetail;
@@ -146,7 +147,11 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
         mAdapters = new ArrayList<>();
 
         if (!mIsNew) {
-            mSubject = Subject.create(this, mItem.getSubjectId());
+            try {
+                mSubject = Subject.create(this, mItem.getSubjectId());
+            } catch (DataNotFoundException e) {
+                e.printStackTrace();
+            }
             updateLinkedSubject();
 
             ArrayList<ClassDetail> classDetails =

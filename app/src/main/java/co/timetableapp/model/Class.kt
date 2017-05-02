@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.ClassesSchema
 import org.threeten.bp.LocalDate
 
@@ -62,8 +63,15 @@ data class Class(
                     endDate)
         }
 
+        /**
+         * Creates a [Class] from the [classId] and corresponding data in the database.
+         *
+         * @throws DataNotFoundException if the database query returns no results
+         * @see from
+         */
         @JvmStatic
-        fun create(context: Context, classId: Int): Class? {
+        @Throws(DataNotFoundException::class)
+        fun create(context: Context, classId: Int): Class {
             val dbHelper = TimetableDbHelper.getInstance(context)
             val cursor = dbHelper.readableDatabase.query(
                     ClassesSchema.TABLE_NAME,
@@ -71,11 +79,13 @@ data class Class(
                     "${ClassesSchema._ID}=?",
                     arrayOf(classId.toString()),
                     null, null, null)
-            cursor.moveToFirst()
+
             if (cursor.count == 0) {
                 cursor.close()
-                return null
+                throw DataNotFoundException(this::class.java, classId)
             }
+
+            cursor.moveToFirst()
             val cls = Class.from(cursor)
             cursor.close()
             return cls
@@ -161,8 +171,8 @@ data class Class(
     class NaturalSortComparator(private val context: Context) : Comparator<Class> {
 
         override fun compare(o1: Class?, o2: Class?): Int {
-            val subject1 = Subject.create(context, o1!!.subjectId)!!
-            val subject2 = Subject.create(context, o2!!.subjectId)!!
+            val subject1 = Subject.create(context, o1!!.subjectId)
+            val subject2 = Subject.create(context, o2!!.subjectId)
             return subject1.compareTo(subject2)
         }
     }

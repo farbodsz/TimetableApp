@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.AssignmentsSchema
 import org.threeten.bp.LocalDate
 
@@ -64,8 +65,15 @@ data class Assignment(
                     cursor.getInt(cursor.getColumnIndex(AssignmentsSchema.COL_COMPLETION_PROGRESS)))
         }
 
+        /**
+         * Creates an [Assignment] from the [assignmentId] and corresponding data in the database.
+         *
+         * @throws DataNotFoundException if the database query returns no results
+         * @see from
+         */
         @JvmStatic
-        fun create(context: Context, assignmentId: Int): Assignment? {
+        @Throws(DataNotFoundException::class)
+        fun create(context: Context, assignmentId: Int): Assignment {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     AssignmentsSchema.TABLE_NAME,
@@ -73,11 +81,13 @@ data class Assignment(
                     "${AssignmentsSchema._ID}=?",
                     arrayOf(assignmentId.toString()),
                     null, null, null)
-            cursor.moveToFirst()
+
             if (cursor.count == 0) {
                 cursor.close()
-                return null
+                throw DataNotFoundException(this::class.java, assignmentId)
             }
+
+            cursor.moveToFirst()
             val assignment = Assignment.from(cursor)
             cursor.close()
             return assignment
