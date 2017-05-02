@@ -13,6 +13,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
+import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.model.Assignment;
 import co.timetableapp.model.Class;
 import co.timetableapp.model.Color;
@@ -78,9 +79,16 @@ public class AssignmentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 DateTimeFormatter.ofPattern("dd MMM uu")));
         holder.mCompletion.setText(assignment.getCompletionProgress() + " %");
 
-        Class cls = Class.create(mContext, assignment.getClassId());
+        Class cls = null;
+        Subject subject = null;
+        try {
+            cls = Class.create(mContext, assignment.getClassId());
+            subject = Subject.create(mContext, cls.getSubjectId());
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+        }
+
         assert cls != null;
-        Subject subject = Subject.create(mContext, cls.getSubjectId());
         assert subject != null;
 
         holder.mSubject.setText(cls.makeName(subject));

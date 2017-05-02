@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.ExamsSchema
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -70,8 +71,15 @@ data class Exam(
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_IS_RESIT)) == 1)
         }
 
+        /**
+         * Creates an [Exam] from the [examId] and corresponding data in the database.
+         *
+         * @throws DataNotFoundException if the database query returns no results
+         * @see from
+         */
         @JvmStatic
-        fun create(context: Context, examId: Int): Exam? {
+        @Throws(DataNotFoundException::class)
+        fun create(context: Context, examId: Int): Exam {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     ExamsSchema.TABLE_NAME,
@@ -79,11 +87,13 @@ data class Exam(
                     "${ExamsSchema._ID}=?",
                     arrayOf(examId.toString()),
                     null, null, null)
-            cursor.moveToFirst()
+
             if (cursor.count == 0) {
                 cursor.close()
-                return null
+                throw DataNotFoundException(this::class.java, examId)
             }
+
+            cursor.moveToFirst()
             val exam = Exam.from(cursor)
             cursor.close()
             return exam

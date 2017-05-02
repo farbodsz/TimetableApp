@@ -26,6 +26,7 @@ import java.util.Calendar;
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.handler.AssignmentHandler;
+import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.model.Assignment;
 import co.timetableapp.model.Class;
 import co.timetableapp.model.ClassDetail;
@@ -114,14 +115,22 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         switch (notificationType) {
             case Type.CLASS:
-                ClassTime classTime = ClassTime.create(context, id);
-                ClassDetail classDetail = ClassDetail.create(context, classTime.getClassDetailId());
+                ClassTime classTime = null;
+                ClassDetail classDetail = null;
+                Class cls = null;
+                Subject classSubject = null;
+                try {
+                    classTime = ClassTime.create(context, id);
+                    classDetail = ClassDetail.create(context, classTime.getClassDetailId());
+                    cls = Class.create(context, classDetail.getClassId());
+                    classSubject = Subject.create(context, cls.getSubjectId());
+                } catch (DataNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                assert classTime != null;
                 assert classDetail != null;
-
-                Class cls = Class.create(context, classDetail.getClassId());
                 assert cls != null;
-
-                Subject classSubject = Subject.create(context, cls.getSubjectId());
                 assert classSubject != null;
 
                 color = new Color(classSubject.getColorId());
@@ -176,10 +185,16 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 break;
 
             case Type.EXAM:
-                Exam exam = Exam.create(context, id);
-                assert exam != null;
+                Exam exam = null;
+                Subject examSubject = null;
+                try {
+                    exam = Exam.create(context, id);
+                    examSubject = Subject.create(context, exam.getSubjectId());
+                } catch (DataNotFoundException e) {
+                    e.printStackTrace();
+                }
 
-                Subject examSubject = Subject.create(context, exam.getSubjectId());
+                assert exam != null;
                 assert examSubject != null;
 
                 color = new Color(examSubject.getColorId());
@@ -192,7 +207,13 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 break;
 
             case Type.EVENT:
-                Event event = Event.create(context, id);
+                Event event = null;
+                try {
+                    event = Event.create(context, id);
+                } catch (DataNotFoundException e) {
+                    e.printStackTrace();
+                }
+                assert event != null;
 
                 color = new Color(19);
                 intent = new Intent(context, AgendaActivity.class);

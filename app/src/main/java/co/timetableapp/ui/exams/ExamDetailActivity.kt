@@ -75,7 +75,7 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        val subject = Subject.create(this, mItem!!.subjectId)!!
+        val subject = Subject.create(this, mItem!!.subjectId)
         (findViewById(R.id.title) as TextView).text = mItem!!.makeName(subject)
 
         val color = Color(subject.colorId)

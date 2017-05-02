@@ -58,7 +58,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
     }
 
     private fun setupToolbar() {
-        val subject = Subject.create(this, mItem!!.subjectId)!!
+        val subject = Subject.create(this, mItem!!.subjectId)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -226,7 +226,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         // Create items
         val items = ArrayList<CardOfItems.CardItem>()
         val formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
-        val subject = Subject.create(this, mItem!!.subjectId)!!
+        val subject = Subject.create(this, mItem!!.subjectId)
         ExamHandler(this).getAllItems(query).forEach {
             if (it.isUpcoming()) {
                 items.add(CardOfItems.CardItem(

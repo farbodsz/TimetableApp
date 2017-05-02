@@ -50,9 +50,12 @@ abstract class DataHandler<T : BaseItem>(val context: Context) {
     /**
      * Constructs the data model type using its integer identifier.
      *
+     * @throws DataNotFoundException    if the item cannot be found in the database
+     *
      * @see createFromCursor
      */
-    abstract fun createFromId(id: Int): T?
+    @Throws(DataNotFoundException::class)
+    abstract fun createFromId(id: Int): T
 
     /**
      * Puts properties of the data model type into [ContentValues] and returns this.

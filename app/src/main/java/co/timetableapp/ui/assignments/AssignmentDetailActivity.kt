@@ -87,8 +87,8 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        val cls = Class.create(this, mItem!!.classId)!!
-        val subject = Subject.create(this, cls.subjectId)!!
+        val cls = Class.create(this, mItem!!.classId)
+        val subject = Subject.create(this, cls.subjectId)
 
         val textViewTitle = findViewById(R.id.title) as TextView
         textViewTitle.text = mItem!!.title

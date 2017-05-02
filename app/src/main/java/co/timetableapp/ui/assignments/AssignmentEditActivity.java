@@ -29,6 +29,7 @@ import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.handler.AssignmentHandler;
 import co.timetableapp.data.handler.ClassHandler;
+import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.model.Assignment;
 import co.timetableapp.model.Class;
 import co.timetableapp.model.Color;
@@ -123,7 +124,11 @@ public class AssignmentEditActivity extends AppCompatActivity {
         mClassText = (TextView) findViewById(R.id.textView_class);
 
         if (!mIsNew) {
-            mClass = Class.create(this, mAssignment.getClassId());
+            try {
+                mClass = Class.create(this, mAssignment.getClassId());
+            } catch (DataNotFoundException e) {
+                e.printStackTrace();
+            }
             updateLinkedClass();
         }
 
@@ -198,7 +203,12 @@ public class AssignmentEditActivity extends AppCompatActivity {
     }
 
     private void updateLinkedClass() {
-        Subject subject = Subject.create(getBaseContext(), mClass.getSubjectId());
+        Subject subject = null;
+        try {
+            subject = Subject.create(getBaseContext(), mClass.getSubjectId());
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+        }
         assert subject != null;
 
         mClassText.setText(subject.getName());

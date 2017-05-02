@@ -13,6 +13,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import co.timetableapp.R;
+import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.model.Color;
 import co.timetableapp.model.Exam;
 import co.timetableapp.model.Subject;
@@ -70,7 +71,12 @@ public class ExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private void setupItemLayout(ExamViewHolder holder, int position) {
         Exam exam = mExams.get(position);
 
-        Subject subject = Subject.create(mContext, exam.getSubjectId());
+        Subject subject = null;
+        try {
+            subject = Subject.create(mContext, exam.getSubjectId());
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+        }
         assert subject != null;
 
         holder.mTitle.setText(exam.makeName(subject));

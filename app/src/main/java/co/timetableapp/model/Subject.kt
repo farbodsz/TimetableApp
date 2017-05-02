@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
+import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.SubjectsSchema
 
 /**
@@ -39,8 +40,15 @@ data class Subject(
                     cursor.getInt(cursor.getColumnIndex(SubjectsSchema.COL_COLOR_ID)))
         }
 
+        /**
+         * Creates a [Subject] from the [subjectId] and corresponding data in the database.
+         *
+         * @throws DataNotFoundException if the database query returns no results
+         * @see from
+         */
         @JvmStatic
-        fun create(context: Context, subjectId: Int): Subject? {
+        @Throws(DataNotFoundException::class)
+        fun create(context: Context, subjectId: Int): Subject {
             val db = TimetableDbHelper.getInstance(context).readableDatabase
             val cursor = db.query(
                     SubjectsSchema.TABLE_NAME,
@@ -48,11 +56,13 @@ data class Subject(
                     "${SubjectsSchema._ID}=?",
                     arrayOf(subjectId.toString()),
                     null, null, null)
-            cursor.moveToFirst()
+
             if (cursor.count == 0) {
                 cursor.close()
-                return null
+                throw DataNotFoundException(this::class.java, subjectId)
             }
+
+            cursor.moveToFirst()
             val subject = Subject.from(cursor)
             cursor.close()
             return subject
