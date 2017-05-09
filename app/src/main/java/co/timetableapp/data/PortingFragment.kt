@@ -82,14 +82,17 @@ class PortingFragment : Fragment() {
 
     /**
      * Starts the import process.
-     * Displays a dialog warning the user of the consequences of importing. If they choose to
-     * continue with the import, then we check to see if we've been granted storage permissions.
+     *
+     * It first displays a dialog warning the user of the consequences of importing. If they choose
+     * to continue with the import, then we check to see if we've been granted storage permissions.
+     *
+     * The import process will be started [onRequestPermissionsResult] after the permissions have
+     * been verified.
      */
     private fun startImport() {
         if (mImportingFirstDb!!) {
             // Don't show the warning dialog since there is no data that would be overwritten.
             verifyStoragePermissions(true)
-            handleDbImport()
             return
         }
 
@@ -98,7 +101,6 @@ class PortingFragment : Fragment() {
                 .setMessage(R.string.dialog_import_warning_message)
                 .setPositiveButton(android.R.string.yes) { _, _ ->
                     verifyStoragePermissions(true)
-                    handleDbImport()
                 }
                 .setNegativeButton(android.R.string.cancel) { _, _ -> }
                 .show()
@@ -106,16 +108,19 @@ class PortingFragment : Fragment() {
 
     /**
      * Starts the export process.
-     * First, we need to check if the storage permissions have been granted.
+     *
+     * First, we need to check if the storage permissions have been granted. The export process
+     * will be invoked [onRequestPermissionsResult] after verifying permissions.
      */
     private fun startExport() {
         verifyStoragePermissions(false)
-        handleDbExport()
     }
 
     /**
      * Checks to see if the user has granted the storage permissions, which are needed for porting.
-     * If the permissions haven't been granted, it will request for the permissions.
+     *
+     * If the permissions haven't been granted, it will request for the permissions. If they have,
+     * a porting process (import/export) will be started depending on the [importing] parameter.
      */
     private fun verifyStoragePermissions(importing: Boolean) {
         Log.v(LOG_TAG, "Verifying storage permissions")
@@ -134,12 +139,10 @@ class PortingFragment : Fragment() {
             Log.v(LOG_TAG, "No permission - prompting user")
 
             val requestCode = if (importing) REQUEST_CODE_IMPORT_PERM else REQUEST_CODE_EXPORT_PERM
+            requestPermissions(STORAGE_PERMISSIONS, requestCode)
 
-            ActivityCompat.requestPermissions(
-                    activity,
-                    STORAGE_PERMISSIONS,
-                    requestCode)
-
+        } else {
+            if (importing) handleDbImport() else handleDbExport()
         }
     }
 
