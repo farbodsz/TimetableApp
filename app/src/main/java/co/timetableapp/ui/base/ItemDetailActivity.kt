@@ -53,8 +53,8 @@ abstract class ItemDetailActivity<T : TimetableItem> : AppCompatActivity() {
     /**
      * The item whose details will be displayed in this activity's UI.
      */
+    @field:JvmSynthetic  // prevent backing methods being visible in Java activities
     protected lateinit var mItem: T
-        private set
 
     /**
      * Whether or not we are creating a new item.

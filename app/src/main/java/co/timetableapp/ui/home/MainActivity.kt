@@ -51,7 +51,7 @@ class MainActivity : NavigationDrawerActivity() {
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white))
 
-        mViewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
 
         tabLayout.setupWithViewPager(mViewPager)
     }
