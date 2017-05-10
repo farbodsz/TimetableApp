@@ -14,7 +14,7 @@ object EventsSchema : BaseColumns {
     const val _ID = BaseColumns._ID
     const val COL_TIMETABLE_ID = "timetable_id"
     const val COL_TITLE = "title"
-    const val COL_DETAIL = "notes"
+    const val COL_DETAIL = "detail"
     const val COL_START_DATE_DAY_OF_MONTH = "start_date_day_of_month"
     const val COL_START_DATE_MONTH = "start_date_month"
     const val COL_START_DATE_YEAR = "start_date_year"

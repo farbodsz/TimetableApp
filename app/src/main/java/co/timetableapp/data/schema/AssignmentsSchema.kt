@@ -15,7 +15,7 @@ object AssignmentsSchema : BaseColumns {
     const val COL_TIMETABLE_ID = "timetable_id"
     const val COL_CLASS_ID = "class_id"
     const val COL_TITLE = "title"
-    const val COL_DETAIL = "notes"
+    const val COL_DETAIL = "detail"
     const val COL_DUE_DATE_DAY_OF_MONTH = "due_date_day_of_month"
     const val COL_DUE_DATE_MONTH = "due_date_month"
     const val COL_DUE_DATE_YEAR = "due_date_year"
