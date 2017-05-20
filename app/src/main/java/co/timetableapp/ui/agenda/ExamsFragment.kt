@@ -15,7 +15,6 @@ import co.timetableapp.ui.exams.ExamEditActivity
 import co.timetableapp.ui.exams.ExamsAdapter
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
-import com.github.clans.fab.FloatingActionMenu
 import org.threeten.bp.format.DateTimeFormatter
 
 /**
@@ -29,7 +28,7 @@ import org.threeten.bp.format.DateTimeFormatter
 class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
-        private const val REQUEST_CODE_EXAM_EDIT = 1
+        private const val REQUEST_CODE_EXAM_EDIT = 3
     }
 
     private val mHeaders = ArrayList<String?>()
@@ -37,20 +36,6 @@ class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeLis
     private var mShowPast = false
 
     override fun instantiateDataHandler() = ExamHandler(activity)
-
-    override fun setupLayout() {
-        super.setupLayout()
-        setupFab()
-    }
-
-    private fun setupFab() {
-        activity.findViewById(R.id.fab_exam).setOnClickListener {
-            val intent = Intent(activity, ExamEditActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_EXAM_EDIT)
-
-            (activity.findViewById(R.id.fabMenu) as FloatingActionMenu).close(false)
-        }
-    }
 
     override fun setupAdapter(): RecyclerView.Adapter<*> {
         val adapter = ExamsAdapter(activity, mHeaders, mItems)
@@ -147,7 +132,8 @@ class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeLis
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_CODE_EXAM_EDIT) {
+        if (requestCode == AgendaActivity.REQUEST_CODE_CREATE_ITEM ||
+                requestCode == REQUEST_CODE_EXAM_EDIT) {
             if (resultCode == Activity.RESULT_OK) {
                 updateList()
             }

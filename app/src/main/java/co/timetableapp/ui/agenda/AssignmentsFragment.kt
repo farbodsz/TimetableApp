@@ -25,7 +25,6 @@ import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
-import com.github.clans.fab.FloatingActionMenu
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
@@ -45,7 +44,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
 
     companion object {
 
-        private const val REQUEST_CODE_ASSIGNMENT_DETAIL = 1
+        private const val REQUEST_CODE_ASSIGNMENT_DETAIL = 2
 
         /**
          * The intent extra key for the display mode of the assignments.
@@ -93,20 +92,6 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
         val mode = extras?.getInt(ARGUMENT_MODE) ?: DISPLAY_ALL_UPCOMING
 
         mShowCompleted = mode == DISPLAY_ALL_UPCOMING
-    }
-
-    override fun setupLayout() {
-        super.setupLayout()
-        setupFab()
-    }
-
-    private fun setupFab() {
-        activity.findViewById(R.id.fab_assignment).setOnClickListener {
-            val intent = Intent(activity, AssignmentDetailActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_ASSIGNMENT_DETAIL)
-
-            (activity.findViewById(R.id.fabMenu) as FloatingActionMenu).close(false)
-        }
     }
 
     override fun setupList() {
@@ -398,7 +383,8 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_CODE_ASSIGNMENT_DETAIL) {
+        if (requestCode == AgendaActivity.REQUEST_CODE_CREATE_ITEM ||
+                requestCode == REQUEST_CODE_ASSIGNMENT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 updateList()
             }

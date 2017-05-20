@@ -1,6 +1,7 @@
 package co.timetableapp.ui.agenda
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
@@ -18,7 +19,11 @@ import android.text.style.ImageSpan
 import android.view.Menu
 import android.view.MenuItem
 import co.timetableapp.R
+import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.NavigationDrawerActivity
+import co.timetableapp.ui.events.EventDetailActivity
+import co.timetableapp.ui.exams.ExamDetailActivity
+import com.github.clans.fab.FloatingActionMenu
 
 /**
  * An activity for displaying the user's agenda - upcoming assignments, exams, etc.
@@ -30,6 +35,9 @@ import co.timetableapp.ui.base.NavigationDrawerActivity
 class AgendaActivity : NavigationDrawerActivity() {
 
     companion object {
+
+        const val REQUEST_CODE_CREATE_ITEM = 1
+
         const val DEFAULT_SHOW_COMPLETED = true
         const val DEFAULT_SHOW_PAST = false
     }
@@ -63,6 +71,36 @@ class AgendaActivity : NavigationDrawerActivity() {
         mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
 
         tabLayout.setupWithViewPager(mViewPager)
+
+        setupFab()
+    }
+
+    private fun setupFab() {
+        val fabIds = arrayOf(R.id.fab_assignment, R.id.fab_exam, R.id.fab_event)
+        val detailActivities = arrayOf(
+                AssignmentDetailActivity::class.java,
+                ExamDetailActivity::class.java,
+                EventDetailActivity::class.java)  // must correspond to list of FAB ids
+
+        fabIds.forEachIndexed { index, id ->
+            findViewById(id).setOnClickListener {
+                val intent = Intent(this, detailActivities[index])
+                startActivityForResult(intent, REQUEST_CODE_CREATE_ITEM)
+
+                (findViewById(R.id.fabMenu) as FloatingActionMenu).close(false)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_CREATE_ITEM) {
+            supportFragmentManager.fragments.forEach {
+                // Pass on the result to the fragments so they can update themselves
+                it.onActivityResult(requestCode, resultCode, data)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

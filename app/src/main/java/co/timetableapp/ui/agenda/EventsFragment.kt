@@ -14,7 +14,6 @@ import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.events.EventsAdapter
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
-import com.github.clans.fab.FloatingActionMenu
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
@@ -29,7 +28,7 @@ import java.util.*
 class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
-        private const val REQUEST_CODE_EVENT_EDIT = 1
+        private const val REQUEST_CODE_EVENT_EDIT = 4
     }
 
     private val mHeaders = ArrayList<String?>()
@@ -37,20 +36,6 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
     private var mShowPast = false
 
     override fun instantiateDataHandler() = EventHandler(activity)
-
-    override fun setupLayout() {
-        super.setupLayout()
-        setupFab()
-    }
-
-    private fun setupFab() {
-        activity.findViewById(R.id.fab_event).setOnClickListener {
-            val intent = Intent(activity, EventDetailActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_EVENT_EDIT)
-
-            (activity.findViewById(R.id.fabMenu) as FloatingActionMenu).close(false)
-        }
-    }
 
     override fun setupAdapter(): RecyclerView.Adapter<*> {
         val adapter = EventsAdapter(activity, mHeaders, mItems)
@@ -143,7 +128,8 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_CODE_EVENT_EDIT) {
+        if (requestCode == AgendaActivity.REQUEST_CODE_CREATE_ITEM ||
+                requestCode == REQUEST_CODE_EVENT_EDIT) {
             if (resultCode == Activity.RESULT_OK) {
                 updateList()
             }
