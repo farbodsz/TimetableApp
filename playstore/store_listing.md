@@ -1,6 +1,6 @@
 # Timetable - Student Planner
 
-##### The modern way to manage your student life!
+#### _The modern way to manage your student life!_
 
 Timetable is the modern way to manage your student life!
 
