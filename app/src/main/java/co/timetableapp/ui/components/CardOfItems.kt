@@ -3,6 +3,7 @@ package co.timetableapp.ui.components
 import android.content.Context
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import co.timetableapp.R
-import co.timetableapp.model.Color
 import co.timetableapp.ui.components.CardOfItems.Builder
 
 /**
@@ -27,11 +27,14 @@ class CardOfItems private constructor(val view: View) {
 
     /**
      * Represents a sub-item that would be displayed on this card component.
+     *
+     * @param title     the item's title
+     * @param subtitle  the item's subtitle. This may be encapsulated by HTML via
+     *                  [android.text.Html.fromHtml] hence this parameter is a [Spanned] type
      */
     class CardItem(
             val title: String,
-            val subtitle: String,
-            val color: Color?
+            val subtitle: Spanned
     )
 
     /**

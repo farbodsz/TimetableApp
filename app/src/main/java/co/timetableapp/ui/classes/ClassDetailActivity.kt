@@ -5,6 +5,7 @@ import android.content.Intent
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
+import android.text.Html
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -204,10 +205,17 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         val formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
         AssignmentHandler(this).getAllItems(query).forEach {
             if (it.isUpcoming() || it.isOverdue()) {
+                val subtitle = if (it.isOverdue()) {
+                    "<font color=\"#F44336\"><b>${getString(R.string.due_overdue)}</b> \u2022 " +
+                            "${it.dueDate.format(formatter)}</font>"
+                } else {
+                    it.dueDate.format(formatter)
+                }
+
                 items.add(CardOfItems.CardItem(
                         it.title,
-                        it.dueDate.format(formatter),
-                        null))
+                        Html.fromHtml(subtitle)
+                ))
             }
         }
 
@@ -231,8 +239,8 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
             if (it.isUpcoming()) {
                 items.add(CardOfItems.CardItem(
                         it.makeName(subject),
-                        it.date.format(formatter),
-                        null))
+                        Html.fromHtml(it.date.format(formatter))
+                ))
             }
         }
 
