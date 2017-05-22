@@ -24,6 +24,7 @@ object ExamsSchema : BaseColumns {
     const val COL_SEAT = "seat"
     const val COL_ROOM = "room"
     const val COL_IS_RESIT = "is_resit"
+    const val COL_NOTES = "notes"
 
     /**
      * An SQLite statement which creates the 'exams' table upon execution.
@@ -43,7 +44,8 @@ object ExamsSchema : BaseColumns {
             COL_DURATION + INTEGER_TYPE + COMMA_SEP +
             COL_SEAT + TEXT_TYPE + COMMA_SEP +
             COL_ROOM + TEXT_TYPE + COMMA_SEP +
-            COL_IS_RESIT + INTEGER_TYPE +
+            COL_IS_RESIT + INTEGER_TYPE + COMMA_SEP +
+            COL_NOTES + TEXT_TYPE +
             " )"
 
 }

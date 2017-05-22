@@ -27,7 +27,7 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
 
     private static TimetableDbHelper sInstance;
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     static final String DATABASE_NAME = "Timetable.db";
 
     private static final String LOG_TAG = "TimetableDbHelper";
@@ -73,10 +73,12 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
 
         switch (oldVersion) {
             case 1:
+                // Add subject abbreviations
                 db.execSQL("ALTER TABLE " + SubjectsSchema.TABLE_NAME + " ADD COLUMN " +
                         SubjectsSchema.COL_ABBREVIATION + SqlHelperKt.TEXT_TYPE + " DEFAULT ''");
 
             case 2:
+                // Add start/end dates for classes
                 LocalDate defaultDate = Class.NO_DATE;
 
                 db.execSQL("ALTER TABLE " + ClassesSchema.TABLE_NAME + " ADD COLUMN " +
@@ -152,6 +154,11 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
             case 4:
                 // Create the events table
                 db.execSQL(EventsSchema.SQL_CREATE);
+
+            case 5:
+                // Add exam notes
+                db.execSQL("ALTER TABLE " + ExamsSchema.TABLE_NAME + " ADD COLUMN " +
+                        ExamsSchema.COL_NOTES + SqlHelperKt.TEXT_TYPE + " DEFAULT ''");
                 break;
 
             default:
