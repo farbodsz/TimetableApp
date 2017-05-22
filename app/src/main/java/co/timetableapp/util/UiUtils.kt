@@ -2,6 +2,7 @@ package co.timetableapp.util
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.ColorRes
@@ -94,6 +95,30 @@ object UiUtils {
         }
 
         return placeholderView
+    }
+
+    /**
+     * Formats the appearance of a TextView displaying item notes. For example, assignment notes or
+     * exam notes.
+     *
+     * If there are no notes to display (i.e. [notes] is blank), then a placeholder text will be
+     * shown instead with a lighter font color.
+     */
+    @JvmStatic
+    fun formatNotesTextView(context: Context, textView: TextView, notes: String) {
+        with(textView) {
+            if (notes.isBlank()) {
+                text = context.getString(R.string.placeholder_notes_empty)
+
+                setTypeface(null, Typeface.ITALIC)
+                setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black_secondary))
+            } else {
+                text = notes
+
+                setTypeface(null, android.graphics.Typeface.NORMAL)
+                setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black))
+            }
+        }
     }
 
     @JvmStatic

@@ -66,6 +66,9 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
 
         val viewGroupResit = findViewById(R.id.viewGroup_resit)
         viewGroupResit.visibility = if (mItem.resit) View.VISIBLE else View.GONE
+
+        val notesText = findViewById(R.id.textView_notes) as TextView
+        UiUtils.formatNotesTextView(this, notesText, mItem.notes)
     }
 
     private fun setupToolbar() {

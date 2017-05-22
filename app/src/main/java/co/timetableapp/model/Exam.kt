@@ -14,14 +14,15 @@ import org.threeten.bp.LocalTime
 /**
  * Represents an exam.
  *
- * @property subjectId the identifier of the [Subject] this exam is linked with
+ * @property subjectId  the identifier of the [Subject] this exam is linked with
  * @property moduleName an optional name for the module of this exam
- * @property date the date of this exam
- * @property startTime the start time of this exam
- * @property duration an integer storing how long this exam would last (in minutes)
- * @property seat an optional string value denoting the seat the candidate would be in for this exam
- * @property room an optional string value denoting the room the candidate would be in for this exam
- * @property resit a boolean value indicating whether or not the exam is a resit
+ * @property date       the date of this exam
+ * @property startTime  the start time of this exam
+ * @property duration   an integer indicating how long this exam would last, in minutes
+ * @property seat       the seat the candidate would be in for this exam. This can be blank.
+ * @property room       the room the candidate would be in for this exam. This can be blank.
+ * @property resit      indicates whether or not the exam is a resit
+ * @property notes      additional details the student may want to note. This can be blank.
  */
 data class Exam(
         override val id: Int,
@@ -33,7 +34,8 @@ data class Exam(
         val duration: Int,
         val seat: String,
         val room: String,
-        val resit: Boolean
+        val resit: Boolean,
+        val notes: String
 ) : TimetableItem, DateItem, Comparable<Exam> {
 
     companion object {
@@ -59,6 +61,8 @@ data class Exam(
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_START_TIME_HRS)),
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_START_TIME_MINS)))
 
+            val isResit = cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_IS_RESIT)) == 1
+
             return Exam(cursor.getInt(cursor.getColumnIndex(ExamsSchema._ID)),
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_TIMETABLE_ID)),
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_SUBJECT_ID)),
@@ -68,7 +72,8 @@ data class Exam(
                     cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_DURATION)),
                     cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_SEAT)),
                     cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_ROOM)),
-                    cursor.getInt(cursor.getColumnIndex(ExamsSchema.COL_IS_RESIT)) == 1)
+                    isResit,
+                    cursor.getString(cursor.getColumnIndex(ExamsSchema.COL_NOTES)))
         }
 
         /**
@@ -117,7 +122,8 @@ data class Exam(
             source.readInt(),
             source.readString(),
             source.readString(),
-            source.readInt() == 1)
+            source.readInt() == 1,
+            source.readString())
 
     fun hasModuleName() = moduleName.trim().isNotEmpty()
 
@@ -178,6 +184,7 @@ data class Exam(
         dest?.writeString(seat)
         dest?.writeString(room)
         dest?.writeInt(if (resit) 1 else 0)
+        dest?.writeString(notes)
     }
 
     /**
