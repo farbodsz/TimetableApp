@@ -76,6 +76,8 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
 
     private boolean mExamIsResit;
 
+    private EditText mEditTextNotes;
+
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_exam_edit;
@@ -103,6 +105,11 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
         mEditTextRoom = (EditText) findViewById(R.id.editText_room);
         if (!mIsNew) {
             mEditTextRoom.setText(mItem.getRoom());
+        }
+
+        mEditTextNotes = (EditText) findViewById(R.id.editText_notes);
+        if (!mIsNew) {
+            mEditTextNotes.setText(mItem.getNotes());
         }
 
         setupSubjectText();
@@ -375,7 +382,8 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
                 mExamDuration,
                 mEditTextSeat.getText().toString(),
                 mEditTextRoom.getText().toString(),
-                mExamIsResit);
+                mExamIsResit,
+                mEditTextNotes.getText().toString());
 
         if (mIsNew) {
             mDataHandler.addItem(mItem);

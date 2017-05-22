@@ -2,9 +2,7 @@ package co.timetableapp.ui.assignments
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Typeface
 import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.widget.SeekBar
 import android.widget.TextView
@@ -65,19 +63,7 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         }
 
         val detailText = findViewById(R.id.textView_detail) as TextView
-        with(detailText) {
-            if (mItem.hasDetail()) {
-                text = mItem.detail
-
-                setTypeface(null, Typeface.NORMAL)
-                setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black))
-            } else {
-                text = getString(R.string.placeholder_notes_empty)
-
-                setTypeface(null, Typeface.ITALIC)
-                setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black_secondary))
-            }
-        }
+        UiUtils.formatNotesTextView(this, detailText, mItem.detail)
     }
 
     private fun setupToolbar() {

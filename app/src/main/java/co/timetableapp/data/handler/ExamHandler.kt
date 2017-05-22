@@ -37,6 +37,7 @@ class ExamHandler(context: Context) : TimetableItemHandler<Exam>(context) {
             put(ExamsSchema.COL_SEAT, item.seat)
             put(ExamsSchema.COL_ROOM, item.room)
             put(ExamsSchema.COL_IS_RESIT, if (item.resit) 1 else 0)
+            put(ExamsSchema.COL_NOTES, item.notes)
         }
         return values
     }
