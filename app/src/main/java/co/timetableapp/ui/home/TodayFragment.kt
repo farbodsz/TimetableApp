@@ -27,6 +27,7 @@ import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.classes.ClassDetailActivity
 import co.timetableapp.ui.components.SectionGroup
+import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.ScheduleUtils
@@ -408,7 +409,7 @@ class TodayFragment : Fragment() {
                 (findViewById(R.id.times) as TextView).text = timesText
 
                 setOnClickListener {
-                    val intent = Intent(activity, ExamDetailActivity::class.java)
+                    val intent = Intent(activity, EventDetailActivity::class.java)
                     intent.putExtra(ItemDetailActivity.EXTRA_ITEM, event)
                     startActivity(intent)
                 }
