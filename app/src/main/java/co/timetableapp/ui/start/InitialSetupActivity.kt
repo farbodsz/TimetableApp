@@ -43,15 +43,8 @@ class InitialSetupActivity : AppCompatActivity() {
      * Contains static variables for setting up the timetable.
      */
     private companion object {
-
-        /* For creating a Timetable */
-        var sName: String? = null
-        var sStartDate: LocalDate? = null
-        var sEndDate: LocalDate? = null
-        var sWeekRotations: Int? = null
-
-        /* For adding subjects */
-        var sSubjects: String? = null
+        val sTimetableBuilder = TimetableBuilder()
+        var sSubjectText: String? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,10 +124,10 @@ class InitialSetupActivity : AppCompatActivity() {
      */
     private fun hasMissingInputs(): Boolean {
         return when (mViewPager.currentItem) {
-            PagerAdapter.PAGE_TIMETABLE_NAME -> sName.isNullOrEmpty()
-            PagerAdapter.PAGE_TIMETABLE_DATES -> sStartDate == null || sEndDate == null
-            PagerAdapter.PAGE_TIMETABLE_SCHEDULING -> sWeekRotations == null
-            PagerAdapter.PAGE_SUBJECTS -> sSubjects.isNullOrEmpty()
+            PagerAdapter.PAGE_TIMETABLE_NAME -> !sTimetableBuilder.hasName()
+            PagerAdapter.PAGE_TIMETABLE_DATES -> !sTimetableBuilder.hasDates()
+            PagerAdapter.PAGE_TIMETABLE_SCHEDULING -> !sTimetableBuilder.hasWeekRotations()
+            PagerAdapter.PAGE_SUBJECTS -> sSubjectText.isNullOrEmpty()
             else -> false
         }
     }
@@ -148,7 +141,7 @@ class InitialSetupActivity : AppCompatActivity() {
     private fun checkInvalidInputs(): Boolean {
         when (mViewPager.currentItem) {
             PagerAdapter.PAGE_TIMETABLE_DATES -> {
-                if (sStartDate!!.isAfter(sEndDate!!)) {
+                if (sTimetableBuilder.hasInvalidDates()) {
                     Snackbar.make(
                             findViewById(R.id.rootLayout),
                             R.string.message_start_date_after_end_date,
@@ -180,12 +173,7 @@ class InitialSetupActivity : AppCompatActivity() {
     private fun addTimetable(): Timetable {
         val dataHandler = TimetableHandler(this)
 
-        val timetable = Timetable(
-                dataHandler.getHighestItemId() + 1,
-                checkNotNull(sName),
-                checkNotNull(sStartDate),
-                checkNotNull(sEndDate),
-                checkNotNull(sWeekRotations))
+        val timetable = sTimetableBuilder.build(dataHandler.getHighestItemId() + 1)
 
         dataHandler.addItem(timetable)
         (application as TimetableApplication).setCurrentTimetable(this, timetable)
@@ -195,12 +183,12 @@ class InitialSetupActivity : AppCompatActivity() {
 
     /**
      * Writes the user's [Subject]s to the database.
-     * The subject names are derived from a string of names separated by line breaks, [sSubjects].
+     * The subject names are derived from a string of names separated by line breaks, [sSubjectText].
      */
     private fun addSubjects(timetableId: Int) {
         val dataHandler = SubjectHandler(this)
 
-        val subjectStrings = sSubjects!!.split("\n")
+        val subjectStrings = sSubjectText!!.split("\n")
         for (i in 1..subjectStrings.size) {
             val subjectStr = subjectStrings[i - 1]
 
@@ -239,6 +227,36 @@ class InitialSetupActivity : AppCompatActivity() {
         } else {
             getString(R.string.back)
         }
+    }
+
+    /**
+     * A simple class consisting of properties used to create a [Timetable] object.
+     */
+    private class TimetableBuilder {
+
+        var name: String? = null
+        var startDate: LocalDate? = null
+        var endDate: LocalDate? = null
+        var weekRotations: Int? = null
+
+        fun hasName() = !name.isNullOrEmpty()
+
+        fun hasDates() = startDate != null && endDate != null
+
+        fun hasInvalidDates() = startDate!!.isAfter(endDate!!)
+
+        fun hasWeekRotations() = weekRotations != null
+
+        /**
+         * @return a [Timetable] instance from the builder properties
+         * @throws IllegalArgumentException if any of the properties is null (from [checkNotNull])
+         */
+        fun build(id: Int) = Timetable(
+                id,
+                checkNotNull(name),
+                checkNotNull(startDate),
+                checkNotNull(endDate),
+                checkNotNull(weekRotations!!))
     }
 
     private class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -289,7 +307,7 @@ class InitialSetupActivity : AppCompatActivity() {
                 override fun afterTextChanged(s: Editable?) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    sName = s.toString()
+                    sTimetableBuilder.name = s.toString()
                 }
             })
 
@@ -315,21 +333,22 @@ class InitialSetupActivity : AppCompatActivity() {
         private fun setupDateTexts(rootView: View) {
             val formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
 
+            // Note -1s and +1s below because Android month values are from 0-11 (to correspond with
+            // java.util.Calendar) but LocalDate month values are from 1-12
+
             val startDateText = rootView.findViewById(R.id.textView_start_date) as TextView
             startDateText.setOnClickListener {
-                // Note -1s and +1s because Android month values are from 0-11 (to correspond with
-                // java.util.Calendar) but LocalDate month values are from 1-12
-
                 val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    sStartDate = LocalDate.of(year, month + 1, dayOfMonth)
-
+                    val newStartDate = LocalDate.of(year, month + 1, dayOfMonth)
                     startDateText.setTextColor(R.color.mdu_text_black)
-                    startDateText.text = sStartDate!!.format(formatter)
+                    startDateText.text = newStartDate.format(formatter)
+                    sTimetableBuilder.startDate = newStartDate
                 }
 
-                val initialDate = sStartDate ?: LocalDate.now()
+                val initialDate = sTimetableBuilder.startDate ?: LocalDate.now()
 
-                DatePickerDialog(activity,
+                DatePickerDialog(
+                        activity,
                         dateSetListener,
                         initialDate.year,
                         initialDate.monthValue - 1,
@@ -339,13 +358,13 @@ class InitialSetupActivity : AppCompatActivity() {
             val endDateText = rootView.findViewById(R.id.textView_end_date) as TextView
             endDateText.setOnClickListener {
                 val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                    sEndDate = LocalDate.of(year, month + 1, dayOfMonth)
-
+                    val newEndDate = LocalDate.of(year, month + 1, dayOfMonth)
                     endDateText.setTextColor(R.color.mdu_text_black)
-                    endDateText.text = sEndDate!!.format(formatter)
+                    endDateText.text = newEndDate.format(formatter)
+                    sTimetableBuilder.endDate = newEndDate
                 }
 
-                val initialDate = sEndDate ?: LocalDate.now().plusMonths(8)
+                val initialDate = sTimetableBuilder.endDate ?: LocalDate.now().plusMonths(8)
 
                 DatePickerDialog(
                         activity,
@@ -385,7 +404,7 @@ class InitialSetupActivity : AppCompatActivity() {
         private fun setupRadioButtons(rootView: View) {
             with(rootView.findViewById(R.id.radio_scheduling_fixed) as RadioButton) {
                 setOnCheckedChangeListener { _, isChecked ->
-                    if (isChecked) sWeekRotations = 1
+                    if (isChecked) sTimetableBuilder.weekRotations = 1
                 }
 
                 isChecked = true
@@ -399,7 +418,7 @@ class InitialSetupActivity : AppCompatActivity() {
             otherRadioIds.forEachIndexed { index, radioId ->
                 (rootView.findViewById(radioId) as RadioButton)
                         .setOnCheckedChangeListener { _, isChecked ->
-                            if (isChecked) sWeekRotations = index + 2
+                            if (isChecked) sTimetableBuilder.weekRotations = index + 2
                         }
             }
         }
@@ -423,7 +442,7 @@ class InitialSetupActivity : AppCompatActivity() {
                 override fun afterTextChanged(s: Editable?) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    sSubjects = s.toString()
+                    sSubjectText = s.toString()
                 }
             })
 
