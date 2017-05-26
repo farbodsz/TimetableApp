@@ -8,6 +8,10 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="Timetable.LightAccent">
+        <item name="colorAccent">@color/mdu_text_white_secondary</item>
+    </style>
+
     <style name="Timetable.TranslucentStatus">
         <item name="android:windowBackground">@color/window_background</item>
     </style>
@@ -105,10 +109,6 @@
         <item name="android:textColor">@color/mdu_text_black_secondary</item>
         <!-- 'secondary' textColor by default (for when nothing is selected) -->
         <item name="android:background">?selectableItemBackground</item>
-    </style>
-
-    <style name="Widget.Timetable.LightAccent">
-        <item name="colorAccent">@color/mdu_text_white_secondary</item>
     </style>
 
 </resources>
