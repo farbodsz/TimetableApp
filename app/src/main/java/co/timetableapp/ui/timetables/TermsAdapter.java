@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import co.timetableapp.R;
 import co.timetableapp.model.Term;
+import co.timetableapp.util.DateUtils;
 
 class TermsAdapter extends RecyclerView.Adapter<TermsAdapter.TermsViewHolder> {
 
@@ -34,7 +35,7 @@ class TermsAdapter extends RecyclerView.Adapter<TermsAdapter.TermsViewHolder> {
 
         holder.mName.setText(term.getName());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+        DateTimeFormatter formatter = DateUtils.FORMATTER_FULL_DATE;
         String datesText = term.getStartDate().format(formatter) + " - " +
                 term.getEndDate().format(formatter);
         holder.mDates.setText(datesText);

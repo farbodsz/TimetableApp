@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import co.timetableapp.R;
 import co.timetableapp.data.handler.TermHandler;
@@ -19,6 +18,7 @@ import co.timetableapp.data.handler.TimetableHandler;
 import co.timetableapp.model.Term;
 import co.timetableapp.model.Timetable;
 import co.timetableapp.ui.base.ItemEditActivity;
+import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.TextUtilsKt;
 
 /**
@@ -146,13 +146,12 @@ public class TermEditActivity extends ItemEditActivity<Term> {
     }
 
     private void updateDateTexts() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu");
         if (mStartDate != null) {
-            mStartDateText.setText(mStartDate.format(formatter));
+            mStartDateText.setText(mStartDate.format(DateUtils.FORMATTER_FULL_DATE));
             mStartDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
         }
         if (mEndDate != null) {
-            mEndDateText.setText(mEndDate.format(formatter));
+            mEndDateText.setText(mEndDate.format(DateUtils.FORMATTER_FULL_DATE));
             mEndDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
         }
     }

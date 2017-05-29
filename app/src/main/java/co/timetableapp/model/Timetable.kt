@@ -7,8 +7,8 @@ import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.TimetablesSchema
+import co.timetableapp.util.DateUtils
 import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * A timetable should be used by the user to represent an academic year.
@@ -47,7 +47,7 @@ data class Timetable(
             return if (hasName()) {
                 name
             } else {
-                val formatter = DateTimeFormatter.ofPattern("MMM uuuu")
+                val formatter = DateUtils.FORMATTER_SHORT_MONTH_YEAR
                 "${startDate.format(formatter)} - ${endDate.format(formatter)}"
             }
         }

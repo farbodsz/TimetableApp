@@ -24,9 +24,9 @@ import co.timetableapp.data.handler.TimetableHandler
 import co.timetableapp.model.Subject
 import co.timetableapp.model.Timetable
 import co.timetableapp.ui.home.MainActivity
+import co.timetableapp.util.DateUtils
 import co.timetableapp.util.PrefUtils
 import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * This activity guides the user through setting up their new timetable.
@@ -331,8 +331,6 @@ class InitialSetupActivity : AppCompatActivity() {
         }
 
         private fun setupDateTexts(rootView: View) {
-            val formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
-
             // Note -1s and +1s below because Android month values are from 0-11 (to correspond with
             // java.util.Calendar) but LocalDate month values are from 1-12
 
@@ -341,7 +339,7 @@ class InitialSetupActivity : AppCompatActivity() {
                 val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     val newStartDate = LocalDate.of(year, month + 1, dayOfMonth)
                     startDateText.setTextColor(R.color.mdu_text_black)
-                    startDateText.text = newStartDate.format(formatter)
+                    startDateText.text = newStartDate.format(DateUtils.FORMATTER_FULL_DATE)
                     sTimetableBuilder.startDate = newStartDate
                 }
 
@@ -360,7 +358,7 @@ class InitialSetupActivity : AppCompatActivity() {
                 val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     val newEndDate = LocalDate.of(year, month + 1, dayOfMonth)
                     endDateText.setTextColor(R.color.mdu_text_black)
-                    endDateText.text = newEndDate.format(formatter)
+                    endDateText.text = newEndDate.format(DateUtils.FORMATTER_FULL_DATE)
                     sTimetableBuilder.endDate = newEndDate
                 }
 

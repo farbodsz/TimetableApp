@@ -17,7 +17,6 @@ import android.widget.TimePicker;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
@@ -26,6 +25,7 @@ import co.timetableapp.model.Event;
 import co.timetableapp.model.Timetable;
 import co.timetableapp.ui.agenda.EventsFragment;
 import co.timetableapp.ui.base.ItemEditActivity;
+import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.TextUtilsKt;
 
 /**
@@ -108,7 +108,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
     }
 
     private void updateDateText() {
-        mDateText.setText(mEventDate.format(DateTimeFormatter.ofPattern("d MMMM uuuu")));
+        mDateText.setText(mEventDate.format(DateUtils.FORMATTER_FULL_DATE));
         mDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
     }
 

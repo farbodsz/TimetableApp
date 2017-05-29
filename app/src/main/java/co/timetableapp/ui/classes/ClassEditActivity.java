@@ -50,6 +50,7 @@ import co.timetableapp.ui.base.ItemEditActivity;
 import co.timetableapp.ui.components.DynamicPagerAdapter;
 import co.timetableapp.ui.subjects.SubjectEditActivity;
 import co.timetableapp.ui.subjects.SubjectsAdapter;
+import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
 
@@ -283,7 +284,7 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
     }
 
     private void updateDateTexts() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        DateTimeFormatter formatter = DateUtils.FORMATTER_FULL_DATE;
 
         if (mStartDate != null) {
             mStartDateText.setText(mStartDate.format(formatter));

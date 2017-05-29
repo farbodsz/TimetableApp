@@ -22,7 +22,6 @@ import android.widget.TimePicker;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +38,7 @@ import co.timetableapp.model.Timetable;
 import co.timetableapp.ui.base.ItemEditActivity;
 import co.timetableapp.ui.subjects.SubjectEditActivity;
 import co.timetableapp.ui.subjects.SubjectsAdapter;
+import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
 
@@ -229,7 +229,7 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
     }
 
     private void updateDateText() {
-        mDateText.setText(mExamDate.format(DateTimeFormatter.ofPattern("d MMMM uuuu")));
+        mDateText.setText(mExamDate.format(DateUtils.FORMATTER_FULL_DATE));
         mDateText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
     }
 

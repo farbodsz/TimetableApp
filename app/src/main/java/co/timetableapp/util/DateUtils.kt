@@ -7,10 +7,26 @@ import co.timetableapp.TimetableApplication
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Period
+import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.WeekFields
 import java.util.*
 
 object DateUtils {
+
+    /**
+     * [DateTimeFormatter] for showing dates in full - e.g. "28 September 2014".
+     */
+    @JvmField val FORMATTER_FULL_DATE = DateTimeFormatter.ofPattern("d MMMM uuuu")!!
+
+    /**
+     * [DateTimeFormatter] for showing months with years in full - e.g. "March 2012".
+     */
+    @JvmField val FORMATTER_FULL_MONTH_YEAR = DateTimeFormatter.ofPattern("MMMM uuuu")!!
+
+    /**
+     * [DateTimeFormatter] for showing month abbreviations with years - e.g. "Mar 2012".
+     */
+    @JvmField val FORMATTER_SHORT_MONTH_YEAR = DateTimeFormatter.ofPattern("MMM uuuu")!!
 
     private const val ID_OVERDUE = 0
     private const val ID_TODAY = 1

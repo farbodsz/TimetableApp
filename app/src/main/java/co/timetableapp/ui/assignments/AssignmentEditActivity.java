@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +35,7 @@ import co.timetableapp.model.Color;
 import co.timetableapp.model.Subject;
 import co.timetableapp.model.Timetable;
 import co.timetableapp.ui.classes.ClassesAdapter;
+import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
 
@@ -225,9 +225,7 @@ public class AssignmentEditActivity extends AppCompatActivity {
     }
 
     private void updateDateText() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM uuuu");
-
-        mDateText.setText(mDueDate.format(formatter));
+        mDateText.setText(mDueDate.format(DateUtils.FORMATTER_FULL_DATE));
         mDateText.setTextColor(ContextCompat.getColor(
                 getBaseContext(), R.color.mdu_text_black));
     }

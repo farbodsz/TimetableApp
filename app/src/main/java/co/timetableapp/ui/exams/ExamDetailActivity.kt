@@ -13,8 +13,8 @@ import co.timetableapp.model.Exam
 import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemEditActivity
+import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * Shows the details of an exam.
@@ -38,7 +38,7 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
     override fun setupLayout() {
         setupToolbar()
 
-        val dateFormatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
+        val dateFormatter = DateUtils.FORMATTER_FULL_DATE
         (findViewById(R.id.textView_date) as TextView).text = mItem.date.format(dateFormatter)
 
         val timeText =

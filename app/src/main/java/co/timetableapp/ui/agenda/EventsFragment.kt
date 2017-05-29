@@ -15,7 +15,6 @@ import co.timetableapp.ui.events.EventsAdapter
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
 import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -81,7 +80,7 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
                     timePeriodId = Integer.parseInt(eventDate.year.toString() + eventDate.monthValue.toString())
 
                     if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(eventDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")))
+                        headers.add(eventDate.format(DateUtils.FORMATTER_FULL_MONTH_YEAR))
                         events.add(null)
                     }
 

@@ -15,7 +15,6 @@ import co.timetableapp.ui.exams.ExamEditActivity
 import co.timetableapp.ui.exams.ExamsAdapter
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * A fragment for displaying a list of exams to the user.
@@ -86,7 +85,7 @@ class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeLis
                             examDate.monthValue.toString())
 
                     if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(examDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")))
+                        headers.add(examDate.format(DateUtils.FORMATTER_FULL_MONTH_YEAR))
                         exams.add(null)
                     }
 

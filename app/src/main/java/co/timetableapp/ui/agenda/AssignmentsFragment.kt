@@ -25,7 +25,6 @@ import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
-import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -320,7 +319,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
                         Integer.parseInt(dueDate.year.toString() + dueDate.monthValue.toString())
 
                 if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                    headers.add(dueDate.format(DateTimeFormatter.ofPattern("MMMM uuuu")))
+                    headers.add(dueDate.format(DateUtils.FORMATTER_FULL_MONTH_YEAR))
                     assignments.add(null)
                 }
 

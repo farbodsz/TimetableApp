@@ -12,6 +12,7 @@ import co.timetableapp.data.handler.EventHandler
 import co.timetableapp.model.Event
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemEditActivity
+import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -54,7 +55,7 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
     }
 
     private fun setupDateText() {
-        val dateFormatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
+        val dateFormatter = DateUtils.FORMATTER_FULL_DATE
 
         val textView = findViewById(R.id.textView_date) as TextView
         textView.text = if (mItem.hasDifferentStartEndDates()) {

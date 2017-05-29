@@ -13,8 +13,8 @@ import co.timetableapp.model.Class
 import co.timetableapp.model.Color
 import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemDetailActivity
+import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * Shows the details of an assignment.
@@ -38,7 +38,7 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
     override fun setupLayout() {
         setupToolbar()
 
-        val dateFormatter = DateTimeFormatter.ofPattern("d MMMM uuuu")
+        val dateFormatter = DateUtils.FORMATTER_FULL_DATE
         (findViewById(R.id.textView_date) as TextView).text = mItem.dueDate.format(dateFormatter)
 
         val progressText = findViewById(R.id.textView_progress) as TextView

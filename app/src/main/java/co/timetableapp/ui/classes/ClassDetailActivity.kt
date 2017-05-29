@@ -24,8 +24,8 @@ import co.timetableapp.ui.agenda.AgendaActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.ui.components.CardOfItems
+import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * Shows the details of a class.
@@ -202,7 +202,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
 
         // Create items
         val items = ArrayList<CardOfItems.CardItem>()
-        val formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
+        val formatter = DateUtils.FORMATTER_FULL_DATE
         AssignmentHandler(this).getAllItems(query).forEach {
             if (it.isUpcoming() || it.isOverdue()) {
                 val subtitle = if (it.isOverdue()) {
@@ -233,7 +233,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
 
         // Create items
         val items = ArrayList<CardOfItems.CardItem>()
-        val formatter = DateTimeFormatter.ofPattern("dd MMMM uuuu")
+        val formatter = DateUtils.FORMATTER_FULL_DATE
         val subject = Subject.create(this, mItem.subjectId)
         ExamHandler(this).getAllItems(query).forEach {
             if (it.isUpcoming()) {
