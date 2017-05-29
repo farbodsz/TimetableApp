@@ -103,12 +103,12 @@ class ScheduleActivity : NavigationDrawerActivity() {
 
                 val tabTitle = makeTabName(dayOfWeek, currentTimetable, weekNumber)
 
-                val classTimes = ScheduleUtils.getClassTimesForDay(
+                val classTimes = ScheduleUtils.getClassTimesForDate(
                         this,
                         currentTimetable,
+                        thisDay,
                         dayOfWeek,
-                        weekNumber,
-                        thisDay)
+                        weekNumber)
 
                 if (classTimes.isEmpty()) {
                     // Show a placeholder if there aren't any classes to display for this day

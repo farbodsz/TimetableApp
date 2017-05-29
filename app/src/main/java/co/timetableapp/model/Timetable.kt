@@ -126,7 +126,9 @@ data class Timetable(
 
     fun hasFixedScheduling() = weekRotations == 1
 
-    fun isValidToday() = !LocalDate.now().isBefore(startDate) && !LocalDate.now().isAfter(endDate)
+    @JvmOverloads
+    fun isValidToday(date: LocalDate = LocalDate.now()) =
+            !date.isBefore(startDate) && !date.isAfter(endDate)
 
     override fun compareTo(other: Timetable) = startDate.compareTo(other.startDate)
 

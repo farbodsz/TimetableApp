@@ -1,6 +1,8 @@
 package co.timetableapp.util
 
+import android.app.Application
 import android.content.Context
+import co.timetableapp.TimetableApplication
 import co.timetableapp.data.handler.ClassTimeHandler
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.query.Filters
@@ -19,15 +21,53 @@ import org.threeten.bp.LocalDate
 object ScheduleUtils {
 
     /**
-     * @return a list of [ClassTime]s for a particular day
+     * @return  the [ClassTime]s occurring on a particular [date] for the currently selected
+     *          timetable. Note that if the specified [date] is not within the start and end dates
+     *          of the current timetable, the returned list will be empty (the timetable would not
+     *          have started or would have ended).
      */
-    // TODO improve parameters
     @JvmStatic
-    fun getClassTimesForDay(context: Context,
-                            currentTimetable: Timetable,
-                            dayOfWeek: DayOfWeek,
-                            weekNumber: Int,
-                            date: LocalDate): ArrayList<ClassTime> {
+    fun getClassTimesForDate(context: Context,
+                             application: Application,
+                             date: LocalDate): ArrayList<ClassTime> {
+        val timetable = (application as TimetableApplication).currentTimetable!!
+        if (!timetable.isValidToday(date)) {
+            // Return empty list if timetable hasn't started or has ended
+            return ArrayList()
+        }
+
+        val weekNumber = DateUtils.findWeekNumber(application, date)
+
+        return getClassTimesForDate(context, timetable, date, date.dayOfWeek, weekNumber)
+    }
+
+    /**
+     * Returns the class times occurring on the specified [date].
+     *
+     * Note that if the specified [date] is not within the start and end dates of the
+     * [currentTimetable], then an empty list will be returned as the timetable would either not
+     * have started or would have ended during that date.
+     *
+     * @param context           the activity context
+     * @param currentTimetable  the current timetable as in [TimetableApplication.currentTimetable]
+     * @param date              the date to find [ClassTime]s for
+     * @param dayOfWeek         the day of the week of the [date] (e.g. Monday, Tuesday, etc.)
+     * @param weekNumber        the week number of the [date] according to the scheduling pattern
+     *                          set by [Timetable.weekRotations]. For example, '2' if it the date
+     *                          occurs on a 'Week 2' or 'Week B'.
+     *
+     * @return the list of [ClassTime]s which occur on the specified [date]
+     */
+    @JvmStatic
+    fun getClassTimesForDate(context: Context,
+                             currentTimetable: Timetable,
+                             date: LocalDate,
+                             dayOfWeek: DayOfWeek,
+                             weekNumber: Int): ArrayList<ClassTime> {
+        if (!currentTimetable.isValidToday(date)) {
+            return ArrayList()
+        }
+
         val timetableId = currentTimetable.id
 
         val query = Query.Builder()

@@ -29,7 +29,6 @@ import co.timetableapp.ui.classes.ClassDetailActivity
 import co.timetableapp.ui.components.SectionGroup
 import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
-import co.timetableapp.util.DateUtils
 import co.timetableapp.util.ScheduleUtils
 import org.threeten.bp.LocalDate
 
@@ -84,11 +83,9 @@ class TodayFragment : Fragment() {
         val classesSection = SectionGroup.Builder(context, mSectionContainer)
                 .setTitle(R.string.title_activity_classes)
                 .build()
-        val classesToday = ScheduleUtils.getClassTimesForDay(
+        val classesToday = ScheduleUtils.getClassTimesForDate(
                 activity,
-                (activity.application as TimetableApplication).currentTimetable!!,
-                LocalDate.now().dayOfWeek,
-                DateUtils.findWeekNumber(activity.application),
+                activity.application,
                 LocalDate.now())
         addClassesCards(classesSection.containerView, inflater, classesToday)
 
