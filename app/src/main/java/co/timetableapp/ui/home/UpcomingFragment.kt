@@ -155,7 +155,7 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
-                                    assignments: ArrayList<Assignment>) {
+                                   assignments: ArrayList<Assignment>) {
         if (assignments.isEmpty()) {
             val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
             container.addView(card)
@@ -201,10 +201,15 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun setupEventSection(inflater: LayoutInflater) {
+        val events = getUpcomingEvents()
+        if (events.isEmpty()) {
+            return
+        }
+
         val assignmentSection = SectionGroup.Builder(context, mSectionContainer)
                 .setTitle(R.string.title_events)
                 .build()
-        addEventCards(assignmentSection.containerView, inflater, getUpcomingEvents())
+        addEventCards(assignmentSection.containerView, inflater, events)
         mSectionContainer.addView(assignmentSection.view)
     }
 
@@ -223,10 +228,6 @@ class UpcomingFragment : Fragment() {
 
     private fun addEventCards(container: ViewGroup, inflater: LayoutInflater,
                               events: ArrayList<Event>) {
-        if (events.isEmpty()) {
-            return
-        }
-
         for (event in events.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
