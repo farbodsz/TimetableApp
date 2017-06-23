@@ -127,4 +127,19 @@ object PrefUtils {
         return sp.getString(PREF_EVENT_NOTIFICATION_TIME, "30").toInt()
     }
 
+
+    private const val PREF_AGENDA_SHOW_COMPLETED = "pref_agenda_show_completed"
+
+    @JvmStatic
+    fun showCompletedAgendaItems(context: Context): Boolean {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        return sp.getBoolean(PREF_AGENDA_SHOW_COMPLETED, true)
+    }
+
+    @JvmStatic
+    fun setShowCompletedAgendaItems(context: Context, showCompleted: Boolean) {
+        val sp = PreferenceManager.getDefaultSharedPreferences(context)
+        sp.edit().putBoolean(PREF_AGENDA_SHOW_COMPLETED, showCompleted).apply()
+    }
+
 }

@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -23,6 +24,7 @@ import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
+import co.timetableapp.util.PrefUtils
 import com.github.clans.fab.FloatingActionMenu
 
 /**
@@ -38,18 +40,19 @@ class AgendaActivity : NavigationDrawerActivity() {
 
         const val REQUEST_CODE_CREATE_ITEM = 1
 
-        const val DEFAULT_SHOW_COMPLETED = true
         const val DEFAULT_SHOW_PAST = false
     }
 
     private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
 
-    private var mShowCompleted = DEFAULT_SHOW_COMPLETED
+    private var mShowCompleted = true
     private var mShowPast = DEFAULT_SHOW_PAST
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabs)
+
+        mShowCompleted = PrefUtils.showCompletedAgendaItems(this)
 
         setupToolbar()
         setupLayout()
@@ -118,6 +121,8 @@ class AgendaActivity : NavigationDrawerActivity() {
     }
 
     private fun showFilterDialog() {
+        val oldShowCompleted = mShowCompleted
+
         val multiChoiceListener = DialogInterface.OnMultiChoiceClickListener { _, which, isChecked ->
             when (which) {
                 0 -> mShowCompleted = isChecked
@@ -135,6 +140,24 @@ class AgendaActivity : NavigationDrawerActivity() {
                 .setPositiveButton(R.string.action_filter, { _, _ ->
                     supportFragmentManager.fragments.forEach {
                         (it as OnFilterChangeListener).onFilterChange(mShowCompleted, mShowPast)
+                    }
+
+                    if (mShowCompleted != oldShowCompleted) {
+                        val stringRes = if (mShowCompleted)
+                            R.string.agenda_showing_completed
+                        else
+                            R.string.agenda_hiding_completed
+
+                        val snackbar = Snackbar.make(
+                                findViewById(R.id.coordinatorLayout),
+                                stringRes,
+                                Snackbar.LENGTH_LONG)
+
+                        snackbar.setAction(R.string.always_do_this, {
+                            PrefUtils.setShowCompletedAgendaItems(this, mShowCompleted)
+                        })
+
+                        snackbar.show()
                     }
                 })
                 .show()

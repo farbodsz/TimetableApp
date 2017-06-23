@@ -17,22 +17,17 @@ import android.view.ViewGroup
 import co.timetableapp.R
 import co.timetableapp.data.handler.AssignmentHandler
 import co.timetableapp.model.Assignment
-import co.timetableapp.ui.agenda.AssignmentsFragment.Companion.DISPLAY_ALL_UPCOMING
-import co.timetableapp.ui.agenda.AssignmentsFragment.Companion.DISPLAY_TODO
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.assignments.AssignmentsAdapter
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
+import co.timetableapp.util.PrefUtils
 import co.timetableapp.util.UiUtils
 import java.util.*
 
 /**
  * A fragment for displaying a list of assignments to the user.
- *
- * Assignments can be displayed in two formats: [DISPLAY_TODO] and [DISPLAY_ALL_UPCOMING].
- * In the former, only incomplete assignments will be displayed; in the latter, only assignments
- * that are due in the future (regardless of completion) and overdue assignments will be shown.
  *
  * @see Assignment
  * @see AgendaActivity
@@ -42,55 +37,20 @@ import java.util.*
 class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
-
         private const val REQUEST_CODE_ASSIGNMENT_DETAIL = 2
-
-        /**
-         * The intent extra key for the display mode of the assignments.
-         *
-         * This should be either [DISPLAY_TODO] or [DISPLAY_ALL_UPCOMING]. If the data passed with
-         * this key is null, [DISPLAY_ALL_UPCOMING] will be used by default.
-         */
-        const val ARGUMENT_MODE = "extra_mode"
-
-        /**
-         * Suggests that only incomplete assignments will be shown in the list.
-         *
-         * It is specified by passing it through an intent extra with the [ARGUMENT_MODE] key.
-         *
-         * @see DISPLAY_ALL_UPCOMING
-         */
-        const val DISPLAY_TODO = 1
-
-        /**
-         * Suggests that only assignments due in the future and overdue assignments will be shown in
-         * the list.
-         *
-         * It is specified by passing it through an intent extra with the [ARGUMENT_MODE] key.
-         *
-         * @see DISPLAY_TODO
-         */
-        const val DISPLAY_ALL_UPCOMING = 2
     }
 
     private val mHeaders = ArrayList<String?>()
 
-    private var mShowCompleted = AgendaActivity.DEFAULT_SHOW_COMPLETED
+    private var mShowCompleted = true
     private var mShowPast = AgendaActivity.DEFAULT_SHOW_PAST
 
     override fun instantiateDataHandler() = AssignmentHandler(activity)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        determineDisplayMode()
+        mShowCompleted = PrefUtils.showCompletedAgendaItems(activity)
         return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    private fun determineDisplayMode() {
-        val extras = arguments
-        val mode = extras?.getInt(ARGUMENT_MODE) ?: DISPLAY_ALL_UPCOMING
-
-        mShowCompleted = mode == DISPLAY_ALL_UPCOMING
     }
 
     override fun setupList() {
