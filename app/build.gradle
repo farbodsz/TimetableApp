@@ -9,13 +9,13 @@ def versionBuild = 9
 def versionBuildNameSuffix = ""
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.0'
 
     defaultConfig {
         applicationId "co.timetableapp"
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode versionMajor * 1000 + versionMinor * 100 + versionPatch * 10 + versionBuild
         versionName "$versionMajor.$versionMinor.$versionPatch" + versionBuildNameSuffix
 
@@ -33,6 +33,12 @@ android {
 
     // The return statement removes the lint error 'Not all execution paths return a value'.
     return void
+}
+
+repositories {
+    maven {
+        url 'https://maven.google.com'
+    }
 }
 
 dependencies {
