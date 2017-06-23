@@ -24,6 +24,7 @@ import co.timetableapp.ui.assignments.AssignmentsAdapter
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemListFragment
 import co.timetableapp.util.DateUtils
+import co.timetableapp.util.PrefUtils
 import co.timetableapp.util.UiUtils
 import java.util.*
 
@@ -75,22 +76,15 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
 
     private val mHeaders = ArrayList<String?>()
 
-    private var mShowCompleted = AgendaActivity.DEFAULT_SHOW_COMPLETED
+    private var mShowCompleted = true
     private var mShowPast = AgendaActivity.DEFAULT_SHOW_PAST
 
     override fun instantiateDataHandler() = AssignmentHandler(activity)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        determineDisplayMode()
+        mShowCompleted = PrefUtils.showCompletedAgendaItems(activity)
         return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    private fun determineDisplayMode() {
-        val extras = arguments
-        val mode = extras?.getInt(ARGUMENT_MODE) ?: DISPLAY_ALL_UPCOMING
-
-        mShowCompleted = mode == DISPLAY_ALL_UPCOMING
     }
 
     override fun setupList() {

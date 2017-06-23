@@ -23,6 +23,7 @@ import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
+import co.timetableapp.util.PrefUtils
 import com.github.clans.fab.FloatingActionMenu
 
 /**
@@ -38,18 +39,19 @@ class AgendaActivity : NavigationDrawerActivity() {
 
         const val REQUEST_CODE_CREATE_ITEM = 1
 
-        const val DEFAULT_SHOW_COMPLETED = true
         const val DEFAULT_SHOW_PAST = false
     }
 
     private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
 
-    private var mShowCompleted = DEFAULT_SHOW_COMPLETED
+    private var mShowCompleted = true
     private var mShowPast = DEFAULT_SHOW_PAST
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabs)
+
+        mShowCompleted = PrefUtils.showCompletedAgendaItems(this)
 
         setupToolbar()
         setupLayout()
