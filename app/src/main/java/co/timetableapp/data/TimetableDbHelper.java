@@ -27,7 +27,7 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
 
     private static TimetableDbHelper sInstance;
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     static final String DATABASE_NAME = "Timetable.db";
 
     private static final String LOG_TAG = "TimetableDbHelper";

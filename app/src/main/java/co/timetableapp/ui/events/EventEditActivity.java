@@ -218,7 +218,9 @@ public class EventEditActivity extends ItemEditActivity<Event> {
                 newTitle,
                 newDetail,
                 LocalDateTime.of(mEventDate, mStartTime),
-                LocalDateTime.of(mEventDate, mEndTime));
+                LocalDateTime.of(mEventDate, mEndTime),
+                "",
+                0); // TODO
 
         if (mIsNew) {
             mDataHandler.addItem(mItem);
