@@ -15,10 +15,16 @@ import org.threeten.bp.LocalTime
  * Represents an event that is not part of the usual schedule of the user.
  * For example, a meeting with a tutor, a sporting event, etc.
  *
- * @property title the event's title
- * @property notes additional notes and details for the event
- * @property startDateTime the starting time and date
- * @property endDateTime the ending time and date
+ * Some events may be related to subjects; for example, meetings with tutors of particular subjects.
+ * This is represented by the [relatedSubjectId] property.
+ *
+ * @property title              this event's title
+ * @property notes              additional notes and details for this event
+ * @property startDateTime      the starting time and date
+ * @property endDateTime        the ending time and date
+ * @property location           some text for the location of this event
+ * @property relatedSubjectId   the identifier for the related subject to this event. If this event
+ *                              has no related subject, the value of this property should be 0.
  */
 data class Event(
         override val id: Int,
@@ -26,13 +32,16 @@ data class Event(
         val title: String,
         val notes: String,
         val startDateTime: LocalDateTime,
-        val endDateTime: LocalDateTime
+        val endDateTime: LocalDateTime,
+        val location: String,
+        val relatedSubjectId: Int
 ) : TimetableItem, DateItem, Comparable<Event> {
 
     companion object {
 
         /**
-         * The color to use when displaying events in lists.
+         * The default color to use when displaying events in lists.
+         * Note that the UI could be affected by the [relatedSubjectId].
          */
         @JvmField val DEFAULT_COLOR = Color(19) // blue-grey
 
@@ -71,7 +80,9 @@ data class Event(
                     cursor.getString(cursor.getColumnIndex(EventsSchema.COL_TITLE)),
                     cursor.getString(cursor.getColumnIndex(EventsSchema.COL_DETAIL)),
                     LocalDateTime.of(startDate, startTime),
-                    LocalDateTime.of(endDate, endTime))
+                    LocalDateTime.of(endDate, endTime),
+                    cursor.getString(cursor.getColumnIndex(EventsSchema.COL_LOCATION)),
+                    cursor.getInt(cursor.getColumnIndex(EventsSchema.COL_RELATED_SUBJECT_ID)))
         }
 
         /**
@@ -116,7 +127,9 @@ data class Event(
             source.readString(),
             source.readString(),
             source.readSerializable() as LocalDateTime,
-            source.readSerializable() as LocalDateTime)
+            source.readSerializable() as LocalDateTime,
+            source.readString(),
+            source.readInt())
 
     fun hasDifferentStartEndDates() = startDateTime.toLocalDate() != endDateTime.toLocalDate()
 
@@ -135,6 +148,8 @@ data class Event(
         dest?.writeString(notes)
         dest?.writeSerializable(startDateTime)
         dest?.writeSerializable(endDateTime)
+        dest?.writeString(location)
+        dest?.writeInt(relatedSubjectId)
     }
 
     /**

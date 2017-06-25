@@ -159,6 +159,13 @@ public final class TimetableDbHelper extends SQLiteOpenHelper {
                 // Add exam notes
                 db.execSQL("ALTER TABLE " + ExamsSchema.TABLE_NAME + " ADD COLUMN " +
                         ExamsSchema.COL_NOTES + SqlHelperKt.TEXT_TYPE + " DEFAULT ''");
+
+            case 6:
+                // Add locations and relatedSubjectIds for events
+                db.execSQL("ALTER TABLE " + EventsSchema.TABLE_NAME + " ADD COLUMN " +
+                        EventsSchema.COL_LOCATION + SqlHelperKt.TEXT_TYPE + " DEFAULT ''");
+                db.execSQL("ALTER TABLE " + EventsSchema.TABLE_NAME + " ADD COLUMN " +
+                        EventsSchema.COL_RELATED_SUBJECT_ID + SqlHelperKt.TEXT_TYPE + " DEFAULT 0");
                 break;
 
             default:

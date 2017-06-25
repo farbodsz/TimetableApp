@@ -38,6 +38,8 @@ class EventHandler(context: Context) : TimetableItemHandler<Event>(context) {
             put(EventsSchema.COL_END_DATE_YEAR, item.endDateTime.year)
             put(EventsSchema.COL_END_TIME_HRS, item.endDateTime.hour)
             put(EventsSchema.COL_END_TIME_MINS, item.endDateTime.minute)
+            put(EventsSchema.COL_LOCATION, item.location)
+            put(EventsSchema.COL_RELATED_SUBJECT_ID, item.relatedSubjectId)
         }
         return values
     }
