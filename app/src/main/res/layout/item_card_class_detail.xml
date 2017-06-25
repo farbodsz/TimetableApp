@@ -22,7 +22,7 @@
 
             <ImageView
                 android:tint="@color/mdu_white"
-                app:srcCompat="@drawable/ic_room_black_24dp"
+                app:srcCompat="@drawable/ic_location_black_24dp"
                 style="@style/Widget.Timetable.ItemIcon" />
 
             <TextView

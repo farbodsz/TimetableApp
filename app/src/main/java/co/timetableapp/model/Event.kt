@@ -135,6 +135,8 @@ data class Event(
 
     fun hasNotes() = notes.isNotEmpty()
 
+    fun hasLocation() = location.isNotEmpty()
+
     override fun isInPast() = startDateTime.isBefore(LocalDateTime.now())
 
     override fun compareTo(other: Event) = startDateTime.compareTo(other.startDateTime)

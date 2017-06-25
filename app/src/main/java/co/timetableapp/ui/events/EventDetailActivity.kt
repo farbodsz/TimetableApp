@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
+import android.view.View
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.EventHandler
@@ -40,6 +41,7 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
         setupDateText()
         setupTimeText()
         setupNotesText()
+        setupLocationText()
     }
 
     private fun setupToolbar() {
@@ -88,6 +90,16 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
                 setTextColor(ContextCompat.getColor(context, R.color.mdu_text_black_secondary))
             }
         }
+    }
+
+    private fun setupLocationText() {
+        if (!mItem.hasLocation()) {
+            findViewById(R.id.divider_location).visibility = View.GONE
+            findViewById(R.id.viewGroup_location).visibility = View.GONE
+            return
+        }
+
+        (findViewById(R.id.textView_location) as TextView).text = mItem.location
     }
 
     override fun onMenuEditClick() {

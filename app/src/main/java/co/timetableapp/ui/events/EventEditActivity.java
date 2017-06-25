@@ -40,6 +40,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
 
     private EditText mEditTextTitle;
     private EditText mEditTextDetail;
+    private EditText mEditTextLocation;
 
     private LocalDate mEventDate;
     private TextView mDateText;
@@ -67,6 +68,11 @@ public class EventEditActivity extends ItemEditActivity<Event> {
         mEditTextDetail = (EditText) findViewById(R.id.editText_detail);
         if (!mIsNew) {
             mEditTextDetail.setText(mItem.getNotes());
+        }
+
+        mEditTextLocation = (EditText) findViewById(R.id.editText_location);
+        if (!mIsNew) {
+            mEditTextLocation.setText(mItem.getLocation());
         }
 
         setupDateText();
@@ -188,6 +194,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
         newTitle = TextUtilsKt.title(newTitle);
 
         String newDetail = mEditTextDetail.getText().toString().trim();
+        String newLocation = mEditTextLocation.getText().toString().trim();
 
         if (newTitle.trim().isEmpty()) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_title_required,
@@ -219,8 +226,8 @@ public class EventEditActivity extends ItemEditActivity<Event> {
                 newDetail,
                 LocalDateTime.of(mEventDate, mStartTime),
                 LocalDateTime.of(mEventDate, mEndTime),
-                "",
-                0); // TODO
+                newLocation,
+                0); // TODO: Related subjects
 
         if (mIsNew) {
             mDataHandler.addItem(mItem);
