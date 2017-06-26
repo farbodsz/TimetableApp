@@ -27,7 +27,7 @@ data class Event(
         val notes: String,
         val startDateTime: LocalDateTime,
         val endDateTime: LocalDateTime
-) : TimetableItem, DateItem, Comparable<Event> {
+) : TimetableItem, AgendaItem, DateItem {
 
     companion object {
 
@@ -124,7 +124,12 @@ data class Event(
 
     override fun isInPast() = startDateTime.isBefore(LocalDateTime.now())
 
-    override fun compareTo(other: Event) = startDateTime.compareTo(other.startDateTime)
+    override fun getDisplayedTitle() = title
+
+    // TODO related subjects feature
+    override fun getRelatedSubject(context: Context) = null
+
+    override fun getDateTime() = startDateTime
 
     override fun describeContents() = 0
 

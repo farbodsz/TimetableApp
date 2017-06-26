@@ -8,6 +8,8 @@ import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.AssignmentsSchema
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 
 /**
  * Represents an assignment the user may have been given.
@@ -27,7 +29,7 @@ data class Assignment(
         val detail: String,
         val dueDate: LocalDate,
         var completionProgress: Int
-) : TimetableItem, DateItem, Comparable<Assignment> {
+) : TimetableItem, AgendaItem, DateItem {
 
     init {
         if (completionProgress !in 0..100) {
@@ -120,15 +122,14 @@ data class Assignment(
 
     fun isPastAndDone() = isInPast() && isComplete()
 
-    override fun compareTo(other: Assignment): Int {
-        // Sorting order is due dates then titles
-        val dateComparison = dueDate.compareTo(other.dueDate)
-        return if (dateComparison == 0) {
-            title.compareTo(other.title)
-        } else {
-            dateComparison
-        }
+    override fun getDisplayedTitle() = title
+
+    override fun getRelatedSubject(context: Context): Subject? {
+        val cls = Class.create(context, classId)
+        return Subject.create(context, cls.subjectId)
     }
+
+    override fun getDateTime() = LocalDateTime.of(dueDate, LocalTime.MIDNIGHT)!!
 
     override fun describeContents() = 0
 

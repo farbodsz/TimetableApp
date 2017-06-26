@@ -36,7 +36,7 @@ data class Exam(
         val room: String,
         val resit: Boolean,
         val notes: String
-) : TimetableItem, DateItem, Comparable<Exam> {
+) : TimetableItem, AgendaItem, DateItem {
 
     companion object {
 
@@ -146,6 +146,7 @@ data class Exam(
     /**
      * @return a [LocalDateTime] object using the [date] and [startTime] of the exam
      */
+    // TODO remove this? - it is redundant since we now have getDateTime from AgendaItem
     fun makeDateTimeObject() = LocalDateTime.of(date, startTime)!!
 
     /**
@@ -167,9 +168,11 @@ data class Exam(
         return stringBuilder.toString()
     }
 
-    override fun compareTo(other: Exam): Int {
-        return makeDateTimeObject().compareTo(other.makeDateTimeObject())
-    }
+    override fun getDisplayedTitle() = moduleName
+
+    override fun getRelatedSubject(context: Context) = Subject.create(context, subjectId)
+
+    override fun getDateTime() = makeDateTimeObject()
 
     override fun describeContents() = 0
 
