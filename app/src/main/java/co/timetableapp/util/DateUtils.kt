@@ -16,7 +16,7 @@ object DateUtils {
     /**
      * [DateTimeFormatter] for showing 24-hour times - e.g. 17:45
      */
-    @JvmField val FORMATTER_TIME = DateTimeFormatter.ofPattern("hh:MM")!!
+    @JvmField val FORMATTER_TIME = DateTimeFormatter.ofPattern("HH:mm")!!
 
     /**
      * [DateTimeFormatter] for showing short dates - e.g. 7 May
