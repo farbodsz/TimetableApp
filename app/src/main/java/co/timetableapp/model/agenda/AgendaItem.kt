@@ -1,13 +1,13 @@
-package co.timetableapp.model
+package co.timetableapp.model.agenda
 
 import android.content.Context
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.LocalTime
+import android.os.Parcelable
+import co.timetableapp.model.Subject
 
 /**
  * This should be implemented by classes that can be shown on the 'Agenda' part of the UI.
  */
-interface AgendaItem : Comparable<AgendaItem> {
+interface AgendaItem : AgendaListItem, Parcelable {
 
     /**
      * @return the title for the Agenda item
@@ -20,13 +20,7 @@ interface AgendaItem : Comparable<AgendaItem> {
      */
     fun getRelatedSubject(context: Context): Subject?
 
-    /**
-     * @return  the date and time of the item. If there is no time, then [LocalTime.MIDNIGHT] should
-     *          be used as the time. This is used to sort Agenda items by date.
-     */
-    fun getDateTime(): LocalDateTime
-
-    override fun compareTo(other: AgendaItem) = getDateTime().compareTo(other.getDateTime())
+    override fun isHeader() = false
 
     /**
      * Defines a sorting order for Agenda items, first being sorted in reverse by date (so that when

@@ -8,19 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import co.timetableapp.R
-import co.timetableapp.model.AgendaItem
 import co.timetableapp.model.Assignment
 import co.timetableapp.model.Color
 import co.timetableapp.model.Event
+import co.timetableapp.model.agenda.AgendaHeader
+import co.timetableapp.model.agenda.AgendaItem
+import co.timetableapp.model.agenda.AgendaListItem
 import co.timetableapp.util.DateUtils
 
 /**
  * A RecyclerView adapter to be used for items being displayed on the "Agenda" page.
  */
-class AgendaItemAdapter(
+class AgendaListItemAdapter(
         private val context: Context,
-        private val headers: ArrayList<String?>,
-        private val agendaItems: ArrayList<AgendaItem?>
+        private val items: List<AgendaListItem>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -69,14 +70,14 @@ class AgendaItemAdapter(
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_HEADER -> {
-                val header = LayoutInflater.from(parent!!.context)
+                val headerView = LayoutInflater.from(parent!!.context)
                         .inflate(R.layout.subheader, parent, false)
-                HeaderViewHolder(header)
+                HeaderViewHolder(headerView)
             }
             VIEW_TYPE_ITEM -> {
-                val item = LayoutInflater.from(parent!!.context)
+                val itemView = LayoutInflater.from(parent!!.context)
                         .inflate(R.layout.item_general, parent, false)
-                AgendaViewHolder(item)
+                AgendaViewHolder(itemView)
             }
             else -> throw IllegalArgumentException("invalid view type")
         }
@@ -90,12 +91,12 @@ class AgendaItemAdapter(
     }
 
     private fun setupHeaderLayout(holder: HeaderViewHolder, position: Int) {
-        holder.textView.text = headers[position]
+        val stringRes = (items[position] as AgendaHeader).nameResId
+        holder.textView.text = context.getString(stringRes)
     }
 
     private fun setupItemLayout(holder: AgendaViewHolder, position: Int) {
-        // Assert agendaItem is not null since we checked for this in getItemViewType in onBindViewHolder
-        val agendaItem = agendaItems[position]!!
+        val agendaItem = items[position] as AgendaItem
 
         val relatedSubject = agendaItem.getRelatedSubject(context)
 
@@ -123,9 +124,12 @@ class AgendaItemAdapter(
         }
     }
 
-    override fun getItemCount() = agendaItems.size
+    override fun getItemCount() = items.size
 
-    override fun getItemViewType(position: Int) =
-            if (agendaItems[position] == null) VIEW_TYPE_HEADER else VIEW_TYPE_ITEM
+    override fun getItemViewType(position: Int) = when (items[position]) {
+        is AgendaHeader -> VIEW_TYPE_HEADER
+        is AgendaItem -> VIEW_TYPE_ITEM
+        else -> throw IllegalArgumentException("invalid item type at position: $position")
+    }
 
 }

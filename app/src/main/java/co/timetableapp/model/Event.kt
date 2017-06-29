@@ -7,6 +7,7 @@ import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.EventsSchema
+import co.timetableapp.model.agenda.AgendaItem
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime

@@ -75,7 +75,7 @@ class AgendaActivity : NavigationDrawerActivity() {
 
         tabLayout.setupWithViewPager(mViewPager)
 
-        setupFab()
+        //setupFab()
     }
 
     private fun setupFab() {
@@ -95,6 +95,7 @@ class AgendaActivity : NavigationDrawerActivity() {
         }
     }
 
+    /*
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -105,6 +106,7 @@ class AgendaActivity : NavigationDrawerActivity() {
             }
         }
     }
+    */
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_agenda, menu)
@@ -187,13 +189,14 @@ class AgendaActivity : NavigationDrawerActivity() {
 
     private inner class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        override fun getCount() = 3
+        override fun getCount() = 4
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> AssignmentsFragment()
                 1 -> ExamsFragment()
                 2 -> EventsFragment()
+                3 -> AgendaListFragment()
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
         }
@@ -203,6 +206,7 @@ class AgendaActivity : NavigationDrawerActivity() {
                 0 -> R.drawable.ic_homework_white_24dp
                 1 -> R.drawable.ic_assessment_white_24dp
                 2 -> R.drawable.ic_event_white_24dp
+                3 -> R.drawable.ic_homework_white_24dp
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
 
