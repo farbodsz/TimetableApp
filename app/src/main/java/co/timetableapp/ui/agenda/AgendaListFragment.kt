@@ -127,21 +127,29 @@ class AgendaListFragment : Fragment() {
     private fun fetchAgendaListItems(): List<AgendaListItem> {
         val arrayList = ArrayList<AgendaListItem>()
 
-        val assignmentManager = AssignmentHandler(activity)
-        val assignments = assignmentManager.getItems(activity.application)
-        if (!mShowCompleted) {
-            // If we're not showing completed items, then only show the incomplete items
-            // N.B: this is different from only showing complete items if mShowCompleted = true
-            // which is not what we want.
-            assignments.filter { !it.isComplete() }
-        }
+        val assignments = AssignmentHandler(activity).getItems(activity.application)
+                .filter {
+                    if (mShowPast) {
+                        it.isPastAndDone()
+                    } else {
+                        if (mShowCompleted) {
+                            // If showing completed items, then show them with incomplete items
+                            it.isUpcoming() || it.isOverdue()
+                        } else {
+                            // Incomplete items only
+                            !it.isComplete()
+                        }
+                    }
+                }
         arrayList.addAll(assignments)
 
-        val examManager = ExamHandler(activity)
-        arrayList.addAll(examManager.getItems(activity.application))
+        val exams = ExamHandler(activity).getItems(activity.application)
+                .filter { it.isInPast() == mShowPast }
+        arrayList.addAll(exams)
 
-        val eventManager = EventHandler(activity)
-        arrayList.addAll(eventManager.getItems(activity.application))
+        val events = EventHandler(activity).getItems(activity.application)
+                .filter { it.isInPast() == mShowPast }
+        arrayList.addAll(events)
 
         arrayList.addAll(AgendaHeader.getAllHeaderTypes())
 
@@ -157,7 +165,6 @@ class AgendaListFragment : Fragment() {
         // Removing items whilst iterating causes a ConcurrentModificationException
         // We will go through the list and store which items need to be removed and do that later
         val itemsToRemove = ArrayList<AgendaListItem>()
-
         var previousItem: AgendaListItem? = null
         for (item in sortedItems) {
             if (previousItem == null) {
@@ -174,6 +181,16 @@ class AgendaListFragment : Fragment() {
         }
 
         sortedItems.removeAll(itemsToRemove)
+
+        // Remove redundant headers from the end of the list
+        val headersToRemove = ArrayList<AgendaListItem>()
+        var i = sortedItems.size - 1
+        while (sortedItems[i] is AgendaHeader) {
+            headersToRemove.add(sortedItems[i])
+            i--
+        }
+
+        sortedItems.removeAll(headersToRemove)
 
         return sortedItems
     }
@@ -198,11 +215,9 @@ class AgendaListFragment : Fragment() {
         else
             R.string.placeholder_assignments_title
 
-        // TODO subtitle
-
         return UiUtils.makePlaceholderView(
                 activity,
-                R.drawable.ic_homework_black_24dp, // TODO better icon
+                R.drawable.ic_homework_black_24dp,
                 titleRes)
     }
 
@@ -220,13 +235,14 @@ class AgendaListFragment : Fragment() {
     inner class AgendaItemTouchHelperCallback : ItemTouchHelper.Callback() {
 
         private lateinit var mCachedAssignment: Assignment
+        private var mCachedCompletionProgress: Int = -1
 
         override fun getMovementFlags(recyclerView: RecyclerView?,
                                       viewHolder: RecyclerView.ViewHolder?): Int {
             val position = viewHolder!!.adapterPosition
             val item = mItems[position]
 
-            val swipeFlags = if (item is Assignment) {
+            val swipeFlags = if (item is Assignment && !mShowPast) {
                 // Items can be swiped from left to right, but not the other way so to avoid
                 // confusion with the tab swiping gesture.
                 ItemTouchHelper.END
@@ -250,11 +266,11 @@ class AgendaListFragment : Fragment() {
 
             // Keep a copy of this assignment in cache so we can undo any actions
             mCachedAssignment = assignment
+            mCachedCompletionProgress = assignment.completionProgress
 
             writeAssignmentCompletion(assignment)
 
-            // Don't remove the assignment from the list if we're showing completed items
-            // But otherwise, overdue assignment should get removed from the list
+            // Don't remove an upcoming assignment from the list if we're showing completed items
             if (mShowCompleted && assignment.isUpcoming()) {
                 updateCompletedAssignment(position, assignment)
                 return
@@ -294,7 +310,7 @@ class AgendaListFragment : Fragment() {
             // Add Snackbar UI for undo action
             val undoListener = View.OnClickListener {
                 // Update database
-                assignment.completionProgress = mCachedAssignment.completionProgress
+                assignment.completionProgress = mCachedCompletionProgress
                 AssignmentHandler(activity).replaceItem(assignment.id, assignment)
 
                 // Update list
@@ -349,10 +365,13 @@ class AgendaListFragment : Fragment() {
                 }
 
                 // Add back the assignment to the UI and database
-                mItems.add(pos, mCachedAssignment)
+                val removedAssignment = mCachedAssignment
+                removedAssignment.completionProgress = mCachedCompletionProgress
+
+                mItems.add(pos, removedAssignment)
                 mAdapter.notifyItemInserted(pos)
 
-                AssignmentHandler(activity).replaceItem(mCachedAssignment.id, mCachedAssignment)
+                AssignmentHandler(activity).replaceItem(removedAssignment.id, removedAssignment)
 
                 refreshPlaceholderStatus()
             }
