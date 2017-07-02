@@ -51,6 +51,40 @@ class AgendaHeader(val type: HeaderType) : AgendaListItem {
 
     constructor(source: Parcel) : this(source.readSerializable() as HeaderType)
 
+    /**
+     * Compares this header with another header, like [compareTo].
+     *
+     * This should be used instead of simply comparing the dates of headers from [getDateTime]
+     * since often the dates for different headers can be the same - e.g. "Tomorrow" could also be
+     * "Next Week".
+     *
+     * @return  a negative integer, zero, or a positive integer if the header is less than, equal
+     *          to, or greater than the [other] header.
+     */
+    fun compareHeaders(other: AgendaHeader): Int {
+        val datetimeComparison = getDateTime().compareTo(other.getDateTime())
+        return if (datetimeComparison != 0) {
+            datetimeComparison
+        } else {
+            getPriority().compareTo(other.getPriority())
+        }
+    }
+
+    /**
+     * @return  an integer denoting the "priority" of a header. This can be used to determine which
+     *          header should be displayed in scenarios where two headers have the same date.
+     *          A higher number denotes a higher priority level.
+     */
+    private fun getPriority() = when (type) {
+        HeaderType.OVERDUE -> 7
+        HeaderType.TODAY -> 6
+        HeaderType.TOMORROW -> 5
+        HeaderType.THIS_WEEK -> 4
+        HeaderType.NEXT_WEEK -> 3
+        HeaderType.THIS_MONTH -> 2
+        HeaderType.LATER -> 1
+    }
+
     override fun isHeader() = true
 
     override fun getDateTime(): LocalDateTime {
@@ -66,7 +100,6 @@ class AgendaHeader(val type: HeaderType) : AgendaListItem {
             HeaderType.TOMORROW -> today.plusDays(1)
             HeaderType.THIS_WEEK -> today.plusDays(2) // covers day after tomorrow until next header
             HeaderType.NEXT_WEEK -> today.with(TemporalAdjusters.next(DayOfWeek.MONDAY))
-        // TODO "Next Week" can be the same as "Tomorrow" if on Sunday - change its definition
             HeaderType.THIS_MONTH -> today.plusWeeks(1).with(TemporalAdjusters.next(DayOfWeek.MONDAY))
             HeaderType.LATER -> today.plusMonths(1).with(TemporalAdjusters.firstDayOfMonth())
         }

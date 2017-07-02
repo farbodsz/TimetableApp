@@ -19,18 +19,24 @@ interface AgendaListItem : Comparable<AgendaListItem>, Parcelable {
 
     override fun compareTo(other: AgendaListItem): Int{
         val dateTimeComparison = getDateTime().compareTo(other.getDateTime())
-        return if (dateTimeComparison == 0) {
-            headerComparison(other)
-        } else {
-            dateTimeComparison
+        if (dateTimeComparison != 0) {
+            return dateTimeComparison
         }
+
+        val itemTypeComparison = compareItemTypes(other)
+        if (itemTypeComparison != 0) {
+            return itemTypeComparison
+        }
+
+        // Item type comparison is 0 so both must be headers
+        return (this as AgendaHeader).compareHeaders(other as AgendaHeader)
     }
 
     /**
      * @return  an integer between -1 and 1 inclusive based on the comparing whether this item and
      *          the [other] item are headers or not.
      */
-    private fun headerComparison(other: AgendaListItem): Int {
+    private fun compareItemTypes(other: AgendaListItem): Int {
         return if (isHeader()) {
             if (other.isHeader()) {
                 0 // equal - both are headers
