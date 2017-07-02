@@ -101,7 +101,9 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         // Overwrite db values as completionProgress may have changed
         mDataHandler.replaceItem(mItem.id, mItem)
 
-        setResult(Activity.RESULT_OK) // to reload any changes in AssignmentsActivity
+        val intent = Intent().putExtra(EXTRA_ITEM, mItem)
+
+        setResult(Activity.RESULT_OK, intent) // to reload any changes in AssignmentsActivity
         supportFinishAfterTransition()
     }
 

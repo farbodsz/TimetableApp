@@ -52,6 +52,14 @@ class AgendaListFragment : Fragment() {
         sortAndFilterItems(fetchAgendaListItems()) as ArrayList<AgendaListItem>
     }
 
+    /**
+     * Stores the list position of the item being updated/deleted in a different activity.
+     *
+     * It is used so that we can update (remove and add) items to the list without having to
+     * fetch the data from the database each time.
+     */
+    private var mItemPosCache = 0
+
     private var mShowCompleted = true
     private var mShowPast = AgendaActivity.DEFAULT_SHOW_PAST
 
@@ -115,6 +123,9 @@ class AgendaListFragment : Fragment() {
                             getString(R.string.transition_1))
                     bundle = options.toBundle()
                 }
+
+                // Store the position of the item so we can update the list easily
+                mItemPosCache = position
 
                 startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL, bundle)
             }
@@ -224,12 +235,48 @@ class AgendaListFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == AgendaActivity.REQUEST_CODE_CREATE_ITEM
-                || requestCode == REQUEST_CODE_ITEM_DETAIL) {
-            if (resultCode == Activity.RESULT_OK) {
-                // updateList() // TODO
+        when (requestCode) {
+            AgendaActivity.REQUEST_CODE_CREATE_ITEM -> if (resultCode == Activity.RESULT_OK) {
+                val newItem =
+                        data!!.getParcelableExtra<AgendaListItem>(ItemDetailActivity.EXTRA_ITEM)
+                addListItem(newItem)
+                mAdapter.notifyDataSetChanged()
+            }
+
+            REQUEST_CODE_ITEM_DETAIL -> if (resultCode == Activity.RESULT_OK) {
+                // Item could be null if it has been deleted from the other activity
+                val updatedItem =
+                        data?.getParcelableExtra<AgendaListItem?>(ItemDetailActivity.EXTRA_ITEM)
+
+                mItems.removeAt(mItemPosCache)
+
+                if (updatedItem == null) {
+                    mAdapter.notifyItemRemoved(mItemPosCache) // simply remove item from list
+                } else {
+                    // We might need new headers if the datetime has changed so treat as a new item
+                    addListItem(updatedItem)
+                    mAdapter.notifyDataSetChanged()
+                }
             }
         }
+    }
+
+    /**
+     * Adds an [agendaListItem] to the list, appropriately so that a new datetime header is also
+     * added if necessary, and sorted.
+     *
+     * @see sortAndFilterItems
+     */
+    private fun addListItem(agendaListItem: AgendaListItem) {
+        mItems.add(agendaListItem)
+
+        // New item may be under a header not already in list - add all headers for now
+        mItems.addAll(AgendaHeader.getAllHeaderTypes())
+
+        // Remove unnecessary headers and sort
+        val tempItems = ArrayList(mItems)
+        mItems.clear()
+        mItems.addAll(sortAndFilterItems(tempItems))
     }
 
     inner class AgendaItemTouchHelperCallback : ItemTouchHelper.Callback() {

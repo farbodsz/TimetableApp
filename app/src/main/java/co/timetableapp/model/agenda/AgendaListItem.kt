@@ -1,12 +1,13 @@
 package co.timetableapp.model.agenda
 
+import android.os.Parcelable
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 
 /**
  * Represents any item which can be displayed on a list of Agenda items, including headers.
  */
-interface AgendaListItem : Comparable<AgendaListItem> {
+interface AgendaListItem : Comparable<AgendaListItem>, Parcelable {
 
     fun isHeader(): Boolean
 

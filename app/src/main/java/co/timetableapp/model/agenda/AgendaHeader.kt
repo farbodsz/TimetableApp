@@ -1,5 +1,7 @@
 package co.timetableapp.model.agenda
 
+import android.os.Parcel
+import android.os.Parcelable
 import android.support.annotation.StringRes
 import co.timetableapp.R
 import co.timetableapp.model.agenda.AgendaHeader.HeaderType
@@ -15,19 +17,6 @@ import org.threeten.bp.temporal.TemporalAdjusters
  * @param type  determines the date of the header. This must be a [HeaderType].
  */
 class AgendaHeader(val type: HeaderType) : AgendaListItem {
-
-    companion object {
-
-        /**
-         * @return a list of all distinct possible kinds of [AgendaHeader] as per [HeaderType]
-         */
-        @JvmStatic
-        fun getAllHeaderTypes(): List<AgendaHeader> {
-            val agendaHeaders = ArrayList<AgendaHeader>()
-            HeaderType.values().mapTo(agendaHeaders) { AgendaHeader(it) }
-            return agendaHeaders
-        }
-    }
 
     /**
      * The string resource for the name of the header. This is what will be displayed in the UI.
@@ -60,6 +49,8 @@ class AgendaHeader(val type: HeaderType) : AgendaListItem {
         }
     }
 
+    constructor(source: Parcel) : this(source.readSerializable() as HeaderType)
+
     override fun isHeader() = true
 
     override fun getDateTime(): LocalDateTime {
@@ -75,8 +66,34 @@ class AgendaHeader(val type: HeaderType) : AgendaListItem {
             HeaderType.TOMORROW -> today.plusDays(1)
             HeaderType.THIS_WEEK -> today.plusDays(2) // covers day after tomorrow until next header
             HeaderType.NEXT_WEEK -> today.with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+        // TODO "Next Week" can be the same as "Tomorrow" if on Sunday - change its definition
             HeaderType.THIS_MONTH -> today.plusWeeks(1).with(TemporalAdjusters.next(DayOfWeek.MONDAY))
             HeaderType.LATER -> today.plusMonths(1).with(TemporalAdjusters.firstDayOfMonth())
+        }
+    }
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeSerializable(type)
+    }
+
+    companion object {
+
+        /**
+         * @return a list of all distinct possible kinds of [AgendaHeader] as per [HeaderType]
+         */
+        @JvmStatic
+        fun getAllHeaderTypes(): List<AgendaHeader> {
+            val agendaHeaders = ArrayList<AgendaHeader>()
+            HeaderType.values().mapTo(agendaHeaders) { AgendaHeader(it) }
+            return agendaHeaders
+        }
+
+        @JvmField
+        val CREATOR: Parcelable.Creator<AgendaHeader> = object : Parcelable.Creator<AgendaHeader> {
+            override fun createFromParcel(source: Parcel): AgendaHeader = AgendaHeader(source)
+            override fun newArray(size: Int): Array<AgendaHeader?> = arrayOfNulls(size)
         }
     }
 

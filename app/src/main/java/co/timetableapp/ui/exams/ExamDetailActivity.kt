@@ -97,7 +97,8 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
     }
 
     override fun saveEditsAndClose() {
-        setResult(Activity.RESULT_OK) // to reload any changes in ExamsActivity
+        val intent = Intent().putExtra(EXTRA_ITEM, mItem)
+        setResult(Activity.RESULT_OK, intent) // to reload any changes in ExamsActivity
         supportFinishAfterTransition()
     }
 
