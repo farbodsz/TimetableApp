@@ -78,6 +78,19 @@ class AgendaHeader(val type: HeaderType) : AgendaListItem {
         dest?.writeSerializable(type)
     }
 
+    override fun toString(): String {
+        val name = when (type) {
+            AgendaHeader.HeaderType.OVERDUE -> "Overdue"
+            AgendaHeader.HeaderType.TODAY -> "Today"
+            AgendaHeader.HeaderType.TOMORROW -> "Tomorrow"
+            AgendaHeader.HeaderType.THIS_WEEK -> "This Week"
+            AgendaHeader.HeaderType.NEXT_WEEK -> "Next Week"
+            AgendaHeader.HeaderType.THIS_MONTH -> "This Month"
+            AgendaHeader.HeaderType.LATER -> "Later"
+        }
+        return "AgendaHeader(date=${getDateTime()}, name=$name)"
+    }
+
     companion object {
 
         /**
