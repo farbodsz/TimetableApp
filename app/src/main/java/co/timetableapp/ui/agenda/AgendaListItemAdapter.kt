@@ -91,8 +91,7 @@ class AgendaListItemAdapter(
     }
 
     private fun setupHeaderLayout(holder: HeaderViewHolder, position: Int) {
-        val stringRes = (items[position] as AgendaHeader).nameResId
-        holder.textView.text = context.getString(stringRes)
+        holder.textView.text = (items[position] as AgendaHeader).getName(context)
     }
 
     private fun setupItemLayout(holder: AgendaViewHolder, position: Int) {

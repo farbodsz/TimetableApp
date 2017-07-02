@@ -80,7 +80,7 @@ class EventsFragment : ItemListFragment<Event>(), AgendaActivity.OnFilterChangeL
                     timePeriodId = Integer.parseInt(eventDate.year.toString() + eventDate.monthValue.toString())
 
                     if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(eventDate.format(DateUtils.FORMATTER_FULL_MONTH_YEAR))
+                        headers.add(eventDate.format(DateUtils.FORMATTER_MONTH_YEAR))
                         events.add(null)
                     }
 

@@ -31,7 +31,7 @@ object DateUtils {
     /**
      * [DateTimeFormatter] for showing months with years in full - e.g. "March 2012".
      */
-    @JvmField val FORMATTER_FULL_MONTH_YEAR = DateTimeFormatter.ofPattern("MMMM uuuu")!!
+    @JvmField val FORMATTER_MONTH_YEAR = DateTimeFormatter.ofPattern("MMMM uuuu")!!
 
     /**
      * [DateTimeFormatter] for showing month abbreviations with years - e.g. "Mar 2012".

@@ -24,9 +24,7 @@ import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.model.Assignment
 import co.timetableapp.model.Event
 import co.timetableapp.model.Exam
-import co.timetableapp.model.agenda.AgendaHeader
-import co.timetableapp.model.agenda.AgendaItem
-import co.timetableapp.model.agenda.AgendaListItem
+import co.timetableapp.model.agenda.*
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.events.EventDetailActivity
@@ -37,7 +35,7 @@ import co.timetableapp.util.UiUtils
 /**
  * A fragment for displaying a list of Agenda items to the user.
  */
-class AgendaListFragment : Fragment() {
+class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
         private const val REQUEST_CODE_ITEM_DETAIL = 2
@@ -48,9 +46,7 @@ class AgendaListFragment : Fragment() {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mPlaceholderLayout: FrameLayout
 
-    private val mItems by lazy {
-        sortAndFilterItems(fetchAgendaListItems()) as ArrayList<AgendaListItem>
-    }
+    private val mItems = ArrayList<AgendaListItem>()
 
     /**
      * Stores the list position of the item being updated/deleted in a different activity.
@@ -88,6 +84,8 @@ class AgendaListFragment : Fragment() {
     }
 
     private fun setupList() {
+        createList()
+
         setupAdapter()
         mRecyclerView = mRootView.findViewById(R.id.recyclerView) as RecyclerView
         with(mRecyclerView) {
@@ -98,6 +96,18 @@ class AgendaListFragment : Fragment() {
 
         val itemTouchHelper = ItemTouchHelper(AgendaItemTouchHelperCallback())
         itemTouchHelper.attachToRecyclerView(mRecyclerView)
+    }
+
+    /**
+     * Populates the list with items from the database and sorts them with headers added.
+     *
+     * @see fetchAgendaListItems
+     * @see sortWithHeaders
+     */
+    private fun createList() {
+        mItems.clear()
+        mItems.addAll(fetchAgendaListItems())
+        sortWithHeaders()
     }
 
     private fun setupAdapter() {
@@ -133,7 +143,7 @@ class AgendaListFragment : Fragment() {
     }
 
     /**
-     * @return an unsorted list of all agenda list items - assignments, exams, events, and headers
+     * @return an unsorted list of all agenda items (excluding headers)
      */
     private fun fetchAgendaListItems(): List<AgendaListItem> {
         val arrayList = ArrayList<AgendaListItem>()
@@ -162,48 +172,25 @@ class AgendaListFragment : Fragment() {
                 .filter { it.isInPast() == mShowPast }
         arrayList.addAll(events)
 
-        arrayList.addAll(AgendaHeader.getAllHeaderTypes())
-
         return arrayList
     }
 
     /**
-     * @return a sorted list of agenda list items with redundant headers removed
+     * Sorts a list of agenda list items with the required headers added and redundant ones removed.
+     *
+     * This function should not be invoked after single items have been updated/removed in the list,
+     * so it is recommended this is used when the whole list needs to be refreshed.
+     *
+     * @return the sorted list with headers where needed
      */
-    private fun sortAndFilterItems(items: List<AgendaListItem>): List<AgendaListItem> {
-        val sortedItems = ArrayList(items.sorted())
-
-        // Removing items whilst iterating causes a ConcurrentModificationException
-        // We will go through the list and store which items need to be removed and do that later
-        val itemsToRemove = ArrayList<AgendaListItem>()
-        var previousItem: AgendaListItem? = null
-        for (item in sortedItems) {
-            if (previousItem == null) {
-                previousItem = item
-                continue
-            }
-
-            if (previousItem.isHeader() && item.isHeader()) {
-                // Two consecutive headers found - remove redundant header
-                itemsToRemove.add(previousItem)
-            }
-
-            previousItem = item
+    private fun sortWithHeaders() {
+        val headersToAdd = ArrayList<AgendaListItem>()
+        mItems.forEach {
+            addListHeader(it as AgendaItem, headersToAdd)
         }
+        mItems.addAll(headersToAdd)
 
-        sortedItems.removeAll(itemsToRemove)
-
-        // Remove redundant headers from the end of the list
-        val headersToRemove = ArrayList<AgendaListItem>()
-        var i = sortedItems.size - 1
-        while (sortedItems[i] is AgendaHeader) {
-            headersToRemove.add(sortedItems[i])
-            i--
-        }
-
-        sortedItems.removeAll(headersToRemove)
-
-        return sortedItems
+        mItems.sort()
     }
 
     private fun refreshPlaceholderStatus() {
@@ -238,7 +225,7 @@ class AgendaListFragment : Fragment() {
         when (requestCode) {
             AgendaActivity.REQUEST_CODE_CREATE_ITEM -> if (resultCode == Activity.RESULT_OK) {
                 val newItem =
-                        data!!.getParcelableExtra<AgendaListItem>(ItemDetailActivity.EXTRA_ITEM)
+                        data!!.getParcelableExtra<AgendaItem>(ItemDetailActivity.EXTRA_ITEM)
                 addListItem(newItem)
                 mAdapter.notifyDataSetChanged()
             }
@@ -246,7 +233,7 @@ class AgendaListFragment : Fragment() {
             REQUEST_CODE_ITEM_DETAIL -> if (resultCode == Activity.RESULT_OK) {
                 // Item could be null if it has been deleted from the other activity
                 val updatedItem =
-                        data?.getParcelableExtra<AgendaListItem?>(ItemDetailActivity.EXTRA_ITEM)
+                        data?.getParcelableExtra<AgendaItem?>(ItemDetailActivity.EXTRA_ITEM)
 
                 mItems.removeAt(mItemPosCache)
 
@@ -262,21 +249,107 @@ class AgendaListFragment : Fragment() {
     }
 
     /**
-     * Adds an [agendaListItem] to the list, appropriately so that a new datetime header is also
+     * Adds an [agendaItem] to the list, appropriately so that a new datetime header is also
      * added if necessary, and sorted.
      *
-     * @see sortAndFilterItems
+     * @see addListHeader
      */
-    private fun addListItem(agendaListItem: AgendaListItem) {
-        mItems.add(agendaListItem)
+    private fun addListItem(agendaItem: AgendaItem) {
+        mItems.add(agendaItem)
+        addListHeader(agendaItem, mItems)
 
-        // New item may be under a header not already in list - add all headers for now
-        mItems.addAll(AgendaHeader.getAllHeaderTypes())
+        mItems.sort()
 
-        // Remove unnecessary headers and sort
-        val tempItems = ArrayList(mItems)
-        mItems.clear()
-        mItems.addAll(sortAndFilterItems(tempItems))
+        // Remove the old header that we no longer need
+        removeRedundantHeader()
+    }
+
+    /**
+     * Adds an [AgendaHeader] to the [list], only if it is not already in the list.
+     *
+     * @param agendaItem    determines the date for the header being added
+     * @return true if a header was added, otherwise false
+     *
+     * @see makeHeader
+     * @see addListItem
+     */
+    private fun addListHeader(agendaItem: AgendaItem, list: ArrayList<AgendaListItem>): Boolean {
+        val header = makeHeader(agendaItem)
+
+        if (!list.contains(header)) {
+            list.add(header)
+            return true
+        } else {
+            return false
+        }
+    }
+
+    /**
+     * @return a header based on the [agendaItem]
+     */
+    private fun makeHeader(agendaItem: AgendaItem) = if (mShowPast) {
+        CustomAgendaHeader.from(agendaItem.getDateTime())
+    } else {
+        RelativeAgendaHeader.from(agendaItem.getDateTime())
+    }
+
+    /**
+     * Removes any unnecessary headers in the list being displayed in the UI.
+     */
+    private fun removeRedundantHeader() {
+        // Removing items whilst iterating causes a ConcurrentModificationException
+        // We will go through the list and store which items need to be removed and do that later
+        var headerToRemove: AgendaHeader? = null
+        var previousItem: AgendaListItem? = null
+        for (item in mItems) {
+            if (previousItem == null) {
+                previousItem = item
+                continue
+            }
+
+            if (previousItem.isHeader() && item.isHeader()) {
+                // Two consecutive headers found - remove redundant header
+                headerToRemove = previousItem as AgendaHeader
+                break
+            }
+
+            previousItem = item
+        }
+
+        headerToRemove?.let {
+            // The extra header has been found - remove it
+            mItems.remove(it)
+            return
+        }
+
+        // The header must be at the end of the list
+        val finalItem = mItems[mItems.size - 1]
+        if (finalItem.isHeader()) {
+            headerToRemove = mItems[mItems.size - 1] as AgendaHeader
+            mItems.remove(headerToRemove)
+        }
+    }
+
+    override fun onFilterChange(showCompleted: Boolean, showPast: Boolean) {
+        mShowCompleted = showCompleted
+        mShowPast = showPast
+
+        refreshUi()
+    }
+
+    /**
+     * Refreshes the list UI with sorted and filtered items from the database, with a placeholder
+     * being shown if necessary.
+     *
+     * This should not be invoked after single items get updated or deleted since it is a costly
+     * operation. Good usage examples include when the user has changed the filter options, so
+     * different data needs to be retrieved and displayed.
+     */
+    private fun refreshUi() {
+        createList()
+        mAdapter.notifyDataSetChanged()
+
+        refreshPlaceholderStatus()
     }
 
     inner class AgendaItemTouchHelperCallback : ItemTouchHelper.Callback() {

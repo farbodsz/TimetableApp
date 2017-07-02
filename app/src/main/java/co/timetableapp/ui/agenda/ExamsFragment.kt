@@ -85,7 +85,7 @@ class ExamsFragment : ItemListFragment<Exam>(), AgendaActivity.OnFilterChangeLis
                             examDate.monthValue.toString())
 
                     if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                        headers.add(examDate.format(DateUtils.FORMATTER_FULL_MONTH_YEAR))
+                        headers.add(examDate.format(DateUtils.FORMATTER_MONTH_YEAR))
                         exams.add(null)
                     }
 

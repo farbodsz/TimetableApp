@@ -279,7 +279,7 @@ class AssignmentsFragment : ItemListFragment<Assignment>(), AgendaActivity.OnFil
                         Integer.parseInt(dueDate.year.toString() + dueDate.monthValue.toString())
 
                 if (currentTimePeriod == -1 || currentTimePeriod != timePeriodId) {
-                    headers.add(dueDate.format(DateUtils.FORMATTER_FULL_MONTH_YEAR))
+                    headers.add(dueDate.format(DateUtils.FORMATTER_MONTH_YEAR))
                     assignments.add(null)
                 }
 
