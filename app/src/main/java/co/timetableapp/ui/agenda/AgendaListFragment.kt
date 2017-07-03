@@ -190,7 +190,18 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
         }
         mItems.addAll(headersToAdd)
 
-        mItems.sort()
+        sortItems()
+    }
+
+    /**
+     * Sorts [mItems] depending on how the list is being displayed (i.e. [mShowPast]).
+     */
+    private fun sortItems() {
+        if (mShowPast) {
+            mItems.sortWith(AgendaListItem.ReverseComparator())
+        } else {
+            mItems.sort()
+        }
     }
 
     private fun refreshPlaceholderStatus() {
@@ -258,7 +269,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
         mItems.add(agendaItem)
         addListHeader(agendaItem, mItems)
 
-        mItems.sort()
+        sortItems()
 
         // Remove the old header that we no longer need
         removeRedundantHeader()
@@ -288,9 +299,9 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
      * @return a header based on the [agendaItem]
      */
     private fun makeHeader(agendaItem: AgendaItem) = if (mShowPast) {
-        CustomAgendaHeader.from(agendaItem.getDateTime())
+        PastAgendaHeader.from(agendaItem.getDateTime())
     } else {
-        RelativeAgendaHeader.from(agendaItem.getDateTime())
+        UpcomingAgendaHeader.from(agendaItem.getDateTime())
     }
 
     /**

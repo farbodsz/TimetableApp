@@ -9,16 +9,19 @@ import org.threeten.bp.LocalTime
 import org.threeten.bp.YearMonth
 
 /**
- * Class to represent headers for custom dates on lists of Agenda items.
+ * Class to represent headers for past dates on lists of Agenda items.
  *
  * This kind of [AgendaHeader] would be shown in the UI as combinations of a year and a month, such
  * as "May 2015" or "November 2011".
  *
+ * These headers should be sorted using [AgendaListItem.ReverseComparator] which is why
+ * [getDateTime] returns the last possible datetime in the [yearMonth]
+ *
  * @param yearMonth determines the date of the header
  *
- * @see RelativeAgendaHeader
+ * @see UpcomingAgendaHeader
  */
-data class CustomAgendaHeader(val yearMonth: YearMonth) : AgendaHeader() {
+data class PastAgendaHeader(val yearMonth: YearMonth) : AgendaHeader() {
 
     constructor(source: Parcel) : this(source.readSerializable() as YearMonth)
 
@@ -26,7 +29,8 @@ data class CustomAgendaHeader(val yearMonth: YearMonth) : AgendaHeader() {
 
     override fun getPriority() = 0 // all custom headers have the same priority
 
-    override fun getDateTime() = LocalDateTime.of(yearMonth.atDay(1), LocalTime.MIDNIGHT)!!
+    override fun getDateTime() =
+            LocalDateTime.of(yearMonth.atDay(yearMonth.lengthOfMonth()), LocalTime.MAX)!!
 
     override fun describeContents() = 0
 
@@ -37,15 +41,15 @@ data class CustomAgendaHeader(val yearMonth: YearMonth) : AgendaHeader() {
     companion object {
 
         /**
-         * Constructs a [CustomAgendaHeader] based on any [dateTime]
+         * Constructs a [PastAgendaHeader] based on any [dateTime]
          */
         @JvmStatic
-        fun from(dateTime: LocalDateTime) = CustomAgendaHeader(YearMonth.from(dateTime))
+        fun from(dateTime: LocalDateTime) = PastAgendaHeader(YearMonth.from(dateTime))
 
         @JvmField
-        val CREATOR: Parcelable.Creator<CustomAgendaHeader> = object : Parcelable.Creator<CustomAgendaHeader> {
-            override fun createFromParcel(source: Parcel): CustomAgendaHeader = CustomAgendaHeader(source)
-            override fun newArray(size: Int): Array<CustomAgendaHeader?> = arrayOfNulls(size)
+        val CREATOR: Parcelable.Creator<PastAgendaHeader> = object : Parcelable.Creator<PastAgendaHeader> {
+            override fun createFromParcel(source: Parcel): PastAgendaHeader = PastAgendaHeader(source)
+            override fun newArray(size: Int): Array<PastAgendaHeader?> = arrayOfNulls(size)
         }
     }
 

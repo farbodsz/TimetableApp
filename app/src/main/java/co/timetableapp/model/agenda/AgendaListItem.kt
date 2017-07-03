@@ -23,6 +23,7 @@ interface AgendaListItem : Comparable<AgendaListItem>, Parcelable {
             return dateTimeComparison
         }
 
+        // If same date, headers should go first
         val itemTypeComparison = compareItemTypes(other)
         if (itemTypeComparison != 0) {
             return itemTypeComparison
@@ -45,6 +46,34 @@ interface AgendaListItem : Comparable<AgendaListItem>, Parcelable {
             }
         } else {
             1
+        }
+    }
+
+    /**
+     * Defines a sorting order for agenda list items, being sorted by date then lexicographically.
+     * Headers will always be shown before the group of items for that date.
+     *
+     * Avoid simply reversing a list sorted by [AgendaListItem.compareTo] since it will not take
+     * into account that headers should be shown before other item types.
+     *
+     * Note: this may not work where the headers are [UpcomingAgendaHeader]s.
+     */
+    class ReverseComparator : Comparator<AgendaListItem> {
+
+        override fun compare(o1: AgendaListItem, o2: AgendaListItem): Int {
+            val dateTimeComparison = o2.getDateTime().compareTo(o1.getDateTime())
+            if (dateTimeComparison != 0) {
+                return dateTimeComparison
+            }
+
+            // Order of item types doesn't change - headers still go before agenda items
+            val itemTypeComparison = o1.compareItemTypes(o2)
+            if (itemTypeComparison != 0) {
+                return itemTypeComparison
+            }
+
+            // Item type comparison is 0 so both must be headers
+            return (o2 as AgendaHeader).compareHeaders(o1 as AgendaHeader)
         }
     }
 

@@ -5,7 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.support.annotation.StringRes
 import co.timetableapp.R
-import co.timetableapp.model.agenda.RelativeAgendaHeader.HeaderType
+import co.timetableapp.model.agenda.UpcomingAgendaHeader.HeaderType
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -18,11 +18,13 @@ import org.threeten.bp.temporal.TemporalAdjusters
  * These headers mark a period of type relative to the current day, such as "Today", "Next Week",
  * or even "Overdue".
  *
+ * Note: these headers should be sorted using the natural sorting order of [AgendaListItem]
+ *
  * @param type  determines the relative period of the header. This must be a [HeaderType].
  *
- * @see CustomAgendaHeader
+ * @see PastAgendaHeader
  */
-data class RelativeAgendaHeader(val type: HeaderType) : AgendaHeader() {
+data class UpcomingAgendaHeader(val type: HeaderType) : AgendaHeader() {
 
     /**
      * The string resource for the name of the header. This is what will be displayed in the UI.
@@ -30,8 +32,8 @@ data class RelativeAgendaHeader(val type: HeaderType) : AgendaHeader() {
     @StringRes val nameResId: Int
 
     /**
-     * The kinds of headers, used for initializing instances of this [AgendaHeader] class.
-     * Each kind of header represents a period of time such as "Today", "This Week" or "Later".
+     * The kinds of headers, used for initializing instances of this class. Each kind of header
+     * represents a relative period of time such as "Today", "This Week" or "Later".
      */
     enum class HeaderType {
         OVERDUE,
@@ -103,16 +105,16 @@ data class RelativeAgendaHeader(val type: HeaderType) : AgendaHeader() {
             HeaderType.THIS_MONTH -> "This Month"
             HeaderType.LATER -> "Later"
         }
-        return "AgendaHeader(date=${getDateTime()}, name=$name)"
+        return "UpcomingAgendaHeader(date=${getDateTime()}, name=$name)"
     }
 
     companion object {
 
         /**
-         * Constructs a [RelativeAgendaHeader] based on any [dateTime]
+         * Constructs a [UpcomingAgendaHeader] based on any [dateTime]
          */
         @JvmStatic
-        fun from(dateTime: LocalDateTime): RelativeAgendaHeader {
+        fun from(dateTime: LocalDateTime): UpcomingAgendaHeader {
             // Start from "Later" and iterate until we find where the dateTime is not before the
             // header's dateTime, then return that header.
             getAllHeaderTypes().asReversed()
@@ -126,16 +128,16 @@ data class RelativeAgendaHeader(val type: HeaderType) : AgendaHeader() {
          * @return a list of all distinct possible kinds of [AgendaHeader] as per [HeaderType]
          */
         @JvmStatic
-        fun getAllHeaderTypes(): List<RelativeAgendaHeader> {
-            val agendaHeaders = ArrayList<RelativeAgendaHeader>()
-            HeaderType.values().mapTo(agendaHeaders) { RelativeAgendaHeader(it) }
+        fun getAllHeaderTypes(): List<UpcomingAgendaHeader> {
+            val agendaHeaders = ArrayList<UpcomingAgendaHeader>()
+            HeaderType.values().mapTo(agendaHeaders) { UpcomingAgendaHeader(it) }
             return agendaHeaders
         }
 
         @JvmField
-        val CREATOR: Parcelable.Creator<RelativeAgendaHeader> = object : Parcelable.Creator<RelativeAgendaHeader> {
-            override fun createFromParcel(source: Parcel): RelativeAgendaHeader = RelativeAgendaHeader(source)
-            override fun newArray(size: Int): Array<RelativeAgendaHeader?> = arrayOfNulls(size)
+        val CREATOR: Parcelable.Creator<UpcomingAgendaHeader> = object : Parcelable.Creator<UpcomingAgendaHeader> {
+            override fun createFromParcel(source: Parcel): UpcomingAgendaHeader = UpcomingAgendaHeader(source)
+            override fun newArray(size: Int): Array<UpcomingAgendaHeader?> = arrayOfNulls(size)
         }
     }
 

@@ -5,12 +5,12 @@ import android.content.Context
 /**
  * Represent headers on lists of Agenda items.
  *
- * Headers can either be relative, meaning that their date period is dependent on the current day
- * (e.g. "Tomorrow", "Next Week"); or they can be custom, where their date period can be
- * any month (e.g. "January 2014", "May 2012").
+ * Headers can either be "upcoming", meaning that their date period is relative and dependent on the
+ * current day (e.g. "Tomorrow", "Next Week"); or they can be "past", where their date period is
+ * displayed as a particular month (e.g. "January 2014", "May 2012").
  *
- * @see RelativeAgendaHeader
- * @see CustomAgendaHeader
+ * @see UpcomingAgendaHeader
+ * @see PastAgendaHeader
  */
 abstract class AgendaHeader : AgendaListItem {
 
@@ -25,8 +25,8 @@ abstract class AgendaHeader : AgendaListItem {
      * Compares this header with another header, like [compareTo].
      *
      * This should be used instead of simply comparing the dates of headers from [getDateTime]
-     * since often the dates for different headers can be the same; for example in relative headers,
-     * "Tomorrow" could also be "Next Week".
+     * since often the dates for different headers can be the same; for example in
+     * [UpcomingAgendaHeader] headers, "Tomorrow" could also be "Next Week".
      *
      * @return  a negative integer, zero, or a positive integer if the header is less than, equal
      *          to, or greater than the [other] header.
