@@ -38,4 +38,10 @@ interface AgendaItem : AgendaListItem, Parcelable {
         }
     }
 
+    enum class Types {
+        ASSIGNMENT,
+        EXAM,
+        EVENT
+    }
+
 }

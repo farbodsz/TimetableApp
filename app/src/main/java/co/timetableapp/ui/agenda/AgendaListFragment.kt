@@ -19,18 +19,19 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import co.timetableapp.R
 import co.timetableapp.data.handler.AssignmentHandler
-import co.timetableapp.data.handler.EventHandler
-import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.model.Assignment
 import co.timetableapp.model.Event
 import co.timetableapp.model.Exam
-import co.timetableapp.model.agenda.*
+import co.timetableapp.model.agenda.AgendaHeader
+import co.timetableapp.model.agenda.AgendaItem
+import co.timetableapp.model.agenda.AgendaListItem
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
 import co.timetableapp.util.PrefUtils
 import co.timetableapp.util.UiUtils
+import java.util.*
 
 /**
  * A fragment for displaying a list of Agenda items to the user.
@@ -38,6 +39,10 @@ import co.timetableapp.util.UiUtils
 class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
+
+        /**
+         * Request code when starting an activity for result for viewing the details of an item.
+         */
         private const val REQUEST_CODE_ITEM_DETAIL = 2
     }
 
@@ -56,8 +61,14 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
      */
     private var mItemPosCache = 0
 
-    private var mShowCompleted = true
-    private var mShowPast = AgendaActivity.DEFAULT_SHOW_PAST
+    private val mDataHelper by lazy {
+        val filterParams = AgendaFilterParams(
+                EnumSet.allOf(AgendaItem.Types::class.java),
+                true,
+                AgendaActivity.DEFAULT_SHOW_PAST)
+
+        AgendaDataHelper(activity, filterParams)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +82,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 
         setupLayout()
 
-        mShowCompleted = PrefUtils.showCompletedAgendaItems(activity)
+        mDataHelper.filterParams.showCompleted = PrefUtils.showCompletedAgendaItems(activity)
 
         return mRootView
     }
@@ -84,7 +95,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
     }
 
     private fun setupList() {
-        createList()
+        mDataHelper.createList(mItems)
 
         setupAdapter()
         mRecyclerView = mRootView.findViewById(R.id.recyclerView) as RecyclerView
@@ -96,18 +107,6 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 
         val itemTouchHelper = ItemTouchHelper(AgendaItemTouchHelperCallback())
         itemTouchHelper.attachToRecyclerView(mRecyclerView)
-    }
-
-    /**
-     * Populates the list with items from the database and sorts them with headers added.
-     *
-     * @see fetchAgendaListItems
-     * @see sortWithHeaders
-     */
-    private fun createList() {
-        mItems.clear()
-        mItems.addAll(fetchAgendaListItems())
-        sortWithHeaders()
     }
 
     private fun setupAdapter() {
@@ -142,68 +141,6 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
         })
     }
 
-    /**
-     * @return an unsorted list of all agenda items (excluding headers)
-     */
-    private fun fetchAgendaListItems(): List<AgendaListItem> {
-        val arrayList = ArrayList<AgendaListItem>()
-
-        val assignments = AssignmentHandler(activity).getItems(activity.application)
-                .filter {
-                    if (mShowPast) {
-                        it.isPastAndDone()
-                    } else {
-                        if (mShowCompleted) {
-                            // If showing completed items, then show them with incomplete items
-                            it.isUpcoming() || it.isOverdue()
-                        } else {
-                            // Incomplete items only
-                            !it.isComplete()
-                        }
-                    }
-                }
-        arrayList.addAll(assignments)
-
-        val exams = ExamHandler(activity).getItems(activity.application)
-                .filter { it.isInPast() == mShowPast }
-        arrayList.addAll(exams)
-
-        val events = EventHandler(activity).getItems(activity.application)
-                .filter { it.isInPast() == mShowPast }
-        arrayList.addAll(events)
-
-        return arrayList
-    }
-
-    /**
-     * Sorts a list of agenda list items with the required headers added and redundant ones removed.
-     *
-     * This function should not be invoked after single items have been updated/removed in the list,
-     * so it is recommended this is used when the whole list needs to be refreshed.
-     *
-     * @return the sorted list with headers where needed
-     */
-    private fun sortWithHeaders() {
-        val headersToAdd = ArrayList<AgendaListItem>()
-        mItems.forEach {
-            addListHeader(it as AgendaItem, headersToAdd)
-        }
-        mItems.addAll(headersToAdd)
-
-        sortItems()
-    }
-
-    /**
-     * Sorts [mItems] depending on how the list is being displayed (i.e. [mShowPast]).
-     */
-    private fun sortItems() {
-        if (mShowPast) {
-            mItems.sortWith(AgendaListItem.ReverseComparator())
-        } else {
-            mItems.sort()
-        }
-    }
-
     private fun refreshPlaceholderStatus() {
         if (mItems.isEmpty()) {
             mRecyclerView.visibility = View.GONE
@@ -219,7 +156,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
     }
 
     private fun getPlaceholderView(): View {
-        val titleRes = if (mShowPast)
+        val titleRes = if (mDataHelper.filterParams.showPast)
             R.string.placeholder_assignments_past_title
         else
             R.string.placeholder_assignments_title
@@ -237,7 +174,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
             AgendaActivity.REQUEST_CODE_CREATE_ITEM -> if (resultCode == Activity.RESULT_OK) {
                 val newItem =
                         data!!.getParcelableExtra<AgendaItem>(ItemDetailActivity.EXTRA_ITEM)
-                addListItem(newItem)
+                mDataHelper.addListItem(newItem, mItems)
                 mAdapter.notifyDataSetChanged()
             }
 
@@ -252,98 +189,18 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
                     mAdapter.notifyItemRemoved(mItemPosCache) // simply remove item from list
                 } else {
                     // We might need new headers if the datetime has changed so treat as a new item
-                    addListItem(updatedItem)
+                    mDataHelper.addListItem(updatedItem, mItems)
                     mAdapter.notifyDataSetChanged()
                 }
             }
         }
     }
 
-    /**
-     * Adds an [agendaItem] to the list, appropriately so that a new datetime header is also
-     * added if necessary, and sorted.
-     *
-     * @see addListHeader
-     */
-    private fun addListItem(agendaItem: AgendaItem) {
-        mItems.add(agendaItem)
-        addListHeader(agendaItem, mItems)
-
-        sortItems()
-
-        // Remove the old header that we no longer need
-        removeRedundantHeader()
-    }
-
-    /**
-     * Adds an [AgendaHeader] to the [list], only if it is not already in the list.
-     *
-     * @param agendaItem    determines the date for the header being added
-     * @return true if a header was added, otherwise false
-     *
-     * @see makeHeader
-     * @see addListItem
-     */
-    private fun addListHeader(agendaItem: AgendaItem, list: ArrayList<AgendaListItem>): Boolean {
-        val header = makeHeader(agendaItem)
-
-        if (!list.contains(header)) {
-            list.add(header)
-            return true
-        } else {
-            return false
-        }
-    }
-
-    /**
-     * @return a header based on the [agendaItem]
-     */
-    private fun makeHeader(agendaItem: AgendaItem) = if (mShowPast) {
-        PastAgendaHeader.from(agendaItem.getDateTime())
-    } else {
-        UpcomingAgendaHeader.from(agendaItem.getDateTime())
-    }
-
-    /**
-     * Removes any unnecessary headers in the list being displayed in the UI.
-     */
-    private fun removeRedundantHeader() {
-        // Removing items whilst iterating causes a ConcurrentModificationException
-        // We will go through the list and store which items need to be removed and do that later
-        var headerToRemove: AgendaHeader? = null
-        var previousItem: AgendaListItem? = null
-        for (item in mItems) {
-            if (previousItem == null) {
-                previousItem = item
-                continue
-            }
-
-            if (previousItem.isHeader() && item.isHeader()) {
-                // Two consecutive headers found - remove redundant header
-                headerToRemove = previousItem as AgendaHeader
-                break
-            }
-
-            previousItem = item
-        }
-
-        headerToRemove?.let {
-            // The extra header has been found - remove it
-            mItems.remove(it)
-            return
-        }
-
-        // The header must be at the end of the list
-        val finalItem = mItems[mItems.size - 1]
-        if (finalItem.isHeader()) {
-            headerToRemove = mItems[mItems.size - 1] as AgendaHeader
-            mItems.remove(headerToRemove)
-        }
-    }
-
     override fun onFilterChange(showCompleted: Boolean, showPast: Boolean) {
-        mShowCompleted = showCompleted
-        mShowPast = showPast
+        with(mDataHelper.filterParams) {
+            this.showCompleted = showCompleted
+            this.showPast = showPast
+        }
 
         refreshUi()
     }
@@ -357,7 +214,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
      * different data needs to be retrieved and displayed.
      */
     private fun refreshUi() {
-        createList()
+        mDataHelper.createList(mItems)
         mAdapter.notifyDataSetChanged()
 
         refreshPlaceholderStatus()
@@ -373,7 +230,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
             val position = viewHolder!!.adapterPosition
             val item = mItems[position]
 
-            val swipeFlags = if (item is Assignment && !mShowPast) {
+            val swipeFlags = if (item is Assignment && !mDataHelper.filterParams.showPast) {
                 // Items can be swiped from left to right, but not the other way so to avoid
                 // confusion with the tab swiping gesture.
                 ItemTouchHelper.END
@@ -402,7 +259,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
             writeAssignmentCompletion(assignment)
 
             // Don't remove an upcoming assignment from the list if we're showing completed items
-            if (mShowCompleted && assignment.isUpcoming()) {
+            if (mDataHelper.filterParams.showCompleted && assignment.isUpcoming()) {
                 updateCompletedAssignment(position, assignment)
                 return
             }
