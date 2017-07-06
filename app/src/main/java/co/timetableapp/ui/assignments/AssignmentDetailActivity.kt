@@ -20,7 +20,6 @@ import co.timetableapp.util.UiUtils
  * Shows the details of an assignment.
  *
  * @see Assignment
- * @see co.timetableapp.ui.agenda.AssignmentsFragment
  * @see AssignmentEditActivity
  * @see ItemDetailActivity
  */

@@ -2,23 +2,24 @@ package co.timetableapp.ui.agenda
 
 import android.os.Parcel
 import android.os.Parcelable
-import co.timetableapp.model.agenda.AgendaItem
+import co.timetableapp.model.agenda.AgendaType
 import java.util.*
 
 /**
  * A class to help with storing filter parameters when displaying items in [AgendaListFragment].
  *
  * @property typesToShow    the types being displayed in the list
- * @property showPast       whether or not past items will be shown
+ * @property showCompleted  true if completed items are being shown in the list UI
+ * @property showPast       true if only past items are being shown in the list UI
  */
 class AgendaFilterParams(
-        val typesToShow: EnumSet<AgendaItem.Types>,
+        var typesToShow: EnumSet<AgendaType>,
         var showCompleted: Boolean,
         var showPast: Boolean
 ) : Parcelable {
 
     constructor(source: Parcel) : this(
-            source.readSerializable() as EnumSet<AgendaItem.Types>,
+            source.readSerializable() as EnumSet<AgendaType>,
             source.readInt() == 1,
             source.readInt() == 1
     )

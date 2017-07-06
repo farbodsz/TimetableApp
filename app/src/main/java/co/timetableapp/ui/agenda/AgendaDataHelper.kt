@@ -4,6 +4,7 @@ import android.app.Activity
 import co.timetableapp.data.handler.AssignmentHandler
 import co.timetableapp.data.handler.EventHandler
 import co.timetableapp.data.handler.ExamHandler
+import co.timetableapp.model.Assignment
 import co.timetableapp.model.agenda.*
 
 /**
@@ -23,6 +24,10 @@ class AgendaDataHelper(val activity: Activity, val filterParams: AgendaFilterPar
 
     /**
      * @return an unsorted list of all agenda items (excluding headers)
+     *
+     * @see getAssignments
+     * @see getExams
+     * @see getEvents
      */
     private fun fetchAgendaListItems(): List<AgendaListItem> {
         val arrayList = ArrayList<AgendaListItem>()
@@ -30,7 +35,22 @@ class AgendaDataHelper(val activity: Activity, val filterParams: AgendaFilterPar
         val showCompleted = filterParams.showCompleted
         val showPast = filterParams.showPast
 
-        val assignments = AssignmentHandler(activity).getItems(activity.application)
+        val typesShowing = filterParams.typesToShow
+
+        if (typesShowing.contains(AgendaType.ASSIGNMENT)) {
+            arrayList.addAll(getAssignments(showPast, showCompleted))
+        }
+        if (typesShowing.contains(AgendaType.EXAM)) arrayList.addAll(getExams(showPast))
+        if (typesShowing.contains(AgendaType.EVENT)) arrayList.addAll(getEvents(showPast))
+
+        return arrayList
+    }
+
+    /**
+     * @return a list of assignments filtered depending on the boolean parameters.
+     */
+    private fun getAssignments(showPast: Boolean, showCompleted: Boolean): List<Assignment> {
+        return AssignmentHandler(activity).getItems(activity.application)
                 .filter {
                     if (showPast) {
                         it.isPastAndDone()
@@ -44,18 +64,19 @@ class AgendaDataHelper(val activity: Activity, val filterParams: AgendaFilterPar
                         }
                     }
                 }
-        arrayList.addAll(assignments)
-
-        val exams = ExamHandler(activity).getItems(activity.application)
-                .filter { it.isInPast() == showPast }
-        arrayList.addAll(exams)
-
-        val events = EventHandler(activity).getItems(activity.application)
-                .filter { it.isInPast() == showPast }
-        arrayList.addAll(events)
-
-        return arrayList
     }
+
+    /**
+     * @return a list of exams filtered depending on the value of [showPast]
+     */
+    private fun getExams(showPast: Boolean) =
+            ExamHandler(activity).getItems(activity.application).filter { it.isInPast() == showPast }
+
+    /**
+     * @return a list of events filtered depending on the value of [showPast]
+     */
+    private fun getEvents(showPast: Boolean) =
+            EventHandler(activity).getItems(activity.application).filter { it.isInPast() == showPast }
 
     /**
      * Sorts a list depending on whether we are showing past items.
@@ -93,6 +114,8 @@ class AgendaDataHelper(val activity: Activity, val filterParams: AgendaFilterPar
     /**
      * Adds an [agendaItem] to the list, appropriately so that a new datetime header is also
      * added if necessary, and sorted.
+     *
+     * This method does not handle database operations.
      *
      * @param agendaItem    the item being added to the list
      * @param items         the list of items being updated

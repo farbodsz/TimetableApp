@@ -20,19 +20,19 @@ import android.text.style.ImageSpan
 import android.view.Menu
 import android.view.MenuItem
 import co.timetableapp.R
+import co.timetableapp.model.agenda.AgendaType
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
 import co.timetableapp.util.PrefUtils
 import com.github.clans.fab.FloatingActionMenu
+import java.util.*
 
 /**
  * An activity for displaying the user's agenda - upcoming assignments, exams, etc.
  *
- * @see AssignmentsFragment
- * @see ExamsFragment
- * @see EventsFragment
+ * @see AgendaListFragment
  */
 class AgendaActivity : NavigationDrawerActivity() {
 
@@ -78,7 +78,7 @@ class AgendaActivity : NavigationDrawerActivity() {
         //setupFab()
     }
 
-    private fun setupFab() {
+    private fun setupFab() { // TODO
         val fabIds = arrayOf(R.id.fab_assignment, R.id.fab_exam, R.id.fab_event)
         val detailActivities = arrayOf(
                 AssignmentDetailActivity::class.java,
@@ -192,13 +192,25 @@ class AgendaActivity : NavigationDrawerActivity() {
         override fun getCount() = 4
 
         override fun getItem(position: Int): Fragment {
-            return when (position) {
-                0 -> AssignmentsFragment()
-                1 -> ExamsFragment()
-                2 -> EventsFragment()
-                3 -> AgendaListFragment()
+            val fragment: Fragment = when (position) {
+                0, 1, 2, 3 -> AgendaListFragment()
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
+
+            val itemTypeArg = when (position) {
+                0 -> EnumSet.of(AgendaType.ASSIGNMENT)
+                1 -> EnumSet.of(AgendaType.EXAM)
+                2 -> EnumSet.of(AgendaType.EVENT)
+                3 -> EnumSet.allOf(AgendaType::class.java)
+                else -> throw IllegalArgumentException("invalid position: $position")
+            }
+
+            val args = Bundle()
+            args.putSerializable(AgendaListFragment.ARGUMENT_LIST_TYPE, itemTypeArg)
+
+            fragment.arguments = args
+
+            return fragment
         }
 
         override fun getPageTitle(position: Int): CharSequence {

@@ -20,7 +20,6 @@ import co.timetableapp.util.UiUtils
  * Shows the details of an exam.
  *
  * @see Exam
- * @see co.timetableapp.ui.agenda.ExamsFragment
  * @see ExamEditActivity
  * @see ItemDetailActivity
  */

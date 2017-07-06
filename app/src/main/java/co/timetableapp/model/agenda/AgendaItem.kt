@@ -2,6 +2,9 @@ package co.timetableapp.model.agenda
 
 import android.content.Context
 import android.os.Parcelable
+import co.timetableapp.model.Assignment
+import co.timetableapp.model.Event
+import co.timetableapp.model.Exam
 import co.timetableapp.model.Subject
 
 /**
@@ -38,10 +41,17 @@ interface AgendaItem : AgendaListItem, Parcelable {
         }
     }
 
-    enum class Types {
-        ASSIGNMENT,
-        EXAM,
-        EVENT
+    companion object {
+
+        /**
+         * @return an [AgendaType] from the type of the [agendaItem].
+         */
+        fun agendaTypeFrom(agendaItem: AgendaItem) = when (agendaItem) {
+            is Assignment -> AgendaType.ASSIGNMENT
+            is Exam -> AgendaType.EXAM
+            is Event -> AgendaType.EVENT
+            else -> throw IllegalArgumentException("invalid agenda item type: $agendaItem")
+        }
     }
 
 }

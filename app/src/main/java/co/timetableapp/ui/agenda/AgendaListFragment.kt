@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ import co.timetableapp.model.Exam
 import co.timetableapp.model.agenda.AgendaHeader
 import co.timetableapp.model.agenda.AgendaItem
 import co.timetableapp.model.agenda.AgendaListItem
+import co.timetableapp.model.agenda.AgendaType
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.events.EventDetailActivity
@@ -40,10 +42,20 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
 
+        private const val LOG_TAG = "AgendaListFragment"
+
         /**
          * Request code when starting an activity for result for viewing the details of an item.
          */
         private const val REQUEST_CODE_ITEM_DETAIL = 2
+
+        /**
+         * The argument key for passing an argument to this fragment deciding which agenda item
+         * types should initially be shown.
+         *
+         * The argument passed must be an [EnumSet] of [AgendaType].
+         */
+        const val ARGUMENT_LIST_TYPE = "arg_list_type"
     }
 
     private lateinit var mRootView: View
@@ -63,7 +75,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 
     private val mDataHelper by lazy {
         val filterParams = AgendaFilterParams(
-                EnumSet.allOf(AgendaItem.Types::class.java),
+                EnumSet.allOf(AgendaType::class.java),
                 true,
                 AgendaActivity.DEFAULT_SHOW_PAST)
 
@@ -73,6 +85,20 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        setupFilters()
+    }
+
+    private fun setupFilters() {
+        if (arguments == null) Log.d(LOG_TAG, "No filter set")
+
+        arguments?.let {
+            Log.d(LOG_TAG, "Setting filter arguments...")
+            val itemSet = it.getSerializable(ARGUMENT_LIST_TYPE) as EnumSet<AgendaType>
+            mDataHelper.filterParams.typesToShow = itemSet
+        }
+
+        Log.i(LOG_TAG, "Displaying: ${mDataHelper.filterParams.typesToShow}")
     }
 
     override fun onCreateView(inflater: LayoutInflater?,
@@ -172,27 +198,69 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 
         when (requestCode) {
             AgendaActivity.REQUEST_CODE_CREATE_ITEM -> if (resultCode == Activity.RESULT_OK) {
-                val newItem =
-                        data!!.getParcelableExtra<AgendaItem>(ItemDetailActivity.EXTRA_ITEM)
-                mDataHelper.addListItem(newItem, mItems)
-                mAdapter.notifyDataSetChanged()
+                // Item shouldn't be null since it we are certain it has been created
+                val newItem = data!!.getParcelableExtra<AgendaItem>(ItemDetailActivity.EXTRA_ITEM)
+                showNewListItem(newItem)
             }
 
             REQUEST_CODE_ITEM_DETAIL -> if (resultCode == Activity.RESULT_OK) {
                 // Item could be null if it has been deleted from the other activity
                 val updatedItem =
                         data?.getParcelableExtra<AgendaItem?>(ItemDetailActivity.EXTRA_ITEM)
-
-                mItems.removeAt(mItemPosCache)
-
-                if (updatedItem == null) {
-                    mAdapter.notifyItemRemoved(mItemPosCache) // simply remove item from list
-                } else {
-                    // We might need new headers if the datetime has changed so treat as a new item
-                    mDataHelper.addListItem(updatedItem, mItems)
-                    mAdapter.notifyDataSetChanged()
-                }
+                showUpdatedListItem(updatedItem)
             }
+        }
+    }
+
+    /**
+     * Updates the UI with a new item, only if the type of the new item is not being filtered out.
+     *
+     * @param newItem   the newly created item to add to the list
+     * @see showUpdatedListItem
+     */
+    private fun showNewListItem(newItem: AgendaItem) {
+        if (!mDataHelper.filterParams.typesToShow.contains(AgendaItem.agendaTypeFrom(newItem))) {
+            // This type isn't being shown, so don't add it to the list UI
+            Log.d(LOG_TAG, "New item being filtered out so it won't be shown in the list")
+            return
+        }
+
+        mDataHelper.addListItem(newItem, mItems)
+        mAdapter.notifyDataSetChanged()
+    }
+
+    /**
+     * Updates the UI with a changed item.
+     *
+     * @param updatedItem   the changed item to update in the list. This could be null, meaning the
+     *                      item has been deleted and should be removed from the list.
+     * @see showNewListItem
+     */
+    private fun showUpdatedListItem(updatedItem: AgendaItem?) {
+        // We don't need to check filters, because the filters can't have changed from when the item
+        // got edited in a different activity. The item will remain of the same type too.
+
+        if (updatedItem == null) {
+            Log.d(LOG_TAG, "Item is null - must have been deleted")
+
+            // Check if the item is the only one in its header group
+            if ((mItems[mItemPosCache - 1] is AgendaHeader) &&
+                    (mItems.size == mItemPosCache + 1 || mItems[mItemPosCache + 1] is AgendaHeader)) {
+                mItems.removeAt(mItemPosCache - 1) // remove header
+                mAdapter.notifyItemRemoved(mItemPosCache - 1)
+
+                mItemPosCache-- // we've removed the header, so the item position has decremented
+            }
+
+            mItems.removeAt(mItemPosCache)
+            mAdapter.notifyItemRemoved(mItemPosCache)
+
+        } else {
+            mItems.removeAt(mItemPosCache)
+
+            // We might need new headers if the datetime has changed so treat as a new item
+            mDataHelper.addListItem(updatedItem, mItems)
+            mAdapter.notifyDataSetChanged()
         }
     }
 
