@@ -9,8 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -20,24 +18,20 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import org.jetbrains.annotations.NotNull;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
-import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.data.handler.ExamHandler;
-import co.timetableapp.data.handler.SubjectHandler;
 import co.timetableapp.model.Color;
 import co.timetableapp.model.Exam;
 import co.timetableapp.model.Subject;
 import co.timetableapp.model.Timetable;
 import co.timetableapp.ui.base.ItemEditActivity;
+import co.timetableapp.ui.components.SubjectSelectorHelper;
 import co.timetableapp.ui.subjects.SubjectEditActivity;
-import co.timetableapp.ui.subjects.SubjectsAdapter;
 import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
@@ -61,8 +55,7 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
     private EditText mEditTextRoom;
 
     private Subject mSubject;
-    private TextView mSubjectText;
-    private AlertDialog mSubjectDialog;
+    private SubjectSelectorHelper mSubjectHelper;
 
     private LocalDate mExamDate;
     private TextView mDateText;
@@ -112,7 +105,7 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
             mEditTextNotes.setText(mItem.getNotes());
         }
 
-        setupSubjectText();
+        setupSubjectHelper();
 
         setupDateText();
         setupTimeText();
@@ -121,78 +114,36 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
         setupResitCheckbox();
     }
 
-    private void setupSubjectText() {
-        mSubjectText = (TextView) findViewById(R.id.textView_subject);
+    private void setupSubjectHelper() {
+        mSubjectHelper = new SubjectSelectorHelper(this, R.id.textView_subject);
 
-        if (!mIsNew) {
-            try {
-                mSubject = Subject.create(this, mItem.getSubjectId());
-            } catch (DataNotFoundException e) {
-                e.printStackTrace();
-            }
-            updateLinkedSubject();
-        }
-
-        mSubjectText.setOnClickListener(new View.OnClickListener() {
+        mSubjectHelper.setOnNewSubjectListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(ExamEditActivity.this);
-
-                final ArrayList<Subject> subjects =
-                        new SubjectHandler(ExamEditActivity.this).getItems(getApplication());
-                Collections.sort(subjects);
-
-                SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
-                adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
-                    @Override
-                    public void onEntryClick(View view, int position) {
-                        mSubject = subjects.get(position);
-                        updateLinkedSubject();
-                        mSubjectDialog.dismiss();
-                    }
-                });
-
-                RecyclerView recyclerView = new RecyclerView(getBaseContext());
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(ExamEditActivity.this));
-                recyclerView.setAdapter(adapter);
-
-                View titleView =
-                        getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
-                ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_subject);
-
-                builder.setView(recyclerView)
-                        .setCustomTitle(titleView)
-                        .setPositiveButton(R.string.action_new, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(
-                                        ExamEditActivity.this, SubjectEditActivity.class);
-                                ActivityCompat.startActivityForResult(
-                                        ExamEditActivity.this,
-                                        intent,
-                                        REQUEST_CODE_SUBJECT_DETAIL,
-                                        null);
-                            }
-                        });
-
-                mSubjectDialog = builder.create();
-                mSubjectDialog.show();
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(ExamEditActivity.this, SubjectEditActivity.class);
+                ActivityCompat.startActivityForResult(
+                        ExamEditActivity.this,
+                        intent,
+                        REQUEST_CODE_SUBJECT_DETAIL,
+                        null);
             }
         });
-    }
 
-    private void updateLinkedSubject() {
-        mSubjectText.setText(mSubject.getName());
-        mSubjectText.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.mdu_text_black));
+        mSubjectHelper.setOnSubjectChangeListener(new SubjectSelectorHelper.OnSubjectChangeListener() {
+            @Override
+            public void onSubjectChange(@NotNull Subject subject) {
+                mSubject = subject;
+                Color color = new Color(subject.getColorId());
+                UiUtils.setBarColors(
+                        color,
+                        ExamEditActivity.this,
+                        mToolbar,
+                        findViewById(R.id.appBarLayout),
+                        findViewById(R.id.toolbar_container));
+            }
+        });
 
-        Color color = new Color(mSubject.getColorId());
-        UiUtils.setBarColors(
-                color,
-                this,
-                mToolbar,
-                findViewById(R.id.appBarLayout),
-                findViewById(R.id.toolbar_container));
+        mSubjectHelper.setup(mItem.getSubjectId(), mIsNew);
     }
 
     private void setupDateText() {
@@ -332,8 +283,7 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 mSubject = data.getParcelableExtra(ItemEditActivity.EXTRA_ITEM);
-                mSubjectDialog.dismiss();
-                updateLinkedSubject();
+                mSubjectHelper.updateSubject(mSubject);
             }
         }
     }

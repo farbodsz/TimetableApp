@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -38,8 +39,6 @@ import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.handler.ClassDetailHandler;
 import co.timetableapp.data.handler.ClassHandler;
 import co.timetableapp.data.handler.ClassTimeHandler;
-import co.timetableapp.data.handler.DataNotFoundException;
-import co.timetableapp.data.handler.SubjectHandler;
 import co.timetableapp.model.Class;
 import co.timetableapp.model.ClassDetail;
 import co.timetableapp.model.ClassTime;
@@ -48,8 +47,8 @@ import co.timetableapp.model.Subject;
 import co.timetableapp.model.Timetable;
 import co.timetableapp.ui.base.ItemEditActivity;
 import co.timetableapp.ui.components.DynamicPagerAdapter;
+import co.timetableapp.ui.components.SubjectSelectorHelper;
 import co.timetableapp.ui.subjects.SubjectEditActivity;
-import co.timetableapp.ui.subjects.SubjectsAdapter;
 import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.TextUtilsKt;
 import co.timetableapp.util.UiUtils;
@@ -79,8 +78,7 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
     private TabLayout mTabLayout;
 
     private Subject mSubject;
-    private TextView mSubjectText;
-    private AlertDialog mSubjectDialog;
+    private SubjectSelectorHelper mSubjectHelper;
 
     private EditText mEditTextModule;
 
@@ -106,8 +104,6 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
     protected void setupLayout() {
         mAppBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
 
-        setupSubjectText();
-
         mEditTextModule = (EditText) findViewById(R.id.editText_module);
         if (!mIsNew) {
             mEditTextModule.setText(mItem.getModuleName());
@@ -119,6 +115,8 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
         setupExpandToggle();
 
         setupTabs();
+
+        setupSubjectText();
     }
 
     private void setupTabs() {
@@ -148,13 +146,6 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
         mAdapters = new ArrayList<>();
 
         if (!mIsNew) {
-            try {
-                mSubject = Subject.create(this, mItem.getSubjectId());
-            } catch (DataNotFoundException e) {
-                e.printStackTrace();
-            }
-            updateLinkedSubject();
-
             ArrayList<ClassDetail> classDetails =
                     ClassDetailHandler.getClassDetailsForClass(this, mItem.getId());
             for (ClassDetail classDetail : classDetails) {
@@ -167,60 +158,31 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
     }
 
     private void setupSubjectText() {
-        mSubjectText = (TextView) findViewById(R.id.textView_subject);
+        mSubjectHelper = new SubjectSelectorHelper(this, R.id.textView_subject);
 
-        mSubjectText.setOnClickListener(new View.OnClickListener() {
+        mSubjectHelper.setOnNewSubjectListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ClassEditActivity.this);
-
-                final ArrayList<Subject> subjects =
-                        new SubjectHandler(ClassEditActivity.this).getItems(getApplication());
-                Collections.sort(subjects);
-
-                SubjectsAdapter adapter = new SubjectsAdapter(getBaseContext(), subjects);
-                adapter.setOnEntryClickListener(new SubjectsAdapter.OnEntryClickListener() {
-                    @Override
-                    public void onEntryClick(View view, int position) {
-                        mSubject = subjects.get(position);
-                        mSubjectDialog.dismiss();
-                        updateLinkedSubject();
-                    }
-                });
-
-                RecyclerView recyclerView = new RecyclerView(getBaseContext());
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(ClassEditActivity.this));
-                recyclerView.setAdapter(adapter);
-
-                View titleView =
-                        getLayoutInflater().inflate(R.layout.dialog_title_with_padding, null);
-                ((TextView) titleView.findViewById(R.id.title)).setText(R.string.choose_subject);
-
-                builder.setView(recyclerView)
-                        .setCustomTitle(titleView)
-                        .setPositiveButton(R.string.action_new, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(
-                                        ClassEditActivity.this, SubjectEditActivity.class);
-                                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
-                            }
-                        });
-
-                mSubjectDialog = builder.create();
-                mSubjectDialog.show();
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(ClassEditActivity.this, SubjectEditActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL);
             }
         });
-    }
 
-    private void updateLinkedSubject() {
-        mSubjectText.setText(mSubject.getName());
-        mSubjectText.setTextColor(ContextCompat.getColor(
-                ClassEditActivity.this, R.color.mdu_text_black));
+        mSubjectHelper.setOnSubjectChangeListener(new SubjectSelectorHelper.OnSubjectChangeListener() {
+            @Override
+            public void onSubjectChange(@NotNull Subject subject) {
+                mSubject = subject;
+                Color color = new Color(mSubject.getColorId());
+                UiUtils.setBarColors(
+                        color,
+                        ClassEditActivity.this,
+                        mAppBarLayout,
+                        mToolbar,
+                        mTabLayout);
+            }
+        });
 
-        Color color = new Color(mSubject.getColorId());
-        UiUtils.setBarColors(color, this, mAppBarLayout, mToolbar, mTabLayout);
+        mSubjectHelper.setup(mItem.getSubjectId(), mIsNew);
     }
 
     private void setupDateTexts() {
@@ -542,8 +504,7 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 mSubject = data.getParcelableExtra(ItemEditActivity.EXTRA_ITEM);
-                mSubjectDialog.dismiss();
-                updateLinkedSubject();
+                mSubjectHelper.updateSubject(mSubject);
             }
 
         } else if (requestCode == REQUEST_CODE_CLASS_TIME_DETAIL) {
