@@ -37,14 +37,9 @@ data class Exam(
         val room: String,
         val resit: Boolean,
         val notes: String
-) : TimetableItem, AgendaItem, DateItem {
+) : TimetableItem, AgendaItem {
 
     companion object {
-
-        /**
-         * @see ReverseDateTimeComparator
-         */
-        @JvmField val COMPARATOR_REVERSE_DATE_TIME = ReverseDateTimeComparator()
 
         /**
          * Constructs an [Exam] using column values from the cursor provided
@@ -132,8 +127,6 @@ data class Exam(
 
     fun hasRoom() = room.trim().isNotEmpty()
 
-    override fun isInPast() = makeDateTimeObject().isBefore(LocalDateTime.now())
-
     /**
      * @return the displayed name for the exam, consisting of the subject name and exam module
      * name if it exists
@@ -143,12 +136,6 @@ data class Exam(
     } else {
         subject.name
     }
-
-    /**
-     * @return a [LocalDateTime] object using the [date] and [startTime] of the exam
-     */
-    // TODO remove this? - it is redundant since we now have getDateTime from AgendaItem
-    fun makeDateTimeObject() = LocalDateTime.of(date, startTime)!!
 
     /**
      * @return a location string consisting of the seat and room texts
@@ -173,7 +160,9 @@ data class Exam(
 
     override fun getRelatedSubject(context: Context) = Subject.create(context, subjectId)
 
-    override fun getDateTime() = makeDateTimeObject()
+    override fun getDateTime() = LocalDateTime.of(date, startTime)!!
+
+    override fun isInPast() = getDateTime().isBefore(LocalDateTime.now())
 
     override fun describeContents() = 0
 
@@ -189,17 +178,6 @@ data class Exam(
         dest?.writeString(room)
         dest?.writeInt(if (resit) 1 else 0)
         dest?.writeString(notes)
-    }
-
-    /**
-     * Defines a sorting order for exams, first being sorted in reverse by date and time (so that
-     * when viewing past exams, the most recent is shown first).
-     */
-    class ReverseDateTimeComparator : Comparator<Exam> {
-
-        override fun compare(o1: Exam?, o2: Exam?): Int {
-            return o2!!.makeDateTimeObject().compareTo(o1!!.makeDateTimeObject())
-        }
     }
 
 }

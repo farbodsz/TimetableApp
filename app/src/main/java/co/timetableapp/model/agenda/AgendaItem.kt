@@ -23,6 +23,18 @@ interface AgendaItem : AgendaListItem, Parcelable {
      */
     fun getRelatedSubject(context: Context): Subject?
 
+    /**
+     * @return true if the item's date is in the past
+     * @see isUpcoming
+     */
+    fun isInPast(): Boolean
+
+    /**
+     * @return true the item's date is in the future (not in the past)
+     * @see isInPast
+     */
+    fun isUpcoming() = !isInPast()
+
     override fun isHeader() = false
 
     /**

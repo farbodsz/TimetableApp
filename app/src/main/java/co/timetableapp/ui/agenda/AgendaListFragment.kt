@@ -37,6 +37,8 @@ import java.util.*
 
 /**
  * A fragment for displaying a list of Agenda items to the user.
+ *
+ * @see AgendaActivity
  */
 class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 

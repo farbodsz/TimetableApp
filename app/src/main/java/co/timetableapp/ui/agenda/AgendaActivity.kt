@@ -75,10 +75,10 @@ class AgendaActivity : NavigationDrawerActivity() {
 
         tabLayout.setupWithViewPager(mViewPager)
 
-        //setupFab()
+        setupFab()
     }
 
-    private fun setupFab() { // TODO
+    private fun setupFab() {
         val fabIds = arrayOf(R.id.fab_assignment, R.id.fab_exam, R.id.fab_event)
         val detailActivities = arrayOf(
                 AssignmentDetailActivity::class.java,
@@ -95,7 +95,6 @@ class AgendaActivity : NavigationDrawerActivity() {
         }
     }
 
-    /*
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -106,7 +105,6 @@ class AgendaActivity : NavigationDrawerActivity() {
             }
         }
     }
-    */
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_agenda, menu)
@@ -189,11 +187,11 @@ class AgendaActivity : NavigationDrawerActivity() {
 
     private inner class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        override fun getCount() = 4
+        override fun getCount() = 3
 
         override fun getItem(position: Int): Fragment {
-            val fragment: Fragment = when (position) {
-                0, 1, 2, 3 -> AgendaListFragment()
+            val fragment = when (position) {
+                0, 1, 2 -> AgendaListFragment()
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
 
@@ -201,7 +199,6 @@ class AgendaActivity : NavigationDrawerActivity() {
                 0 -> EnumSet.of(AgendaType.ASSIGNMENT)
                 1 -> EnumSet.of(AgendaType.EXAM)
                 2 -> EnumSet.of(AgendaType.EVENT)
-                3 -> EnumSet.allOf(AgendaType::class.java)
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
 
@@ -218,7 +215,6 @@ class AgendaActivity : NavigationDrawerActivity() {
                 0 -> R.drawable.ic_homework_white_24dp
                 1 -> R.drawable.ic_assessment_white_24dp
                 2 -> R.drawable.ic_event_white_24dp
-                3 -> R.drawable.ic_homework_white_24dp
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
 
