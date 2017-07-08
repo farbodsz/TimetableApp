@@ -7,17 +7,20 @@ import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.AssignmentsSchema
+import co.timetableapp.model.agenda.AgendaItem
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 
 /**
  * Represents an assignment the user may have been given.
  *
- * @property classId the identifier of the [Class] this assignment is associated with
- * @property title the name of the assignment
- * @property detail optional, additional notes the user may enter for the assignment
- * @property dueDate the date the assignment must be handed in
+ * @property classId            the identifier of the [Class] this assignment is associated with
+ * @property title              the name of the assignment
+ * @property detail             optional, additional notes the user may enter for the assignment
+ * @property dueDate            the date the assignment must be handed in
  * @property completionProgress an integer from 0-100 (like a percentage) indicating how complete
- *      the assignment is (100 indicating fully complete)
+ *                              the assignment is (100 indicating fully complete)
  */
 data class Assignment(
         override val id: Int,
@@ -27,7 +30,7 @@ data class Assignment(
         val detail: String,
         val dueDate: LocalDate,
         var completionProgress: Int
-) : TimetableItem, DateItem, Comparable<Assignment> {
+) : TimetableItem, AgendaItem {
 
     init {
         if (completionProgress !in 0..100) {
@@ -36,11 +39,6 @@ data class Assignment(
     }
 
     companion object {
-
-        /**
-         * @see ReverseDueDateComparator
-         */
-        @JvmField val COMPARATOR_REVERSE_DUE_DATE = ReverseDueDateComparator()
 
         /**
          * Constructs an [Assignment] using column values from the cursor provided
@@ -116,19 +114,18 @@ data class Assignment(
 
     fun isOverdue() = !isComplete() && isInPast()
 
-    override fun isInPast() = dueDate.isBefore(LocalDate.now())
-
     fun isPastAndDone() = isInPast() && isComplete()
 
-    override fun compareTo(other: Assignment): Int {
-        // Sorting order is due dates then titles
-        val dateComparison = dueDate.compareTo(other.dueDate)
-        return if (dateComparison == 0) {
-            title.compareTo(other.title)
-        } else {
-            dateComparison
-        }
+    override fun getDisplayedTitle() = title
+
+    override fun getRelatedSubject(context: Context): Subject? {
+        val cls = Class.create(context, classId)
+        return Subject.create(context, cls.subjectId)
     }
+
+    override fun getDateTime() = LocalDateTime.of(dueDate, LocalTime.MIDNIGHT)!!
+
+    override fun isInPast() = dueDate.isBefore(LocalDate.now())
 
     override fun describeContents() = 0
 
@@ -140,23 +137,6 @@ data class Assignment(
         dest?.writeString(detail)
         dest?.writeSerializable(dueDate)
         dest?.writeInt(completionProgress)
-    }
-
-    /**
-     * Defines a sorting order for assignments, first being sorted in reverse by date (so that when
-     * viewing past assignments, the most recent is shown first), then lexicographically.
-     */
-    class ReverseDueDateComparator : Comparator<Assignment> {
-
-        override fun compare(o1: Assignment?, o2: Assignment?): Int {
-            // Sorting order is reverse due dates then titles
-            val dateComparison = o2!!.dueDate.compareTo(o1!!.dueDate)
-            return if (dateComparison == 0) {
-                o1.title.compareTo(o2.title)
-            } else {
-                dateComparison
-            }
-        }
     }
   
 }

@@ -102,7 +102,8 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
     }
 
     override fun saveEditsAndClose() {
-        setResult(Activity.RESULT_OK) // to reload any changes in EventsActivity
+        val intent = Intent().putExtra(EXTRA_ITEM, mItem)
+        setResult(Activity.RESULT_OK, intent) // to reload any changes in EventsActivity
         supportFinishAfterTransition()
     }
 

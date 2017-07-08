@@ -7,6 +7,7 @@ import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.EventsSchema
+import co.timetableapp.model.agenda.AgendaItem
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -15,10 +16,10 @@ import org.threeten.bp.LocalTime
  * Represents an event that is not part of the usual schedule of the user.
  * For example, a meeting with a tutor, a sporting event, etc.
  *
- * @property title the event's title
- * @property notes additional notes and details for the event
- * @property startDateTime the starting time and date
- * @property endDateTime the ending time and date
+ * @property title          the event's title
+ * @property notes          additional notes and details for the event
+ * @property startDateTime  the starting time and date
+ * @property endDateTime    the ending time and date
  */
 data class Event(
         override val id: Int,
@@ -27,7 +28,7 @@ data class Event(
         val notes: String,
         val startDateTime: LocalDateTime,
         val endDateTime: LocalDateTime
-) : TimetableItem, DateItem, Comparable<Event> {
+) : TimetableItem, AgendaItem {
 
     companion object {
 
@@ -35,11 +36,6 @@ data class Event(
          * The color to use when displaying events in lists.
          */
         @JvmField val DEFAULT_COLOR = Color(19) // blue-grey
-
-        /**
-         * @see ReverseDateTimeComparator
-         */
-        @JvmField val COMPARATOR_REVERSE_DATE_TIME = ReverseDateTimeComparator()
 
         /**
          * Constructs an Event using column values from the cursor provided
@@ -122,9 +118,14 @@ data class Event(
 
     fun hasNotes() = notes.isNotEmpty()
 
-    override fun isInPast() = startDateTime.isBefore(LocalDateTime.now())
+    override fun getDisplayedTitle() = title
 
-    override fun compareTo(other: Event) = startDateTime.compareTo(other.startDateTime)
+    // TODO related subjects feature
+    override fun getRelatedSubject(context: Context) = null
+
+    override fun getDateTime() = startDateTime
+
+    override fun isInPast() = startDateTime.isBefore(LocalDateTime.now())
 
     override fun describeContents() = 0
 
@@ -135,17 +136,6 @@ data class Event(
         dest?.writeString(notes)
         dest?.writeSerializable(startDateTime)
         dest?.writeSerializable(endDateTime)
-    }
-
-    /**
-     * Defines a sorting order for events, first being sorted in reverse by date and time (so that
-     * when viewing past events, the most recent is shown first).
-     */
-    class ReverseDateTimeComparator : Comparator<Event> {
-
-        override fun compare(o1: Event?, o2: Event?): Int {
-            return o2!!.startDateTime.compareTo(o1!!.startDateTime)
-        }
     }
 
 }

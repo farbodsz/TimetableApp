@@ -14,6 +14,16 @@ import java.util.*
 object DateUtils {
 
     /**
+     * [DateTimeFormatter] for showing 24-hour times - e.g. 17:45
+     */
+    @JvmField val FORMATTER_TIME = DateTimeFormatter.ofPattern("HH:mm")!!
+
+    /**
+     * [DateTimeFormatter] for showing short dates - e.g. 7 May
+     */
+    @JvmField val FORMATTER_SHORT_DATE = DateTimeFormatter.ofPattern("d MMM")!!
+
+    /**
      * [DateTimeFormatter] for showing dates in full - e.g. "28 September 2014".
      */
     @JvmField val FORMATTER_FULL_DATE = DateTimeFormatter.ofPattern("d MMMM uuuu")!!
@@ -21,7 +31,7 @@ object DateUtils {
     /**
      * [DateTimeFormatter] for showing months with years in full - e.g. "March 2012".
      */
-    @JvmField val FORMATTER_FULL_MONTH_YEAR = DateTimeFormatter.ofPattern("MMMM uuuu")!!
+    @JvmField val FORMATTER_MONTH_YEAR = DateTimeFormatter.ofPattern("MMMM uuuu")!!
 
     /**
      * [DateTimeFormatter] for showing month abbreviations with years - e.g. "Mar 2012".

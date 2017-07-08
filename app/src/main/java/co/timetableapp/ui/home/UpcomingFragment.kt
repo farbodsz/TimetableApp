@@ -109,7 +109,7 @@ class UpcomingFragment : Fragment() {
             val color = Color(subject.colorId)
 
             val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
-            val datesText = exam.makeDateTimeObject().format(formatter).toUpperCase()
+            val datesText = exam.getDateTime().format(formatter).toUpperCase()
 
             with(card) {
                 findViewById(R.id.color).setBackgroundColor(
