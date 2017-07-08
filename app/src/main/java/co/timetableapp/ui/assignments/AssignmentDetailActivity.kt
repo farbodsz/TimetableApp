@@ -20,7 +20,6 @@ import co.timetableapp.util.UiUtils
  * Shows the details of an assignment.
  *
  * @see Assignment
- * @see co.timetableapp.ui.agenda.AssignmentsFragment
  * @see AssignmentEditActivity
  * @see ItemDetailActivity
  */
@@ -101,7 +100,9 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         // Overwrite db values as completionProgress may have changed
         mDataHandler.replaceItem(mItem.id, mItem)
 
-        setResult(Activity.RESULT_OK) // to reload any changes in AssignmentsActivity
+        val intent = Intent().putExtra(EXTRA_ITEM, mItem)
+
+        setResult(Activity.RESULT_OK, intent) // to reload any changes in AssignmentsActivity
         supportFinishAfterTransition()
     }
 

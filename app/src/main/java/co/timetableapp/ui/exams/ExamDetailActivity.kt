@@ -20,7 +20,6 @@ import co.timetableapp.util.UiUtils
  * Shows the details of an exam.
  *
  * @see Exam
- * @see co.timetableapp.ui.agenda.ExamsFragment
  * @see ExamEditActivity
  * @see ItemDetailActivity
  */
@@ -97,7 +96,8 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
     }
 
     override fun saveEditsAndClose() {
-        setResult(Activity.RESULT_OK) // to reload any changes in ExamsActivity
+        val intent = Intent().putExtra(EXTRA_ITEM, mItem)
+        setResult(Activity.RESULT_OK, intent) // to reload any changes in ExamsActivity
         supportFinishAfterTransition()
     }
 

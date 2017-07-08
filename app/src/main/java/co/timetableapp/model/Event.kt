@@ -7,6 +7,7 @@ import android.os.Parcelable
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.EventsSchema
+import co.timetableapp.model.agenda.AgendaItem
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -35,7 +36,7 @@ data class Event(
         val endDateTime: LocalDateTime,
         val location: String,
         val relatedSubjectId: Int
-) : TimetableItem, DateItem, Comparable<Event> {
+) : TimetableItem, AgendaItem {
 
     companion object {
 
@@ -44,11 +45,6 @@ data class Event(
          * Note that the UI could be affected by the [relatedSubjectId].
          */
         @JvmField val DEFAULT_COLOR = Color(19) // blue-grey
-
-        /**
-         * @see ReverseDateTimeComparator
-         */
-        @JvmField val COMPARATOR_REVERSE_DATE_TIME = ReverseDateTimeComparator()
 
         /**
          * Constructs an Event using column values from the cursor provided
@@ -134,12 +130,16 @@ data class Event(
     fun hasDifferentStartEndDates() = startDateTime.toLocalDate() != endDateTime.toLocalDate()
 
     fun hasNotes() = notes.isNotEmpty()
-
+  
     fun hasLocation() = location.isNotEmpty()
 
-    override fun isInPast() = startDateTime.isBefore(LocalDateTime.now())
+    override fun getDisplayedTitle() = title
 
-    override fun compareTo(other: Event) = startDateTime.compareTo(other.startDateTime)
+    override fun getRelatedSubject(context: Context) = null // TODO related subjects feature
+
+    override fun getDateTime() = startDateTime
+
+    override fun isInPast() = startDateTime.isBefore(LocalDateTime.now())
 
     override fun describeContents() = 0
 
@@ -152,17 +152,6 @@ data class Event(
         dest?.writeSerializable(endDateTime)
         dest?.writeString(location)
         dest?.writeInt(relatedSubjectId)
-    }
-
-    /**
-     * Defines a sorting order for events, first being sorted in reverse by date and time (so that
-     * when viewing past events, the most recent is shown first).
-     */
-    class ReverseDateTimeComparator : Comparator<Event> {
-
-        override fun compare(o1: Event?, o2: Event?): Int {
-            return o2!!.startDateTime.compareTo(o1!!.startDateTime)
-        }
     }
 
 }

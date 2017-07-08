@@ -23,7 +23,6 @@ import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.handler.EventHandler;
 import co.timetableapp.model.Event;
 import co.timetableapp.model.Timetable;
-import co.timetableapp.ui.agenda.EventsFragment;
 import co.timetableapp.ui.base.ItemEditActivity;
 import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.TextUtilsKt;
@@ -31,7 +30,6 @@ import co.timetableapp.util.TextUtilsKt;
 /**
  * Allows the user to edit an {@link Event}
  *
- * @see EventsFragment
  * @see ItemEditActivity
  */
 public class EventEditActivity extends ItemEditActivity<Event> {
