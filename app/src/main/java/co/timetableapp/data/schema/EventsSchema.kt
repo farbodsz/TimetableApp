@@ -5,7 +5,7 @@ import android.provider.BaseColumns
 /**
  * The schema for the 'events' table, containing constants for the column names and an SQLite create
  * statement.
-
+ *
  * @see co.timetableapp.model.Event
  */
 object EventsSchema : BaseColumns {
@@ -25,10 +25,12 @@ object EventsSchema : BaseColumns {
     const val COL_END_DATE_YEAR = "end_date_year"
     const val COL_END_TIME_HRS = "end_time_hrs"
     const val COL_END_TIME_MINS = "end_time_mins"
+    const val COL_LOCATION = "location"
+    const val COL_RELATED_SUBJECT_ID = "related_subject_id"
 
     /**
      * An SQLite statement which creates the 'events' table upon execution.
-
+     *
      * @see co.timetableapp.data.TimetableDbHelper
      */
     internal const val SQL_CREATE = "CREATE TABLE " + TABLE_NAME + "( " +
@@ -45,7 +47,9 @@ object EventsSchema : BaseColumns {
             COL_END_DATE_MONTH + INTEGER_TYPE + COMMA_SEP +
             COL_END_DATE_YEAR + INTEGER_TYPE + COMMA_SEP +
             COL_END_TIME_HRS + INTEGER_TYPE + COMMA_SEP +
-            COL_END_TIME_MINS + INTEGER_TYPE +
+            COL_END_TIME_MINS + INTEGER_TYPE + COMMA_SEP +
+            COL_LOCATION + TEXT_TYPE + COMMA_SEP +
+            COL_RELATED_SUBJECT_ID + INTEGER_TYPE +
             " )"
 
 }

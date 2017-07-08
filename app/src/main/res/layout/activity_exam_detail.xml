@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    app:srcCompat="@drawable/ic_room_black_24dp"
+                    app:srcCompat="@drawable/ic_location_black_24dp"
                     style="@style/Widget.Timetable.ItemIcon" />
 
                 <TextView

@@ -110,6 +110,28 @@
                     android:layout_marginRight="@dimen/mdu_keyline_1" />
             </FrameLayout>
 
+            <include layout="@layout/divider"
+                android:id="@+id/divider_location" />
+
+            <FrameLayout
+                android:id="@+id/viewGroup_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_location_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <TextView
+                    android:id="@+id/textView_location"
+                    tools:text="Room 0, 12 Fake Street"
+                    style="@style/Widget.Timetable.TextView.Item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/mdu_keyline_2"
+                    android:layout_marginRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+
             <include layout="@layout/divider" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
