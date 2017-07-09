@@ -188,6 +188,7 @@
                     android:id="@+id/textView_notes"
                     tools:text="Some notes about the exam.\nHere's another line."
                     style="@style/Widget.Timetable.TextView.Item"
+                    android:autoLink="all"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/mdu_keyline_2"
