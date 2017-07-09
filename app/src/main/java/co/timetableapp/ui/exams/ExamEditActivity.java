@@ -143,7 +143,7 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
             }
         });
 
-        mSubjectHelper.setup(mItem.getSubjectId(), mIsNew);
+        mSubjectHelper.setup(mIsNew ? null : mItem.getRelatedSubject(this));
     }
 
     private void setupDateText() {

@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import co.timetableapp.R
-import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.handler.SubjectHandler
 import co.timetableapp.model.Subject
 import co.timetableapp.ui.subjects.SubjectsAdapter
@@ -26,16 +25,15 @@ class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: In
 
     private var mSubjectDialog: AlertDialog? = null
 
-    fun setup(subjectId: Int, isNew: Boolean) {
-        if (!isNew) {
-            try {
-                val subject = Subject.create(activity, subjectId)
-                updateSubject(subject)
-            } catch (e: DataNotFoundException) {
-                e.printStackTrace()
-            }
-        }
-
+    /**
+     * Sets up this helper class, displaying the [subject] and preparing actions for when the
+     * [TextView] is clicked.
+     *
+     * @param subject   the subject to initially display on the [TextView]. This can be null, in
+     *                  which case a placeholder 'hint' text will be initially displayed.
+     */
+    fun setup(subject: Subject?) {
+        subject?.let { updateSubject(it) }
         setupOnClick()
     }
 

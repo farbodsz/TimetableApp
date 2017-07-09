@@ -39,6 +39,7 @@ import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.handler.ClassDetailHandler;
 import co.timetableapp.data.handler.ClassHandler;
 import co.timetableapp.data.handler.ClassTimeHandler;
+import co.timetableapp.data.handler.DataNotFoundException;
 import co.timetableapp.model.Class;
 import co.timetableapp.model.ClassDetail;
 import co.timetableapp.model.ClassTime;
@@ -182,7 +183,15 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
             }
         });
 
-        mSubjectHelper.setup(mItem.getSubjectId(), mIsNew);
+        Subject subject = null;
+        if (!mIsNew) {
+            try {
+                subject = Subject.create(this, mItem.getSubjectId());
+            } catch (DataNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        mSubjectHelper.setup(subject);
     }
 
     private void setupDateTexts() {

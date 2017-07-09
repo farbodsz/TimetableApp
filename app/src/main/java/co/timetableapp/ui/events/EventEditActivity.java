@@ -121,7 +121,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
             }
         });
 
-        mSubjectHelper.setup(mItem.getRelatedSubjectId(), mIsNew);
+        mSubjectHelper.setup(mIsNew ? null : mItem.getRelatedSubject(this));
     }
 
     private void setupDateText() {
