@@ -108,6 +108,8 @@
     </string-array>
     <string name="week_item">Week %1$s</string>
 
+    <string name="no_subject">No subject</string>
+
     <string name="property_title">Title</string>
     <string name="property_detail">Detail</string>
     <string name="property_notes">Notes</string>

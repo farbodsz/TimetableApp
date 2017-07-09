@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.EventHandler
+import co.timetableapp.model.Color
 import co.timetableapp.model.Event
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.base.ItemEditActivity
@@ -42,6 +43,7 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
         setupTimeText()
         setupNotesText()
         setupLocationText()
+        setupSubjectText()
     }
 
     private fun setupToolbar() {
@@ -53,7 +55,12 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
 
         (findViewById(R.id.title) as TextView).text = mItem.title
 
-        UiUtils.setBarColors(Event.DEFAULT_COLOR, this, toolbar)
+        val color = if (mItem.hasRelatedSubject()) {
+            Color(mItem.getRelatedSubject(this)!!.colorId)
+        } else {
+            Event.DEFAULT_COLOR
+        }
+        UiUtils.setBarColors(color, this, toolbar)
     }
 
     private fun setupDateText() {
@@ -100,6 +107,17 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
         }
 
         (findViewById(R.id.textView_location) as TextView).text = mItem.location
+    }
+
+    private fun setupSubjectText() {
+        if (!mItem.hasRelatedSubject()) {
+            findViewById(R.id.divider_subject).visibility = View.GONE
+            findViewById(R.id.viewGroup_subject).visibility = View.GONE
+            return
+        }
+
+        (findViewById(R.id.textView_subject) as TextView).text =
+                mItem.getRelatedSubject(this)!!.name
     }
 
     override fun onMenuEditClick() {

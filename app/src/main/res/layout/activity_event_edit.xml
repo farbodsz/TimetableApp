@@ -145,6 +145,26 @@
             </FrameLayout>
 
             <include layout="@layout/divider" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_school_black_24dp"
+                    style="@style/Widget.Timetable.ItemIcon" />
+
+                <TextView
+                    android:id="@+id/textView_subject"
+                    android:text="@string/property_subject"
+                    style="@style/Widget.Timetable.TextView.Item.Selectable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/mdu_keyline_2"
+                    android:paddingRight="@dimen/mdu_keyline_1" />
+            </FrameLayout>
+
+            <include layout="@layout/divider" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

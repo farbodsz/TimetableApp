@@ -133,9 +133,15 @@ data class Event(
   
     fun hasLocation() = location.isNotEmpty()
 
+    fun hasRelatedSubject() = relatedSubjectId != 0
+
     override fun getDisplayedTitle() = title
 
-    override fun getRelatedSubject(context: Context) = null // TODO related subjects feature
+    override fun getRelatedSubject(context: Context) = if (hasRelatedSubject()) {
+        Subject.create(context, relatedSubjectId)
+    } else {
+        null
+    }
 
     override fun getDateTime() = startDateTime
 

@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -21,11 +22,16 @@ import org.threeten.bp.LocalTime;
 import co.timetableapp.R;
 import co.timetableapp.TimetableApplication;
 import co.timetableapp.data.handler.EventHandler;
+import co.timetableapp.model.Color;
 import co.timetableapp.model.Event;
+import co.timetableapp.model.Subject;
 import co.timetableapp.model.Timetable;
 import co.timetableapp.ui.base.ItemEditActivity;
+import co.timetableapp.ui.components.SubjectSelectorHelper;
+import co.timetableapp.ui.subjects.SubjectEditActivity;
 import co.timetableapp.util.DateUtils;
 import co.timetableapp.util.TextUtilsKt;
+import co.timetableapp.util.UiUtils;
 
 /**
  * Allows the user to edit an {@link Event}
@@ -33,6 +39,8 @@ import co.timetableapp.util.TextUtilsKt;
  * @see ItemEditActivity
  */
 public class EventEditActivity extends ItemEditActivity<Event> {
+
+    private static final int REQUEST_CODE_SUBJECT_DETAIL = 2;
 
     private EventHandler mDataHandler = new EventHandler(this);
 
@@ -45,6 +53,9 @@ public class EventEditActivity extends ItemEditActivity<Event> {
 
     private LocalTime mStartTime, mEndTime;
     private TextView mStartTimeText, mEndTimeText;
+
+    private Subject mSubject;
+    private SubjectSelectorHelper mSubjectHelper;
 
     @Override
     protected int getLayoutResource() {
@@ -73,9 +84,49 @@ public class EventEditActivity extends ItemEditActivity<Event> {
             mEditTextLocation.setText(mItem.getLocation());
         }
 
+        setupSubjectHelper();
+
         setupDateText();
         setupStartTimeText();
         setupEndTimeText();
+    }
+
+    private void setupSubjectHelper() {
+        mSubjectHelper = new SubjectSelectorHelper(this, R.id.textView_subject);
+
+        mSubjectHelper.setOnNewSubjectListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(EventEditActivity.this, SubjectEditActivity.class);
+                ActivityCompat.startActivityForResult(
+                        EventEditActivity.this,
+                        intent,
+                        REQUEST_CODE_SUBJECT_DETAIL,
+                        null);
+            }
+        });
+
+        mSubjectHelper.setOnSubjectChangeListener(new SubjectSelectorHelper.OnSubjectChangeListener() {
+            @Override
+            public void onSubjectChange(Subject subject) {
+                mSubject = subject;
+
+                Color color;
+                if (subject == null) {
+                    color = Event.DEFAULT_COLOR;
+                } else {
+                    color = new Color(subject.getColorId());
+                }
+                UiUtils.setBarColors(
+                        color,
+                        EventEditActivity.this,
+                        mToolbar,
+                        findViewById(R.id.appBarLayout),
+                        findViewById(R.id.toolbar_container));
+            }
+        });
+
+        mSubjectHelper.setup(mIsNew ? null : mItem.getRelatedSubject(this), true);
     }
 
     private void setupDateText() {
@@ -187,6 +238,18 @@ public class EventEditActivity extends ItemEditActivity<Event> {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
+            if (resultCode == Activity.RESULT_OK) {
+                mSubject = data.getParcelableExtra(ItemEditActivity.EXTRA_ITEM);
+                mSubjectHelper.updateSubject(mSubject);
+            }
+        }
+    }
+
+    @Override
     protected void handleDoneAction() {
         String newTitle = mEditTextTitle.getText().toString();
         newTitle = TextUtilsKt.title(newTitle);
@@ -225,7 +288,7 @@ public class EventEditActivity extends ItemEditActivity<Event> {
                 LocalDateTime.of(mEventDate, mStartTime),
                 LocalDateTime.of(mEventDate, mEndTime),
                 newLocation,
-                0); // TODO: Related subjects
+                mSubject == null ? 0 : mSubject.getId());
 
         if (mIsNew) {
             mDataHandler.addItem(mItem);
