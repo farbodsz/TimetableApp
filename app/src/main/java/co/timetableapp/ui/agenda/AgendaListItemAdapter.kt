@@ -27,6 +27,7 @@ import co.timetableapp.R
 import co.timetableapp.model.Assignment
 import co.timetableapp.model.Color
 import co.timetableapp.model.Event
+import co.timetableapp.model.Subject
 import co.timetableapp.model.agenda.AgendaHeader
 import co.timetableapp.model.agenda.AgendaItem
 import co.timetableapp.model.agenda.AgendaListItem
@@ -117,7 +118,7 @@ class AgendaListItemAdapter(
 
         with(holder) {
             title.text = agendaItem.getDisplayedTitle()
-            subtitle.text = relatedSubject?.name ?: ""
+            subtitle.text = makeSubtitleText(agendaItem, relatedSubject)
 
             info1.text = agendaItem.getDateTime().toLocalDate()
                     .format(DateUtils.FORMATTER_FULL_DATE) // TODO display start **and end** dates
@@ -137,6 +138,17 @@ class AgendaListItemAdapter(
             colorView.setBackgroundColor(
                     ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
         }
+    }
+
+    /**
+     * @return a string to be used as a subtitle on the agenda list item
+     */
+    private fun makeSubtitleText(agendaItem: AgendaItem, relatedSubject: Subject?): String {
+        var subtitleText = ""
+        relatedSubject?.let { subtitleText += "${it.name} " }
+        subtitleText += context.getString(agendaItem.getTypeNameRes())
+
+        return subtitleText
     }
 
     override fun getItemCount() = items.size

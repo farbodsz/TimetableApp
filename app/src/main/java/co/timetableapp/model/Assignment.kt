@@ -20,6 +20,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import co.timetableapp.R
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.AssignmentsSchema
@@ -131,6 +132,8 @@ data class Assignment(
     fun isOverdue() = !isComplete() && isInPast()
 
     fun isPastAndDone() = isInPast() && isComplete()
+
+    override fun getTypeNameRes() = R.string.assignment
 
     override fun getDisplayedTitle() = title
 

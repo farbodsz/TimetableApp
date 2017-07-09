@@ -20,6 +20,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import co.timetableapp.R
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.ExamsSchema
@@ -171,6 +172,8 @@ data class Exam(
 
         return stringBuilder.toString()
     }
+
+    override fun getTypeNameRes() = R.string.exam
 
     override fun getDisplayedTitle() = moduleName
 

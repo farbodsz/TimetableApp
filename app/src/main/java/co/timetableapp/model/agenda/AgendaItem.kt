@@ -18,6 +18,7 @@ package co.timetableapp.model.agenda
 
 import android.content.Context
 import android.os.Parcelable
+import android.support.annotation.StringRes
 import co.timetableapp.model.Assignment
 import co.timetableapp.model.Event
 import co.timetableapp.model.Exam
@@ -27,6 +28,12 @@ import co.timetableapp.model.Subject
  * This should be implemented by classes that can be shown on the 'Agenda' part of the UI.
  */
 interface AgendaItem : AgendaListItem, Parcelable {
+
+    /**
+     * @return the string resource for the name of the kind of [AgendaItem].
+     */
+    @StringRes
+    fun getTypeNameRes(): Int
 
     /**
      * @return the title for the Agenda item

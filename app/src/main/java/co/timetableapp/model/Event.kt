@@ -20,6 +20,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
+import co.timetableapp.R
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.EventsSchema
@@ -150,6 +151,8 @@ data class Event(
     fun hasLocation() = location.isNotEmpty()
 
     fun hasRelatedSubject() = relatedSubjectId != 0
+
+    override fun getTypeNameRes() = R.string.event
 
     override fun getDisplayedTitle() = title
 
