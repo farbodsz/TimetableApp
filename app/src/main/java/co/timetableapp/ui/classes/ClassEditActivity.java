@@ -26,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import org.jetbrains.annotations.NotNull;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -171,7 +170,7 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
 
         mSubjectHelper.setOnSubjectChangeListener(new SubjectSelectorHelper.OnSubjectChangeListener() {
             @Override
-            public void onSubjectChange(@NotNull Subject subject) {
+            public void onSubjectChange(Subject subject) {
                 mSubject = subject;
                 Color color = new Color(mSubject.getColorId());
                 UiUtils.setBarColors(

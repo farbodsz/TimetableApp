@@ -18,7 +18,6 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import org.jetbrains.annotations.NotNull;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 
@@ -131,7 +130,7 @@ public class ExamEditActivity extends ItemEditActivity<Exam> {
 
         mSubjectHelper.setOnSubjectChangeListener(new SubjectSelectorHelper.OnSubjectChangeListener() {
             @Override
-            public void onSubjectChange(@NotNull Subject subject) {
+            public void onSubjectChange(Subject subject) {
                 mSubject = subject;
                 Color color = new Color(subject.getColorId());
                 UiUtils.setBarColors(

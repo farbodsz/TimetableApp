@@ -29,15 +29,18 @@ class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: In
      * Sets up this helper class, displaying the [subject] and preparing actions for when the
      * [TextView] is clicked.
      *
-     * @param subject   the subject to initially display on the [TextView]. This can be null, in
-     *                  which case a placeholder 'hint' text will be initially displayed.
+     * @param subject           the subject to initially display on the [TextView]. This can be
+     *                          null, in which case a 'hint' text will be initially displayed.
+     * @param allowNoSubject    whether a 'No subject' option should be shown in the subject
+     *                          selector dialog.
      */
-    fun setup(subject: Subject?) {
+    @JvmOverloads
+    fun setup(subject: Subject?, allowNoSubject: Boolean = false) {
         subject?.let { updateSubject(it) }
-        setupOnClick()
+        setupOnClick(allowNoSubject)
     }
 
-    private fun setupOnClick() = mTextView.setOnClickListener {
+    private fun setupOnClick(allowNoSubject: Boolean) = mTextView.setOnClickListener {
         val builder = AlertDialog.Builder(activity)
 
         val subjects = SubjectHandler(activity).getItems(activity.application)
@@ -61,15 +64,31 @@ class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: In
                 .setCustomTitle(titleView)
                 .setPositiveButton(R.string.action_new, onNewSubjectListener)
 
+        if (allowNoSubject) {
+            builder.setNeutralButton(R.string.no_subject) { _, _ ->
+                updateSubject(null)
+            }
+        }
+
         mSubjectDialog = builder.create()
         mSubjectDialog!!.show()
     }
 
-    fun updateSubject(newSubject: Subject) {
+    /**
+     * Updates the displayed text according to the [newSubject].
+     *
+     * [newSubject] can be null, in which case a 'hint' text is shown.
+     */
+    fun updateSubject(newSubject: Subject?) {
         mSubjectDialog?.dismiss() // in case it is already open
 
-        mTextView.text = newSubject.name
-        mTextView.setTextColor(ContextCompat.getColor(activity, R.color.mdu_text_black))
+        if (newSubject == null) {
+            mTextView.text = activity.getString(R.string.property_subject)
+            mTextView.setTextColor(ContextCompat.getColor(activity, R.color.mdu_text_black_secondary))
+        } else {
+            mTextView.text = newSubject.name
+            mTextView.setTextColor(ContextCompat.getColor(activity, R.color.mdu_text_black))
+        }
 
         onSubjectChangeListener?.onSubjectChange(newSubject)
     }
@@ -79,7 +98,7 @@ class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: In
         /**
          * Callback to be invoked when the [Subject] being displayed has changed.
          */
-        fun onSubjectChange(subject: Subject)
+        fun onSubjectChange(subject: Subject?)
 
     }
 

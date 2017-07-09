@@ -112,7 +112,7 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
     private fun setupSubjectText() {
         if (!mItem.hasRelatedSubject()) {
             findViewById(R.id.divider_subject).visibility = View.GONE
-            findViewById(R.id.viewGroup_location).visibility = View.GONE
+            findViewById(R.id.viewGroup_subject).visibility = View.GONE
             return
         }
 
