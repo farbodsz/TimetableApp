@@ -60,22 +60,6 @@ interface AgendaItem : AgendaListItem, Parcelable {
 
     override fun isHeader() = false
 
-    /**
-     * Defines a sorting order for Agenda items, first being sorted in reverse by date (so that when
-     * viewing past assignments, the most recent is shown first), then lexicographically.
-     */
-    class ReverseDateComparator : Comparator<AgendaItem> {
-
-        override fun compare(o1: AgendaItem?, o2: AgendaItem?): Int {
-            val dateComparison = o2!!.getDateTime().compareTo(o1!!.getDateTime())
-            return if (dateComparison == 0) {
-                o1.getDisplayedTitle().compareTo(o2.getDisplayedTitle())
-            } else {
-                dateComparison
-            }
-        }
-    }
-
     companion object {
 
         /**
