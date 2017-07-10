@@ -32,8 +32,8 @@ class TimetableApplication : Application() {
         private set(value) {
             field = value
             value?.let {
-                PrefUtils.setCurrentTimetable(this, field!!)
-                Log.i(LOG_TAG, "Switched current timetable to that with id ${field!!.id}")
+                PrefUtils.setCurrentTimetable(this, it)
+                Log.i(LOG_TAG, "Switched current timetable to that with id ${it.id}")
             }
         }
 
