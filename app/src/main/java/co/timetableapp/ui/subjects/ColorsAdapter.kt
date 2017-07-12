@@ -59,7 +59,7 @@ class ColorsAdapter(
 
     inner class ColorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val imageView = itemView.findViewById(R.id.color) as CircleImageView
+        val imageView = itemView.findViewById(R.id.imageView) as CircleImageView
 
         init {
             itemView.setOnClickListener { view ->
