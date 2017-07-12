@@ -28,6 +28,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import co.timetableapp.R;
@@ -98,12 +100,12 @@ public class SubjectEditActivity extends ItemEditActivity<Subject> {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(SubjectEditActivity.this);
 
-                final ArrayList<Color> colors = ColorsAdapter.getAllColors();
+                final ArrayList<Color> colors = Color.getAllColors();
 
                 ColorsAdapter adapter = new ColorsAdapter(getBaseContext(), colors);
-                adapter.setOnEntryClickListener(new ColorsAdapter.OnEntryClickListener() {
+                adapter.setOnItemClickListener(new ColorsAdapter.OnItemClickListener() {
                     @Override
-                    public void onEntryClick(View view, int position) {
+                    public void onItemClick(@NotNull View view, int position) {
                         mColor = colors.get(position);
                         imageView.setImageResource(mColor.getPrimaryColorResId(getBaseContext()));
                         UiUtils.setBarColors(mColor, SubjectEditActivity.this, mToolbar);

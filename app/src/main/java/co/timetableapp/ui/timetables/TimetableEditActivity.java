@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import com.satsuware.usefulviews.LabelledSpinner;
 
+import org.jetbrains.annotations.NotNull;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
@@ -211,9 +212,9 @@ public class TimetableEditActivity extends ItemEditActivity<Timetable>
         sortList();
 
         mAdapter = new TermsAdapter(mTerms);
-        mAdapter.setOnEntryClickListener(new TermsAdapter.OnEntryClickListener() {
+        mAdapter.setOnItemClickListener(new TermsAdapter.OnItemClickListener() {
             @Override
-            public void onEntryClick(View view, int position) {
+            public void onItemClick(@NotNull View view, int position) {
                 Intent intent = new Intent(TimetableEditActivity.this, TermEditActivity.class);
                 intent.putExtra(ItemEditActivity.EXTRA_ITEM, mTerms.get(position));
                 intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId());

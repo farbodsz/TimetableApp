@@ -87,10 +87,10 @@ class TimetablesFragment : Fragment() {
 
         mAdapter = TimetablesAdapter(
                 activity,
-                mTimetables,
+                mTimetables!!,
                 activity.findViewById(R.id.coordinatorLayout))
 
-        mAdapter.setOnEntryClickListener { view, position ->
+        mAdapter.setOnItemClickListener { view, position ->
             val intent = Intent(activity, TimetableEditActivity::class.java)
             intent.putExtra(ItemEditActivity.EXTRA_ITEM, mTimetables!![position])
 

@@ -381,30 +381,30 @@ public class ClassEditActivity extends ItemEditActivity<Class> {
         mAllClassTimeGroups.add(classTimeGroups);
 
         ClassTimesAdapter adapter = new ClassTimesAdapter(this, classTimeGroups);
-        adapter.setOnEntryClickListener(new ClassTimesAdapter.OnEntryClickListener() {
-            @Override
-            public void onEntryClick(View view, int position) {
-                ClassTimeGroup classTimeGroup = classTimeGroups.get(position);
-
-                Intent intent = new Intent(ClassEditActivity.this, ClassTimeEditActivity.class);
-                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME, classTimeGroup.getClassTimes());
-                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
-                intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
-
-                Bundle bundle = null;
-                if (UiUtils.isApi21()) {
-                    ActivityOptionsCompat options =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                    ClassEditActivity.this,
-                                    view,
-                                    getString(R.string.transition_2));
-                    bundle = options.toBundle();
-                }
-
-                ActivityCompat.startActivityForResult(
-                        ClassEditActivity.this, intent, REQUEST_CODE_CLASS_TIME_DETAIL, bundle);
-            }
-        });
+//        adapter.setOnEntryClickListener(new ClassTimesAdapter.OnEntryClickListener() { // TODO
+//            @Override
+//            public void onEntryClick(View view, int position) {
+//                ClassTimeGroup classTimeGroup = classTimeGroups.get(position);
+//
+//                Intent intent = new Intent(ClassEditActivity.this, ClassTimeEditActivity.class);
+//                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_TIME, classTimeGroup.getClassTimes());
+//                intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId);
+//                intent.putExtra(ClassTimeEditActivity.EXTRA_TAB_POSITION, pagerCount);
+//
+//                Bundle bundle = null;
+//                if (UiUtils.isApi21()) {
+//                    ActivityOptionsCompat options =
+//                            ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                                    ClassEditActivity.this,
+//                                    view,
+//                                    getString(R.string.transition_2));
+//                    bundle = options.toBundle();
+//                }
+//
+//                ActivityCompat.startActivityForResult(
+//                        ClassEditActivity.this, intent, REQUEST_CODE_CLASS_TIME_DETAIL, bundle);
+//            }
+//        });
         mAdapters.add(adapter);
 
         RecyclerView recyclerView = (RecyclerView) page.findViewById(R.id.recyclerView);

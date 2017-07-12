@@ -159,14 +159,10 @@ public class AssignmentEditActivity extends AppCompatActivity {
                 Collections.sort(classes, new Class.NaturalSortComparator(getBaseContext()));
 
                 ClassesAdapter adapter = new ClassesAdapter(getBaseContext(), classes);
-                adapter.setOnEntryClickListener(new ClassesAdapter.OnEntryClickListener() {
-                    @Override
-                    public void onEntryClick(View view, int position) {
-                        mClass = classes.get(position);
-                        updateLinkedClass();
-                        mClassDialog.dismiss();
-                    }
-                });
+                //adapter.setOnItemClickListener( ... ); // TODO
+//                mClass = classes.get(position);
+//                updateLinkedClass();
+//                mClassDialog.dismiss();
 
                 RecyclerView recyclerView = new RecyclerView(getBaseContext());
                 recyclerView.setHasFixedSize(true);

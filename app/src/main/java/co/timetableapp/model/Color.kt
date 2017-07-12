@@ -30,6 +30,19 @@ import android.support.annotation.ColorRes
  */
 data class Color(val id: Int) {
 
+    companion object {
+
+        /**
+         * @return a list of all possible colors
+         */
+        @JvmStatic
+        fun getAllColors(): ArrayList<Color> {
+            val colors = ArrayList<Color>()
+            (1..19).mapTo(colors) { Color(it) }
+            return colors
+        }
+    }
+
     // TODO sealed classes?
 
     val name: String
