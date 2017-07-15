@@ -44,11 +44,11 @@ import org.threeten.bp.LocalTime
  * for each different class detail (e.g. when the student gets taught by teacher A and when they
  * get taught by teacher B).
  *
- * @property classDetailId the identifier of the associated [ClassDetail]
- * @property day a day of the week (Monday to Sunday) that the class takes place
- * @property weekNumber the number of a week rotation where the class takes place
- * @property startTime a start time of the class
- * @property endTime an end time of the class
+ * @property classDetailId  the id of the associated [ClassDetail]
+ * @property day            the day of the week (Monday to Sunday) that the class takes place
+ * @property weekNumber     the number of a week rotation when the class takes place
+ * @property startTime      the time the class starts
+ * @property endTime        the time the class ends
  */
 data class ClassTime(
         override val id: Int,
@@ -194,6 +194,32 @@ data class ClassTime(
         dest?.writeInt(weekNumber)
         dest?.writeSerializable(startTime)
         dest?.writeSerializable(endTime)
+    }
+
+    /**
+     * Defines a sorting order for [class times][ClassTime] so that they are sorted by start time,
+     * then end time, then days, then week numbers.
+     */
+    class TimeComparator : Comparator<ClassTime> {
+
+        override fun compare(o1: ClassTime?, o2: ClassTime?): Int {
+            val startTimeComparison = o1!!.startTime.compareTo(o2!!.startTime)
+            if (startTimeComparison != 0) {
+                return startTimeComparison
+            }
+
+            val endTimeComparison = o1.endTime.compareTo(o2.endTime)
+            if (endTimeComparison != 0) {
+                return endTimeComparison
+            }
+
+            val dayComparison = o1.day.compareTo(o2.day)
+            if (dayComparison != 0) {
+                return dayComparison
+            }
+
+            return o1.weekNumber - o2.weekNumber
+        }
     }
 
 }
