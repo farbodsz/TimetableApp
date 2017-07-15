@@ -29,14 +29,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import co.timetableapp.R
-import co.timetableapp.TimetableApplication
-import co.timetableapp.data.handler.AssignmentHandler
 import co.timetableapp.data.handler.DataNotFoundException
-import co.timetableapp.data.handler.EventHandler
-import co.timetableapp.data.handler.ExamHandler
-import co.timetableapp.data.query.Filters
-import co.timetableapp.data.query.Query
-import co.timetableapp.data.schema.ExamsSchema
 import co.timetableapp.model.*
 import co.timetableapp.ui.agenda.AgendaActivity
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
@@ -60,24 +53,17 @@ class TodayFragment : Fragment() {
         private const val LOG_TAG = "TodayFragment"
     }
 
+    private lateinit var mDataHelper: HomeDataHelper
+
     private lateinit var mSectionContainer: LinearLayout
 
-    private val mAssignmentsToday: ArrayList<Assignment> by lazy {
-        val today = LocalDate.now()
-        val assignmentsToday = ArrayList<Assignment>()
-
-        AssignmentHandler(context).getItems(activity.application).forEach {
-            if (it.dueDate == today) {
-                assignmentsToday.add(it)
-            }
-        }
-
-        assignmentsToday
-    }
+    private val mAssignmentsToday by lazy { mDataHelper.getAssignmentsToday() }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.fragment_home_main, container, false)
+
+        mDataHelper = HomeDataHelper(activity)
 
         mSectionContainer = rootView.findViewById(R.id.section_container) as LinearLayout
         setupLayout()
@@ -86,11 +72,10 @@ class TodayFragment : Fragment() {
     }
 
     private fun setupLayout() {
-        val timetableId = (activity.application as TimetableApplication).currentTimetable!!.id
         val inflater = LayoutInflater.from(context)
 
         setupClassSection(inflater)
-        setupExamSection(inflater, timetableId)
+        setupExamSection(inflater)
         setupEventSection(inflater)
         setupAssignmentSection(inflater)
     }
@@ -177,7 +162,7 @@ class TodayFragment : Fragment() {
          * This is also helpful as we want to display other assignments due today on separate cards
          * (i.e. assignments not related to a class today).
          */
-        mAssignmentsToday.removeAll(classAssignments)
+        (mAssignmentsToday as ArrayList).removeAll(classAssignments)
 
         val numberDue = classAssignments.size
 
@@ -192,15 +177,14 @@ class TodayFragment : Fragment() {
         }
     }
 
-    private fun getAssignmentsForClass(assignments: ArrayList<Assignment>,
-                                       cls: Class): ArrayList<Assignment> {
+    private fun getAssignmentsForClass(assignments: List<Assignment>, cls: Class): List<Assignment> {
         val classAssignments = ArrayList<Assignment>()
         assignments.filterTo(classAssignments) { it.classId == cls.id }
         return classAssignments
     }
 
-    private fun setupExamSection(inflater: LayoutInflater, timetableId: Int) {
-        val exams = getExamsToday(timetableId)
+    private fun setupExamSection(inflater: LayoutInflater) {
+        val exams = mDataHelper.getExamsToday()
         if (exams.isNotEmpty()) {
             val examsSection = SectionGroup.Builder(context, mSectionContainer)
                     .setTitle(R.string.title_exams)
@@ -211,21 +195,7 @@ class TodayFragment : Fragment() {
         }
     }
 
-    private fun getExamsToday(timetableId: Int): ArrayList<Exam> {
-        val today = LocalDate.now()
-
-        val query = Query.Builder()
-                .addFilter(Filters.equal(ExamsSchema.COL_TIMETABLE_ID, timetableId.toString()))
-                .addFilter(Filters.equal(ExamsSchema.COL_DATE_DAY_OF_MONTH, today.dayOfMonth.toString()))
-                .addFilter(Filters.equal(ExamsSchema.COL_DATE_MONTH, today.monthValue.toString()))
-                .addFilter(Filters.equal(ExamsSchema.COL_DATE_YEAR, today.year.toString()))
-                .build()
-
-        return ExamHandler(activity).getAllItems(query)
-    }
-
-    private fun addExamsCards(container: ViewGroup, inflater: LayoutInflater,
-                              exams: ArrayList<Exam>) {
+    private fun addExamsCards(container: ViewGroup, inflater: LayoutInflater, exams: List<Exam>) {
         for (exam in exams.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
@@ -262,7 +232,7 @@ class TodayFragment : Fragment() {
     }
 
     private fun setupAssignmentSection(inflater: LayoutInflater) {
-        val overdueAssignments = getOverdueAssignments()
+        val overdueAssignments = mDataHelper.getOverdueAssignments()
         if (mAssignmentsToday.isNotEmpty() || overdueAssignments.isNotEmpty()) {
             val otherSection = SectionGroup.Builder(context, mSectionContainer)
                     .setTitle(R.string.title_other_notices)
@@ -283,20 +253,8 @@ class TodayFragment : Fragment() {
         }
     }
 
-    private fun getOverdueAssignments(): ArrayList<Assignment> {
-        val overdueAssignments = ArrayList<Assignment>()
-
-        AssignmentHandler(context).getItems(activity.application).forEach {
-            if (it.isOverdue()) {
-                overdueAssignments.add(it)
-            }
-        }
-
-        return overdueAssignments
-    }
-
     private fun addOverdueAssignmentsCard(container: ViewGroup, inflater: LayoutInflater,
-                                          overdueAssignments: ArrayList<Assignment>) {
+                                          overdueAssignments: List<Assignment>) {
         val card = inflater.inflate(R.layout.item_home_card_no_date, container, false)
 
         val numOverdue = overdueAssignments.size
@@ -347,7 +305,7 @@ class TodayFragment : Fragment() {
     }
 
     private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
-                                   assignments: ArrayList<Assignment>) {
+                                   assignments: List<Assignment>) {
         for (assignment in assignments.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card_no_date, container, false)
 
@@ -388,7 +346,7 @@ class TodayFragment : Fragment() {
     }
 
     private fun setupEventSection(inflater: LayoutInflater) {
-        val events = getEventsToday() as ArrayList<Event>
+        val events = mDataHelper.getEventsToday()
         if (events.isNotEmpty()) {
             val eventsSection = SectionGroup.Builder(context, mSectionContainer)
                     .setTitle(R.string.title_events)
@@ -398,15 +356,8 @@ class TodayFragment : Fragment() {
         }
     }
 
-    private fun getEventsToday(): List<Event> {
-        val today = LocalDate.now()
-        return EventHandler(activity).getItems(activity.application).filter {
-            it.startDateTime.toLocalDate() == today
-        }
-    }
-
     private fun addEventsCards(container: ViewGroup, inflater: LayoutInflater,
-                               events: ArrayList<Event>) {
+                               events: List<Event>) {
         for (event in events.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 

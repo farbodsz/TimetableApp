@@ -183,6 +183,8 @@ data class Exam(
 
     override fun isInPast() = getDateTime().isBefore(LocalDateTime.now())
 
+    override fun occursOnDate(date: LocalDate) = this.date == date
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {

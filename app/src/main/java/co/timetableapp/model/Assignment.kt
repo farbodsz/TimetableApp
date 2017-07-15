@@ -146,6 +146,8 @@ data class Assignment(
 
     override fun isInPast() = dueDate.isBefore(LocalDate.now())
 
+    override fun occursOnDate(date: LocalDate) = dueDate == date
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {

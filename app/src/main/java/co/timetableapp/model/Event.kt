@@ -166,6 +166,8 @@ data class Event(
 
     override fun isInPast() = startDateTime.isBefore(LocalDateTime.now())
 
+    override fun occursOnDate(date: LocalDate) = startDateTime.toLocalDate() == date
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {

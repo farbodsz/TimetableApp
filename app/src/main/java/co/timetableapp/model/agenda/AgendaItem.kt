@@ -19,15 +19,13 @@ package co.timetableapp.model.agenda
 import android.content.Context
 import android.os.Parcelable
 import android.support.annotation.StringRes
-import co.timetableapp.model.Assignment
-import co.timetableapp.model.Event
-import co.timetableapp.model.Exam
-import co.timetableapp.model.Subject
+import co.timetableapp.model.*
+import org.threeten.bp.LocalDate
 
 /**
  * This should be implemented by classes that can be shown on the 'Agenda' part of the UI.
  */
-interface AgendaItem : AgendaListItem, Parcelable {
+interface AgendaItem : AgendaListItem, TimetableItem, Parcelable {
 
     /**
      * @return the string resource for the name of the kind of [AgendaItem].
@@ -48,15 +46,24 @@ interface AgendaItem : AgendaListItem, Parcelable {
 
     /**
      * @return true if the item's date is in the past
+     *
      * @see isUpcoming
+     * @see occursOnDate
      */
     fun isInPast(): Boolean
 
     /**
-     * @return true the item's date is in the future (not in the past)
+     * @return true if the item's date is in the future (not in the past)
+     *
      * @see isInPast
+     * @see occursOnDate
      */
     fun isUpcoming() = !isInPast()
+
+    /**
+     * @return true if the item occurs on the specified [date]
+     */
+    fun occursOnDate(date: LocalDate): Boolean
 
     override fun isHeader() = false
 

@@ -28,17 +28,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import co.timetableapp.R
-import co.timetableapp.data.handler.AssignmentHandler
 import co.timetableapp.data.handler.DataNotFoundException
-import co.timetableapp.data.handler.EventHandler
-import co.timetableapp.data.handler.ExamHandler
 import co.timetableapp.model.*
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.ItemDetailActivity
 import co.timetableapp.ui.components.SectionGroup
 import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
-import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
 /**
@@ -52,14 +48,24 @@ import org.threeten.bp.format.DateTimeFormatter
 class UpcomingFragment : Fragment() {
 
     companion object {
+
         private const val LOG_TAG = "UpcomingFragment"
+
+        /**
+         * Upcoming items occurring between today and this number of days after today will be shown.
+         */
+        private const val MAX_DAYS_UPCOMING = 7L
     }
 
     private lateinit var mSectionContainer: LinearLayout
 
+    private lateinit var mDataHelper: HomeDataHelper
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.fragment_home_main, container, false)
+
+        mDataHelper = HomeDataHelper(activity)
 
         mSectionContainer = rootView.findViewById(R.id.section_container) as LinearLayout
         setupLayout()
@@ -76,7 +82,7 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun setupExamSection(inflater: LayoutInflater) {
-        val exams = getUpcomingExams()
+        val exams = mDataHelper.getUpcomingExams(MAX_DAYS_UPCOMING)
         if (exams.isNotEmpty()) {
             val examsSection = SectionGroup.Builder(context, mSectionContainer)
                     .setTitle(R.string.title_exams)
@@ -87,25 +93,7 @@ class UpcomingFragment : Fragment() {
         }
     }
 
-    /**
-     * @return a list of exams due between today's date and next week.
-     */
-    private fun getUpcomingExams(): ArrayList<Exam> {
-        val upcomingExams = ArrayList<Exam>()
-        val now = LocalDate.now()
-        val upperDate = now.plusWeeks(1)
-
-        ExamHandler(context).getItems(activity.application).forEach {
-            if (it.date.isAfter(now) && it.date.isBefore(upperDate)) {
-                upcomingExams.add(it)
-            }
-        }
-
-        return upcomingExams
-    }
-
-    private fun addExamCards(container: ViewGroup, inflater: LayoutInflater,
-                             exams: ArrayList<Exam>) {
+    private fun addExamCards(container: ViewGroup, inflater: LayoutInflater, exams: List<Exam>) {
         if (exams.isEmpty()) {
             val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
             container.addView(card)
@@ -150,28 +138,15 @@ class UpcomingFragment : Fragment() {
         val assignmentSection = SectionGroup.Builder(context, mSectionContainer)
                 .setTitle(R.string.title_assignments)
                 .build()
-        addAssignmentCards(assignmentSection.containerView, inflater, getUpcomingAssignments())
+        addAssignmentCards(
+                assignmentSection.containerView,
+                inflater,
+                mDataHelper.getUpcomingAssignments(MAX_DAYS_UPCOMING))
         mSectionContainer.addView(assignmentSection.view)
     }
 
-    /**
-     * @return a list of assignments due between today's date and next week.
-     */
-    private fun getUpcomingAssignments(): ArrayList<Assignment> {
-        val upcomingAssignments = ArrayList<Assignment>()
-        val upperDate = LocalDate.now().plusWeeks(1)
-
-        AssignmentHandler(context).getItems(activity.application).forEach {
-            if (it.isUpcoming() && it.dueDate.isBefore(upperDate)) {
-                upcomingAssignments.add(it)
-            }
-        }
-
-        return upcomingAssignments
-    }
-
     private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
-                                   assignments: ArrayList<Assignment>) {
+                                   assignments: List<Assignment>) {
         if (assignments.isEmpty()) {
             val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
             container.addView(card)
@@ -217,7 +192,7 @@ class UpcomingFragment : Fragment() {
     }
 
     private fun setupEventSection(inflater: LayoutInflater) {
-        val events = getUpcomingEvents()
+        val events = mDataHelper.getUpcomingEvents(MAX_DAYS_UPCOMING)
         if (events.isEmpty()) {
             return
         }
@@ -229,21 +204,7 @@ class UpcomingFragment : Fragment() {
         mSectionContainer.addView(assignmentSection.view)
     }
 
-    private fun getUpcomingEvents(): ArrayList<Event> {
-        val upcomingEvents = ArrayList<Event>()
-        val upperDate = LocalDate.now().plusWeeks(1)
-
-        EventHandler(context).getItems(activity.application).forEach {
-            if (it.isUpcoming() && it.startDateTime.toLocalDate().isBefore(upperDate)) {
-                upcomingEvents.add(it)
-            }
-        }
-
-        return upcomingEvents
-    }
-
-    private fun addEventCards(container: ViewGroup, inflater: LayoutInflater,
-                              events: ArrayList<Event>) {
+    private fun addEventCards(container: ViewGroup, inflater: LayoutInflater, events: List<Event>) {
         for (event in events.sorted()) {
             val card = inflater.inflate(R.layout.item_home_card, container, false)
 
