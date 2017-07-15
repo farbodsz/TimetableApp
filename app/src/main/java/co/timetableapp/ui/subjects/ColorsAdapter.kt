@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import co.timetableapp.R
 import co.timetableapp.model.Color
+import co.timetableapp.ui.OnItemClickListener
 import de.hdodenhof.circleimageview.CircleImageView
 
 /**
@@ -37,11 +38,6 @@ class ColorsAdapter(
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         onItemClickListener = listener
-    }
-
-    @Deprecated("Use the typealias version instead")
-    interface OnItemClickListener {
-        fun onItemClick(view: View, position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ColorViewHolder {
@@ -63,7 +59,7 @@ class ColorsAdapter(
 
         init {
             itemView.setOnClickListener { view ->
-                onItemClickListener?.onItemClick(view, layoutPosition)
+                onItemClickListener?.invoke(view, layoutPosition)
             }
         }
 
