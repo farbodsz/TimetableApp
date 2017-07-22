@@ -37,7 +37,7 @@ import co.timetableapp.util.DateUtils
 /**
  * A RecyclerView adapter to be used for items being displayed on the "Agenda" page.
  */
-class AgendaListItemAdapter(
+class AgendaItemsAdapter(
         private val context: Context,
         private val items: List<AgendaListItem>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

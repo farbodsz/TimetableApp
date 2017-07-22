@@ -56,11 +56,11 @@ import java.util.*
  *
  * @see AgendaActivity
  */
-class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
+class AgendaFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 
     companion object {
 
-        private const val LOG_TAG = "AgendaListFragment"
+        private const val LOG_TAG = "AgendaFragment"
 
         /**
          * Request code when starting an activity for result for viewing the details of an item.
@@ -77,7 +77,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
     }
 
     private lateinit var mRootView: View
-    private lateinit var mAdapter: AgendaListItemAdapter
+    private lateinit var mAdapter: AgendaItemsAdapter
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mPlaceholderLayout: FrameLayout
 
@@ -154,7 +154,7 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
     }
 
     private fun setupAdapter() {
-        mAdapter = AgendaListItemAdapter(activity, mItems)
+        mAdapter = AgendaItemsAdapter(activity, mItems)
         mAdapter.onItemClick { view, position ->
             val item = mItems[position] as AgendaItem
             val detailActivity = when (item) {

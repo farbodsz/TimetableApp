@@ -22,7 +22,7 @@ import co.timetableapp.model.agenda.AgendaType
 import java.util.*
 
 /**
- * A class to help with storing filter parameters when displaying items in [AgendaListFragment].
+ * A class to help with storing filter parameters when displaying items in [AgendaFragment].
  *
  * @property typesToShow    the types being displayed in the list
  * @property showCompleted  true if completed items are being shown in the list UI

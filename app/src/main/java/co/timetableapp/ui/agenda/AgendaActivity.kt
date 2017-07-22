@@ -48,7 +48,7 @@ import java.util.*
 /**
  * An activity for displaying the user's agenda - upcoming assignments, exams, etc.
  *
- * @see AgendaListFragment
+ * @see AgendaFragment
  */
 class AgendaActivity : NavigationDrawerActivity() {
 
@@ -207,7 +207,7 @@ class AgendaActivity : NavigationDrawerActivity() {
 
         override fun getItem(position: Int): Fragment {
             val fragment = when (position) {
-                0, 1, 2 -> AgendaListFragment()
+                0, 1, 2 -> AgendaFragment()
                 else -> throw IllegalArgumentException("invalid position: $position")
             }
 
@@ -219,7 +219,7 @@ class AgendaActivity : NavigationDrawerActivity() {
             }
 
             val args = Bundle()
-            args.putSerializable(AgendaListFragment.ARGUMENT_LIST_TYPE, itemTypeArg)
+            args.putSerializable(AgendaFragment.ARGUMENT_LIST_TYPE, itemTypeArg)
 
             fragment.arguments = args
 
