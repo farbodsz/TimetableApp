@@ -16,6 +16,7 @@
 
 package co.timetableapp.model
 
+import android.app.Activity
 import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
@@ -25,6 +26,8 @@ import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.AssignmentsSchema
 import co.timetableapp.model.agenda.AgendaItem
+import co.timetableapp.model.home.HomeItem
+import co.timetableapp.model.home.HomeItemProperties
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -47,7 +50,7 @@ data class Assignment(
         val detail: String,
         val dueDate: LocalDate,
         var completionProgress: Int
-) : TimetableItem, AgendaItem {
+) : TimetableItem, AgendaItem, HomeItem {
 
     init {
         if (completionProgress !in 0..100) {
@@ -146,6 +149,10 @@ data class Assignment(
 
     override fun isInPast() = dueDate.isBefore(LocalDate.now())
 
+    override fun occursOnDate(date: LocalDate) = dueDate == date
+
+    override fun getHomeItemProperties(activity: Activity) = HomeAssignmentProperties(activity, this)
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
@@ -156,6 +163,26 @@ data class Assignment(
         dest?.writeString(detail)
         dest?.writeSerializable(dueDate)
         dest?.writeInt(completionProgress)
+    }
+
+    class HomeAssignmentProperties(context: Context, assignment: Assignment) : HomeItemProperties {
+
+        private val mSubject: Subject
+
+        init {
+            val cls = Class.create(context, assignment.classId)
+            mSubject = Subject.create(context, cls.subjectId)
+        }
+
+        override val title = assignment.title
+
+        override val subtitle = mSubject.name
+
+        override val time = "" // TODO something better here
+
+        override val extraText = null
+
+        override val color = Color(mSubject.colorId)
     }
   
 }

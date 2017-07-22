@@ -65,6 +65,8 @@
 
             <TextView
                 android:id="@+id/subtitle"
+                android:visibility="gone"
+                tools:visibility="visible"
                 tools:text="S114 \u2022 Mr Crosby"
                 android:textSize="14sp"
                 android:textColor="@color/mdu_text_black_secondary"

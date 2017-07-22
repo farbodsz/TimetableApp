@@ -26,6 +26,9 @@ import co.timetableapp.TimetableApplication
 import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.ClassTimesSchema
+import co.timetableapp.model.home.HomeItem
+import co.timetableapp.model.home.HomeItemProperties
+import co.timetableapp.ui.home.HomeDataHelper
 import co.timetableapp.util.PrefUtils
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime
@@ -58,7 +61,7 @@ data class ClassTime(
         val weekNumber: Int,
         val startTime: LocalTime,
         val endTime: LocalTime
-) : TimetableItem, Comparable<ClassTime> {
+) : TimetableItem, HomeItem, Comparable<ClassTime> {
 
     init {
         if (startTime.isAfter(endTime)) {
@@ -165,6 +168,8 @@ data class ClassTime(
      */
     fun getWeekText(activity: Activity) = Companion.getWeekText(activity, weekNumber)
 
+    override fun getHomeItemProperties(activity: Activity) = HomeClassProperties(activity, this)
+
     override fun compareTo(other: ClassTime): Int {
         // Sort by day, then by time
         val dayComparison = day.compareTo(other.day)
@@ -220,6 +225,66 @@ data class ClassTime(
 
             return o1.weekNumber - o2.weekNumber
         }
+    }
+
+    class HomeClassProperties(
+            private val activity: Activity,
+            private val classTime: ClassTime
+    ) : HomeItemProperties {
+
+        private val mClassDetail = ClassDetail.create(activity, classTime.classDetailId)
+        private val mClass: Class
+        private val mSubject: Subject
+
+        private val mDataHelper by lazy { HomeDataHelper(activity) }
+
+        init {
+            mClass = Class.create(activity, mClassDetail.classId)
+            mSubject = Subject.create(activity, mClass.subjectId)
+        }
+
+        override val title by lazy { mClass.makeName(mSubject) }
+
+        override val subtitle by lazy {
+            val classDetailBuilder = StringBuilder()
+            mClassDetail.formatLocationName()?.let {
+                classDetailBuilder.append(it)
+            }
+            if (mClassDetail.hasTeacher()) {
+                classDetailBuilder.append(" \u2022 ").append(mClassDetail.teacher)
+            }
+
+            if (classDetailBuilder.isEmpty()) {
+                null
+            } else {
+                classDetailBuilder.toString()
+            }
+        }
+
+        override val time = with(classTime) { "$startTime\n$endTime" }
+
+        override val extraText: String?
+            get() {
+                val classDetail = ClassDetail.create(activity, classTime.classDetailId)
+                val cls = Class.create(activity, classDetail.classId)
+
+                val classAssignments =
+                        mDataHelper.getAssignmentsToday().filter { it.classId == cls.id }
+
+                val numberDue = classAssignments.size
+
+                if (numberDue == 0) {
+                    return null
+                }
+
+                return activity.resources.getQuantityString(
+                        R.plurals.class_card_assignment_text,
+                        numberDue,
+                        numberDue)
+            }
+
+        override val color = Color(mSubject.colorId)
+
     }
 
 }

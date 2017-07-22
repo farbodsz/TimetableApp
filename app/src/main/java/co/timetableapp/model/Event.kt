@@ -16,6 +16,7 @@
 
 package co.timetableapp.model
 
+import android.app.Activity
 import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
@@ -25,6 +26,8 @@ import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.EventsSchema
 import co.timetableapp.model.agenda.AgendaItem
+import co.timetableapp.model.home.HomeItem
+import co.timetableapp.model.home.HomeItemProperties
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -53,7 +56,7 @@ data class Event(
         val endDateTime: LocalDateTime,
         val location: String,
         val relatedSubjectId: Int
-) : TimetableItem, AgendaItem {
+) : TimetableItem, AgendaItem, HomeItem {
 
     companion object {
 
@@ -166,6 +169,10 @@ data class Event(
 
     override fun isInPast() = startDateTime.isBefore(LocalDateTime.now())
 
+    override fun occursOnDate(date: LocalDate) = startDateTime.toLocalDate() == date
+
+    override fun getHomeItemProperties(activity: Activity) = HomeEventProperties(activity, this)
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
@@ -177,6 +184,33 @@ data class Event(
         dest?.writeSerializable(endDateTime)
         dest?.writeString(location)
         dest?.writeInt(relatedSubjectId)
+    }
+
+    class HomeEventProperties(context: Context, event: Event) : HomeItemProperties {
+
+        /**
+         * The related subject for this event. If there is none, then this will be null.
+         */
+        private var mSubject: Subject? = null
+
+        init {
+            if (event.hasRelatedSubject()) {
+                mSubject = Subject.create(context, event.relatedSubjectId)
+            }
+        }
+
+        override val title = event.title
+
+        override val subtitle = mSubject?.name
+
+        override val time = with(event) {
+            "${startDateTime.toLocalTime()}\n${endDateTime.toLocalTime()}"
+        }
+
+        override val extraText = null
+
+        override val color = if (mSubject == null) DEFAULT_COLOR else Color(mSubject!!.colorId)
+
     }
 
 }
