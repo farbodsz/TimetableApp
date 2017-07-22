@@ -124,7 +124,7 @@ class ScheduleActivity : NavigationDrawerActivity() {
                         currentTimetable,
                         thisDay,
                         dayOfWeek,
-                        weekNumber)
+                        weekNumber) as ArrayList
 
                 if (classTimes.isEmpty()) {
                     // Show a placeholder if there aren't any classes to display for this day

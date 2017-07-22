@@ -19,28 +19,31 @@ package co.timetableapp.ui.home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import co.timetableapp.R
-import co.timetableapp.data.handler.DataNotFoundException
-import co.timetableapp.model.*
+import co.timetableapp.model.Assignment
+import co.timetableapp.model.Event
+import co.timetableapp.model.Exam
+import co.timetableapp.model.home.HomeHeader
+import co.timetableapp.model.home.HomeItem
+import co.timetableapp.model.home.HomeListItem
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.ItemDetailActivity
-import co.timetableapp.ui.components.SectionGroup
 import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
-import org.threeten.bp.format.DateTimeFormatter
+import co.timetableapp.ui.home.UpcomingFragment.Companion.MAX_DAYS_UPCOMING
 
 /**
  * This page displays the user's upcoming classes and exams.
  *
- * 'Upcoming' is defined to mean within the next week.
+ * 'Upcoming' is defined by [MAX_DAYS_UPCOMING].
  *
  * @see MainActivity
  * @see TodayFragment
@@ -57,176 +60,63 @@ class UpcomingFragment : Fragment() {
         private const val MAX_DAYS_UPCOMING = 7L
     }
 
-    private lateinit var mSectionContainer: LinearLayout
+    private lateinit var mAdapter: HomeItemsAdapter
 
-    private lateinit var mDataHelper: HomeDataHelper
+    private val mItems = ArrayList<HomeListItem>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.fragment_home_main, container, false)
-
-        mDataHelper = HomeDataHelper(activity)
-
-        mSectionContainer = rootView.findViewById(R.id.section_container) as LinearLayout
-        setupLayout()
-
+        setupLayout(rootView)
         return rootView
     }
 
-    private fun setupLayout() {
-        val inflater = LayoutInflater.from(context)
+    private fun setupLayout(rootView: View) {
+        populateList()
 
-        setupExamSection(inflater)
-        setupAssignmentSection(inflater)
-        setupEventSection(inflater)
-    }
-
-    private fun setupExamSection(inflater: LayoutInflater) {
-        val exams = mDataHelper.getUpcomingExams(MAX_DAYS_UPCOMING)
-        if (exams.isNotEmpty()) {
-            val examsSection = SectionGroup.Builder(context, mSectionContainer)
-                    .setTitle(R.string.title_exams)
-                    .build()
-            addExamCards(examsSection.containerView, inflater, exams)
-
-            mSectionContainer.addView(examsSection.view)
+        mAdapter = HomeItemsAdapter(activity, mItems)
+        mAdapter.onHeaderClick { view, position ->
+            val header = mItems[position] as HomeHeader
+            header.onClick?.invoke(view, position)
         }
-    }
-
-    private fun addExamCards(container: ViewGroup, inflater: LayoutInflater, exams: List<Exam>) {
-        if (exams.isEmpty()) {
-            val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
-            container.addView(card)
-            return
-        }
-
-        for (exam in exams.sorted()) {
-            val card = inflater.inflate(R.layout.item_home_card, container, false)
-
-            val subject = try {
-                Subject.create(context, exam.subjectId)
-            } catch (e: DataNotFoundException) {
-                e.printStackTrace()
-                continue
-            }
-
-            val color = Color(subject.colorId)
-
-            val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
-            val datesText = exam.getDateTime().format(formatter).toUpperCase()
-
-            with(card) {
-                findViewById(R.id.color).setBackgroundColor(
-                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
-
-                (findViewById(R.id.title) as TextView).text = exam.makeName(subject)
-                (findViewById(R.id.subtitle) as TextView).text = exam.formatLocationText()
-                (findViewById(R.id.times) as TextView).text = datesText
-
-                setOnClickListener {
-                    val intent = Intent(activity, ExamDetailActivity::class.java)
-                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, exam)
-                    startActivity(intent)
+        mAdapter.onItemClick { _, position ->
+            val item = mItems[position] as HomeItem
+            val intent = when (item) {
+                is Assignment -> {
+                    Intent(activity, AssignmentDetailActivity::class.java)
+                            .putExtra(ItemDetailActivity.EXTRA_ITEM, item)
                 }
-            }
-
-            container.addView(card)
-        }
-    }
-
-    private fun setupAssignmentSection(inflater: LayoutInflater) {
-        val assignmentSection = SectionGroup.Builder(context, mSectionContainer)
-                .setTitle(R.string.title_assignments)
-                .build()
-        addAssignmentCards(
-                assignmentSection.containerView,
-                inflater,
-                mDataHelper.getUpcomingAssignments(MAX_DAYS_UPCOMING))
-        mSectionContainer.addView(assignmentSection.view)
-    }
-
-    private fun addAssignmentCards(container: ViewGroup, inflater: LayoutInflater,
-                                   assignments: List<Assignment>) {
-        if (assignments.isEmpty()) {
-            val card = inflater.inflate(R.layout.item_empty_placeholder, container, false)
-            container.addView(card)
-            return
-        }
-
-        for (assignment in assignments.sorted()) {
-            val card = inflater.inflate(R.layout.item_home_card, container, false)
-
-            // Not checking for DataNotFoundException since this would have been handled when
-            // getting the list of assignments
-            val cls = Class.create(context, assignment.classId)
-
-            val subject = try {
-                Subject.create(context, cls.subjectId)
-            } catch (e: DataNotFoundException) {
-                e.printStackTrace()
-                continue
-            }
-
-            val color = Color(subject.colorId)
-
-            val formatter = DateTimeFormatter.ofPattern("EEE\nd")
-            val datesText = assignment.dueDate.format(formatter).toUpperCase()
-
-            with(card) {
-                findViewById(R.id.color).setBackgroundColor(
-                        ContextCompat.getColor(context, color.getPrimaryColorResId(context)))
-
-                (findViewById(R.id.title) as TextView).text = assignment.title
-                (findViewById(R.id.subtitle) as TextView).text = cls.makeName(subject)
-                (findViewById(R.id.times) as TextView).text = datesText
-
-                setOnClickListener {
-                    val intent = Intent(context, AssignmentDetailActivity::class.java)
-                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, assignment)
-                    startActivityForResult(intent, MainActivity.REQUEST_CODE_ITEM_DETAIL)
+                is Exam -> {
+                    Intent(activity, ExamDetailActivity::class.java)
+                            .putExtra(ItemDetailActivity.EXTRA_ITEM, item)
                 }
-            }
-
-            container.addView(card)
-        }
-    }
-
-    private fun setupEventSection(inflater: LayoutInflater) {
-        val events = mDataHelper.getUpcomingEvents(MAX_DAYS_UPCOMING)
-        if (events.isEmpty()) {
-            return
-        }
-
-        val assignmentSection = SectionGroup.Builder(context, mSectionContainer)
-                .setTitle(R.string.title_events)
-                .build()
-        addEventCards(assignmentSection.containerView, inflater, events)
-        mSectionContainer.addView(assignmentSection.view)
-    }
-
-    private fun addEventCards(container: ViewGroup, inflater: LayoutInflater, events: List<Event>) {
-        for (event in events.sorted()) {
-            val card = inflater.inflate(R.layout.item_home_card, container, false)
-
-            val formatter = DateTimeFormatter.ofPattern("EEE\nHH:mm")
-            val datesText = event.startDateTime.format(formatter).toUpperCase()
-
-            with(card) {
-                findViewById(R.id.color).setBackgroundColor(ContextCompat.getColor(
-                        context,
-                        Event.DEFAULT_COLOR.getPrimaryColorResId(context)))
-
-                (findViewById(R.id.title) as TextView).text = event.title
-                (findViewById(R.id.times) as TextView).text = datesText
-
-                setOnClickListener {
-                    val intent = Intent(activity, EventDetailActivity::class.java)
-                    intent.putExtra(ItemDetailActivity.EXTRA_ITEM, event)
-                    startActivity(intent)
+                is Event -> {
+                    Intent(activity, EventDetailActivity::class.java)
+                            .putExtra(ItemDetailActivity.EXTRA_ITEM, item)
                 }
+                else -> throw IllegalArgumentException("invalid item type: $item")
             }
+            startActivity(intent)
+        }
 
-            container.addView(card)
+        val recyclerView = rootView.findViewById(R.id.recyclerView) as RecyclerView
+        with(recyclerView) {
+            layoutManager = LinearLayoutManager(activity)
+            setHasFixedSize(true)
+            adapter = mAdapter
+        }
+    }
+
+    /**
+     * Adds the items being displayed to the list.
+     */
+    private fun populateList() {
+        val processor = DataProcessor(activity)
+
+        with(mItems) {
+            addAll(processor.getAssignmentItems())
+            addAll(processor.getExamItems())
+            addAll(processor.getEventItems())
         }
     }
 
@@ -236,10 +126,45 @@ class UpcomingFragment : Fragment() {
         if (requestCode == MainActivity.REQUEST_CODE_ITEM_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.d(LOG_TAG, "UpcomingFragment: received activity result - refreshing lists")
-                mSectionContainer.removeAllViews()
-                setupLayout()
+                mItems.clear()
+                populateList()
+                mAdapter.notifyDataSetChanged()
             }
         }
+    }
+
+    /**
+     * A helper class for managing and organizing data displayed on this part of the home page.
+     */
+    private class DataProcessor(private val activity: Activity) {
+
+        private val mDataHelper = HomeDataHelper(activity)
+
+        fun getAssignmentItems() = getDisplayedItems(
+                mDataHelper.getUpcomingAssignments(MAX_DAYS_UPCOMING),
+                R.string.title_assignments
+        )
+
+        fun getExamItems() = getDisplayedItems(
+                mDataHelper.getUpcomingExams(MAX_DAYS_UPCOMING),
+                R.string.title_exams
+        )
+
+        fun getEventItems() = getDisplayedItems(
+                mDataHelper.getUpcomingEvents(MAX_DAYS_UPCOMING),
+                R.string.title_events
+        )
+
+        private fun getDisplayedItems(items: List<HomeListItem>,
+                                      @StringRes titleRes: Int): List<HomeListItem> {
+            if (items.isEmpty()) return emptyList()
+
+            val list = ArrayList<HomeListItem>()
+            list.add(HomeHeader(activity.getString(titleRes)))
+            list.addAll(items)
+            return list
+        }
+
     }
 
 }

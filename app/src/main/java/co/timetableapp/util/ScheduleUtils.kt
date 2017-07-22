@@ -45,11 +45,11 @@ object ScheduleUtils {
     @JvmStatic
     fun getClassTimesForDate(context: Context,
                              application: Application,
-                             date: LocalDate): ArrayList<ClassTime> {
+                             date: LocalDate): List<ClassTime> {
         val timetable = (application as TimetableApplication).currentTimetable!!
         if (!timetable.isValidToday(date)) {
             // Return empty list if timetable hasn't started or has ended
-            return ArrayList()
+            return emptyList()
         }
 
         val weekNumber = DateUtils.findWeekNumber(application, date)
@@ -79,9 +79,9 @@ object ScheduleUtils {
                              currentTimetable: Timetable,
                              date: LocalDate,
                              dayOfWeek: DayOfWeek,
-                             weekNumber: Int): ArrayList<ClassTime> {
+                             weekNumber: Int): List<ClassTime> {
         if (!currentTimetable.isValidToday(date)) {
-            return ArrayList()
+            return emptyList()
         }
 
         val timetableId = currentTimetable.id

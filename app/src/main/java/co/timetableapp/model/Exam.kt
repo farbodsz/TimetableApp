@@ -16,6 +16,7 @@
 
 package co.timetableapp.model
 
+import android.app.Activity
 import android.content.Context
 import android.database.Cursor
 import android.os.Parcel
@@ -25,6 +26,8 @@ import co.timetableapp.data.TimetableDbHelper
 import co.timetableapp.data.handler.DataNotFoundException
 import co.timetableapp.data.schema.ExamsSchema
 import co.timetableapp.model.agenda.AgendaItem
+import co.timetableapp.model.home.HomeItem
+import co.timetableapp.model.home.HomeItemProperties
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -54,7 +57,7 @@ data class Exam(
         val room: String,
         val resit: Boolean,
         val notes: String
-) : TimetableItem, AgendaItem {
+) : TimetableItem, AgendaItem, HomeItem {
 
     companion object {
 
@@ -185,6 +188,8 @@ data class Exam(
 
     override fun occursOnDate(date: LocalDate) = this.date == date
 
+    override fun getHomeItemProperties(activity: Activity) = HomeExamProperties(activity)
+
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
@@ -199,6 +204,25 @@ data class Exam(
         dest?.writeString(room)
         dest?.writeInt(if (resit) 1 else 0)
         dest?.writeString(notes)
+    }
+
+    inner class HomeExamProperties(context: Context) : HomeItemProperties {
+
+        private val mSubject = Subject.create(context, subjectId)
+
+        override val title = makeName(mSubject)
+
+        override val subtitle = null
+
+        override val time: String
+            get() {
+                val endTime = startTime.plusMinutes(duration.toLong())
+                return "$startTime\n$endTime"
+            }
+
+        override val extraText = null
+
+        override val color = Color(mSubject.colorId)
     }
 
 }
