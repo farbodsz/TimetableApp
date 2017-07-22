@@ -18,6 +18,7 @@ package co.timetableapp.ui.settings
 
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceFragment
@@ -201,6 +202,15 @@ class SettingsFragment : PreferenceFragment() {
         val licensePref = findPreference("pref_about_licenses")
         licensePref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             startActivity(Intent(activity, LicensesActivity::class.java))
+            true
+        }
+
+        val githubPref = findPreference("pref_view_github")
+        githubPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            val url = "https://github.com/FarbodSalamat-Zadeh/TimetableApp"
+            intent.data = Uri.parse(url)
+            startActivity(intent)
             true
         }
 

@@ -70,6 +70,7 @@
     <string name="prefCategory_about">About</string>
 
     <string name="pref_licenses">Open-source licenses</string>
+    <string name="pref_view_github">View on GitHub</string>
     <string name="pref_appVersion">Version</string>
 
 </resources>

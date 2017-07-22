@@ -94,9 +94,13 @@
         <Preference
             android:key="pref_about_licenses"
             android:title="@string/pref_licenses" />
+
+        <Preference
+            android:key="pref_view_github"
+            android:title="@string/pref_view_github" />
+
         <Preference
             android:key="pref_about_app_version"
             android:title="@string/pref_appVersion" />
     </PreferenceCategory>
-
 </PreferenceScreen>
