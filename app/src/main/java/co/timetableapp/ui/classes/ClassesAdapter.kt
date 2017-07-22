@@ -28,7 +28,7 @@ import co.timetableapp.data.handler.ClassDetailHandler
 import co.timetableapp.model.Class
 import co.timetableapp.model.Color
 import co.timetableapp.model.Subject
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 
 /**
  * A RecyclerView adapter for displaying a list of [classes][Class].
@@ -38,9 +38,9 @@ class ClassesAdapter(
         private val classes: List<Class>
 ) : RecyclerView.Adapter<ClassesAdapter.ClassesViewHolder>() {
 
-    private var onItemClickListener: OnItemClickListener? = null
+    private var onItemClickListener: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClick) {
         onItemClickListener = listener
     }
 

@@ -23,7 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import co.timetableapp.R
 import co.timetableapp.model.Color
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 import de.hdodenhof.circleimageview.CircleImageView
 
 /**
@@ -34,9 +34,9 @@ class ColorsAdapter(
         private val colors: List<Color>
 ) : RecyclerView.Adapter<ColorsAdapter.ColorViewHolder>() {
 
-    private var onItemClickListener: OnItemClickListener? = null
+    private var onItemClickListener: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClick) {
         onItemClickListener = listener
     }
 

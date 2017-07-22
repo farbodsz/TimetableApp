@@ -31,7 +31,7 @@ import co.timetableapp.model.Subject
 import co.timetableapp.model.agenda.AgendaHeader
 import co.timetableapp.model.agenda.AgendaItem
 import co.timetableapp.model.agenda.AgendaListItem
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 import co.timetableapp.util.DateUtils
 
 /**
@@ -47,9 +47,9 @@ class AgendaListItemAdapter(
         private const val VIEW_TYPE_ITEM = 2
     }
 
-    private var mOnItemClick: OnItemClickListener? = null
+    private var mOnItemClick: OnItemClick? = null
 
-    fun onItemClick(action: OnItemClickListener) {
+    fun onItemClick(action: OnItemClick) {
         mOnItemClick = action
     }
 

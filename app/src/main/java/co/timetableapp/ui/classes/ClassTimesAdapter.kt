@@ -25,7 +25,7 @@ import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.model.ClassTime
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 import co.timetableapp.util.title
 
 /**
@@ -36,9 +36,9 @@ class ClassTimesAdapter(
         private val classTimeGroups: List<ClassTimeGroup>
 ) : RecyclerView.Adapter<ClassTimesAdapter.ClassTimesViewHolder>() {
 
-    private var onItemClickListener: OnItemClickListener? = null
+    private var onItemClickListener: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClick) {
         onItemClickListener = listener
     }
 

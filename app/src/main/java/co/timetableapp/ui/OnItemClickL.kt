@@ -19,9 +19,9 @@ package co.timetableapp.ui
 import android.view.View
 
 /**
- * Type definition for a callback to be invoked when a view in the list has been clicked.
+ * Type definition for an action to be performed when a view in the list has been clicked.
  *
- * This is a function type who's parameters are the view that was clicked and the layout position
+ * This is a function type with its parameters as the view that was clicked and the layout position
  * of the ViewHolder. The function does not return anything.
  */
-typealias OnItemClickListener = (view: View, position: Int) -> Unit
+typealias OnItemClick = (view: View, position: Int) -> Unit

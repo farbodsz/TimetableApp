@@ -16,7 +16,7 @@
 
 package co.timetableapp.model.home
 
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 
 /**
  * Represents a header shown on the home page.
@@ -25,6 +25,6 @@ import co.timetableapp.ui.OnItemClickListener
  * @param onClick   the action to be performed if the header is clicked. This can be null if there
  *                  is no action.
  */
-class HomeHeader(val name: String, val onClick: OnItemClickListener?) : HomeListItem {
+class HomeHeader(val name: String, val onClick: OnItemClick?) : HomeListItem {
     constructor(name: String) : this(name, null)
 }

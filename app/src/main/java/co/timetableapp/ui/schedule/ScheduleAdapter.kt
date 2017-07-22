@@ -25,7 +25,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.model.*
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 
 /**
  * A RecyclerView adapter for displaying items in the schedule page.
@@ -35,9 +35,9 @@ class ScheduleAdapter(
         private val classTimes: List<ClassTime>
 ) : RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder>() {
 
-    private var onItemClickListener: OnItemClickListener? = null
+    private var onItemClickListener: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClick) {
         onItemClickListener = listener
     }
 

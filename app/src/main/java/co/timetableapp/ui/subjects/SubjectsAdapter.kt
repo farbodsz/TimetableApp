@@ -26,7 +26,7 @@ import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.model.Color
 import co.timetableapp.model.Subject
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 
 /**
  * A RecyclerView adapter for displaying a list of subjects.
@@ -36,9 +36,9 @@ class SubjectsAdapter(
         private val subjects: List<Subject>
 ) : RecyclerView.Adapter<SubjectsAdapter.SubjectViewHolder>() {
 
-    private var onItemClickListener: OnItemClickListener? = null
+    private var onItemClickListener: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClick) {
         onItemClickListener = listener
     }
 

@@ -27,7 +27,7 @@ import co.timetableapp.R
 import co.timetableapp.model.home.HomeHeader
 import co.timetableapp.model.home.HomeItem
 import co.timetableapp.model.home.HomeListItem
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 
 /**
  * A RecyclerView adapter for displaying items on the home screen.
@@ -42,14 +42,14 @@ class HomeItemsAdapter(
         private const val VIEW_TYPE_ITEM = 2
     }
 
-    private var mOnHeaderClick: OnItemClickListener? = null
-    private var mOnItemClick: OnItemClickListener? = null
+    private var mOnHeaderClick: OnItemClick? = null
+    private var mOnItemClick: OnItemClick? = null
 
-    fun onHeaderClick(action: OnItemClickListener) {
+    fun onHeaderClick(action: OnItemClick) {
         mOnHeaderClick = action
     }
 
-    fun onItemClick(action: OnItemClickListener) {
+    fun onItemClick(action: OnItemClick) {
         mOnItemClick = action
     }
 

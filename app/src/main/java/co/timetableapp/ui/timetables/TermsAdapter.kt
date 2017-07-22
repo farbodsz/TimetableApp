@@ -23,7 +23,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.model.Term
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 import co.timetableapp.util.DateUtils
 
 /**
@@ -33,9 +33,9 @@ class TermsAdapter(
         private val terms: List<Term>
 ) : RecyclerView.Adapter<TermsAdapter.TermViewHolder>() {
 
-    private var onItemClickListener: OnItemClickListener? = null
+    private var onItemClickListener: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClick) {
         onItemClickListener = listener
     }
 

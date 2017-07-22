@@ -27,7 +27,7 @@ import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.model.Timetable
-import co.timetableapp.ui.OnItemClickListener
+import co.timetableapp.ui.OnItemClick
 import co.timetableapp.util.DateUtils
 
 /**
@@ -43,9 +43,9 @@ class TimetablesAdapter(
 
     private var bindingVH = false
 
-    private var onItemClickListener: OnItemClickListener? = null
+    private var onItemClickListener: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClick) {
         onItemClickListener = listener
     }
 
