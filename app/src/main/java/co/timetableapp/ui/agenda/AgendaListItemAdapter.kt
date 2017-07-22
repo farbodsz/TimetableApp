@@ -31,6 +31,7 @@ import co.timetableapp.model.Subject
 import co.timetableapp.model.agenda.AgendaHeader
 import co.timetableapp.model.agenda.AgendaItem
 import co.timetableapp.model.agenda.AgendaListItem
+import co.timetableapp.ui.OnItemClickListener
 import co.timetableapp.util.DateUtils
 
 /**
@@ -46,21 +47,17 @@ class AgendaListItemAdapter(
         private const val VIEW_TYPE_ITEM = 2
     }
 
-    private var mOnEntryClickListener: OnEntryClickListener? = null
+    private var mOnItemClick: OnItemClickListener? = null
 
-    interface OnEntryClickListener {
-        fun onEntryClick(view: View, position: Int)
-    }
-
-    fun setOnEntryClickListener(onEntryClickListener: OnEntryClickListener) {
-        mOnEntryClickListener = onEntryClickListener
+    fun onItemClick(action: OnItemClickListener) {
+        mOnItemClick = action
     }
 
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.text) as TextView
     }
 
-    inner class AgendaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class AgendaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val colorView: View
         val title: TextView
@@ -69,7 +66,7 @@ class AgendaListItemAdapter(
         val info2: TextView
 
         init {
-            itemView.setOnClickListener(this)
+            itemView.setOnClickListener { mOnItemClick?.invoke(it, layoutPosition) }
             colorView = itemView.findViewById(R.id.color)
             title = itemView.findViewById(R.id.text1) as TextView
             subtitle = itemView.findViewById(R.id.text2) as TextView
@@ -77,11 +74,6 @@ class AgendaListItemAdapter(
             info2 = itemView.findViewById(R.id.text4) as TextView
         }
 
-        override fun onClick(view: View?) {
-            if (mOnEntryClickListener != null) {
-                mOnEntryClickListener!!.onEntryClick(view!!, layoutPosition)
-            }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {

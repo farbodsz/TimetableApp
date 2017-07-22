@@ -155,34 +155,32 @@ class AgendaListFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
 
     private fun setupAdapter() {
         mAdapter = AgendaListItemAdapter(activity, mItems)
-        mAdapter.setOnEntryClickListener(object : AgendaListItemAdapter.OnEntryClickListener {
-            override fun onEntryClick(view: View, position: Int) {
-                val item = mItems[position] as AgendaItem
-                val detailActivity = when (item) {
-                    is Assignment -> AssignmentDetailActivity::class.java
-                    is Exam -> ExamDetailActivity::class.java
-                    is Event -> EventDetailActivity::class.java
-                    else -> throw IllegalArgumentException("invalid item type at position: $position")
-                }
-
-                val intent = Intent(activity, detailActivity)
-                        .putExtra(ItemDetailActivity.EXTRA_ITEM, item)
-
-                var bundle: Bundle? = null
-                if (UiUtils.isApi21()) {
-                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            activity,
-                            view,
-                            getString(R.string.transition_1))
-                    bundle = options.toBundle()
-                }
-
-                // Store the position of the item so we can update the list easily
-                mItemPosCache = position
-
-                startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL, bundle)
+        mAdapter.onItemClick { view, position ->
+            val item = mItems[position] as AgendaItem
+            val detailActivity = when (item) {
+                is Assignment -> AssignmentDetailActivity::class.java
+                is Exam -> ExamDetailActivity::class.java
+                is Event -> EventDetailActivity::class.java
+                else -> throw IllegalArgumentException("invalid item type at position: $position")
             }
-        })
+
+            val intent = Intent(activity, detailActivity)
+                    .putExtra(ItemDetailActivity.EXTRA_ITEM, item)
+
+            var bundle: Bundle? = null
+            if (UiUtils.isApi21()) {
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        activity,
+                        view,
+                        getString(R.string.transition_1))
+                bundle = options.toBundle()
+            }
+
+            // Store the position of the item so we can update the list easily
+            mItemPosCache = position
+
+            startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL, bundle)
+        }
     }
 
     private fun refreshPlaceholderStatus() {
