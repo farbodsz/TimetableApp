@@ -188,7 +188,7 @@ data class Exam(
 
     override fun occursOnDate(date: LocalDate) = this.date == date
 
-    override fun getHomeItemProperties(activity: Activity) = HomeExamProperties(activity)
+    override fun getHomeItemProperties(activity: Activity) = HomeExamProperties(activity, this)
 
     override fun describeContents() = 0
 
@@ -206,18 +206,20 @@ data class Exam(
         dest?.writeString(notes)
     }
 
-    inner class HomeExamProperties(context: Context) : HomeItemProperties {
+    class HomeExamProperties(context: Context, private val exam: Exam) : HomeItemProperties {
 
-        private val mSubject = Subject.create(context, subjectId)
+        private val mSubject = Subject.create(context, exam.subjectId)
 
-        override val title = makeName(mSubject)
+        override val title = exam.makeName(mSubject)
 
         override val subtitle = null
 
         override val time: String
             get() {
-                val endTime = startTime.plusMinutes(duration.toLong())
-                return "$startTime\n$endTime"
+                with(exam) {
+                    val endTime = startTime.plusMinutes(duration.toLong())
+                    return "$startTime\n$endTime"
+                }
             }
 
         override val extraText = null

@@ -168,7 +168,7 @@ data class ClassTime(
      */
     fun getWeekText(activity: Activity) = Companion.getWeekText(activity, weekNumber)
 
-    override fun getHomeItemProperties(activity: Activity) = HomeClassProperties(activity)
+    override fun getHomeItemProperties(activity: Activity) = HomeClassProperties(activity, this)
 
     override fun compareTo(other: ClassTime): Int {
         // Sort by day, then by time
@@ -227,9 +227,12 @@ data class ClassTime(
         }
     }
 
-    inner class HomeClassProperties(private val activity: Activity) : HomeItemProperties {
+    class HomeClassProperties(
+            private val activity: Activity,
+            private val classTime: ClassTime
+    ) : HomeItemProperties {
 
-        private val mClassDetail = ClassDetail.create(activity, classDetailId)
+        private val mClassDetail = ClassDetail.create(activity, classTime.classDetailId)
         private val mClass: Class
         private val mSubject: Subject
 
@@ -258,11 +261,11 @@ data class ClassTime(
             }
         }
 
-        override val time = "$startTime\n$endTime"
+        override val time = with(classTime) { "$startTime\n$endTime" }
 
         override val extraText: String?
             get() {
-                val classDetail = ClassDetail.create(activity, classDetailId)
+                val classDetail = ClassDetail.create(activity, classTime.classDetailId)
                 val cls = Class.create(activity, classDetail.classId)
 
                 val classAssignments =

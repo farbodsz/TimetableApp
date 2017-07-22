@@ -151,7 +151,7 @@ data class Assignment(
 
     override fun occursOnDate(date: LocalDate) = dueDate == date
 
-    override fun getHomeItemProperties(activity: Activity) = HomeAssignmentProperties(activity)
+    override fun getHomeItemProperties(activity: Activity) = HomeAssignmentProperties(activity, this)
 
     override fun describeContents() = 0
 
@@ -165,16 +165,16 @@ data class Assignment(
         dest?.writeInt(completionProgress)
     }
 
-    inner class HomeAssignmentProperties(context: Context) : HomeItemProperties {
+    class HomeAssignmentProperties(context: Context, assignment: Assignment) : HomeItemProperties {
 
         private val mSubject: Subject
 
         init {
-            val cls = Class.create(context, classId)
+            val cls = Class.create(context, assignment.classId)
             mSubject = Subject.create(context, cls.subjectId)
         }
 
-        override val title = this@Assignment.title
+        override val title = assignment.title
 
         override val subtitle = mSubject.name
 

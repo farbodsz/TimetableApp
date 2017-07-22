@@ -171,7 +171,7 @@ data class Event(
 
     override fun occursOnDate(date: LocalDate) = startDateTime.toLocalDate() == date
 
-    override fun getHomeItemProperties(activity: Activity) = HomeEventProperties(activity)
+    override fun getHomeItemProperties(activity: Activity) = HomeEventProperties(activity, this)
 
     override fun describeContents() = 0
 
@@ -186,7 +186,7 @@ data class Event(
         dest?.writeInt(relatedSubjectId)
     }
 
-    inner class HomeEventProperties(context: Context) : HomeItemProperties {
+    class HomeEventProperties(context: Context, event: Event) : HomeItemProperties {
 
         /**
          * The related subject for this event. If there is none, then this will be null.
@@ -194,16 +194,18 @@ data class Event(
         private var mSubject: Subject? = null
 
         init {
-            if (hasRelatedSubject()) {
-                mSubject = Subject.create(context, relatedSubjectId)
+            if (event.hasRelatedSubject()) {
+                mSubject = Subject.create(context, event.relatedSubjectId)
             }
         }
 
-        override val title = this@Event.title
+        override val title = event.title
 
         override val subtitle = mSubject?.name
 
-        override val time = "${startDateTime.toLocalTime()}\n${endDateTime.toLocalTime()}"
+        override val time = with(event) {
+            "${startDateTime.toLocalTime()}\n${endDateTime.toLocalTime()}"
+        }
 
         override val extraText = null
 
