@@ -42,15 +42,15 @@ class HomeItemsAdapter(
         private const val VIEW_TYPE_ITEM = 2
     }
 
-    private var mOnHeaderClick: OnItemClick? = null
-    private var mOnItemClick: OnItemClick? = null
+    private var onHeaderClick: OnItemClick? = null
+    private var onItemClick: OnItemClick? = null
 
     fun onHeaderClick(action: OnItemClick) {
-        mOnHeaderClick = action
+        onHeaderClick = action
     }
 
     fun onItemClick(action: OnItemClick) {
-        mOnItemClick = action
+        onItemClick = action
     }
 
     private inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -58,7 +58,7 @@ class HomeItemsAdapter(
         val title = itemView.findViewById(R.id.title) as TextView
 
         init {
-            itemView.setOnClickListener { mOnHeaderClick?.invoke(it!!, layoutPosition) }
+            itemView.setOnClickListener { onHeaderClick?.invoke(it!!, layoutPosition) }
         }
     }
 
@@ -71,7 +71,7 @@ class HomeItemsAdapter(
         val boxedText = itemView.findViewById(R.id.assignment_text) as TextView
 
         init {
-            itemView.setOnClickListener { mOnItemClick?.invoke(it!!, layoutPosition) }
+            itemView.setOnClickListener { onItemClick?.invoke(it!!, layoutPosition) }
         }
     }
 

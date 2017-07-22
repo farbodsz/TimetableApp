@@ -85,7 +85,7 @@ class SubjectEditActivity : ItemEditActivity<Subject>() {
             val colors = Color.getAllColors()
 
             val adapter = ColorsAdapter(baseContext, colors)
-            adapter.setOnItemClickListener { _, position ->
+            adapter.onItemClick { _, position ->
                 mColor = colors[position]
                 imageView.setImageResource(mColor.getPrimaryColorResId(baseContext))
                 UiUtils.setBarColors(mColor, this, mToolbar!!)

@@ -191,7 +191,7 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
         mTerms.sort()
 
         mAdapter = TermsAdapter(mTerms)
-        mAdapter.setOnItemClickListener { view, position ->
+        mAdapter.onItemClick { view, position ->
             val intent = Intent(this, TermEditActivity::class.java)
             intent.putExtra(ItemEditActivity.EXTRA_ITEM, mTerms[position])
             intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId())

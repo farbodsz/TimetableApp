@@ -57,7 +57,7 @@ class SubjectsFragment : ItemListFragment<Subject>() {
 
     override fun setupAdapter(): RecyclerView.Adapter<*> {
         val adapter = SubjectsAdapter(activity, mItems!!)
-        adapter.setOnItemClickListener { view, position ->
+        adapter.onItemClick { view, position ->
             val intent = Intent(activity, SubjectEditActivity::class.java)
             intent.putExtra(ItemEditActivity.EXTRA_ITEM, mItems!![position])
 

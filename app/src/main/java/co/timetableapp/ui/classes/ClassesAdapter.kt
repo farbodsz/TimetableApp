@@ -38,10 +38,10 @@ class ClassesAdapter(
         private val classes: List<Class>
 ) : RecyclerView.Adapter<ClassesAdapter.ClassesViewHolder>() {
 
-    private var onItemClickListener: OnItemClick? = null
+    private var onItemClick: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClick) {
-        onItemClickListener = listener
+    fun onItemClick(action: OnItemClick) {
+        onItemClick = action
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ClassesViewHolder {
@@ -98,9 +98,7 @@ class ClassesAdapter(
         val detailText = itemView.findViewById(R.id.class_details) as TextView
 
         init {
-            itemView.setOnClickListener { view ->
-                onItemClickListener?.invoke(view, layoutPosition)
-            }
+            itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }
         }
     }
 

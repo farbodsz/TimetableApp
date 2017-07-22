@@ -140,7 +140,7 @@ class ScheduleActivity : NavigationDrawerActivity() {
                 classTimes.sort()
 
                 val scheduleAdapter = ScheduleAdapter(this, classTimes)
-                scheduleAdapter.setOnItemClickListener { view, position ->
+                scheduleAdapter.onItemClick { view, position ->
                     val classTime = classTimes[position]
 
                     // Not checking for DataNotFoundException since this would have been handled

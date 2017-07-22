@@ -340,7 +340,7 @@ class ClassEditActivity : ItemEditActivity<Class>() {
         mAllClassTimeGroups.add(classTimeGroups)
 
         val adapter = ClassTimesAdapter(this, classTimeGroups)
-        adapter.setOnItemClickListener { view, position ->
+        adapter.onItemClick { view, position ->
             val classTimeGroup = classTimeGroups[position]
 
             val intent = Intent(this, ClassTimeEditActivity::class.java)

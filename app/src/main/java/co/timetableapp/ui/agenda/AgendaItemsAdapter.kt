@@ -47,10 +47,10 @@ class AgendaItemsAdapter(
         private const val VIEW_TYPE_ITEM = 2
     }
 
-    private var mOnItemClick: OnItemClick? = null
+    private var onItemClick: OnItemClick? = null
 
     fun onItemClick(action: OnItemClick) {
-        mOnItemClick = action
+        onItemClick = action
     }
 
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -66,7 +66,7 @@ class AgendaItemsAdapter(
         val info2: TextView
 
         init {
-            itemView.setOnClickListener { mOnItemClick?.invoke(it, layoutPosition) }
+            itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }
             colorView = itemView.findViewById(R.id.color)
             title = itemView.findViewById(R.id.text1) as TextView
             subtitle = itemView.findViewById(R.id.text2) as TextView

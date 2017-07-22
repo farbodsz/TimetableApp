@@ -34,10 +34,10 @@ class ColorsAdapter(
         private val colors: List<Color>
 ) : RecyclerView.Adapter<ColorsAdapter.ColorViewHolder>() {
 
-    private var onItemClickListener: OnItemClick? = null
+    private var onItemClick: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClick) {
-        onItemClickListener = listener
+    fun onItemClick(action: OnItemClick) {
+        onItemClick = action
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ColorViewHolder {
@@ -58,9 +58,7 @@ class ColorsAdapter(
         val imageView = itemView.findViewById(R.id.imageView) as CircleImageView
 
         init {
-            itemView.setOnClickListener { view ->
-                onItemClickListener?.invoke(view, layoutPosition)
-            }
+            itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }
         }
 
     }

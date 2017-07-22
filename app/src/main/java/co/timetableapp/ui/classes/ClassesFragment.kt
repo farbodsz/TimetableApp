@@ -65,7 +65,7 @@ class ClassesFragment : ItemListFragment<Class>() {
 
     override fun setupAdapter(): RecyclerView.Adapter<*> {
         val adapter = ClassesAdapter(activity, mItems!!)
-        adapter.setOnItemClickListener { view, position ->
+        adapter.onItemClick { view, position ->
             val intent = Intent(activity, ClassDetailActivity::class.java)
             intent.putExtra(ItemDetailActivity.EXTRA_ITEM, mItems!![position])
 

@@ -36,10 +36,10 @@ class ClassTimesAdapter(
         private val classTimeGroups: List<ClassTimeGroup>
 ) : RecyclerView.Adapter<ClassTimesAdapter.ClassTimesViewHolder>() {
 
-    private var onItemClickListener: OnItemClick? = null
+    private var onItemClick: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClick) {
-        onItemClickListener = listener
+    fun onItemClick(action: OnItemClick) {
+        onItemClick = action
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ClassTimesViewHolder {
@@ -87,9 +87,7 @@ class ClassTimesAdapter(
         val dayText = itemView.findViewById(R.id.day) as TextView
 
         init {
-            itemView.setOnClickListener { view ->
-                onItemClickListener?.invoke(view!!, layoutPosition)
-            }
+            itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }
         }
 
     }

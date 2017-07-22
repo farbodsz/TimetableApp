@@ -135,7 +135,7 @@ class AssignmentEditActivity : AppCompatActivity() {
             classes.sortWith(Class.NaturalSortComparator(baseContext))
 
             val adapter = ClassesAdapter(baseContext, classes)
-            adapter.setOnItemClickListener { _, position ->
+            adapter.onItemClick { _, position ->
                 mClass = classes[position]
                 updateLinkedClass()
                 mClassDialog.dismiss()

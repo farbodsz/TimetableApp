@@ -36,10 +36,10 @@ class SubjectsAdapter(
         private val subjects: List<Subject>
 ) : RecyclerView.Adapter<SubjectsAdapter.SubjectViewHolder>() {
 
-    private var onItemClickListener: OnItemClick? = null
+    private var onItemClick: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClick) {
-        onItemClickListener = listener
+    fun onItemClick(action: OnItemClick) {
+        onItemClick = action
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SubjectViewHolder {
@@ -67,9 +67,7 @@ class SubjectsAdapter(
         val nameText = itemView.findViewById(R.id.name) as TextView
 
         init {
-            itemView.setOnClickListener { view ->
-                onItemClickListener?.invoke(view, layoutPosition)
-            }
+            itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }
         }
 
     }

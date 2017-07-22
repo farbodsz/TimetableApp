@@ -63,7 +63,7 @@ class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: In
         subjects.sort()
 
         val adapter = SubjectsAdapter(activity, subjects)
-        adapter.setOnItemClickListener { _, position ->
+        adapter.onItemClick { _, position ->
             updateSubject(subjects[position])
             mSubjectDialog?.dismiss()
         }

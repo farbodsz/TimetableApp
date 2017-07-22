@@ -35,10 +35,10 @@ class ScheduleAdapter(
         private val classTimes: List<ClassTime>
 ) : RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder>() {
 
-    private var onItemClickListener: OnItemClick? = null
+    private var onItemClick: OnItemClick? = null
 
-    fun setOnItemClickListener(listener: OnItemClick) {
-        onItemClickListener = listener
+    fun onItemClick(action: OnItemClick) {
+        onItemClick = action
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ScheduleViewHolder {
@@ -97,9 +97,7 @@ class ScheduleAdapter(
         init {
             itemView.findViewById(R.id.text4).visibility = View.GONE
 
-            itemView.setOnClickListener { view ->
-                onItemClickListener?.invoke(view, layoutPosition)
-            }
+            itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }
         }
 
     }
