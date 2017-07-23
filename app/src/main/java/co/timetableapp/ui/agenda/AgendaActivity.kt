@@ -37,12 +37,12 @@ import android.view.Menu
 import android.view.MenuItem
 import co.timetableapp.R
 import co.timetableapp.model.agenda.AgendaType
+import co.timetableapp.ui.NewItemSelectorFragment
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
 import co.timetableapp.util.PrefUtils
-import com.github.clans.fab.FloatingActionMenu
 import java.util.*
 
 /**
@@ -95,19 +95,22 @@ class AgendaActivity : NavigationDrawerActivity() {
     }
 
     private fun setupFab() {
-        val fabIds = arrayOf(R.id.fab_assignment, R.id.fab_exam, R.id.fab_event)
-        val detailActivities = arrayOf(
-                AssignmentDetailActivity::class.java,
-                ExamDetailActivity::class.java,
-                EventDetailActivity::class.java)  // must correspond to list of FAB ids
+        findViewById(R.id.fab).setOnClickListener {
+            val dialogFragment = NewItemSelectorFragment()
 
-        fabIds.forEachIndexed { index, id ->
-            findViewById(id).setOnClickListener {
-                val intent = Intent(this, detailActivities[index])
+            dialogFragment.onCreateNewAgendaItem { _, dialog, agendaType ->
+                val detailActivity = when (agendaType) {
+                    AgendaType.ASSIGNMENT -> AssignmentDetailActivity::class.java
+                    AgendaType.EXAM -> ExamDetailActivity::class.java
+                    AgendaType.EVENT -> EventDetailActivity::class.java
+                }
+
+                val intent = Intent(this, detailActivity)
                 startActivityForResult(intent, REQUEST_CODE_CREATE_ITEM)
-
-                (findViewById(R.id.fabMenu) as FloatingActionMenu).close(false)
+                dialog.dismiss()
             }
+
+            dialogFragment.show(supportFragmentManager, dialogFragment.tag)
         }
     }
 

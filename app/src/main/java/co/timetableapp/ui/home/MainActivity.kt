@@ -28,11 +28,13 @@ import android.support.v4.view.ViewPager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import co.timetableapp.R
+import co.timetableapp.model.agenda.AgendaType
+import co.timetableapp.ui.NewItemSelectorFragment
+import co.timetableapp.ui.agenda.AgendaActivity
 import co.timetableapp.ui.assignments.AssignmentDetailActivity
 import co.timetableapp.ui.base.NavigationDrawerActivity
 import co.timetableapp.ui.events.EventDetailActivity
 import co.timetableapp.ui.exams.ExamDetailActivity
-import com.github.clans.fab.FloatingActionButton
 
 /**
  * The main screen showing an overview of the user's classes, assignments and exams.
@@ -46,7 +48,7 @@ import com.github.clans.fab.FloatingActionButton
 class MainActivity : NavigationDrawerActivity() {
 
     companion object {
-        internal const val REQUEST_CODE_ITEM_DETAIL = 1
+        const val REQUEST_CODE_ITEM_DETAIL = 1
     }
 
     private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
@@ -59,8 +61,6 @@ class MainActivity : NavigationDrawerActivity() {
     }
 
     private fun setupLayout() {
-        setupFabMenu()
-
         mViewPager.adapter = PagerAdapter(supportFragmentManager)
 
         val tabLayout = findViewById(R.id.tabLayout) as TabLayout
@@ -71,25 +71,27 @@ class MainActivity : NavigationDrawerActivity() {
         mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
 
         tabLayout.setupWithViewPager(mViewPager)
+
+        setupFab()
     }
 
-    private fun setupFabMenu() {
-        val fabAssignment = findViewById(R.id.fab_assignment) as FloatingActionButton
-        fabAssignment.setOnClickListener {
-            val intent = Intent(this, AssignmentDetailActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
-        }
+    private fun setupFab() {
+        findViewById(R.id.fab).setOnClickListener {
+            val dialogFragment = NewItemSelectorFragment()
 
-        val fabExam = findViewById(R.id.fab_exam) as FloatingActionButton
-        fabExam.setOnClickListener {
-            val intent = Intent(this, ExamDetailActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
-        }
+            dialogFragment.onCreateNewAgendaItem { _, dialog, agendaType ->
+                val detailActivity = when (agendaType) {
+                    AgendaType.ASSIGNMENT -> AssignmentDetailActivity::class.java
+                    AgendaType.EXAM -> ExamDetailActivity::class.java
+                    AgendaType.EVENT -> EventDetailActivity::class.java
+                }
 
-        val fabEvent = findViewById(R.id.fab_event) as FloatingActionButton
-        fabEvent.setOnClickListener {
-            val intent = Intent(this, EventDetailActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_ITEM_DETAIL)
+                val intent = Intent(this, detailActivity)
+                startActivityForResult(intent, AgendaActivity.REQUEST_CODE_CREATE_ITEM)
+                dialog.dismiss()
+            }
+
+            dialogFragment.show(supportFragmentManager, dialogFragment.tag)
         }
     }
 
