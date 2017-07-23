@@ -70,9 +70,6 @@ dependencies {
     compile "com.android.support:cardview-v7:$android_support_lib_version"
     compile "com.android.support:recyclerview-v7:$android_support_lib_version"
 
-    // FAB menus
-    compile 'com.github.clans:fab:1.6.4'
-
     // Other libraries
     compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
     compile 'com.satsuware.lib:usefulviews:2.3.6'
