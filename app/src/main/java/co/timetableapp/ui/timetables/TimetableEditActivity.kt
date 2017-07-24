@@ -95,15 +95,15 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
     }
 
     override fun setupLayout() {
-        mNameEditText = findViewById(R.id.editText_name) as EditText
+        mNameEditText = findViewById(R.id.editText_name)
         if (!mIsNew) {
             mNameEditText.setText(mItem!!.name)
         }
 
         setupDateTexts()
 
-        mSchedulingSpinner = findViewById(R.id.spinner_scheduling_type) as LabelledSpinner
-        mWeekRotationSpinner = findViewById(R.id.spinner_scheduling_detail) as LabelledSpinner
+        mSchedulingSpinner = findViewById(R.id.spinner_scheduling_type)
+        mWeekRotationSpinner = findViewById(R.id.spinner_scheduling_detail)
 
         mSchedulingSpinner.onItemChosenListener = this
         mWeekRotationSpinner.onItemChosenListener = this
@@ -117,8 +117,8 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
     }
 
     private fun setupDateTexts() {
-        mStartDateText = findViewById(R.id.textView_start_date) as TextView
-        mEndDateText = findViewById(R.id.textView_end_date) as TextView
+        mStartDateText = findViewById(R.id.textView_start_date)
+        mEndDateText = findViewById(R.id.textView_end_date)
 
         if (!mIsNew) {
             mStartDate = mItem!!.startDate
@@ -208,7 +208,7 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
             ActivityCompat.startActivityForResult(this, intent, REQUEST_CODE_TERM_EDIT, bundle)
         }
 
-        val recyclerView = findViewById(R.id.recyclerView) as RecyclerView
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         with(recyclerView) {
             setHasFixedSize(true)
             layoutManager = object : LinearLayoutManager(this@TimetableEditActivity) {
@@ -219,7 +219,7 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
     }
 
     private fun setupAddTermButton() {
-        val btnAddTerm = findViewById(R.id.button_add_term) as Button
+        val btnAddTerm = findViewById<Button>(R.id.button_add_term)
         btnAddTerm.setOnClickListener { view ->
             val intent = Intent(this, TermEditActivity::class.java)
             intent.putExtra(TermEditActivity.EXTRA_TIMETABLE_ID, findTimetableId())

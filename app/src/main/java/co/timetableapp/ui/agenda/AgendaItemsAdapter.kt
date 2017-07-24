@@ -54,24 +54,19 @@ class AgendaItemsAdapter(
     }
 
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.text) as TextView
+        val textView: TextView = itemView.findViewById(R.id.text)
     }
 
     inner class AgendaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val colorView: View
-        val title: TextView
-        val subtitle: TextView
-        val info1: TextView
-        val info2: TextView
+        val colorView: View = itemView.findViewById(R.id.color)
+        val title: TextView = itemView.findViewById(R.id.text1)
+        val subtitle: TextView = itemView.findViewById(R.id.text2)
+        val info1: TextView = itemView.findViewById(R.id.text3)
+        val info2: TextView = itemView.findViewById(R.id.text4)
 
         init {
             itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }
-            colorView = itemView.findViewById(R.id.color)
-            title = itemView.findViewById(R.id.text1) as TextView
-            subtitle = itemView.findViewById(R.id.text2) as TextView
-            info1 = itemView.findViewById(R.id.text3) as TextView
-            info2 = itemView.findViewById(R.id.text4) as TextView
         }
 
     }

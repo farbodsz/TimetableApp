@@ -105,7 +105,7 @@ class TodayFragment : Fragment() {
             startActivity(intent)
         }
 
-        val recyclerView = rootView.findViewById(R.id.recyclerView) as RecyclerView
+        val recyclerView = rootView.findViewById<RecyclerView>(R.id.recyclerView)
         with(recyclerView) {
             layoutManager = LinearLayoutManager(activity)
             setHasFixedSize(true)

@@ -82,7 +82,7 @@ class AssignmentEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assignment_edit)
 
-        mToolbar = findViewById(R.id.toolbar) as Toolbar
+        mToolbar = findViewById(R.id.toolbar)
         setSupportActionBar(mToolbar)
 
         val extras = intent.extras
@@ -105,12 +105,12 @@ class AssignmentEditActivity : AppCompatActivity() {
     }
 
     private fun setupLayout() {
-        mTitleEditText = findViewById(R.id.editText_title) as EditText
+        mTitleEditText = findViewById(R.id.editText_title)
         if (!mIsNew) {
             mTitleEditText.setText(mAssignment!!.title)
         }
 
-        mDetailEditText = findViewById(R.id.editText_detail) as EditText
+        mDetailEditText = findViewById(R.id.editText_detail)
         if (!mIsNew) {
             mDetailEditText.setText(mAssignment!!.detail)
         }
@@ -120,7 +120,7 @@ class AssignmentEditActivity : AppCompatActivity() {
     }
 
     private fun setupClassText() {
-        mClassText = findViewById(R.id.textView_class) as TextView
+        mClassText = findViewById(R.id.textView_class)
 
         if (!mIsNew) {
             mClass = Class.create(this, mAssignment!!.classId)
@@ -149,7 +149,7 @@ class AssignmentEditActivity : AppCompatActivity() {
             }
 
             val titleView = layoutInflater.inflate(R.layout.dialog_title_with_padding, null)
-            (titleView.findViewById(R.id.title) as TextView).setText(R.string.choose_class)
+            titleView.findViewById<TextView>(R.id.title).setText(R.string.choose_class)
 
             builder.setView(recyclerView)
                     .setCustomTitle(titleView)
@@ -160,7 +160,7 @@ class AssignmentEditActivity : AppCompatActivity() {
     }
 
     private fun setupDateText() {
-        mDateText = findViewById(R.id.textView_date) as TextView
+        mDateText = findViewById(R.id.textView_date)
 
         if (!mIsNew) {
             mDueDate = mAssignment!!.dueDate

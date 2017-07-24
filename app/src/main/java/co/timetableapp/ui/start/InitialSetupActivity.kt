@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.IdRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -49,7 +48,7 @@ import org.threeten.bp.LocalDate
  */
 class InitialSetupActivity : AppCompatActivity() {
 
-    private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
+    private val mViewPager by lazy { findViewById<ViewPager>(R.id.viewPager) }
 
     private lateinit var mProgressText: TextView
     private lateinit var mPrevButton: Button
@@ -73,16 +72,16 @@ class InitialSetupActivity : AppCompatActivity() {
     private fun setupLayout() {
         mViewPager.adapter = PagerAdapter(supportFragmentManager)
 
-        mProgressText = findViewById(R.id.textView_progress) as TextView
+        mProgressText = findViewById(R.id.textView_progress)
         updateProgressText()
 
-        mPrevButton = findViewById(R.id.button_previous) as Button
+        mPrevButton = findViewById(R.id.button_previous)
         mPrevButton.setOnClickListener {
             changePage(true)
             updateProgressText()
         }
 
-        mNextButton = findViewById(R.id.button_next) as Button
+        mNextButton = findViewById(R.id.button_next)
         mNextButton.setOnClickListener {
             if (mViewPager.currentItem == PagerAdapter.PAGE_END) {
                 saveAndExit()
@@ -314,7 +313,7 @@ class InitialSetupActivity : AppCompatActivity() {
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater!!.inflate(R.layout.fragment_welcome_timetable, container, false)
 
-            val editText = rootView.findViewById(R.id.editText_name) as EditText
+            val editText = rootView.findViewById<EditText>(R.id.editText_name)
             editText.addTextChangedListener(object : TextWatcher {
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int,
@@ -350,7 +349,7 @@ class InitialSetupActivity : AppCompatActivity() {
             // Note -1s and +1s below because Android month values are from 0-11 (to correspond with
             // java.util.Calendar) but LocalDate month values are from 1-12
 
-            val startDateText = rootView.findViewById(R.id.textView_start_date) as TextView
+            val startDateText = rootView.findViewById<TextView>(R.id.textView_start_date)
             startDateText.setOnClickListener {
                 val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     val newStartDate = LocalDate.of(year, month + 1, dayOfMonth)
@@ -369,7 +368,7 @@ class InitialSetupActivity : AppCompatActivity() {
                         initialDate.dayOfMonth).show()
             }
 
-            val endDateText = rootView.findViewById(R.id.textView_end_date) as TextView
+            val endDateText = rootView.findViewById<TextView>(R.id.textView_end_date)
             endDateText.setOnClickListener {
                 val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     val newEndDate = LocalDate.of(year, month + 1, dayOfMonth)
@@ -408,15 +407,14 @@ class InitialSetupActivity : AppCompatActivity() {
         private fun setupLayout(rootView: View) {
             setupRadioButtons(rootView)
 
-            val checkboxUseNumbers =
-                    rootView.findViewById(R.id.checkbox_sched_use_numbers) as CheckBox
+            val checkboxUseNumbers = rootView.findViewById<CheckBox>(R.id.checkbox_sched_use_numbers)
             checkboxUseNumbers.setOnCheckedChangeListener { _, isChecked ->
                 PrefUtils.setWeekRotationShownWithNumbers(activity, isChecked)
             }
         }
 
         private fun setupRadioButtons(rootView: View) {
-            with(rootView.findViewById(R.id.radio_scheduling_fixed) as RadioButton) {
+            with(rootView.findViewById<RadioButton>(R.id.radio_scheduling_fixed)) {
                 setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) sTimetableBuilder.weekRotations = 1
                 }
@@ -424,13 +422,13 @@ class InitialSetupActivity : AppCompatActivity() {
                 isChecked = true
             }
 
-            @IdRes val otherRadioIds = arrayOf(
+            val otherRadioIds = arrayOf(
                     R.id.radio_scheduling_2,
                     R.id.radio_scheduling_3,
                     R.id.radio_scheduling_4)
 
             otherRadioIds.forEachIndexed { index, radioId ->
-                (rootView.findViewById(radioId) as RadioButton)
+                rootView.findViewById<RadioButton>(radioId)
                         .setOnCheckedChangeListener { _, isChecked ->
                             if (isChecked) sTimetableBuilder.weekRotations = index + 2
                         }
@@ -447,7 +445,7 @@ class InitialSetupActivity : AppCompatActivity() {
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater!!.inflate(R.layout.fragment_welcome_subjects, container, false)
 
-            val editText = rootView.findViewById(R.id.editText) as EditText
+            val editText = rootView.findViewById<EditText>(R.id.editText)
             editText.addTextChangedListener(object : TextWatcher {
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int,

@@ -61,8 +61,8 @@ class TermsAdapter(
 
     inner class TermViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val nameText = itemView.findViewById(R.id.time) as TextView
-        val detailText = itemView.findViewById(R.id.day) as TextView
+        val nameText: TextView = itemView.findViewById(R.id.time)
+        val detailText: TextView = itemView.findViewById(R.id.day)
 
         init {
             itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }

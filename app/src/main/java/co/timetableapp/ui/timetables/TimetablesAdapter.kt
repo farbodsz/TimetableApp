@@ -80,9 +80,9 @@ class TimetablesAdapter(
 
     inner class TimetableViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val radioButton = itemView.findViewById(R.id.radioButton) as RadioButton
-        val nameText = itemView.findViewById(R.id.name) as TextView
-        val detailText = itemView.findViewById(R.id.details) as TextView
+        val radioButton: RadioButton = itemView.findViewById(R.id.radioButton)
+        val nameText: TextView = itemView.findViewById(R.id.name)
+        val detailText: TextView = itemView.findViewById(R.id.details)
 
         init {
             itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }

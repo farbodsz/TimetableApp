@@ -110,7 +110,7 @@ class CardOfItems private constructor(val view: View) {
             val card = inflater.inflate(R.layout.item_card_of_items, mRoot, false)
 
             with(card) {
-                val titleView = findViewById(R.id.title) as TextView
+                val titleView = findViewById<TextView>(R.id.title)
                 if (mTitle == null) {
                     titleView.visibility = View.GONE
                 } else {
@@ -118,13 +118,13 @@ class CardOfItems private constructor(val view: View) {
                 }
 
                 if (mItems != null && mItems!!.isNotEmpty()) {
-                    val container = findViewById(R.id.container) as LinearLayout
+                    val container = findViewById<LinearLayout>(R.id.container)
 
                     container.removeAllViews() // by default contains a placeholder text
                     populateCardContainer(container, mItems!!)
                 }
 
-                val button = findViewById(R.id.button) as Button
+                val button = findViewById<Button>(R.id.button)
                 if (mButtonText == null) {
                     button.visibility = View.GONE
                 } else {
@@ -145,10 +145,10 @@ class CardOfItems private constructor(val view: View) {
                         .inflate(R.layout.item_condensed, container, false)
 
                 with(itemView) {
-                    (findViewById(R.id.title) as TextView).text = it.title
-                    (findViewById(R.id.subtitle) as TextView).text = it.subtitle
+                    findViewById<TextView>(R.id.title).text = it.title
+                    findViewById<TextView>(R.id.subtitle).text = it.subtitle
 
-                    val imageView = findViewById(R.id.icon) as ImageView
+                    val imageView = findViewById<ImageView>(R.id.icon)
                     mItemsIconRes?.let {
                         imageView.setImageResource(it)
                     }

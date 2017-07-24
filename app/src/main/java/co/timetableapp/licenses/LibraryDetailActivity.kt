@@ -62,12 +62,12 @@ class LibraryDetailActivity : AppCompatActivity() {
     private fun setupLayout() {
         setupToolbar()
 
-        val container = findViewById(R.id.container) as LinearLayout
+        val container = findViewById<LinearLayout>(R.id.container)
         container.addView(makeLicenseCard(container))
     }
 
     private fun setupToolbar() {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         with(supportActionBar!!) {
@@ -85,10 +85,9 @@ class LibraryDetailActivity : AppCompatActivity() {
         val card = layoutInflater.inflate(R.layout.item_license_card, container, false)
 
         with(card) {
-            (findViewById(R.id.title) as TextView).text = getString(R.string.title_license)
-            (findViewById(R.id.subtitle) as TextView).text = mLibrary!!.license.name
-            (findViewById(R.id.content_text) as TextView).text =
-                    mLibrary!!.license.getNotice(context)
+            findViewById<TextView>(R.id.title).text = getString(R.string.title_license)
+            findViewById<TextView>(R.id.subtitle).text = mLibrary!!.license.name
+            findViewById<TextView>(R.id.content_text).text = mLibrary!!.license.getNotice(context)
         }
 
         return card

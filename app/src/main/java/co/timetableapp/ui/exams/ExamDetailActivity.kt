@@ -21,6 +21,7 @@ import android.content.Intent
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.Toolbar
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.ExamHandler
@@ -54,47 +55,47 @@ class ExamDetailActivity : ItemDetailActivity<Exam>() {
         setupToolbar()
 
         val dateFormatter = DateUtils.FORMATTER_FULL_DATE
-        (findViewById(R.id.textView_date) as TextView).text = mItem.date.format(dateFormatter)
+        findViewById<TextView>(R.id.textView_date).text = mItem.date.format(dateFormatter)
 
         val timeText =
                 "${mItem.startTime} - ${mItem.startTime.plusMinutes(mItem.duration.toLong())}"
-        (findViewById(R.id.textView_times) as TextView).text = timeText
+        findViewById<TextView>(R.id.textView_times).text = timeText
 
-        val seatGroup = findViewById(R.id.viewGroup_seat)
+        val seatGroup = findViewById<ViewGroup>(R.id.viewGroup_seat)
         if (mItem.hasSeat()) {
             seatGroup.visibility = View.VISIBLE
-            (findViewById(R.id.textView_seat) as TextView).text = mItem.seat
+            findViewById<TextView>(R.id.textView_seat).text = mItem.seat
         } else {
             seatGroup.visibility = View.GONE
         }
 
-        val roomGroup = findViewById(R.id.viewGroup_room)
+        val roomGroup = findViewById<ViewGroup>(R.id.viewGroup_room)
         if (mItem.hasRoom()) {
             roomGroup.visibility = View.VISIBLE
-            (findViewById(R.id.textView_room) as TextView).text = mItem.room
+            findViewById<TextView>(R.id.textView_room).text = mItem.room
         } else {
             roomGroup.visibility = View.GONE
         }
 
-        findViewById(R.id.location_divider).visibility =
+        findViewById<View>(R.id.location_divider).visibility =
                 if (!mItem.hasRoom() && !mItem.hasSeat()) View.GONE else View.VISIBLE
 
-        val viewGroupResit = findViewById(R.id.viewGroup_resit)
+        val viewGroupResit = findViewById<ViewGroup>(R.id.viewGroup_resit)
         viewGroupResit.visibility = if (mItem.resit) View.VISIBLE else View.GONE
 
-        val notesText = findViewById(R.id.textView_notes) as TextView
+        val notesText = findViewById<TextView>(R.id.textView_notes)
         UiUtils.formatNotesTextView(this, notesText, mItem.notes)
     }
 
     private fun setupToolbar() {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
         val subject = Subject.create(this, mItem.subjectId)
-        (findViewById(R.id.title) as TextView).text = mItem.makeName(subject)
+        findViewById<TextView>(R.id.title).text = mItem.makeName(subject)
 
         val color = Color(subject.colorId)
         UiUtils.setBarColors(color, this, toolbar)

@@ -19,6 +19,7 @@ package co.timetableapp.ui.start
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.PortingFragment
@@ -50,11 +51,11 @@ class WelcomeActivity : AppCompatActivity() {
     private fun hasExistingData() = (application as TimetableApplication).currentTimetable != null
 
     private fun setupLayout() {
-        findViewById(R.id.button_import).setOnClickListener {
+        findViewById<View>(R.id.button_import).setOnClickListener {
             startImportFragment()
         }
 
-        findViewById(R.id.button_next).setOnClickListener {
+        findViewById<View>(R.id.button_next).setOnClickListener {
             startActivity(Intent(this, InitialSetupActivity::class.java))
             finish()
         }

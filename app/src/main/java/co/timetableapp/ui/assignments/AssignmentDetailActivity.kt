@@ -54,12 +54,12 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         setupToolbar()
 
         val dateFormatter = DateUtils.FORMATTER_FULL_DATE
-        (findViewById(R.id.textView_date) as TextView).text = mItem.dueDate.format(dateFormatter)
+        findViewById<TextView>(R.id.textView_date).text = mItem.dueDate.format(dateFormatter)
 
-        val progressText = findViewById(R.id.textView_progress) as TextView
+        val progressText = findViewById<TextView>(R.id.textView_progress)
         progressText.text = getString(R.string.property_progress, mItem.completionProgress)
 
-        val seekBar = findViewById(R.id.seekBar) as SeekBar
+        val seekBar = findViewById<SeekBar>(R.id.seekBar)
         with(seekBar) {
             max = 20 // so it goes up in 5s
             progress = mItem.completionProgress / 5
@@ -77,12 +77,12 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
             })
         }
 
-        val detailText = findViewById(R.id.textView_detail) as TextView
+        val detailText = findViewById<TextView>(R.id.textView_detail)
         UiUtils.formatNotesTextView(this, detailText, mItem.detail)
     }
 
     private fun setupToolbar() {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
@@ -91,10 +91,10 @@ class AssignmentDetailActivity : ItemDetailActivity<Assignment>() {
         val cls = Class.create(this, mItem.classId)
         val subject = Subject.create(this, cls.subjectId)
 
-        val textViewTitle = findViewById(R.id.title) as TextView
+        val textViewTitle = findViewById<TextView>(R.id.title)
         textViewTitle.text = mItem.title
 
-        val textViewSubtitle = findViewById(R.id.subtitle) as TextView
+        val textViewSubtitle = findViewById<TextView>(R.id.subtitle)
         textViewSubtitle.text = subject.name
 
         val color = Color(subject.colorId)
