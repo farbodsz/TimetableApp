@@ -137,7 +137,7 @@ data class Event(
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readString(),
@@ -145,7 +145,8 @@ data class Event(
             source.readSerializable() as LocalDateTime,
             source.readSerializable() as LocalDateTime,
             source.readString(),
-            source.readInt())
+            source.readInt()
+    )
 
     fun hasDifferentStartEndDates() = startDateTime.toLocalDate() != endDateTime.toLocalDate()
 

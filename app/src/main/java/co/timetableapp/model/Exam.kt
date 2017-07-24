@@ -128,7 +128,7 @@ data class Exam(
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readInt(),
@@ -139,7 +139,8 @@ data class Exam(
             source.readString(),
             source.readString(),
             source.readInt() == 1,
-            source.readString())
+            source.readString()
+    )
 
     fun hasModuleName() = moduleName.trim().isNotEmpty()
 

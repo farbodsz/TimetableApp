@@ -114,12 +114,13 @@ data class Term(
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readString(),
             source.readSerializable() as LocalDate,
-            source.readSerializable() as LocalDate)
+            source.readSerializable() as LocalDate
+    )
 
     override fun compareTo(other: Term): Int {
         return startDate.compareTo(other.startDate)

@@ -120,13 +120,14 @@ data class Class(
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readInt(),
             source.readString(),
             source.readSerializable() as LocalDate,
-            source.readSerializable() as LocalDate)
+            source.readSerializable() as LocalDate
+    )
 
     init {
         if (startDate == NO_DATE && endDate != NO_DATE ||

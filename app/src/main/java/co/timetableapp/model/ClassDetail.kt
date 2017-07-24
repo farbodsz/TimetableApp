@@ -100,12 +100,13 @@ data class ClassDetail(
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readString(),
             source.readString(),
-            source.readString())
+            source.readString()
+    )
 
     fun hasRoom() = room.trim().isNotEmpty()
 

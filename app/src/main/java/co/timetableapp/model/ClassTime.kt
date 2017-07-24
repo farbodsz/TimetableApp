@@ -180,14 +180,15 @@ data class ClassTime(
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readInt(),
             source.readSerializable() as DayOfWeek,
             source.readInt(),
             source.readSerializable() as LocalTime,
-            source.readSerializable() as LocalTime)
+            source.readSerializable() as LocalTime
+    )
 
     override fun describeContents() = 0
 

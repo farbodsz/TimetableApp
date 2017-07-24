@@ -36,7 +36,7 @@ class ApacheLicense() : License, Parcelable {
         }
     }
 
-    constructor(source: Parcel) : this()
+    private constructor(source: Parcel) : this()
 
     override fun describeContents() = 0
 

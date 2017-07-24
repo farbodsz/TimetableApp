@@ -92,12 +92,13 @@ data class Subject(
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readString(),
             source.readString(),
-            source.readInt())
+            source.readInt()
+    )
 
     override fun compareTo(other: Subject): Int {
         return name.compareTo(other.name)

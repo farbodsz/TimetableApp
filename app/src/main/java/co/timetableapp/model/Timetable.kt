@@ -131,12 +131,13 @@ data class Timetable(
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readInt(),
             source.readString(),
             source.readSerializable() as LocalDate,
             source.readSerializable() as LocalDate,
-            source.readInt())
+            source.readInt()
+    )
 
     fun hasName() = name.trim().isNotEmpty()
 

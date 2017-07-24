@@ -73,7 +73,7 @@ data class UpcomingAgendaHeader(val type: HeaderType) : AgendaHeader() {
         }
     }
 
-    constructor(source: Parcel) : this(source.readSerializable() as HeaderType)
+    private constructor(source: Parcel) : this(source.readSerializable() as HeaderType)
 
     override fun getName(context: Context) = context.getString(nameResId)!!
 

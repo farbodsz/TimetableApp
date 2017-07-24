@@ -31,11 +31,12 @@ class Library(val name: String, val website: String?, val author: String,
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readString(),
             source.readString(),
             source.readString(),
-            source.readParcelable<License>(License::class.java.classLoader))
+            source.readParcelable<License>(License::class.java.classLoader)
+    )
 
     override fun describeContents() = 0
 

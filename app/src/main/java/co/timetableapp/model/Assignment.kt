@@ -119,14 +119,15 @@ data class Assignment(
         }
     }
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readInt(),
             source.readInt(),
             source.readInt(),
             source.readString(),
             source.readString(),
             source.readSerializable() as LocalDate,
-            source.readInt())
+            source.readInt()
+    )
 
     fun hasDetail() = detail.trim().isNotEmpty()
 

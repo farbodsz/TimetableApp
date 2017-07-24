@@ -39,7 +39,7 @@ import org.threeten.bp.YearMonth
  */
 data class PastAgendaHeader(val yearMonth: YearMonth) : AgendaHeader() {
 
-    constructor(source: Parcel) : this(source.readSerializable() as YearMonth)
+    private constructor(source: Parcel) : this(source.readSerializable() as YearMonth)
 
     override fun getName(context: Context) = getDateTime().format(DateUtils.FORMATTER_MONTH_YEAR)!!
 

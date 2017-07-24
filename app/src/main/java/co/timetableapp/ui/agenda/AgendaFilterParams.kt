@@ -34,7 +34,7 @@ class AgendaFilterParams(
         var showPast: Boolean
 ) : Parcelable {
 
-    constructor(source: Parcel) : this(
+    private constructor(source: Parcel) : this(
             source.readSerializable() as EnumSet<AgendaType>,
             source.readInt() == 1,
             source.readInt() == 1
