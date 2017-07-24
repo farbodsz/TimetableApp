@@ -93,7 +93,7 @@ class ClassesAdapter(
 
     inner class ClassesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val colorView: View = itemView.findViewById(R.id.color)!!
+        val colorView: View = itemView.findViewById(R.id.color)
         val subjectText: TextView = itemView.findViewById(R.id.subject)
         val detailText: TextView = itemView.findViewById(R.id.class_details)
 
