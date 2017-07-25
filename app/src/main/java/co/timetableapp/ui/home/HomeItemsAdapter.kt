@@ -55,7 +55,7 @@ class HomeItemsAdapter(
 
     private inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val title = itemView.findViewById(R.id.title) as TextView
+        val title: TextView = itemView.findViewById(R.id.title)
 
         init {
             itemView.setOnClickListener { onHeaderClick?.invoke(it!!, layoutPosition) }
@@ -65,10 +65,10 @@ class HomeItemsAdapter(
     private inner class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val colorView: View = itemView.findViewById(R.id.color)
-        val title = itemView.findViewById(R.id.title) as TextView
-        val subtitle = itemView.findViewById(R.id.subtitle) as TextView
-        val times = itemView.findViewById(R.id.times) as TextView
-        val boxedText = itemView.findViewById(R.id.assignment_text) as TextView
+        val title: TextView = itemView.findViewById(R.id.title)
+        val subtitle: TextView = itemView.findViewById(R.id.subtitle)
+        val times: TextView = itemView.findViewById(R.id.times)
+        val boxedText: TextView = itemView.findViewById(R.id.assignment_text)
 
         init {
             itemView.setOnClickListener { onItemClick?.invoke(it!!, layoutPosition) }

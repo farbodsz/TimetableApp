@@ -35,7 +35,7 @@ class LicensesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
@@ -85,7 +85,7 @@ class LicensesActivity : AppCompatActivity() {
     }
 
     private fun displayCards() {
-        val container = findViewById(R.id.container) as LinearLayout
+        val container = findViewById<LinearLayout>(R.id.container)
 
         Collections.sort(mLibraries)
 
@@ -98,10 +98,10 @@ class LicensesActivity : AppCompatActivity() {
         val card = layoutInflater.inflate(R.layout.item_license_card, container, false)
 
         with(card) {
-            (findViewById(R.id.title) as TextView).text = library.name
-            (findViewById(R.id.subtitle) as TextView).text = library.author
+            findViewById<TextView>(R.id.title).text = library.name
+            findViewById<TextView>(R.id.subtitle).text = library.author
 
-            (findViewById(R.id.content_text) as TextView).text = library.license.getNotice(context)
+            findViewById<TextView>(R.id.content_text).text = library.license.getNotice(context)
 
             setOnClickListener {
                 val intent = Intent(context, LibraryDetailActivity::class.java)

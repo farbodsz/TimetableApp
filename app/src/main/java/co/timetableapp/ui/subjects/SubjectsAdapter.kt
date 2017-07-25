@@ -63,8 +63,8 @@ class SubjectsAdapter(
 
     inner class SubjectViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val colorView = itemView.findViewById(R.id.color)!!
-        val nameText = itemView.findViewById(R.id.name) as TextView
+        val colorView: View = itemView.findViewById(R.id.color)
+        val nameText: TextView = itemView.findViewById(R.id.name)
 
         init {
             itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }

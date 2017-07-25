@@ -19,6 +19,7 @@ package co.timetableapp.ui.subjects
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.RecyclerView
 import co.timetableapp.R
@@ -49,7 +50,7 @@ class SubjectsFragment : ItemListFragment<Subject>() {
     }
 
     private fun setupFab() {
-        activity.findViewById(R.id.fab).setOnClickListener {
+        activity.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             val intent = Intent(activity, SubjectEditActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL)
         }

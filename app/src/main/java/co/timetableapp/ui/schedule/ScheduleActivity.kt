@@ -63,7 +63,7 @@ class ScheduleActivity : NavigationDrawerActivity() {
     }
 
     private lateinit var mPagerAdapter: DynamicPagerAdapter
-    private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
+    private val mViewPager by lazy { findViewById<ViewPager>(R.id.viewPager) as ViewPager }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,12 +74,12 @@ class ScheduleActivity : NavigationDrawerActivity() {
     }
 
     private fun setupToolbar() {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
     }
 
     private fun setupLayout() {
-        val tabLayout = findViewById(R.id.tabLayout) as TabLayout
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
 
         mPagerAdapter = DynamicPagerAdapter()
@@ -268,10 +268,10 @@ class ScheduleActivity : NavigationDrawerActivity() {
 
     override fun getSelfNavDrawerItem() = NAVDRAWER_ITEM_SCHEDULE
 
-    override fun getSelfToolbar() = findViewById(R.id.toolbar) as Toolbar
+    override fun getSelfToolbar(): Toolbar = findViewById(R.id.toolbar)
 
-    override fun getSelfDrawerLayout() = findViewById(R.id.drawerLayout) as DrawerLayout
+    override fun getSelfDrawerLayout(): DrawerLayout = findViewById(R.id.drawerLayout)
 
-    override fun getSelfNavigationView() = findViewById(R.id.navigationView) as NavigationView
+    override fun getSelfNavigationView(): NavigationView = findViewById(R.id.navigationView)
 
 }

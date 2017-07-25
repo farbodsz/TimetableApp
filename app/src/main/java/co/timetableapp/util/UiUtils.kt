@@ -88,21 +88,21 @@ object UiUtils {
                             @StringRes subtitleRes: Int? = null): View {
         val placeholderView = LayoutInflater.from(context).inflate(R.layout.placeholder, null)
 
-        val background = placeholderView.findViewById(R.id.background)
+        val background = placeholderView.findViewById<View>(R.id.background)
         background.setBackgroundColor(ContextCompat.getColor(context, backgroundColorRes))
 
-        val image = placeholderView.findViewById(R.id.imageView) as ImageView
+        val image = placeholderView.findViewById<ImageView>(R.id.imageView)
         image.setImageDrawable(tintDrawable(context, drawableRes, drawableColorRes))
         if (largeIcon) {
             image.layoutParams.width = dpToPixels(context, 108)
             image.layoutParams.height = dpToPixels(context, 108)
         }
 
-        val title = placeholderView.findViewById(R.id.title) as TextView
+        val title = placeholderView.findViewById<TextView>(R.id.title)
         title.setText(titleRes)
         title.setTextColor(ContextCompat.getColor(context, textColorRes))
 
-        val subtitle = placeholderView.findViewById(R.id.subtitle) as TextView
+        val subtitle = placeholderView.findViewById<TextView>(R.id.subtitle)
         if (subtitleRes == null) {
             subtitle.visibility = View.GONE
         } else {

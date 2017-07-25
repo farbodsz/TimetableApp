@@ -37,7 +37,7 @@ class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: In
     var onNewSubjectListener: DialogInterface.OnClickListener? = null
     var onSubjectChangeListener: OnSubjectChangeListener? = null
 
-    private val mTextView = activity.findViewById(textViewResId) as TextView
+    private val mTextView: TextView = activity.findViewById(textViewResId)
 
     private var mSubjectDialog: AlertDialog? = null
 
@@ -74,7 +74,7 @@ class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: In
         recyclerView.adapter = adapter
 
         val titleView = activity.layoutInflater.inflate(R.layout.dialog_title_with_padding, null)
-        (titleView.findViewById(R.id.title) as TextView).setText(R.string.choose_subject)
+        titleView.findViewById<TextView>(R.id.title).setText(R.string.choose_subject)
 
         builder.setView(recyclerView)
                 .setCustomTitle(titleView)

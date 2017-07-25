@@ -21,6 +21,7 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.CoordinatorLayout
 import android.view.View
+import android.widget.FrameLayout
 import co.timetableapp.R
 import co.timetableapp.model.agenda.AgendaType
 
@@ -59,13 +60,13 @@ class NewItemSelectorFragment : BottomSheetDialogFragment() {
     }
 
     private fun setClickListeners(dialog: Dialog) {
-        dialog.findViewById(R.id.frameLayout_assignment).setOnClickListener {
+        dialog.findViewById<FrameLayout>(R.id.frameLayout_assignment).setOnClickListener {
             newItemAction?.invoke(it, dialog, AgendaType.ASSIGNMENT)
         }
-        dialog.findViewById(R.id.frameLayout_exam).setOnClickListener {
+        dialog.findViewById<FrameLayout>(R.id.frameLayout_exam).setOnClickListener {
             newItemAction?.invoke(it, dialog, AgendaType.EXAM)
         }
-        dialog.findViewById(R.id.frameLayout_event).setOnClickListener {
+        dialog.findViewById<FrameLayout>(R.id.frameLayout_event).setOnClickListener {
             newItemAction?.invoke(it, dialog, AgendaType.EVENT)
         }
     }

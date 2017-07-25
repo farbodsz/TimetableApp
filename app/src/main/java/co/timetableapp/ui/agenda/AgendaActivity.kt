@@ -19,6 +19,7 @@ package co.timetableapp.ui.agenda
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
@@ -59,7 +60,7 @@ class AgendaActivity : NavigationDrawerActivity() {
         const val DEFAULT_SHOW_PAST = false
     }
 
-    private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
+    private val mViewPager by lazy { findViewById<ViewPager>(R.id.viewPager) }
 
     private var mShowCompleted = true
     private var mShowPast = DEFAULT_SHOW_PAST
@@ -75,14 +76,14 @@ class AgendaActivity : NavigationDrawerActivity() {
     }
 
     private fun setupToolbar() {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
     }
 
     private fun setupLayout() {
         mViewPager.adapter = PagerAdapter(supportFragmentManager)
 
-        val tabLayout = findViewById(R.id.tabLayout) as TabLayout
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         tabLayout.setTabTextColors(
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white))
@@ -95,7 +96,7 @@ class AgendaActivity : NavigationDrawerActivity() {
     }
 
     private fun setupFab() {
-        findViewById(R.id.fab).setOnClickListener {
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             val dialogFragment = NewItemSelectorFragment()
 
             dialogFragment.onCreateNewAgendaItem { _, dialog, agendaType ->
@@ -184,11 +185,11 @@ class AgendaActivity : NavigationDrawerActivity() {
 
     override fun getSelfNavDrawerItem() = NAVDRAWER_ITEM_AGENDA
 
-    override fun getSelfToolbar() = findViewById(R.id.toolbar) as Toolbar
+    override fun getSelfToolbar(): Toolbar = findViewById(R.id.toolbar)
 
-    override fun getSelfDrawerLayout() = findViewById(R.id.drawerLayout) as DrawerLayout
+    override fun getSelfDrawerLayout(): DrawerLayout = findViewById(R.id.drawerLayout)
 
-    override fun getSelfNavigationView() = findViewById(R.id.navigationView) as NavigationView
+    override fun getSelfNavigationView(): NavigationView = findViewById(R.id.navigationView)
 
     /**
      * Interface definition for a callback to be invoked when the agenda filter has been updated.

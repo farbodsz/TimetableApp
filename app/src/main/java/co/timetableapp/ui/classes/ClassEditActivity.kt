@@ -100,9 +100,9 @@ class ClassEditActivity : ItemEditActivity<Class>() {
     }
 
     override fun setupLayout() {
-        mAppBarLayout = findViewById(R.id.appBarLayout) as AppBarLayout
+        mAppBarLayout = findViewById(R.id.appBarLayout)
 
-        mModuleEditText = findViewById(R.id.editText_module) as EditText
+        mModuleEditText = findViewById(R.id.editText_module)
         if (!mIsNew) {
             mModuleEditText.setText(mItem!!.moduleName)
         }
@@ -118,8 +118,8 @@ class ClassEditActivity : ItemEditActivity<Class>() {
     }
 
     private fun setupDateTexts() {
-        mStartDateText = findViewById(R.id.textView_start_date) as TextView
-        mEndDateText = findViewById(R.id.textView_end_date) as TextView
+        mStartDateText = findViewById(R.id.textView_start_date)
+        mEndDateText = findViewById(R.id.textView_end_date)
 
         if (!mIsNew && mItem!!.hasStartEndDates()) {
             mStartDate = mItem!!.startDate
@@ -185,8 +185,8 @@ class ClassEditActivity : ItemEditActivity<Class>() {
     }
 
     private fun setupDateSwitch() {
-        val datesSwitch = findViewById(R.id.dates_switch) as Switch
-        val datesSection = findViewById(R.id.dates_section)
+        val datesSwitch = findViewById<Switch>(R.id.dates_switch)
+        val datesSection = findViewById<ViewGroup>(R.id.dates_section)
 
         datesSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -213,10 +213,10 @@ class ClassEditActivity : ItemEditActivity<Class>() {
     }
 
     private fun setupExpandToggle() {
-        val detailSection = findViewById(R.id.linearLayout_details)
+        val detailSection = findViewById<LinearLayout>(R.id.linearLayout_details)
 
-        val expandToggle = findViewById(R.id.expand_toggle)
-        val expandIcon = findViewById(R.id.expand_icon) as ImageView
+        val expandToggle = findViewById<ViewGroup>(R.id.expand_toggle)
+        val expandIcon = findViewById<ImageView>(R.id.expand_icon)
 
         expandToggle.setOnClickListener(object : View.OnClickListener {
             internal var mIsExpanded = false
@@ -274,10 +274,10 @@ class ClassEditActivity : ItemEditActivity<Class>() {
      * @see populateTabs
      */
     private fun setupTabs() {
-        mTabLayout = findViewById(R.id.tabLayout) as TabLayout
+        mTabLayout = findViewById(R.id.tabLayout)
         mTabLayout.tabMode = TabLayout.MODE_SCROLLABLE
 
-        val viewPager = findViewById(R.id.viewPager) as ViewPager
+        val viewPager = findViewById<ViewPager>(R.id.viewPager)
         viewPager.adapter = mPagerAdapter
 
         mTabLayout.setupWithViewPager(viewPager)
@@ -315,17 +315,17 @@ class ClassEditActivity : ItemEditActivity<Class>() {
 
         val page = layoutInflater.inflate(R.layout.fragment_class_edit, null)
 
-        val room = page.findViewById(R.id.editText_room) as EditText
+        val room = page.findViewById<EditText>(R.id.editText_room)
         if (!isNewDetail) {
             room.setText(classDetail!!.room)
         }
 
-        val building = page.findViewById(R.id.editText_building) as EditText
+        val building = page.findViewById<EditText>(R.id.editText_building)
         if (!isNewDetail) {
             building.setText(classDetail!!.building)
         }
 
-        val teacher = page.findViewById(R.id.editText_teacher) as EditText
+        val teacher = page.findViewById<EditText>(R.id.editText_teacher)
         if (!isNewDetail) {
             teacher.setText(classDetail!!.teacher)
         }
@@ -365,14 +365,14 @@ class ClassEditActivity : ItemEditActivity<Class>() {
 
         mAdapters.add(adapter)
 
-        val recyclerView = page.findViewById(R.id.recyclerView) as RecyclerView
+        val recyclerView = page.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = object : LinearLayoutManager(this) {
             override fun canScrollVertically() = false
         }
         recyclerView.adapter = adapter
 
-        val btnAddTime = page.findViewById(R.id.button_add_time) as Button
+        val btnAddTime = page.findViewById<Button>(R.id.button_add_time)
         btnAddTime.setOnClickListener { view ->
             val intent = Intent(this, ClassTimeEditActivity::class.java)
             intent.putExtra(ClassTimeEditActivity.EXTRA_CLASS_DETAIL_ID, classDetailId)
@@ -392,10 +392,10 @@ class ClassEditActivity : ItemEditActivity<Class>() {
         }
 
         if (placeholder) {
-            val content = page.findViewById(R.id.content) as ViewGroup
+            val content = page.findViewById<ViewGroup>(R.id.content)
             content.visibility = View.GONE
 
-            val btnAddTab = page.findViewById(R.id.button_add_tab) as Button
+            val btnAddTab = page.findViewById<Button>(R.id.button_add_tab)
             btnAddTab.visibility = View.VISIBLE
             btnAddTab.setOnClickListener {
                 content.visibility = View.VISIBLE
@@ -521,13 +521,13 @@ class ClassEditActivity : ItemEditActivity<Class>() {
 
             val classDetailId = mClassDetailIds[i]
 
-            val roomText = page.findViewById(R.id.editText_room) as EditText
+            val roomText = page.findViewById<EditText>(R.id.editText_room)
             val room = roomText.text.toString().title()
 
-            val buildingText = page.findViewById(R.id.editText_building) as EditText
+            val buildingText = page.findViewById<EditText>(R.id.editText_building)
             val building = buildingText.text.toString().title()
 
-            val teacherText = page.findViewById(R.id.editText_teacher) as EditText
+            val teacherText = page.findViewById<EditText>(R.id.editText_teacher)
             val teacher = teacherText.text.toString().title()
 
             val classTimeGroups = mAllClassTimeGroups[i]

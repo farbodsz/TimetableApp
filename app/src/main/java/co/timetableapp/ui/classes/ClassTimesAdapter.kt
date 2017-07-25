@@ -83,8 +83,8 @@ class ClassTimesAdapter(
 
     inner class ClassTimesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val timeText = itemView.findViewById(R.id.time) as TextView
-        val dayText = itemView.findViewById(R.id.day) as TextView
+        val timeText: TextView = itemView.findViewById(R.id.time)
+        val dayText: TextView = itemView.findViewById(R.id.day)
 
         init {
             itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }

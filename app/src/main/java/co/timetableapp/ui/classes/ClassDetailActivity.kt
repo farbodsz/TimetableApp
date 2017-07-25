@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.text.Html
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import co.timetableapp.R
@@ -68,7 +69,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
         setupToolbar()
         setupClassDetailCard()
 
-        findViewById(R.id.main_card).setBackgroundColor(
+        findViewById<View>(R.id.main_card).setBackgroundColor(
                 ContextCompat.getColor(this, mColor.getLightAccentColorRes(this)))
 
         setupRelatedItemCards()
@@ -77,7 +78,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
     private fun setupToolbar() {
         val subject = Subject.create(this, mItem.subjectId)
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
@@ -161,19 +162,19 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
      */
     private fun setClassDetailTexts(locations: String, teachers: String, classTimes: String) {
         val locationVisibility = if (locations.isEmpty()) View.GONE else View.VISIBLE
-        findViewById(R.id.viewGroup_location).visibility = locationVisibility
+        findViewById<ViewGroup>(R.id.viewGroup_location).visibility = locationVisibility
         if (locations.isNotEmpty()) {
-            (findViewById(R.id.textView_location) as TextView).text = locations
+            findViewById<TextView>(R.id.textView_location).text = locations
         }
 
         val teacherVisibility = if (teachers.isEmpty()) View.GONE else View.VISIBLE
-        findViewById(R.id.viewGroup_teacher).visibility = teacherVisibility
+        findViewById<ViewGroup>(R.id.viewGroup_teacher).visibility = teacherVisibility
         if (teachers.isNotEmpty()) {
-            (findViewById(R.id.textView_teacher) as TextView).text = teachers
+            findViewById<TextView>(R.id.textView_teacher).text = teachers
         }
 
         // No need to check if it's empty - all class details must have a class time
-        val textViewTimes = findViewById(R.id.textView_times) as TextView
+        val textViewTimes = findViewById<TextView>(R.id.textView_times)
         textViewTimes.text = classTimes
     }
 
@@ -182,7 +183,7 @@ class ClassDetailActivity : ItemDetailActivity<Class>() {
      * exams for this class.
      */
     private fun setupRelatedItemCards() {
-        val cardContainer = findViewById(R.id.card_container) as LinearLayout
+        val cardContainer = findViewById<LinearLayout>(R.id.card_container)
 
         val assignmentsCard = CardOfItems.Builder(this, cardContainer)
                 .setTitle(R.string.title_assignments)

@@ -23,6 +23,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.EventHandler
@@ -63,13 +64,13 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
     }
 
     private fun setupToolbar() {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         toolbar.navigationIcon = UiUtils.tintDrawable(this, R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener { saveEditsAndClose() }
 
-        (findViewById(R.id.title) as TextView).text = mItem.title
+        findViewById<TextView>(R.id.title).text = mItem.title
 
         val color = if (mItem.hasRelatedSubject()) {
             Color(mItem.getRelatedSubject(this)!!.colorId)
@@ -82,7 +83,7 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
     private fun setupDateText() {
         val dateFormatter = DateUtils.FORMATTER_FULL_DATE
 
-        val textView = findViewById(R.id.textView_date) as TextView
+        val textView = findViewById<TextView>(R.id.textView_date)
         textView.text = if (mItem.hasDifferentStartEndDates()) {
             "${mItem.startDateTime.format(dateFormatter)} - ${mItem.endDateTime.format(dateFormatter)}"
         } else {
@@ -95,11 +96,11 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
 
         val timeText = mItem.startDateTime.format(timeFormatter) + " - " +
                 mItem.endDateTime.format(timeFormatter)
-        (findViewById(R.id.textView_times) as TextView).text = timeText
+        findViewById<TextView>(R.id.textView_times).text = timeText
     }
 
     private fun setupNotesText() {
-        val notesText = findViewById(R.id.textView_notes) as TextView
+        val notesText = findViewById<TextView>(R.id.textView_notes)
         with(notesText) {
             if (mItem.hasNotes()) {
                 text = mItem.notes
@@ -117,23 +118,22 @@ class EventDetailActivity : ItemDetailActivity<Event>() {
 
     private fun setupLocationText() {
         if (!mItem.hasLocation()) {
-            findViewById(R.id.divider_location).visibility = View.GONE
-            findViewById(R.id.viewGroup_location).visibility = View.GONE
+            findViewById<View>(R.id.divider_location).visibility = View.GONE
+            findViewById<ViewGroup>(R.id.viewGroup_location).visibility = View.GONE
             return
         }
 
-        (findViewById(R.id.textView_location) as TextView).text = mItem.location
+        findViewById<TextView>(R.id.textView_location).text = mItem.location
     }
 
     private fun setupSubjectText() {
         if (!mItem.hasRelatedSubject()) {
-            findViewById(R.id.divider_subject).visibility = View.GONE
-            findViewById(R.id.viewGroup_subject).visibility = View.GONE
+            findViewById<View>(R.id.divider_subject).visibility = View.GONE
+            findViewById<ViewGroup>(R.id.viewGroup_subject).visibility = View.GONE
             return
         }
 
-        (findViewById(R.id.textView_subject) as TextView).text =
-                mItem.getRelatedSubject(this)!!.name
+        findViewById<TextView>(R.id.textView_subject).text = mItem.getRelatedSubject(this)!!.name
     }
 
     override fun onMenuEditClick() {

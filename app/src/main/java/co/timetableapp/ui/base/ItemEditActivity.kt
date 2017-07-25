@@ -104,7 +104,7 @@ abstract class ItemEditActivity<T : BaseItem> : AppCompatActivity() {
     }
 
     private fun setupToolbar(): Toolbar {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         supportActionBar!!.setTitle(getTitleRes(mIsNew))

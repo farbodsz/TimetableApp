@@ -18,6 +18,7 @@ package co.timetableapp.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -51,7 +52,7 @@ class MainActivity : NavigationDrawerActivity() {
         const val REQUEST_CODE_ITEM_DETAIL = 1
     }
 
-    private val mViewPager by lazy { findViewById(R.id.viewPager) as ViewPager }
+    private val mViewPager by lazy { findViewById<ViewPager>(R.id.viewPager) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +64,7 @@ class MainActivity : NavigationDrawerActivity() {
     private fun setupLayout() {
         mViewPager.adapter = PagerAdapter(supportFragmentManager)
 
-        val tabLayout = findViewById(R.id.tabLayout) as TabLayout
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         tabLayout.setTabTextColors(
                 ContextCompat.getColor(this, R.color.mdu_text_white_secondary),
                 ContextCompat.getColor(this, R.color.mdu_text_white))
@@ -76,7 +77,7 @@ class MainActivity : NavigationDrawerActivity() {
     }
 
     private fun setupFab() {
-        findViewById(R.id.fab).setOnClickListener {
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             val dialogFragment = NewItemSelectorFragment()
 
             dialogFragment.onCreateNewAgendaItem { _, dialog, agendaType ->
@@ -104,13 +105,13 @@ class MainActivity : NavigationDrawerActivity() {
         }
     }
 
-    override fun getSelfToolbar() = findViewById(R.id.toolbar) as Toolbar
+    override fun getSelfToolbar(): Toolbar = findViewById(R.id.toolbar)
 
-    override fun getSelfDrawerLayout() = findViewById(R.id.drawerLayout) as DrawerLayout
+    override fun getSelfDrawerLayout(): DrawerLayout = findViewById(R.id.drawerLayout)
 
     override fun getSelfNavDrawerItem() = NAVDRAWER_ITEM_HOME
 
-    override fun getSelfNavigationView() = findViewById(R.id.navigationView) as NavigationView
+    override fun getSelfNavigationView(): NavigationView = findViewById(R.id.navigationView)
 
     private inner class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 

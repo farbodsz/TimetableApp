@@ -89,13 +89,13 @@ class ScheduleAdapter(
 
     inner class ScheduleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val colorView = itemView.findViewById(R.id.color)!!
-        val subjectText = itemView.findViewById(R.id.text1) as TextView
-        val detailText = itemView.findViewById(R.id.text2) as TextView
-        val timesText = itemView.findViewById(R.id.text3) as TextView
+        val colorView: View = itemView.findViewById(R.id.color)!!
+        val subjectText: TextView = itemView.findViewById(R.id.text1)
+        val detailText: TextView = itemView.findViewById(R.id.text2)
+        val timesText: TextView = itemView.findViewById(R.id.text3)
 
         init {
-            itemView.findViewById(R.id.text4).visibility = View.GONE
+            itemView.findViewById<TextView>(R.id.text4).visibility = View.GONE
 
             itemView.setOnClickListener { onItemClick?.invoke(it, layoutPosition) }
         }

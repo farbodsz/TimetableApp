@@ -50,16 +50,16 @@ class TimetablesActivity : NavigationDrawerActivity() {
     }
 
     private fun setupToolbar() {
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
     }
 
     override fun getSelfNavDrawerItem() = NAVDRAWER_ITEM_MANAGE_TIMETABLES
 
-    override fun getSelfToolbar() = findViewById(R.id.toolbar) as Toolbar
+    override fun getSelfToolbar(): Toolbar = findViewById(R.id.toolbar)
 
-    override fun getSelfDrawerLayout() = findViewById(R.id.drawerLayout) as DrawerLayout
+    override fun getSelfDrawerLayout(): DrawerLayout = findViewById(R.id.drawerLayout)
 
-    override fun getSelfNavigationView() = findViewById(R.id.navigationView) as NavigationView
+    override fun getSelfNavigationView(): NavigationView = findViewById(R.id.navigationView)
 
 }

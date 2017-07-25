@@ -58,12 +58,12 @@ class SubjectEditActivity : ItemEditActivity<Subject>() {
     }
 
     override fun setupLayout() {
-        mNameEditText = findViewById(R.id.editText_name) as EditText
+        mNameEditText = findViewById(R.id.editText_name)
         if (!mIsNew) {
             mNameEditText.setText(mItem!!.name)
         }
 
-        mAbbreviationEditText = findViewById(R.id.editText_abbreviation) as EditText
+        mAbbreviationEditText = findViewById(R.id.editText_abbreviation)
         if (!mIsNew) {
             mAbbreviationEditText.setText(mItem!!.abbreviation)
         }
@@ -76,7 +76,7 @@ class SubjectEditActivity : ItemEditActivity<Subject>() {
 
         UiUtils.setBarColors(mColor, this, mToolbar!!)
 
-        val imageView = findViewById(R.id.imageView) as ImageView
+        val imageView = findViewById<ImageView>(R.id.imageView)
         imageView.setImageResource(mColor.getPrimaryColorResId(this))
 
         imageView.setOnClickListener {
@@ -101,7 +101,7 @@ class SubjectEditActivity : ItemEditActivity<Subject>() {
             }
 
             val titleView = layoutInflater.inflate(R.layout.dialog_title_with_padding, null)
-            (titleView.findViewById(R.id.title) as TextView).setText(R.string.choose_color)
+            titleView.findViewById<TextView>(R.id.title).setText(R.string.choose_color)
 
             builder.setView(recyclerView)
                     .setCustomTitle(titleView)

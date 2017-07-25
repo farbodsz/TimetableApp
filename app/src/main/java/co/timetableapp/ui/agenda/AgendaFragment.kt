@@ -134,7 +134,7 @@ class AgendaFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
     private fun setupLayout() {
         setupList()
 
-        mPlaceholderLayout = mRootView.findViewById(R.id.placeholder) as FrameLayout
+        mPlaceholderLayout = mRootView.findViewById(R.id.placeholder)
         refreshPlaceholderStatus()
     }
 
@@ -142,7 +142,7 @@ class AgendaFragment : Fragment(), AgendaActivity.OnFilterChangeListener {
         mDataHelper.createList(mItems)
 
         setupAdapter()
-        mRecyclerView = mRootView.findViewById(R.id.recyclerView) as RecyclerView
+        mRecyclerView = mRootView.findViewById(R.id.recyclerView)
         with(mRecyclerView) {
             layoutManager = LinearLayoutManager(activity)
             setHasFixedSize(true)
