@@ -19,10 +19,10 @@ apply plugin: 'kotlin-android'
 
 // Version code/name information
 def versionMajor = 1
-def versionMinor = 2
-def versionPatch = 3
-def versionBuild = 9
-def versionBuildNameSuffix = ""
+def versionMinor = 3
+def versionPatch = 0
+def versionBuild = 1
+def versionBuildNameSuffix = "-rc1"
 
 android {
     compileSdkVersion 25
