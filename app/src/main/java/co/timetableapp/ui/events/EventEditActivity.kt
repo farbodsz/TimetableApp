@@ -59,7 +59,7 @@ class EventEditActivity : ItemEditActivity<Event>() {
     private lateinit var mEditTextDetail: EditText
     private lateinit var mEditTextLocation: EditText
 
-    private var mEventDate: LocalDate? = null
+    private lateinit var mEventDate: LocalDate
     private lateinit var mDateHelper: DateSelectorHelper
 
     private var mStartTime: LocalTime? = null
@@ -138,7 +138,7 @@ class EventEditActivity : ItemEditActivity<Event>() {
     }
 
     private fun setupDateText() {
-        mEventDate = mItem?.startDateTime?.toLocalDate()
+        mEventDate = mItem?.startDateTime?.toLocalDate() ?: LocalDate.now()
 
         mDateHelper = DateSelectorHelper(this, R.id.textView_date)
         mDateHelper.setup(mEventDate) { _, date ->
@@ -229,12 +229,6 @@ class EventEditActivity : ItemEditActivity<Event>() {
             return
         }
 
-        if (mEventDate == null) {
-            Snackbar.make(findViewById(R.id.rootView), R.string.message_date_required,
-                    Snackbar.LENGTH_SHORT).show()
-            return
-        }
-
         if (mStartTime == null || mEndTime == null) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_times_required,
                     Snackbar.LENGTH_SHORT).show()
@@ -250,8 +244,8 @@ class EventEditActivity : ItemEditActivity<Event>() {
                 timetableId,
                 newTitle,
                 newDetail,
-                LocalDateTime.of(mEventDate!!, mStartTime!!),
-                LocalDateTime.of(mEventDate!!, mEndTime!!),
+                LocalDateTime.of(mEventDate, mStartTime!!),
+                LocalDateTime.of(mEventDate, mEndTime!!),
                 newLocation,
                 if (mSubject == null) 0 else mSubject!!.id
         )

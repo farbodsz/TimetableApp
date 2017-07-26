@@ -67,7 +67,7 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
     private var mSubject: Subject? = null
     private lateinit var mSubjectHelper: SubjectSelectorHelper
 
-    private var mExamDate: LocalDate? = null
+    private lateinit var mExamDate: LocalDate
     private lateinit var mDateHelper: DateSelectorHelper
 
     private var mExamTime: LocalTime? = null
@@ -254,12 +254,6 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
             return
         }
 
-        if (mExamDate == null) {
-            Snackbar.make(findViewById(R.id.rootView), R.string.message_date_required,
-                    Snackbar.LENGTH_SHORT).show()
-            return
-        }
-
         if (mExamTime == null) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_exam_time_required,
                     Snackbar.LENGTH_SHORT).show()
@@ -281,7 +275,7 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
                 timetableId,
                 mSubject!!.id,
                 newModuleName,
-                mExamDate!!,
+                mExamDate,
                 mExamTime!!,
                 mExamDuration,
                 mEditTextSeat.text.toString().trim(),
