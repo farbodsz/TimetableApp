@@ -17,7 +17,6 @@
 package co.timetableapp.ui.classes
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -201,22 +200,21 @@ class ClassEditActivity : ItemEditActivity<Class>() {
     private fun setupSubjectText() {
         mSubjectHelper = SubjectSelectorHelper(this, R.id.textView_subject)
 
-        mSubjectHelper.onNewSubjectListener = DialogInterface.OnClickListener { _, _ ->
+        mSubjectHelper.onCreateNewSubject { _, _ ->
             val intent = Intent(this, SubjectEditActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_SUBJECT_DETAIL)
         }
 
-        mSubjectHelper.onSubjectChangeListener = object : SubjectSelectorHelper.OnSubjectChangeListener {
-            override fun onSubjectChange(subject: Subject?) {
-                mSubject = subject!!
-                val color = Color(mSubject!!.colorId)
-                UiUtils.setBarColors(
-                        color,
-                        this@ClassEditActivity,
-                        mAppBarLayout,
-                        mToolbar!!,
-                        mTabLayout)
-            }
+        mSubjectHelper.onSubjectChange {
+            mSubject = it!!
+            val color = Color(mSubject!!.colorId)
+            UiUtils.setBarColors(
+                    color,
+                    this,
+                    mAppBarLayout,
+                    mToolbar!!,
+                    mTabLayout
+            )
         }
 
         val subject = if (mIsNew) null else Subject.create(this, mItem!!.subjectId)

@@ -18,7 +18,6 @@ package co.timetableapp.ui.events
 
 import android.app.Activity
 import android.app.TimePickerDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
@@ -105,7 +104,7 @@ class EventEditActivity : ItemEditActivity<Event>() {
     private fun setupSubjectHelper() {
         mSubjectHelper = SubjectSelectorHelper(this, R.id.textView_subject)
 
-        mSubjectHelper.onNewSubjectListener = DialogInterface.OnClickListener { _, _ ->
+        mSubjectHelper.onCreateNewSubject { _, _ ->
             val intent = Intent(this, SubjectEditActivity::class.java)
             ActivityCompat.startActivityForResult(
                     this,
@@ -115,23 +114,23 @@ class EventEditActivity : ItemEditActivity<Event>() {
             )
         }
 
-        mSubjectHelper.onSubjectChangeListener = object : SubjectSelectorHelper.OnSubjectChangeListener {
-            override fun onSubjectChange(subject: Subject?) {
-                mSubject = subject
+        mSubjectHelper.onSubjectChange {
+            mSubject = it
 
-                val color: Color
-                if (subject == null) {
-                    color = Event.DEFAULT_COLOR
-                } else {
-                    color = Color(subject.colorId)
-                }
-                UiUtils.setBarColors(
-                        color,
-                        this@EventEditActivity,
-                        mToolbar!!,
-                        findViewById(R.id.appBarLayout),
-                        findViewById(R.id.toolbar_container))
+            val color: Color
+            if (it == null) {
+                color = Event.DEFAULT_COLOR
+            } else {
+                color = Color(it.colorId)
             }
+
+            UiUtils.setBarColors(
+                    color,
+                    this@EventEditActivity,
+                    mToolbar!!,
+                    findViewById(R.id.appBarLayout),
+                    findViewById(R.id.toolbar_container)
+            )
         }
 
         mSubjectHelper.setup(mItem?.getRelatedSubject(this), true)

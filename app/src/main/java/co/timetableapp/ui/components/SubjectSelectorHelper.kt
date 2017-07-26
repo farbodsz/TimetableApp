@@ -34,8 +34,8 @@ import co.timetableapp.ui.subjects.SubjectsAdapter
  */
 class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: Int) {
 
-    var onNewSubjectListener: DialogInterface.OnClickListener? = null
-    var onSubjectChangeListener: OnSubjectChangeListener? = null
+    private var mNewSubjectAction: ((DialogInterface, Int) -> Unit)? = null
+    private var mSubjectChangeAction: ((Subject?) -> Unit)? = null
 
     private val mTextView = activity.findViewById(textViewResId) as TextView
 
@@ -78,7 +78,9 @@ class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: In
 
         builder.setView(recyclerView)
                 .setCustomTitle(titleView)
-                .setPositiveButton(R.string.action_new, onNewSubjectListener)
+                .setPositiveButton(R.string.action_new, { dialog, which ->
+                    mNewSubjectAction?.invoke(dialog, which)
+                })
 
         if (allowNoSubject) {
             builder.setNeutralButton(R.string.no_subject) { _, _ ->
@@ -106,16 +108,21 @@ class SubjectSelectorHelper(val activity: Activity, @IdRes val textViewResId: In
             mTextView.setTextColor(ContextCompat.getColor(activity, R.color.mdu_text_black))
         }
 
-        onSubjectChangeListener?.onSubjectChange(newSubject)
+        mSubjectChangeAction?.invoke(newSubject)
     }
 
-    interface OnSubjectChangeListener {
+    /**
+     * Sets the [action] to be invoked when the 'New Subject' button gets clicked from the dialog.
+     */
+    fun onCreateNewSubject(action: (dialog: DialogInterface, which: Int) -> Unit) {
+        mNewSubjectAction = action
+    }
 
-        /**
-         * Callback to be invoked when the [Subject] being displayed has changed.
-         */
-        fun onSubjectChange(subject: Subject?)
-
+    /**
+     * Sets the [action] to be invoked when the subject has been changed.
+     */
+    fun onSubjectChange(action: (subject: Subject?) -> Unit) {
+        mSubjectChangeAction = action
     }
 
 }
