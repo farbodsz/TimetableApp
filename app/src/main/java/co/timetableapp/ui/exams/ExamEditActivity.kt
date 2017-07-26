@@ -17,7 +17,6 @@
 package co.timetableapp.ui.exams
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -36,9 +35,9 @@ import co.timetableapp.model.Color
 import co.timetableapp.model.Exam
 import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemEditActivity
+import co.timetableapp.ui.components.DateSelectorHelper
 import co.timetableapp.ui.components.SubjectSelectorHelper
 import co.timetableapp.ui.subjects.SubjectEditActivity
-import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
 import co.timetableapp.util.title
 import org.threeten.bp.LocalDate
@@ -66,10 +65,10 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
     private lateinit var mEditTextRoom: EditText
 
     private var mSubject: Subject? = null
-    private var mSubjectHelper: SubjectSelectorHelper? = null
+    private lateinit var mSubjectHelper: SubjectSelectorHelper
 
     private var mExamDate: LocalDate? = null
-    private lateinit var mDateText: TextView
+    private lateinit var mDateHelper: DateSelectorHelper
 
     private var mExamTime: LocalTime? = null
     private lateinit var mTimeText: TextView
@@ -123,7 +122,7 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
     private fun setupSubjectHelper() {
         mSubjectHelper = SubjectSelectorHelper(this, R.id.textView_subject)
 
-        mSubjectHelper!!.onNewSubjectListener = DialogInterface.OnClickListener { _, _ ->
+        mSubjectHelper.onNewSubjectListener = DialogInterface.OnClickListener { _, _ ->
             val intent = Intent(this, SubjectEditActivity::class.java)
             ActivityCompat.startActivityForResult(
                     this,
@@ -133,7 +132,7 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
             )
         }
 
-        mSubjectHelper!!.onSubjectChangeListener = object : SubjectSelectorHelper.OnSubjectChangeListener {
+        mSubjectHelper.onSubjectChangeListener = object : SubjectSelectorHelper.OnSubjectChangeListener {
             override fun onSubjectChange(subject: Subject?) {
                 mSubject = subject
                 val color = Color(subject!!.colorId)
@@ -147,39 +146,17 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
             }
         }
 
-        mSubjectHelper!!.setup(mItem?.getRelatedSubject(this))
+        mSubjectHelper.setup(mItem?.getRelatedSubject(this))
     }
 
     private fun setupDateText() {
-        mDateText = findViewById(R.id.textView_date) as TextView
+        mExamDate = mItem?.date ?: LocalDate.now()
 
-        if (!mIsNew) {
-            mExamDate = mItem!!.date
-            updateDateText()
+        mDateHelper = DateSelectorHelper(this, R.id.textView_date)
+        mDateHelper.setup(mExamDate) { _, date ->
+            mExamDate = date
+            mDateHelper.updateDate(mExamDate)
         }
-
-        mDateText.setOnClickListener {
-            // note: -1 and +1s in code because Android month values are from 0-11 (to
-            // correspond with java.util.Calendar) but LocalDate month values are from 1-12
-
-            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                mExamDate = LocalDate.of(year, month + 1, dayOfMonth)
-                updateDateText()
-            }
-
-            DatePickerDialog(
-                    this,
-                    listener,
-                    if (mIsNew) LocalDate.now().year else mExamDate!!.year,
-                    if (mIsNew) LocalDate.now().monthValue - 1 else mExamDate!!.monthValue - 1,
-                    if (mIsNew) LocalDate.now().dayOfMonth else mExamDate!!.dayOfMonth
-            ).show()
-        }
-    }
-
-    private fun updateDateText() {
-        mDateText.text = mExamDate!!.format(DateUtils.FORMATTER_FULL_DATE)
-        mDateText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
     }
 
     private fun setupTimeText() {
@@ -262,7 +239,7 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
         if (requestCode == REQUEST_CODE_SUBJECT_DETAIL) {
             if (resultCode == Activity.RESULT_OK) {
                 mSubject = data.getParcelableExtra<Subject>(ItemEditActivity.EXTRA_ITEM)
-                mSubjectHelper!!.updateSubject(mSubject)
+                mSubjectHelper.updateSubject(mSubject)
             }
         }
     }
