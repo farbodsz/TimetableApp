@@ -236,12 +236,6 @@ class AssignmentEditActivity : AppCompatActivity() {
             return
         }
 
-        if (mDueDate == null) {
-            Snackbar.make(findViewById(R.id.rootView), R.string.message_due_date_required,
-                    Snackbar.LENGTH_SHORT).show()
-            return
-        }
-
         val assignmentId = if (mIsNew) {
             mAssignmentHandler.getHighestItemId() + 1
         } else {
@@ -258,8 +252,9 @@ class AssignmentEditActivity : AppCompatActivity() {
                 mClass!!.id,
                 newTitle,
                 mDetailEditText.text.toString(),
-                mDueDate!!,
-                completionProgress)
+                mDueDate,
+                completionProgress
+        )
 
         if (mIsNew) {
             mAssignmentHandler.addItem(mAssignment!!)

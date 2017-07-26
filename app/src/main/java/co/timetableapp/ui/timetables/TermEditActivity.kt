@@ -56,10 +56,10 @@ class TermEditActivity : ItemEditActivity<Term>() {
 
     private lateinit var mEditText: EditText
 
-    private var mStartDate: LocalDate? = null
+    private lateinit var mStartDate: LocalDate
     private lateinit var mStartDateHelper: DateSelectorHelper
 
-    private var mEndDate: LocalDate? = null
+    private lateinit var mEndDate: LocalDate
     private lateinit var mEndDateHelper: DateSelectorHelper
 
     override fun getLayoutResource() = R.layout.activity_term_edit
@@ -124,17 +124,12 @@ class TermEditActivity : ItemEditActivity<Term>() {
         }
         newName = newName.title()
 
-        if (mStartDate == null || mEndDate == null) {
-            Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_term_dates_required, Snackbar.LENGTH_SHORT).show()
-            return
-        }
         if (mStartDate == mEndDate) {
             Snackbar.make(findViewById(R.id.rootView),
                     R.string.message_start_date_equal_end_date, Snackbar.LENGTH_SHORT).show()
             return
         }
-        if (mStartDate!!.isAfter(mEndDate!!)) {
+        if (mStartDate.isAfter(mEndDate)) {
             Snackbar.make(findViewById(R.id.rootView),
                     R.string.message_start_date_after_end_date, Snackbar.LENGTH_SHORT).show()
             return
@@ -146,7 +141,7 @@ class TermEditActivity : ItemEditActivity<Term>() {
             mItem!!.id
         }
 
-        mItem = Term(id, mTimetableId, newName, mStartDate!!, mEndDate!!)
+        mItem = Term(id, mTimetableId, newName, mStartDate, mEndDate)
 
         if (mIsNew) {
             mDataHandler.addItem(mItem!!)
