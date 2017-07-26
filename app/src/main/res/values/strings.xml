@@ -139,7 +139,6 @@
     <string name="property_location">Location</string>
     <string name="message_title_required">You must enter a title</string>
     <string name="message_class_required">You must choose a class</string>
-    <string name="message_due_date_required">You must select a due date</string>
     <string name="placeholder_notes_empty">
         It looks like you haven\'t entered any additional notes here.
     </string>
@@ -151,11 +150,9 @@
     <string name="property_duration">Duration</string>
     <string name="property_seat">Seat</string>
     <string name="property_resit">Resit</string>
-    <string name="message_date_required">You must choose a date</string>
     <string name="message_exam_time_required">You must enter an exam time</string>
     <string name="message_exam_duration_required">You must select an exam duration</string>
 
-    <string name="message_term_dates_required">You must specify term dates</string>
     <string name="message_start_date_equal_end_date">Your start and end dates must be different</string>
     <string name="message_start_date_after_end_date">The start date cannot be after the end date</string>
 

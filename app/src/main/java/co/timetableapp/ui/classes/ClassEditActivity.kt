@@ -17,7 +17,6 @@
 package co.timetableapp.ui.classes
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -34,7 +33,10 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Switch
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.handler.ClassDetailHandler
@@ -42,10 +44,10 @@ import co.timetableapp.data.handler.ClassHandler
 import co.timetableapp.data.handler.ClassTimeHandler
 import co.timetableapp.model.*
 import co.timetableapp.ui.base.ItemEditActivity
+import co.timetableapp.ui.components.DateSelectorHelper
 import co.timetableapp.ui.components.DynamicPagerAdapter
 import co.timetableapp.ui.components.SubjectSelectorHelper
 import co.timetableapp.ui.subjects.SubjectEditActivity
-import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
 import co.timetableapp.util.title
 import org.threeten.bp.LocalDate
@@ -83,8 +85,8 @@ class ClassEditActivity : ItemEditActivity<Class>() {
 
     private var mStartDate: LocalDate? = null
     private var mEndDate: LocalDate? = null
-    private lateinit var mStartDateText: TextView
-    private lateinit var mEndDateText: TextView
+    private lateinit var mStartDateHelper: DateSelectorHelper
+    private lateinit var mEndDateHelper: DateSelectorHelper
 
     private val mPagerAdapter = DynamicPagerAdapter()
 
@@ -118,69 +120,21 @@ class ClassEditActivity : ItemEditActivity<Class>() {
     }
 
     private fun setupDateTexts() {
-        mStartDateText = findViewById(R.id.textView_start_date) as TextView
-        mEndDateText = findViewById(R.id.textView_end_date) as TextView
-
         if (!mIsNew && mItem!!.hasStartEndDates()) {
             mStartDate = mItem!!.startDate
             mEndDate = mItem!!.endDate
-            updateDateTexts()
         }
 
-        mStartDateText.setOnClickListener {
-            // note: -1 and +1s in code because Android month values are from 0-11 (to
-            // correspond with java.util.Calendar) but LocalDate month values are from 1-12
-
-            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                mStartDate = LocalDate.of(year, month + 1, dayOfMonth)
-                updateDateTexts()
-            }
-
-            val useNowTime = mIsNew || !mItem!!.hasStartEndDates()
-
-            with(mStartDate!!) {
-                DatePickerDialog(
-                        this@ClassEditActivity,
-                        listener,
-                        if (useNowTime) LocalDate.now().year else year,
-                        if (useNowTime) LocalDate.now().monthValue - 1 else monthValue - 1,
-                        if (useNowTime) LocalDate.now().dayOfMonth else dayOfMonth
-                ).show()
-            }
+        mStartDateHelper = DateSelectorHelper(this, R.id.textView_start_date)
+        mStartDateHelper.setup(mStartDate) { _, date ->
+            mStartDate = date
+            mStartDateHelper.updateDate(date)
         }
 
-        mEndDateText.setOnClickListener {
-            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                mEndDate = LocalDate.of(year, month + 1, dayOfMonth)
-                updateDateTexts()
-            }
-
-            val useNowTime = mIsNew || !mItem!!.hasStartEndDates()
-
-            with(mEndDate!!) {
-                DatePickerDialog(
-                        this@ClassEditActivity,
-                        listener,
-                        if (useNowTime) LocalDate.now().year else year,
-                        if (useNowTime) LocalDate.now().monthValue - 1 else monthValue - 1,
-                        if (useNowTime) LocalDate.now().dayOfMonth else dayOfMonth
-                ).show()
-            }
-        }
-    }
-
-    private fun updateDateTexts() {
-        val formatter = DateUtils.FORMATTER_FULL_DATE
-
-        if (mStartDate != null) {
-            mStartDateText.text = mStartDate!!.format(formatter)
-            mStartDateText.setTextColor(ContextCompat.getColor(
-                    baseContext, R.color.mdu_text_black))
-        }
-        if (mEndDate != null) {
-            mEndDateText.text = mEndDate!!.format(formatter)
-            mEndDateText.setTextColor(ContextCompat.getColor(
-                    baseContext, R.color.mdu_text_black))
+        mEndDateHelper = DateSelectorHelper(this, R.id.textView_end_date)
+        mEndDateHelper.setup(mEndDate) { _, date ->
+            mEndDate = date
+            mEndDateHelper.updateDate(date)
         }
     }
 
@@ -199,7 +153,8 @@ class ClassEditActivity : ItemEditActivity<Class>() {
                     mStartDate = today
                     mEndDate = today.plusMonths(1)
                 }
-                updateDateTexts()
+                mStartDateHelper.updateDate(mStartDate)
+                mEndDateHelper.updateDate(mEndDate)
             } else {
                 datesSection.visibility = View.GONE
                 mStartDate = null
