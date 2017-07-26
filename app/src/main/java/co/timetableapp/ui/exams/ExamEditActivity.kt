@@ -17,7 +17,6 @@
 package co.timetableapp.ui.exams
 
 import android.app.Activity
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
@@ -36,6 +35,7 @@ import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.ui.components.DateSelectorHelper
 import co.timetableapp.ui.components.SubjectSelectorHelper
+import co.timetableapp.ui.components.TimeSelectorHelper
 import co.timetableapp.ui.subjects.SubjectEditActivity
 import co.timetableapp.util.UiUtils
 import co.timetableapp.util.title
@@ -69,8 +69,8 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
     private lateinit var mExamDate: LocalDate
     private lateinit var mDateHelper: DateSelectorHelper
 
-    private var mExamTime: LocalTime? = null
-    private lateinit var mTimeText: TextView
+    private lateinit var mExamTime: LocalTime
+    private lateinit var mTimeHelper: TimeSelectorHelper
 
     private var mExamDuration = NO_DURATION
     private lateinit var mDurationText: TextView
@@ -157,31 +157,13 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
     }
 
     private fun setupTimeText() {
-        mTimeText = findViewById(R.id.textView_start_time) as TextView
+        mExamTime = mItem?.startTime ?: LocalTime.of(9 ,0)
 
-        if (!mIsNew) {
-            mExamTime = mItem!!.startTime
-            updateTimeText()
+        mTimeHelper = TimeSelectorHelper(this, R.id.textView_start_time)
+        mTimeHelper.setup(mExamTime) { _, time ->
+            mExamTime = time
+            mTimeHelper.updateTime(mExamTime)
         }
-
-        mTimeText.setOnClickListener {
-            var initialHour = 9
-            var initialMinute = 0
-            if (mExamTime != null) {
-                initialHour = mExamTime!!.hour
-                initialMinute = mExamTime!!.minute
-            }
-
-            TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-                mExamTime = LocalTime.of(hour, minute)
-                updateTimeText()
-            }, initialHour, initialMinute, true).show()
-        }
-    }
-
-    private fun updateTimeText() {
-        mTimeText.text = mExamTime!!.toString()
-        mTimeText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
     }
 
     private fun setupDurationText() {
@@ -251,12 +233,6 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
             return
         }
 
-        if (mExamTime == null) {
-            Snackbar.make(findViewById(R.id.rootView), R.string.message_exam_time_required,
-                    Snackbar.LENGTH_SHORT).show()
-            return
-        }
-
         if (mExamDuration == -1) {
             Snackbar.make(findViewById(R.id.rootView), R.string.message_exam_duration_required,
                     Snackbar.LENGTH_SHORT).show()
@@ -273,7 +249,7 @@ class ExamEditActivity : ItemEditActivity<Exam>() {
                 mSubject!!.id,
                 newModuleName,
                 mExamDate,
-                mExamTime!!,
+                mExamTime,
                 mExamDuration,
                 mEditTextSeat.text.toString().trim(),
                 mEditTextRoom.text.toString().trim(),

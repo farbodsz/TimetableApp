@@ -110,6 +110,7 @@
     <string name="property_days">Days</string>
     <string name="property_weeks">Weeks</string>
     <string name="property_date">Date</string>
+    <string name="property_time">Time</string>
     <string name="property_start_time">Start Time</string>
     <string name="property_end_time">End Time</string>
     <string name="message_days_required">You need to choose at least one day</string>
@@ -150,7 +151,6 @@
     <string name="property_duration">Duration</string>
     <string name="property_seat">Seat</string>
     <string name="property_resit">Resit</string>
-    <string name="message_exam_time_required">You must enter an exam time</string>
     <string name="message_exam_duration_required">You must select an exam duration</string>
 
     <string name="message_start_date_equal_end_date">Your start and end dates must be different</string>

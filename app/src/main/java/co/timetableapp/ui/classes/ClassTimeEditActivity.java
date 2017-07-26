@@ -47,6 +47,7 @@ import co.timetableapp.model.Timetable;
 import co.timetableapp.util.PrefUtils;
 import co.timetableapp.util.TextUtilsKt;
 
+// TODO: Convert to Kotlin and use TimeSelectorHelper
 /**
  * This activity is started and displayed to allow the user to change a class time.
  *

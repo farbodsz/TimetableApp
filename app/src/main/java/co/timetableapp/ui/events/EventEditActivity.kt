@@ -17,14 +17,11 @@
 package co.timetableapp.ui.events
 
 import android.app.Activity
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.widget.EditText
-import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.handler.EventHandler
@@ -34,6 +31,7 @@ import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemEditActivity
 import co.timetableapp.ui.components.DateSelectorHelper
 import co.timetableapp.ui.components.SubjectSelectorHelper
+import co.timetableapp.ui.components.TimeSelectorHelper
 import co.timetableapp.ui.subjects.SubjectEditActivity
 import co.timetableapp.util.UiUtils
 import co.timetableapp.util.title
@@ -61,11 +59,11 @@ class EventEditActivity : ItemEditActivity<Event>() {
     private lateinit var mEventDate: LocalDate
     private lateinit var mDateHelper: DateSelectorHelper
 
-    private var mStartTime: LocalTime? = null
-    private lateinit var mStartTimeText: TextView
+    private lateinit var mStartTime: LocalTime
+    private lateinit var mStartTimeHelper: TimeSelectorHelper
 
-    private var mEndTime: LocalTime? = null
-    private lateinit var mEndTimeText: TextView
+    private lateinit var mEndTime: LocalTime
+    private lateinit var mEndTimeHelper: TimeSelectorHelper
 
     private var mSubject: Subject? = null
     private lateinit var mSubjectHelper: SubjectSelectorHelper
@@ -97,8 +95,7 @@ class EventEditActivity : ItemEditActivity<Event>() {
         setupSubjectHelper()
 
         setupDateText()
-        setupStartTimeText()
-        setupEndTimeText()
+        setupTimeTexts()
     }
 
     private fun setupSubjectHelper() {
@@ -146,61 +143,21 @@ class EventEditActivity : ItemEditActivity<Event>() {
         }
     }
 
-    private fun setupStartTimeText() {
-        mStartTimeText = findViewById(R.id.textView_start_time) as TextView
+    private fun setupTimeTexts() {
+        val defaultStart = LocalTime.of(LocalTime.now().hour + 1, 0) // the next hour from now
+        mStartTime = mItem?.startDateTime?.toLocalTime() ?: defaultStart
+        mEndTime = mItem?.endDateTime?.toLocalTime() ?: defaultStart.plusHours(1)
 
-        if (!mIsNew) {
-            mStartTime = mItem!!.startDateTime.toLocalTime()
-            updateTimeTexts()
+        mStartTimeHelper = TimeSelectorHelper(this, R.id.textView_start_time)
+        mStartTimeHelper.setup(mStartTime) { _, time ->
+            mStartTime = time
+            mStartTimeHelper.updateTime(mStartTime)
         }
 
-        mStartTimeText.setOnClickListener {
-            var initialHour = 9
-            var initialMinute = 0
-            if (mStartTime != null) {
-                initialHour = mStartTime!!.hour
-                initialMinute = mStartTime!!.minute
-            }
-
-            TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-                mStartTime = LocalTime.of(hour, minute)
-                updateTimeTexts()
-            }, initialHour, initialMinute, true).show()
-        }
-    }
-
-    private fun setupEndTimeText() {
-        mEndTimeText = findViewById(R.id.textView_end_time) as TextView
-
-        if (!mIsNew) {
-            mEndTime = mItem!!.endDateTime.toLocalTime()
-            updateTimeTexts()
-        }
-
-        mEndTimeText.setOnClickListener {
-            var initialHour = 9
-            var initialMinute = 0
-            if (mEndTime != null) {
-                initialHour = mEndTime!!.hour
-                initialMinute = mEndTime!!.minute
-            }
-
-            TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-                mEndTime = LocalTime.of(hour, minute)
-                updateTimeTexts()
-            }, initialHour, initialMinute, true).show()
-        }
-    }
-
-    private fun updateTimeTexts() {
-        if (mStartTime != null) {
-            mStartTimeText.text = mStartTime!!.toString()
-            mStartTimeText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
-        }
-
-        if (mEndTime != null) {
-            mEndTimeText.text = mEndTime!!.toString()
-            mEndTimeText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
+        mEndTimeHelper = TimeSelectorHelper(this, R.id.textView_end_time)
+        mEndTimeHelper.setup(mEndTime) { _, time ->
+            mEndTime = time
+            mEndTimeHelper.updateTime(mEndTime)
         }
     }
 
@@ -228,12 +185,6 @@ class EventEditActivity : ItemEditActivity<Event>() {
             return
         }
 
-        if (mStartTime == null || mEndTime == null) {
-            Snackbar.make(findViewById(R.id.rootView), R.string.message_times_required,
-                    Snackbar.LENGTH_SHORT).show()
-            return
-        }
-
         val id = if (mIsNew) mDataHandler.getHighestItemId() + 1 else mItem!!.id
 
         val timetableId = (application as TimetableApplication).currentTimetable!!.id
@@ -243,8 +194,8 @@ class EventEditActivity : ItemEditActivity<Event>() {
                 timetableId,
                 newTitle,
                 newDetail,
-                LocalDateTime.of(mEventDate, mStartTime!!),
-                LocalDateTime.of(mEventDate, mEndTime!!),
+                LocalDateTime.of(mEventDate, mStartTime),
+                LocalDateTime.of(mEventDate, mEndTime),
                 newLocation,
                 if (mSubject == null) 0 else mSubject!!.id
         )
