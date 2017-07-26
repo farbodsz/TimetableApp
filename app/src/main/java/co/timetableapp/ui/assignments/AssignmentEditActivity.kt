@@ -17,7 +17,6 @@
 package co.timetableapp.ui.assignments
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -41,7 +40,7 @@ import co.timetableapp.model.Class
 import co.timetableapp.model.Color
 import co.timetableapp.model.Subject
 import co.timetableapp.ui.classes.ClassesAdapter
-import co.timetableapp.util.DateUtils
+import co.timetableapp.ui.components.DateSelectorHelper
 import co.timetableapp.util.UiUtils
 import co.timetableapp.util.title
 import org.threeten.bp.LocalDate
@@ -75,8 +74,8 @@ class AssignmentEditActivity : AppCompatActivity() {
     private lateinit var mClassText: TextView
     private lateinit var mClassDialog: AlertDialog
 
-    private var mDueDate: LocalDate? = null
-    private lateinit var mDateText: TextView
+    private lateinit var mDueDate: LocalDate
+    private lateinit var mDateHelper: DateSelectorHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -160,29 +159,14 @@ class AssignmentEditActivity : AppCompatActivity() {
     }
 
     private fun setupDateText() {
-        mDateText = findViewById(R.id.textView_date) as TextView
+        mDueDate = mAssignment?.dueDate ?: LocalDate.now()
 
-        if (!mIsNew) {
-            mDueDate = mAssignment!!.dueDate
-            updateDateText()
-        }
+        mDateHelper = DateSelectorHelper(this, R.id.textView_date)
+        mDateHelper.updateDate(mDueDate)
 
-        mDateText.setOnClickListener {
-            // Note: -1 and +1s in code because Android month values are from 0-11 (to
-            // correspond with java.util.Calendar) but LocalDate month values are from 1-12
-
-            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                mDueDate = LocalDate.of(year, month + 1, dayOfMonth)
-                updateDateText()
-            }
-
-            DatePickerDialog(
-                    this@AssignmentEditActivity,
-                    listener,
-                    if (mIsNew) LocalDate.now().year else mDueDate!!.year,
-                    if (mIsNew) LocalDate.now().monthValue - 1 else mDueDate!!.monthValue - 1,
-                    if (mIsNew) LocalDate.now().dayOfMonth else mDueDate!!.dayOfMonth
-            ).show()
+        mDateHelper.setup(mDueDate) { _, date ->
+            mDueDate = date
+            mDateHelper.updateDate(date)
         }
     }
 
@@ -199,11 +183,6 @@ class AssignmentEditActivity : AppCompatActivity() {
                 mToolbar,
                 findViewById(R.id.appBarLayout),
                 findViewById(R.id.toolbar_container))
-    }
-
-    private fun updateDateText() {
-        mDateText.text = mDueDate!!.format(DateUtils.FORMATTER_FULL_DATE)
-        mDateText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
