@@ -42,10 +42,13 @@ class DateSelectorHelper(val activity: Activity, @IdRes val textViewResId: Int) 
      *
      * @param initialDate   the date to initially display on the [TextView]. This can be null, in
      *                      which case a hint text will be initially displayed.
+     * @param onDateSet     a function to be invoked when the date has been changed
      */
     fun setup(initialDate: LocalDate?,
               onDateSet: (view: DatePicker, date: LocalDate) -> Unit) {
         mDate = initialDate
+        updateDateText()
+
         setupOnClick(onDateSet)
     }
 
@@ -73,7 +76,7 @@ class DateSelectorHelper(val activity: Activity, @IdRes val textViewResId: Int) 
      *
      * @param date          used to update the displayed text. This can be null, in which case a
      *                      'hint' text is shown.
-     * @param hintTextRes   the string resource used to display the hint text.
+     * @param hintTextRes   the string resource used to display the hint text
      */
     @JvmOverloads
     fun updateDate(date: LocalDate?, @StringRes hintTextRes: Int = R.string.property_date) {
@@ -81,7 +84,7 @@ class DateSelectorHelper(val activity: Activity, @IdRes val textViewResId: Int) 
         updateDateText(hintTextRes)
     }
 
-    private fun updateDateText(@StringRes hintTextRes: Int) {
+    private fun updateDateText(@StringRes hintTextRes: Int = R.string.property_date) {
         val date = mDate
 
         if (date == null) {

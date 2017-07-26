@@ -162,8 +162,6 @@ class AssignmentEditActivity : AppCompatActivity() {
         mDueDate = mAssignment?.dueDate ?: LocalDate.now()
 
         mDateHelper = DateSelectorHelper(this, R.id.textView_date)
-        mDateHelper.updateDate(mDueDate)
-
         mDateHelper.setup(mDueDate) { _, date ->
             mDueDate = date
             mDateHelper.updateDate(date)
