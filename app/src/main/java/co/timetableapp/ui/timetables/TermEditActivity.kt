@@ -17,18 +17,15 @@
 package co.timetableapp.ui.timetables
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.widget.EditText
-import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.data.handler.TermHandler
 import co.timetableapp.data.handler.TimetableHandler
 import co.timetableapp.model.Term
 import co.timetableapp.model.Timetable
 import co.timetableapp.ui.base.ItemEditActivity
-import co.timetableapp.util.DateUtils
+import co.timetableapp.ui.components.DateSelectorHelper
 import co.timetableapp.util.title
 import org.threeten.bp.LocalDate
 
@@ -60,10 +57,10 @@ class TermEditActivity : ItemEditActivity<Term>() {
     private lateinit var mEditText: EditText
 
     private var mStartDate: LocalDate? = null
-    private lateinit var mStartDateText: TextView
+    private lateinit var mStartDateHelper: DateSelectorHelper
 
     private var mEndDate: LocalDate? = null
-    private lateinit var mEndDateText: TextView
+    private lateinit var mEndDateHelper: DateSelectorHelper
 
     override fun getLayoutResource() = R.layout.activity_term_edit
 
@@ -101,57 +98,20 @@ class TermEditActivity : ItemEditActivity<Term>() {
     }
 
     private fun setupDateTexts() {
-        mStartDateText = findViewById(R.id.textView_start_date) as TextView
-        mEndDateText = findViewById(R.id.textView_end_date) as TextView
+        val today = LocalDate.now()
+        mStartDate = mItem?.startDate ?: today
+        mEndDate = mItem?.endDate ?: today.plusWeeks(12)
 
-        if (!mIsNew) {
-            mStartDate = mItem!!.startDate
-            mEndDate = mItem!!.endDate
-            updateDateTexts()
+        mStartDateHelper = DateSelectorHelper(this, R.id.textView_start_date)
+        mStartDateHelper.setup(mStartDate) { _, date ->
+            mStartDate = date
+            mStartDateHelper.updateDate(mStartDate)
         }
 
-        mStartDateText.setOnClickListener {
-            // note: -1 and +1s in code because Android month values are from 0-11 (to
-            // correspond with java.util.Calendar) but LocalDate month values are from 1-12
-
-            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                mStartDate = LocalDate.of(year, month + 1, dayOfMonth)
-                updateDateTexts()
-            }
-
-            DatePickerDialog(
-                    this,
-                    listener,
-                    if (mIsNew) LocalDate.now().year else mStartDate!!.year,
-                    if (mIsNew) LocalDate.now().monthValue - 1 else mStartDate!!.monthValue - 1,
-                    if (mIsNew) LocalDate.now().dayOfMonth else mStartDate!!.dayOfMonth
-            ).show()
-        }
-
-        mEndDateText.setOnClickListener {
-            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                mEndDate = LocalDate.of(year, month + 1, dayOfMonth)
-                updateDateTexts()
-            }
-
-            DatePickerDialog(
-                    this,
-                    listener,
-                    if (mIsNew) LocalDate.now().year else mEndDate!!.year,
-                    if (mIsNew) LocalDate.now().monthValue - 1 else mEndDate!!.monthValue - 1,
-                    if (mIsNew) LocalDate.now().dayOfMonth else mEndDate!!.dayOfMonth
-            ).show()
-        }
-    }
-
-    private fun updateDateTexts() {
-        if (mStartDate != null) {
-            mStartDateText.text = mStartDate!!.format(DateUtils.FORMATTER_FULL_DATE)
-            mStartDateText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
-        }
-        if (mEndDate != null) {
-            mEndDateText.text = mEndDate!!.format(DateUtils.FORMATTER_FULL_DATE)
-            mEndDateText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
+        mEndDateHelper = DateSelectorHelper(this, R.id.textView_end_date)
+        mEndDateHelper.setup(mEndDate) { _, date ->
+            mEndDate = date
+            mEndDateHelper.updateDate(mEndDate)
         }
     }
 

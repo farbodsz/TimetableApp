@@ -17,7 +17,6 @@
 package co.timetableapp.ui.events
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -34,9 +33,9 @@ import co.timetableapp.model.Color
 import co.timetableapp.model.Event
 import co.timetableapp.model.Subject
 import co.timetableapp.ui.base.ItemEditActivity
+import co.timetableapp.ui.components.DateSelectorHelper
 import co.timetableapp.ui.components.SubjectSelectorHelper
 import co.timetableapp.ui.subjects.SubjectEditActivity
-import co.timetableapp.util.DateUtils
 import co.timetableapp.util.UiUtils
 import co.timetableapp.util.title
 import org.threeten.bp.LocalDate
@@ -61,7 +60,7 @@ class EventEditActivity : ItemEditActivity<Event>() {
     private lateinit var mEditTextLocation: EditText
 
     private var mEventDate: LocalDate? = null
-    private lateinit var mDateText: TextView
+    private lateinit var mDateHelper: DateSelectorHelper
 
     private var mStartTime: LocalTime? = null
     private lateinit var mStartTimeText: TextView
@@ -139,35 +138,13 @@ class EventEditActivity : ItemEditActivity<Event>() {
     }
 
     private fun setupDateText() {
-        mDateText = findViewById(R.id.textView_date) as TextView
+        mEventDate = mItem?.startDateTime?.toLocalDate()
 
-        if (!mIsNew) {
-            mEventDate = mItem!!.startDateTime.toLocalDate()
-            updateDateText()
+        mDateHelper = DateSelectorHelper(this, R.id.textView_date)
+        mDateHelper.setup(mEventDate) { _, date ->
+            mEventDate = date
+            mDateHelper.updateDate(mEventDate)
         }
-
-        mDateText.setOnClickListener {
-            // note: -1 and +1s in code because Android month values are from 0-11 (to
-            // correspond with java.util.Calendar) but LocalDate month values are from 1-12
-
-            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                mEventDate = LocalDate.of(year, month + 1, dayOfMonth)
-                updateDateText()
-            }
-
-            DatePickerDialog(
-                    this@EventEditActivity,
-                    listener,
-                    if (mIsNew) LocalDate.now().year else mEventDate!!.year,
-                    if (mIsNew) LocalDate.now().monthValue - 1 else mEventDate!!.monthValue - 1,
-                    if (mIsNew) LocalDate.now().dayOfMonth else mEventDate!!.dayOfMonth
-            ).show()
-        }
-    }
-
-    private fun updateDateText() {
-        mDateText.text = mEventDate!!.format(DateUtils.FORMATTER_FULL_DATE)
-        mDateText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
     }
 
     private fun setupStartTimeText() {
