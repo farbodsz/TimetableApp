@@ -88,7 +88,7 @@ class TimeSelectorHelper(private val activity: Activity, @IdRes private val text
             mTextView.text = activity.getString(hintTextRes)
             mTextView.setTextColor(ContextCompat.getColor(activity, R.color.mdu_text_black_secondary))
         } else {
-            mTextView.text = time.format(DateUtils.FORMATTER_FULL_DATE)
+            mTextView.text = time.format(DateUtils.FORMATTER_TIME)
             mTextView.setTextColor(ContextCompat.getColor(activity, R.color.mdu_text_black))
         }
     }
