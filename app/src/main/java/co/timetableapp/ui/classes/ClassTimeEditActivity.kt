@@ -36,6 +36,7 @@ import co.timetableapp.model.ClassDetail
 import co.timetableapp.model.ClassTime
 import co.timetableapp.ui.components.TimeSelectorHelper
 import co.timetableapp.util.PrefUtils
+import co.timetableapp.util.isEmpty
 import co.timetableapp.util.title
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalTime
@@ -85,18 +86,18 @@ class ClassTimeEditActivity : AppCompatActivity() {
         const val EXTRA_TAB_POSITION = "extra_tab_position"
     }
 
-    private var mClassDetailId: Int = 0
-    private var mTabPos: Int = 0
+    private var mClassDetailId = 0
+    private var mTabPos = 0
 
     private var mClassTimes: ArrayList<ClassTime>? = null
     private var mIsNewTime = false
 
     private val mClassTimeHandler = ClassTimeHandler(this)
 
-    private var mStartTime: LocalTime? = null
+    private lateinit var mStartTime: LocalTime
     private lateinit var mStartTimeHelper: TimeSelectorHelper
 
-    private var mEndTime: LocalTime? = null
+    private lateinit var mEndTime: LocalTime
     private lateinit var mEndTimeHelper: TimeSelectorHelper
 
     private lateinit var mDayText: TextView
@@ -191,7 +192,7 @@ class ClassTimeEditActivity : AppCompatActivity() {
 
             val checkedItems = BooleanArray(7)
             for (i in 0..6) {
-                checkedItems[i] = mDaysOfWeek.get(i) != null
+                checkedItems[i] = mDaysOfWeek[i] != null
             }
 
             builder.setTitle(R.string.property_days)
@@ -213,16 +214,16 @@ class ClassTimeEditActivity : AppCompatActivity() {
     }
 
     private fun updateDayText() {
-        if (mDaysOfWeek.size() == 0) {
+        if (mDaysOfWeek.isEmpty()) {
             mDayText.setText(R.string.property_days)
-            mDayText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black_secondary))
+            mDayText.setTextColor(ContextCompat.getColor(this, R.color.mdu_text_black_secondary))
             return
         }
 
         val builder = StringBuilder()
         for (i in 0..6) {
-            val dayOfWeek = mDaysOfWeek.get(i)
-            if (mDaysOfWeek.get(i) != null) {
+            val dayOfWeek = mDaysOfWeek[i]
+            if (mDaysOfWeek[i] != null) {
                 builder.append(dayOfWeek.toString().toLowerCase().title())
                         .append(", ")
             }
@@ -231,7 +232,7 @@ class ClassTimeEditActivity : AppCompatActivity() {
         val displayed = text.substring(0, text.length - 2)
 
         mDayText.text = displayed
-        mDayText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
+        mDayText.setTextColor(ContextCompat.getColor(this, R.color.mdu_text_black))
     }
 
     private fun setupWeekText() {
@@ -265,7 +266,7 @@ class ClassTimeEditActivity : AppCompatActivity() {
 
                 val checkedItems = BooleanArray(weekRotations)
                 for (i in 0..weekRotations - 1) {
-                    checkedItems[i] = mWeekNumbers.get(i) != null
+                    checkedItems[i] = mWeekNumbers[i] != null
                 }
 
                 builder.setTitle(R.string.property_weeks)
@@ -288,10 +289,9 @@ class ClassTimeEditActivity : AppCompatActivity() {
     }
 
     private fun updateWeekText() {
-        if (mWeekNumbers.size() == 0) {
+        if (mWeekNumbers.isEmpty()) {
             mWeekText.setText(R.string.property_weeks)
-            mWeekText.setTextColor(ContextCompat.getColor(
-                    baseContext, R.color.mdu_text_black_secondary))
+            mWeekText.setTextColor(ContextCompat.getColor(this, R.color.mdu_text_black_secondary))
             return
         }
 
@@ -299,17 +299,17 @@ class ClassTimeEditActivity : AppCompatActivity() {
 
         val builder = StringBuilder()
         for (i in 0..weekRotations - 1) {
-            if (mWeekNumbers.get(i) != null) {
-                val weekNumber = mWeekNumbers.get(i)
+            if (mWeekNumbers[i] != null) {
+                val weekNumber = mWeekNumbers[i]
                 builder.append(ClassTime.getWeekText(this, weekNumber))
-                builder.append(", ")
+                        .append(", ")
             }
         }
         val text = builder.toString()
         val displayed = text.substring(0, text.length - 2)
 
         mWeekText.text = displayed
-        mWeekText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
+        mWeekText.setTextColor(ContextCompat.getColor(this, R.color.mdu_text_black))
     }
 
     private fun setupTimeTexts() {
@@ -317,9 +317,9 @@ class ClassTimeEditActivity : AppCompatActivity() {
             mStartTime = mClassTimes!![0].startTime
             mEndTime = mClassTimes!![0].endTime
         } else {
-            val defaultDuration = PrefUtils.getDefaultLessonDuration(baseContext).toLong()
+            val defaultDuration = PrefUtils.getDefaultLessonDuration(this).toLong()
             mStartTime = LocalTime.of(9, 0)
-            mEndTime = mStartTime!!.plusMinutes(defaultDuration)
+            mEndTime = mStartTime.plusMinutes(defaultDuration)
         }
 
         mStartTimeHelper = TimeSelectorHelper(this, R.id.textView_start_time)
@@ -364,34 +364,41 @@ class ClassTimeEditActivity : AppCompatActivity() {
     }
 
     private fun handleDoneAction() {
-        if (mDaysOfWeek.size() == 0) {
-            Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_days_required, Snackbar.LENGTH_SHORT).show()
+        if (mDaysOfWeek.isEmpty()) {
+            Snackbar.make(
+                    findViewById(R.id.rootView),
+                    R.string.message_days_required,
+                    Snackbar.LENGTH_SHORT
+            ).show()
             return
         }
-        if (mWeekNumbers.size() == 0) {
-            Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_weeks_required, Snackbar.LENGTH_SHORT).show()
+        if (mWeekNumbers.isEmpty()) {
+            Snackbar.make(
+                    findViewById(R.id.rootView),
+                    R.string.message_weeks_required,
+                    Snackbar.LENGTH_SHORT
+            ).show()
             return
         }
 
-        if (mStartTime == null || mEndTime == null) {
-            Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_times_required, Snackbar.LENGTH_SHORT).show()
-            return
-        }
         if (mStartTime == mEndTime) {
-            Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_start_time_equal_end, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(
+                    findViewById(R.id.rootView),
+                    R.string.message_start_time_equal_end,
+                    Snackbar.LENGTH_SHORT
+            ).show()
             return
         }
-        if (mStartTime!!.isAfter(mEndTime!!)) {
-            Snackbar.make(findViewById(R.id.rootView),
-                    R.string.message_start_time_after_end, Snackbar.LENGTH_SHORT).show()
+        if (mStartTime.isAfter(mEndTime)) {
+            Snackbar.make(
+                    findViewById(R.id.rootView),
+                    R.string.message_start_time_after_end,
+                    Snackbar.LENGTH_SHORT
+            ).show()
             return
         }
 
-        val (id1, _, _, _, weekRotations) = (application as TimetableApplication).currentTimetable!!
+        val timetable = (application as TimetableApplication).currentTimetable!!
 
         if (!mIsNewTime) {
             for ((id) in mClassTimes!!) {
@@ -399,19 +406,26 @@ class ClassTimeEditActivity : AppCompatActivity() {
             }
         }
 
-        for (i in 0..weekRotations - 1) {
-            if (mWeekNumbers.get(i) == null) {
+        for (i in 0..timetable.weekRotations - 1) {
+            if (mWeekNumbers[i] == null) {
                 continue
             }
-            val weekNumber = mWeekNumbers.get(i)
+            val weekNumber = mWeekNumbers[i]
 
             for (j in 0..6) {
-                val dayOfWeek = mDaysOfWeek.get(j) ?: continue
+                val dayOfWeek = mDaysOfWeek[j] ?: continue
 
                 val id = mClassTimeHandler.getHighestItemId() + 1
 
-                val classTime = ClassTime(id, id1, mClassDetailId,
-                        dayOfWeek, weekNumber, mStartTime!!, mEndTime!!)
+                val classTime = ClassTime(
+                        id,
+                        timetable.id,
+                        mClassDetailId,
+                        dayOfWeek,
+                        weekNumber,
+                        mStartTime,
+                        mEndTime
+                )
 
                 // Everything will be added fresh regardless of whether or not it is new.
                 // This is because there may be more or less ClassTimes than before so ids cannot

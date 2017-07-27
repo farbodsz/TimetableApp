@@ -16,6 +16,10 @@
 
 package co.timetableapp.util
 
+import android.util.SparseArray
+
+fun <E> SparseArray<E>.isEmpty() = size() == 0
+
 fun String.title(): String {
     val string = this.trim()
 
