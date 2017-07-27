@@ -17,13 +17,11 @@
 package co.timetableapp.ui.timetables
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -31,7 +29,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import co.timetableapp.R
 import co.timetableapp.TimetableApplication
 import co.timetableapp.data.TimetableDbHelper
@@ -46,7 +43,7 @@ import co.timetableapp.model.ClassTime
 import co.timetableapp.model.Term
 import co.timetableapp.model.Timetable
 import co.timetableapp.ui.base.ItemEditActivity
-import co.timetableapp.util.DateUtils
+import co.timetableapp.ui.components.DateSelectorHelper
 import co.timetableapp.util.UiUtils
 import co.timetableapp.util.title
 import com.satsuware.usefulviews.LabelledSpinner
@@ -69,10 +66,11 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
 
     private lateinit var mNameEditText: EditText
 
-    private var mStartDate: LocalDate? = null
-    private var mEndDate: LocalDate? = null
-    private lateinit var mStartDateText: TextView
-    private lateinit var mEndDateText: TextView
+    private lateinit var mStartDate: LocalDate
+    private lateinit var mStartDateHelper: DateSelectorHelper
+
+    private lateinit var mEndDate: LocalDate
+    private lateinit var mEndDateHelper: DateSelectorHelper
 
     private var mWeekRotations = 0
     private lateinit var mSchedulingSpinner: LabelledSpinner
@@ -117,58 +115,19 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
     }
 
     private fun setupDateTexts() {
-        mStartDateText = findViewById(R.id.textView_start_date) as TextView
-        mEndDateText = findViewById(R.id.textView_end_date) as TextView
+        mStartDate = mItem?.startDate ?: LocalDate.now()
+        mEndDate = mItem?.endDate ?: mStartDate.plusMonths(9)
 
-        if (!mIsNew) {
-            mStartDate = mItem!!.startDate
-            mEndDate = mItem!!.endDate
-            updateDateTexts()
+        mStartDateHelper = DateSelectorHelper(this, R.id.textView_start_date)
+        mStartDateHelper.setup(mStartDate) { _, date ->
+            mStartDate = date
+            mStartDateHelper.updateDate(mStartDate)
         }
 
-        // Note: -1 and +1s in code because Android month values are from 0-11 (to correspond with
-        // java.util.Calendar) but LocalDate month values are from 1-12.
-
-        mStartDateText.setOnClickListener {
-            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                mStartDate = LocalDate.of(year, month + 1, dayOfMonth)
-                updateDateTexts()
-            }
-
-            DatePickerDialog(
-                    this,
-                    listener,
-                    if (mIsNew) LocalDate.now().year else mStartDate!!.year,
-                    if (mIsNew) LocalDate.now().monthValue - 1 else mStartDate!!.monthValue - 1,
-                    if (mIsNew) LocalDate.now().dayOfMonth else mStartDate!!.dayOfMonth
-            ).show()
-        }
-
-        mEndDateText.setOnClickListener {
-            val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                mEndDate = LocalDate.of(year, month + 1, dayOfMonth)
-                updateDateTexts()
-            }
-
-            DatePickerDialog(
-                    this,
-                    listener,
-                    if (mIsNew) LocalDate.now().year else mEndDate!!.year,
-                    if (mIsNew) LocalDate.now().monthValue - 1 else mEndDate!!.monthValue - 1,
-                    if (mIsNew) LocalDate.now().dayOfMonth else mEndDate!!.dayOfMonth
-            ).show()
-        }
-    }
-
-    private fun updateDateTexts() {
-        mStartDate?.let {
-            mStartDateText.text = it.format(DateUtils.FORMATTER_FULL_DATE)
-            mStartDateText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
-        }
-
-        mEndDate?.let {
-            mEndDateText.text = it.format(DateUtils.FORMATTER_FULL_DATE)
-            mEndDateText.setTextColor(ContextCompat.getColor(baseContext, R.color.mdu_text_black))
+        mEndDateHelper = DateSelectorHelper(this, R.id.textView_end_time)
+        mEndDateHelper.setup(mEndDate) { _, date ->
+            mEndDate = date
+            mEndDateHelper.updateDate(mEndDate)
         }
     }
 
@@ -237,7 +196,8 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
         }
     }
 
-    override fun onItemChosen(labelledSpinner: View?, adapterView: AdapterView<*>?, itemView: View?, position: Int, id: Long) {
+    override fun onItemChosen(labelledSpinner: View?, adapterView: AdapterView<*>?, itemView: View?,
+                              position: Int, id: Long) {
         when (labelledSpinner!!.id) {
             R.id.spinner_scheduling_type -> {
                 val isFixedScheduling = position == 0
@@ -278,9 +238,7 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
         return TermHandler(this).getAllItems(query)
     }
 
-    private fun findTimetableId(): Int {
-        return if (mItem == null) mTimetableHandler.getHighestItemId() + 1 else mItem!!.id
-    }
+    private fun findTimetableId() = mItem?.id ?: mTimetableHandler.getHighestItemId() + 1
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -308,15 +266,6 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
     override fun handleDoneAction() {
         val name = mNameEditText.text.toString().title()
 
-        if (mStartDate == null || mEndDate == null) {
-            Snackbar.make(
-                    findViewById(R.id.rootView),
-                    R.string.message_times_required,
-                    Snackbar.LENGTH_SHORT
-            ).show()
-            return
-        }
-
         if (mStartDate == mEndDate) {
             Snackbar.make(
                     findViewById(R.id.rootView),
@@ -325,7 +274,7 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
             ).show()
             return
         }
-        if (mStartDate!!.isAfter(mEndDate!!)) {
+        if (mStartDate.isAfter(mEndDate)) {
             Snackbar.make(
                     findViewById(R.id.rootView),
                     R.string.message_start_time_after_end,
@@ -341,18 +290,20 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
                 val cursor = helper.readableDatabase.query(
                         ClassTimesSchema.TABLE_NAME, null,
                         ClassTimesSchema.COL_WEEK_NUMBER + ">?",
-                        arrayOf(mWeekRotations.toString()), null, null, null)
+                        arrayOf(mWeekRotations.toString()),
+                        null, null, null
+                )
                 cursor.moveToFirst()
                 while (!cursor.isAfterLast) {
-                    val (id) = ClassTime.from(cursor)
-                    ClassTimeHandler(this).deleteItemWithReferences(id)
+                    val classTime = ClassTime.from(cursor)
+                    ClassTimeHandler(this).deleteItemWithReferences(classTime.id)
                     cursor.moveToNext()
                 }
                 cursor.close()
             }
         }
 
-        mItem = Timetable(findTimetableId(), name, mStartDate!!, mEndDate!!, mWeekRotations)
+        mItem = Timetable(findTimetableId(), name, mStartDate, mEndDate, mWeekRotations)
 
         if (mIsNew) {
             mTimetableHandler.addItem(mItem!!)
@@ -360,8 +311,7 @@ class TimetableEditActivity : ItemEditActivity<Timetable>(), LabelledSpinner.OnI
             mTimetableHandler.replaceItem(mItem!!.id, mItem!!)
         }
 
-        val application = application as TimetableApplication
-        application.setCurrentTimetable(this, mItem!!)
+        (application as TimetableApplication).setCurrentTimetable(this, mItem!!)
 
         setResult(Activity.RESULT_OK)
         supportFinishAfterTransition()
